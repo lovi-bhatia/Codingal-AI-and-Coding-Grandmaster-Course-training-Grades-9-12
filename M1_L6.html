@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Research Lab Allocation Request</title>
+  </head>
+  <body>
+    <h1>🔬 HPC & Quantum Lab Booking</h1>
+    <p>
+      Fill in the form below to reserve GPU nodes or quantum simulators for your
+      research experiments!
+    </p>
+    <hr />
+
+    <form>
+      <fieldset>
+        <legend>Researcher Details</legend>
+
+        <label>Your Name</label><br />
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter your full academic name"
+        /><br /><br />
+
+        <label>Cluster Access Token</label><br />
+        <input
+          type="password"
+          id="token"
+          placeholder="Your secret SSH token"
+        /><br /><br />
+
+        <label>Required Start Date</label><br />
+        <input type="date" id="start-date" /><br />
+      </fieldset>
+
+      <br />
+
+      <fieldset>
+        <legend>Experiment Details</legend>
+
+        <label>Choose your Target Hardware</label><br />
+        <select id="hardware">
+          <option value="">-- Select a computing resource --</option>
+          <option value="quantum-sim">
+            Quantum Simulator — 5-Qubit Variational Circuits
+          </option>
+          <option value="gpu-node">
+            High-Performance GPU — Space Weather CME Forecasting
+          </option>
+          <option value="m1-cluster">
+            MacBook Pro M1 Node — Local Parallel Testing
+          </option></select
+        ><br /><br />
+
+        <label>Primary Research Domain?</label><br />
+        <input type="radio" name="domain" value="qml" /> Quantum Machine
+        Learning (QML)<br />
+        <input type="radio" name="domain" value="ssa" /> Space Situational
+        Awareness (SSA)<br />
+        <input type="radio" name="domain" value="forensics" /> Digital Forensics
+        & Stylometry<br />
+        <input type="radio" name="domain" value="algorithms" /> C++ Algorithmic
+        Optimization<br /><br />
+
+        <label>Experiment Notes & Dependencies?</label><br />
+        <textarea
+          id="notes"
+          rows="3"
+          cols="35"
+          placeholder="e.g. Need Python for hybrid CNN-QNN architecture and LaTeX compiler for output tables."
+        ></textarea
+        ><br />
+      </fieldset>
+
+      <br />
+
+      <fieldset>
+        <legend>Preferred Execution Window</legend>
+
+        <input type="checkbox" value="mon" /> Monday Overnight Batch<br />
+        <input type="checkbox" value="wed" /> Wednesday Overnight Batch<br />
+        <input type="checkbox" value="fri" /> Friday Overnight Batch<br />
+      </fieldset>
+
+      <br />
+      <input type="submit" value="Submit Allocation Request" />
+    </form>
+  </body>
+</html>
