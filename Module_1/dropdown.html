@@ -1,0 +1,81 @@
+<!-- 
+HTML DROPDOWN MENUS STUDY GUIDE:
+Sometimes you have too many choices to put on the screen all at once. 
+A drop-down menu hides the choices until the user clicks on it!
+
+<form>
+- Explanation: The invisible container that holds all your questions and sends the user's answers to the website.
+- Example: Like a digital envelope that holds your filled-out paper survey.
+
+<label>
+- Explanation: The helpful text that sits next to a blank box or menu to tell the user what they are supposed to choose.
+- Example: The words "Pick your favorite club:" right above the menu.
+
+<select>
+- Explanation: Creates the actual drop-down menu box that you click on to reveal the hidden list of choices.
+- Example: The clickable box that says "Choose a state..." when you are typing your address.
+
+<optgroup>
+- Explanation: A special label used INSIDE the drop-down menu to organize the choices into neat, bolded categories.
+- Example: A bold, unclickable title like "Sports" that sits right above "Basketball" and "Soccer" in the list.
+
+<option>
+- Explanation: The individual, clickable choices hidden inside the drop-down menu.
+- Example: The word "Drama Club" that you actually click to make your final choice.
+
+<input type="submit">
+- Explanation: The final button you click to lock in your choices and send them to the computer.
+- Example: The "Submit My Choice!" button at the bottom of the page.
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>High School Club Selector</title>
+  </head>
+  <body>
+    <h1>🏫 High School Club Selector</h1>
+    <p>
+      It's time to pick your after-school elective! Click the box below to open
+      the drop-down menu and see all your options.
+    </p>
+    <hr />
+
+    <form>
+      <label><b>Which club would you like to join this semester?</b></label
+      ><br /><br />
+
+      <!-- The <select> tag creates the drop-down box itself -->
+      <select id="school-club" name="club">
+        <!-- The very first option is usually blank or a helpful instruction -->
+        <option value="">-- Please pick one club --</option>
+
+        <!-- <optgroup> creates a bold category name that you CANNOT click -->
+        <optgroup label="Technology & Science">
+          <!-- <option> creates the actual choices you CAN click -->
+          <option value="robotics">Robotics Team</option>
+          <option value="coding">Video Game Coding</option>
+          <option value="astronomy">Astronomy Club</option>
+        </optgroup>
+
+        <optgroup label="Arts & Performance">
+          <option value="drama">Drama & Theater</option>
+          <option value="band">Marching Band</option>
+          <option value="art">Digital Art</option>
+        </optgroup>
+
+        <optgroup label="Sports & Fitness">
+          <option value="track">Track & Field</option>
+          <option value="swim">Swim Team</option>
+          <option value="chess">Chess Club (Mental Sport!)</option>
+        </optgroup>
+      </select>
+
+      <br /><br /><br />
+
+      <input type="submit" value="Sign Up for Club!" />
+    </form>
+  </body>
+</html>

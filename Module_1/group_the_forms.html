@@ -1,0 +1,153 @@
+<!-- 
+HTML FORM GROUPING STUDY GUIDE:
+When a form gets too long, we use special tags to "group" questions 
+together. This makes the form look neat, organized, and easy to read!
+
+<form>
+- Explanation: The invisible wrapper that holds all your questions and sends the data to the website.
+- Example: Like the physical piece of paper that holds an entire survey.
+
+<fieldset>
+- Explanation: The main grouping tag! It draws a neat box around a group of related questions.
+- Example: Grouping all the "Contact Info" questions into their own box.
+
+<legend>
+- Explanation: The title that sits perfectly right inside the top border of your <fieldset> box to name the group.
+- Example: The words "Step 1: Your Info" written on the line of the box.
+
+<label>
+- Explanation: The text that tells the user exactly what they need to type into the blank box.
+- Example: The words "Enter your name:" right next to the typing box.
+
+<input type="text">
+- Explanation: A standard, single-line text box where users can type short answers.
+- Example: A box to type your first name or city.
+
+<input type="password">
+- Explanation: A text box that turns everything you type into hidden dots so nobody can spy on your screen.
+- Example: A box to type your secret account password.
+
+<input type="date">
+- Explanation: Pops up a mini calendar so the user can easily click and pick a specific day.
+- Example: Clicking to pick your birthday from a calendar.
+
+<select> 
+- Explanation: Creates a drop-down menu on the screen.
+- Example: A box you click that drops down a list of all 50 states.
+
+<optgroup>
+- Explanation: A special grouping tag used inside a drop-down menu to put choices into categories!
+- Example: Grouping states by "East Coast" and "West Coast" inside the drop-down.
+
+<option>
+- Explanation: The individual choices inside the drop-down menu that the user can actually click.
+- Example: The word "Florida" inside the drop-down list.
+
+<input type="radio">
+- Explanation: Little circle buttons where you can only pick exactly ONE choice from the group.
+- Example: Picking your grade level (you can't be in 9th and 10th grade at the same time).
+
+<textarea>
+- Explanation: A big, stretchable box used for typing long messages, paragraphs, or stories.
+- Example: A big box asking "Explain why you want to join this club."
+
+<input type="checkbox">
+- Explanation: Little square boxes that let you pick as many choices as you want.
+- Example: Checking off which pizza toppings you want (you can pick 3 at once).
+
+<input type="submit">
+- Explanation: The final button you click at the bottom to send all your answers to the computer.
+- Example: The "Submit Application" button.
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Superhero Academy Application</title>
+  </head>
+  <body>
+    <h1>🦸‍♂️ Superhero Academy Application</h1>
+    <p>
+      Fill out this form to apply for the Academy. Notice how the questions are
+      grouped into neat boxes!
+    </p>
+    <hr />
+
+    <form>
+      <!-- GROUP 1: Personal Identity -->
+      <fieldset>
+        <legend>Secret Identity Details</legend>
+
+        <label>Your Real Name</label><br />
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter your full name"
+        /><br /><br />
+
+        <label>Base Access Code</label><br />
+        <input
+          type="password"
+          id="pid"
+          placeholder="Your secret passcode"
+        /><br /><br />
+
+        <label>Date You Discovered Your Powers</label><br />
+        <input type="date" id="dob" /><br />
+      </fieldset>
+
+      <br />
+
+      <!-- GROUP 2: Power Profile -->
+      <fieldset>
+        <legend>Power & Abilities Profile</legend>
+
+        <label>Choose your Academy Mentor</label><br />
+        <select id="mentor">
+          <option value="">-- Select a mentor --</option>
+          <!-- Here we use <optgroup> to group choices INSIDE a drop-down menu! -->
+          <optgroup label="Tech Heroes">
+            <option value="iron">Professor Iron</option>
+            <option value="bat">The Night Knight</option>
+          </optgroup>
+          <optgroup label="Magic Heroes">
+            <option value="strange">Doctor Mystic</option>
+            <option value="scarlet">The Red Witch</option>
+          </optgroup></select
+        ><br /><br />
+
+        <label>What is your primary power type?</label><br />
+        <input type="radio" name="power" value="strength" /> Super Strength<br />
+        <input type="radio" name="power" value="speed" /> Lightning Speed<br />
+        <input type="radio" name="power" value="flight" /> Flight<br />
+        <input type="radio" name="power" value="mind" /> Telepathy<br /><br />
+
+        <label>Tell us your origin story:</label><br />
+        <textarea
+          id="notes"
+          rows="3"
+          cols="35"
+          placeholder="e.g. I was bitten by a radioactive spider..."
+        ></textarea
+        ><br />
+      </fieldset>
+
+      <br />
+
+      <!-- GROUP 3: Gear Needed -->
+      <fieldset>
+        <legend>Equipment Request</legend>
+
+        <p>Check all the gear you need for your uniform:</p>
+        <input type="checkbox" value="cape" /> Aerodynamic Cape<br />
+        <input type="checkbox" value="mask" /> Face Mask<br />
+        <input type="checkbox" value="shield" /> Indestructible Shield<br />
+      </fieldset>
+
+      <br />
+      <input type="submit" value="Submit My Application" />
+    </form>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!-- 
+SEMANTIC HTML STUDY GUIDE:
+In HTML, "semantics" means using tags that actually describe what the 
+content IS, rather than just how it looks.
+
+<header> 
+- Explanation: Acts like the title card of a document, holding the main headings or logos at the top.
+- Example: The top banner of a website that shows the site's name.
+
+<nav> 
+- Explanation: Holds the navigation links so users can click around and travel through your website.
+- Example: The row of clickable text at the top of a page like "Home", "About Us", and "Contact".
+
+<main> 
+- Explanation: Wraps around the most important, unique content of your specific webpage.
+- Example: On a YouTube page, this holds the video and comments, but ignores the search bar.
+
+<section> 
+- Explanation: Groups related information together, acting just like a chapter in a book.
+- Example: A "Contact Info" section that holds your email, phone number, and social media links.
+
+<article> 
+- Explanation: Holds a complete, independent piece of information that makes sense all on its own.
+- Example: A single news story, a blog post, or a review of a new video game.
+
+<figure> 
+- Explanation: Wraps around an image or chart to separate it from the main text as a visual aid.
+- Example: A picture of a dinosaur in a science textbook.
+
+<figcaption> 
+- Explanation: A short caption attached to the bottom of a <figure> to explain what the picture is.
+- Example: The tiny text under the dinosaur picture that says "A T-Rex hunting for food."
+
+<aside> 
+- Explanation: Holds extra, side-information that is related to the page but not part of the main story.
+- Example: A little pop-out box on a blog that shows "Fun Facts" or "Related Links".
+
+<footer> 
+- Explanation: Sits at the very bottom of your webpage and holds legal info, copyrights, or site maps.
+- Example: The dark bar at the bottom of a website that says "Copyright 2024. All rights reserved."
+
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mission Mars &#8212; Space Guide</title>
+  </head>
+  <body>
+    <header>
+      <h1>&#128640; Mission Mars &#8212; The Red Planet</h1>
+      <nav>
+        <a href="#mission">The Mission</a>
+        <a href="#facts">Quick Facts</a>
+        <a href="#media">Watch &amp; Learn</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="mission">
+        <article>
+          <h2>&#128301; Why We Want to Go to Mars</h2>
+          <p>
+            Mars is the most Earth-like planet in our solar system! Scientists
+            send robots called <strong>rovers</strong> to drive around the
+            planet and look for ancient signs of water or alien bacteria.
+          </p>
+          <p>
+            One day, humans might even build a base on Mars. To do this,
+            astronauts will need to figure out how to grow food and create
+            oxygen in a frozen, dusty wasteland!
+          </p>
+        </article>
+
+        <figure>
+          <img
+            src="https://images.pexels.com/photos/73873/star-cluster-rosette-nebula-star-galaxies-73873.jpeg?auto=compress&cs=tinysrgb&w=700&h=700&fit=crop"
+            alt="A glowing view of deep space"
+            width="500"
+            height="500"
+          />
+          <figcaption>
+            &#128248; Deep space is full of mysteries waiting to be discovered!
+          </figcaption>
+        </figure>
+      </section>
+
+      <aside id="facts">
+        <h3>&#11088; Quick Mars Facts</h3>
+        <ul>
+          <li>&#127777; The average temperature is minus 81 degrees!</li>
+          <li>&#127761; Mars has two tiny moons named Phobos and Deimos.</li>
+          <li>
+            &#127939; Because of low gravity, you could jump 3 times higher on
+            Mars.
+          </li>
+          <li>&#128197; A year on Mars takes 687 Earth days.</li>
+        </ul>
+      </aside>
+
+      <h2 id="media">&#127909; Watch &amp; Learn</h2>
+      <iframe
+        src="https://www.youtube.com/embed/XRCIzZHpFtY"
+        width="700"
+        height="400"
+        title="Mars Rover Video"
+        allowfullscreen
+      ></iframe>
+    </main>
+
+    <footer>
+      <p>
+        Copyright &#169; 2024 Mars Explorers &#124; Built by a future web
+        developer &#128125;
+      </p>
+    </footer>
+  </body>
+</html>

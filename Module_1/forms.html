@@ -1,0 +1,138 @@
+<!-- 
+
+HTML FORMS STUDY GUIDE:
+
+<form>
+- Explanation: The invisible wrapper that holds all your questions and sends the answers to the server.
+- Example: Like the paper packet that holds all your quiz questions together.
+
+<fieldset>
+- Explanation: Draws a neat little box around a group of related questions to keep your form organized.
+- Example: Grouping all the "Personal Info" questions together inside one box.
+
+<legend>
+- Explanation: The title that sits perfectly right inside the top line of your <fieldset> box.
+- Example: The words "Player Details" written at the top border of the box.
+
+<label>
+- Explanation: The text that tells the user exactly what they need to type into the blank box.
+- Example: The words "Enter your username:" right next to the typing box.
+
+<input type="text">
+- Explanation: A standard, single-line text box where users can type short answers.
+- Example: A box to type your Gamer Tag or first name.
+
+<input type="password">
+- Explanation: A text box that turns everything you type into hidden dots so nobody peeking over your shoulder can read it.
+- Example: A box to type your secret account password.
+
+<input type="date">
+- Explanation: Pops up a mini calendar so the user can easily click and pick a specific day.
+- Example: Clicking to pick your birthday from the calendar.
+
+<select> and <option>
+- Explanation: Creates a drop-down menu (<select>) filled with choices (<option>) the user can pick from.
+- Example: Clicking a box to see a list of games and selecting "Minecraft".
+
+<input type="radio">
+- Explanation: Little circle buttons where you can only pick exactly ONE choice from the group.
+- Example: Picking your t-shirt size (you can't be both Small and Large at the same time).
+
+<textarea>
+- Explanation: A big, stretchable box used for typing long messages, paragraphs, or comments.
+- Example: A big box asking "Tell us why you want to join the team."
+
+<input type="checkbox">
+- Explanation: Little square boxes that let you pick as many choices as you want (or none at all).
+- Example: Checking off which pizza toppings you want (pepperoni, extra cheese, mushrooms).
+
+<input type="submit">
+- Explanation: The final button you click at the bottom to send all your typed answers to the website.
+- Example: The "Register Now!" button.
+
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Esports Tournament Signup</title>
+  </head>
+  <body>
+    <h1>🎮 Epic Esports Tournament Signup</h1>
+    <p>
+      Fill out the form below to register for the upcoming school gaming
+      tournament!
+    </p>
+    <hr />
+
+    <form>
+      <fieldset>
+        <legend>Player Details</legend>
+
+        <label>Gamer Tag (Username)</label><br />
+        <input
+          type="text"
+          id="username"
+          placeholder="e.g. NinjaGamer99"
+        /><br /><br />
+
+        <label>Secret Team PIN</label><br />
+        <input
+          type="password"
+          id="pin"
+          placeholder="Enter 4-digit PIN"
+        /><br /><br />
+
+        <label>Date of Birth</label><br />
+        <input type="date" id="dob" /><br />
+      </fieldset>
+
+      <br />
+
+      <fieldset>
+        <legend>Tournament Info</legend>
+
+        <label>Which game are you competing in?</label><br />
+        <select id="game">
+          <option value="">-- Select a game --</option>
+          <option value="smash">Super Smash Bros</option>
+          <option value="kart">Mario Kart 8</option>
+          <option value="rocket">Rocket League</option></select
+        ><br /><br />
+
+        <label>What is your skill level?</label><br />
+        <input type="radio" name="skill" value="beginner" /> Beginner (Just for
+        fun)<br />
+        <input type="radio" name="skill" value="intermediate" /> Intermediate
+        (Pretty good)<br />
+        <input type="radio" name="skill" value="expert" /> Expert (I play every
+        day)<br /><br />
+
+        <label>What is your victory catchphrase?</label><br />
+        <textarea
+          id="catchphrase"
+          rows="3"
+          cols="35"
+          placeholder="e.g. GG! Better luck next time!"
+        ></textarea
+        ><br />
+      </fieldset>
+
+      <br />
+
+      <fieldset>
+        <legend>What consoles do you own?</legend>
+
+        <input type="checkbox" value="pc" /> Gaming PC<br />
+        <input type="checkbox" value="switch" /> Nintendo Switch<br />
+        <input type="checkbox" value="playstation" /> PlayStation 5<br />
+        <input type="checkbox" value="xbox" /> Xbox Series X<br />
+      </fieldset>
+
+      <br />
+      <input type="submit" value="Join the Tournament!" />
+    </form>
+  </body>
+</html>
