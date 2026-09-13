@@ -1,0 +1,91 @@
+/*
+=======================================================
+  FILE 2 - style.css
+=======================================================
+
+  This is the EXTERNAL CSS file.
+  It is a separate file from the HTML file.
+  It is linked to index.html using the link tag.
+
+  CSS SELECTORS USED:
+=======================================================
+
+  1. Universal Selector ( * )
+     - The * means apply to EVERYTHING on the page
+     - Here it sets font size and font family
+
+  2. Element Selectors
+     - Directly targets the HTML tag by its name
+     - Example: h1 styles ALL h1 tags on the page
+
+  3. Class Selector ( .cartoon-detail )
+     - Written with a dot (.) before the name
+     - Applied using class="cartoon-detail"
+     - Can be used on MULTIPLE elements
+     - MEMORY TRICK: Dot = Duplicate (many elements)
+
+  4. ID Selector ( #cartoon-card )
+     - Written with a hash (#) before the name
+     - Applied using id="cartoon-card"
+     - Used only ONCE per page (like a roll number!)
+     - MEMORY TRICK: # = 1 unique thing
+
+  CSS PROPERTIES USED:
+=======================================================
+
+  background-color  → Sets background colour
+  color             → Sets text colour
+  font-size         → Sets text size (px = pixels)
+  font-weight       → Makes text bold or thin
+  padding           → Space INSIDE the box/element
+  border-radius     → Makes corners rounded
+  text-align        → Aligns text (left, center, right)
+  font-family       → Changes the font style
+
+=======================================================
+*/
+
+/* Universal Selector - applies to everything */
+* {
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+/* Element Selector - targets body tag */
+body {
+    background-color: lightyellow;
+    text-align: center;
+}
+
+/* Element Selector - targets h1 tag */
+h1 {
+    color: darkblue;
+}
+
+/* Element Selector - targets h2 tag */
+h2 {
+    color: purple;
+}
+
+/* Element Selector - targets p tag */
+p {
+    color: dimgray;
+}
+
+/* Class Selector - targets intro paragraph */
+.intro {
+    color: crimson;
+}
+
+/* Class Selector - targets elements with class cartoon-detail */
+.cartoon-detail {
+    color: darkgreen;
+    font-weight: bold;
+}
+
+/* ID Selector - targets element with id cartoon-card */
+#cartoon-card {
+    background-color: lightcyan;
+    padding: 20px;
+    border-radius: 10px;
+}

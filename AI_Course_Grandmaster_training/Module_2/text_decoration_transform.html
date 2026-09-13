@@ -1,0 +1,981 @@
+<!--
+=======================================================
+  TEXT DECORATION AND TEXT TRANSFORM - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains CSS Text Decoration
+and Text Transform properties using Internal CSS
+with simple and clear examples.
+
+=======================================================
+  WHAT IS TEXT DECORATION?
+=======================================================
+
+  Text Decoration = adding LINES to the text
+  or removing lines from the text.
+
+  It is used to:
+  - Underline important text
+  - Strike through deleted or wrong text
+  - Add a line above text
+  - Remove underline from links
+
+  Basic Syntax:
+  text-decoration: value;
+
+  OR using individual properties:
+  text-decoration-line   : type of line
+  text-decoration-color  : colour of line
+  text-decoration-style  : style of line
+  text-decoration-thickness : thickness of line
+
+=======================================================
+  TEXT DECORATION PROPERTIES
+=======================================================
+
+  1. text-decoration-line
+  -------------------------------------------------------
+  What it does : Decides WHERE the line appears
+
+  Values:
+  none          - no line at all
+                  Used to REMOVE underline from links
+                  Example: text-decoration-line: none;
+
+  underline     - line appears BELOW the text
+                  Most common decoration
+                  Example: text-decoration-line: underline;
+
+  overline      - line appears ABOVE the text
+                  Less commonly used
+                  Example: text-decoration-line: overline;
+
+  line-through  - line appears THROUGH the middle
+                  Used for deleted or wrong text
+                  Like strikethrough in MS Word
+                  Example: text-decoration-line: line-through;
+
+  underline overline - BOTH underline and overline
+                       Two lines at once
+                       Example: text-decoration-line: underline overline;
+
+  Memory Trick:
+  under = below the text
+  over  = above the text
+  through = cutting through the middle
+
+
+  2. text-decoration-color
+  -------------------------------------------------------
+  What it does : Changes the COLOUR of the line
+                 Can be different from text colour
+
+  Values:
+  Any colour value:
+  Colour name : red, blue, green
+  Hex code    : #ff0000
+  RGB         : rgb(255, 0, 0)
+
+  Example:
+  text-decoration-color: red;
+  text-decoration-color: #ff6347;
+
+  Note: You must also set text-decoration-line
+        for the colour to show
+
+
+  3. text-decoration-style
+  -------------------------------------------------------
+  What it does : Changes the STYLE or PATTERN of the line
+
+  Values:
+  solid   - a plain straight solid line (default)
+            Example: text-decoration-style: solid;
+
+  double  - two parallel lines
+            Example: text-decoration-style: double;
+
+  dotted  - a line made of dots
+            Example: text-decoration-style: dotted;
+
+  dashed  - a line made of dashes
+            Example: text-decoration-style: dashed;
+
+  wavy    - a wavy squiggly line
+            Like the red spelling error line
+            Example: text-decoration-style: wavy;
+
+  Memory Trick:
+  solid  = one straight line
+  double = two straight lines
+  dotted = . . . . . . . . .
+  dashed = - - - - - - - - -
+  wavy   = like water waves
+
+
+  4. text-decoration-thickness
+  -------------------------------------------------------
+  What it does : Changes how THICK or THIN the line is
+
+  Values:
+  auto      - browser decides thickness (default)
+  from-font - uses thickness from the font
+  px value  - set exact thickness in pixels
+
+  Example:
+  text-decoration-thickness: 2px;
+  text-decoration-thickness: 5px;
+
+  Note: Thicker lines are more visible and bold
+
+
+  5. text-decoration SHORTHAND
+  -------------------------------------------------------
+  Combines all decoration properties in ONE line
+
+  Syntax:
+  text-decoration: line colour style thickness;
+
+  Example:
+  text-decoration: underline red wavy 2px;
+  Adds a red wavy underline that is 2px thick
+
+  text-decoration: line-through blue solid 3px;
+  Adds a blue solid strikethrough that is 3px thick
+
+  Note: You must at least write the line value
+        All other values are optional
+
+=======================================================
+  WHAT IS TEXT TRANSFORM?
+=======================================================
+
+  Text Transform = changing the CASE of text
+  without changing the actual HTML content.
+
+  It makes letters:
+  - ALL CAPITAL (uppercase)
+  - all small (lowercase)
+  - First Letter Capital (capitalize)
+
+  The actual text in HTML stays the same
+  Only the DISPLAY on screen changes
+
+  Basic Syntax:
+  text-transform: value;
+
+=======================================================
+  TEXT TRANSFORM PROPERTIES
+=======================================================
+
+  6. text-transform: none
+  -------------------------------------------------------
+  What it does : Text stays EXACTLY as typed in HTML
+                 No change at all (default value)
+
+  Example:
+  text-transform: none;
+  hElLo WoRlD stays as hElLo WoRlD
+
+
+  7. text-transform: uppercase
+  -------------------------------------------------------
+  What it does : Changes ALL letters to CAPITALS
+
+  Example:
+  text-transform: uppercase;
+  hello world becomes HELLO WORLD
+  doraemon becomes DORAEMON
+
+  Used for:
+  - Headings and titles
+  - Buttons and labels
+  - Important announcements
+
+  Memory Trick: UPPER = top = CAPITAL letters
+                like SHOUTING
+
+
+  8. text-transform: lowercase
+  -------------------------------------------------------
+  What it does : Changes ALL letters to small letters
+
+  Example:
+  text-transform: lowercase;
+  HELLO WORLD becomes hello world
+  DORAEMON becomes doraemon
+
+  Used for:
+  - Making text consistent
+  - Email addresses
+  - Usernames
+
+  Memory Trick: lower = bottom = small letters
+
+
+  9. text-transform: capitalize
+  -------------------------------------------------------
+  What it does : Makes FIRST LETTER of EVERY word capital
+                 Rest of the letters stay the same
+
+  Example:
+  text-transform: capitalize;
+  hello world becomes Hello World
+  my name is doraemon becomes My Name Is Doraemon
+
+  Note: Only the FIRST letter of each word changes
+        The rest of the letters are NOT changed
+
+  Used for:
+  - Names of people and places
+  - Titles of books and movies
+  - Headings
+
+  Memory Trick: capitalize = capital at start of each word
+                Like how we write names in English
+
+=======================================================
+  COMBINING TEXT DECORATION AND TEXT TRANSFORM
+=======================================================
+
+  Both properties can be used on the SAME element
+
+  Example:
+  p {
+    text-transform: uppercase;
+    text-decoration: underline red wavy;
+  }
+
+  This will make text ALL CAPS and add
+  a red wavy underline at the same time
+
+=======================================================
+  PRACTICAL USES
+=======================================================
+
+  TEXT DECORATION PRACTICAL USES:
+  -------------------------------------------------------
+  Remove link underline:
+  a { text-decoration: none; }
+
+  Show deleted price:
+  .old-price { text-decoration: line-through red; }
+
+  Spelling error style:
+  .error { text-decoration: underline red wavy; }
+
+  Highlight important text:
+  .important { text-decoration: underline double; }
+
+
+  TEXT TRANSFORM PRACTICAL USES:
+  -------------------------------------------------------
+  Button text always uppercase:
+  button { text-transform: uppercase; }
+
+  Heading capitalize:
+  h1 { text-transform: capitalize; }
+
+  Username always lowercase:
+  .username { text-transform: lowercase; }
+
+=======================================================
+  CSS PROPERTIES QUICK REFERENCE TABLE
+=======================================================
+
+  Property                    Values
+  ------------------------    ----------------------------
+  text-decoration-line        none underline overline
+                              line-through
+  text-decoration-color       any colour value
+  text-decoration-style       solid double dotted
+                              dashed wavy
+  text-decoration-thickness   auto px value
+  text-decoration             shorthand for all above
+  text-transform              none uppercase lowercase
+                              capitalize
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  Text Decoration = adds or removes LINES on text
+  text-decoration-line      = where the line goes
+  text-decoration-color     = colour of the line
+  text-decoration-style     = pattern of the line
+  text-decoration-thickness = thickness of the line
+
+  Text Transform = changes the CASE of text
+  uppercase  = ALL CAPITAL LETTERS
+  lowercase  = all small letters
+  capitalize = First Letter Of Each Word Capital
+  none       = no change stays as typed
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>Text Decoration and Text Transform</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        text-align: center;
+        color: #333;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+      }
+
+      h3 {
+        color: #555;
+        font-size: 18px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 85%;
+        border: 2px solid #ddd;
+        text-align: left;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin: 10px 0;
+      }
+
+      /* Label showing the CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      /* =============================================
+       TEXT DECORATION LINE EXAMPLES
+    =============================================== */
+
+      /* No decoration - removes any line */
+      .deco-none {
+        text-decoration-line: none;
+        font-size: 22px;
+      }
+
+      /* Underline - line below text */
+      .deco-underline {
+        text-decoration-line: underline;
+        font-size: 22px;
+      }
+
+      /* Overline - line above text */
+      .deco-overline {
+        text-decoration-line: overline;
+        font-size: 22px;
+      }
+
+      /* Line through middle of text */
+      .deco-linethrough {
+        text-decoration-line: line-through;
+        font-size: 22px;
+      }
+
+      /* Both underline and overline together */
+      .deco-both {
+        text-decoration-line: underline overline;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       TEXT DECORATION COLOR EXAMPLES
+    =============================================== */
+
+      /* Underline with red colour */
+      .deco-color-red {
+        text-decoration-line: underline;
+        text-decoration-color: red;
+        font-size: 22px;
+      }
+
+      /* Underline with blue colour */
+      .deco-color-blue {
+        text-decoration-line: underline;
+        text-decoration-color: blue;
+        font-size: 22px;
+      }
+
+      /* Line through with orange colour */
+      .deco-color-orange {
+        text-decoration-line: line-through;
+        text-decoration-color: orange;
+        font-size: 22px;
+      }
+
+      /* Overline with green colour */
+      .deco-color-green {
+        text-decoration-line: overline;
+        text-decoration-color: green;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       TEXT DECORATION STYLE EXAMPLES
+    =============================================== */
+
+      /* Solid line - default style */
+      .deco-solid {
+        text-decoration-line: underline;
+        text-decoration-style: solid;
+        text-decoration-color: #003366;
+        font-size: 22px;
+      }
+
+      /* Double line */
+      .deco-double {
+        text-decoration-line: underline;
+        text-decoration-style: double;
+        text-decoration-color: #003366;
+        font-size: 22px;
+      }
+
+      /* Dotted line */
+      .deco-dotted {
+        text-decoration-line: underline;
+        text-decoration-style: dotted;
+        text-decoration-color: #003366;
+        font-size: 22px;
+      }
+
+      /* Dashed line */
+      .deco-dashed {
+        text-decoration-line: underline;
+        text-decoration-style: dashed;
+        text-decoration-color: #003366;
+        font-size: 22px;
+      }
+
+      /* Wavy line - like spelling error */
+      .deco-wavy {
+        text-decoration-line: underline;
+        text-decoration-style: wavy;
+        text-decoration-color: #003366;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       TEXT DECORATION THICKNESS EXAMPLES
+    =============================================== */
+
+      /* Thin line - 1px */
+      .deco-thin {
+        text-decoration-line: underline;
+        text-decoration-thickness: 1px;
+        text-decoration-color: #003366;
+        font-size: 22px;
+      }
+
+      /* Medium line - 3px */
+      .deco-medium {
+        text-decoration-line: underline;
+        text-decoration-thickness: 3px;
+        text-decoration-color: #003366;
+        font-size: 22px;
+      }
+
+      /* Thick line - 6px */
+      .deco-thick {
+        text-decoration-line: underline;
+        text-decoration-thickness: 6px;
+        text-decoration-color: #003366;
+        font-size: 22px;
+      }
+
+      /* Very thick line - 10px */
+      .deco-verythick {
+        text-decoration-line: underline;
+        text-decoration-thickness: 10px;
+        text-decoration-color: #003366;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       TEXT DECORATION SHORTHAND EXAMPLES
+    =============================================== */
+
+      /* Shorthand - underline red wavy */
+      .short-1 {
+        text-decoration: underline red wavy 2px;
+        font-size: 22px;
+      }
+
+      /* Shorthand - line-through blue solid */
+      .short-2 {
+        text-decoration: line-through blue solid 3px;
+        font-size: 22px;
+      }
+
+      /* Shorthand - overline green dotted */
+      .short-3 {
+        text-decoration: overline green dotted 2px;
+        font-size: 22px;
+      }
+
+      /* Shorthand - underline orange dashed thick */
+      .short-4 {
+        text-decoration: underline orange dashed 4px;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       PRACTICAL USES OF TEXT DECORATION
+    =============================================== */
+
+      /* Link with no underline */
+      .link-nodeco {
+        text-decoration: none;
+        color: #1e90ff;
+        font-size: 22px;
+        cursor: pointer;
+      }
+
+      /* Old price with strikethrough */
+      .old-price {
+        text-decoration: line-through red solid 2px;
+        color: #888;
+        font-size: 22px;
+      }
+
+      /* Spelling error style */
+      .spelling-error {
+        text-decoration: underline red wavy 2px;
+        font-size: 22px;
+      }
+
+      /* Important text with double underline */
+      .important-text {
+        text-decoration: underline double #003366 3px;
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      /* =============================================
+       TEXT TRANSFORM EXAMPLES
+    =============================================== */
+
+      /* No transform - stays as typed */
+      .transform-none {
+        text-transform: none;
+        font-size: 22px;
+      }
+
+      /* Uppercase - all capital letters */
+      .transform-upper {
+        text-transform: uppercase;
+        font-size: 22px;
+      }
+
+      /* Lowercase - all small letters */
+      .transform-lower {
+        text-transform: lowercase;
+        font-size: 22px;
+      }
+
+      /* Capitalize - first letter of each word */
+      .transform-capitalize {
+        text-transform: capitalize;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       PRACTICAL USES OF TEXT TRANSFORM
+    =============================================== */
+
+      /* Button with uppercase text */
+      .btn {
+        text-transform: uppercase;
+        background-color: #1e90ff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        display: inline-block;
+        margin: 5px;
+      }
+
+      /* Heading capitalize */
+      .heading-capitalize {
+        text-transform: capitalize;
+        font-size: 24px;
+        font-weight: bold;
+        color: #003366;
+      }
+
+      /* Username lowercase */
+      .username {
+        text-transform: lowercase;
+        font-size: 22px;
+        color: #555;
+        font-family:
+          Courier New,
+          monospace;
+      }
+
+      /* =============================================
+       COMBINING BOTH PROPERTIES EXAMPLE
+    =============================================== */
+
+      /* Uppercase with wavy red underline */
+      .combined-1 {
+        text-transform: uppercase;
+        text-decoration: underline red wavy 2px;
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      /* Capitalize with double blue underline */
+      .combined-2 {
+        text-transform: capitalize;
+        text-decoration: underline blue double 3px;
+        font-size: 22px;
+      }
+
+      /* Lowercase with orange line-through */
+      .combined-3 {
+        text-transform: lowercase;
+        text-decoration: line-through orange solid 2px;
+        font-size: 22px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Text Decoration and Text Transform</h1>
+
+    <!-- ============================================
+       TEXT DECORATION LINE SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>1. text-decoration-line</h2>
+      <p>Controls WHERE the line appears on the text</p>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-line: none;</span>
+        <p class="deco-none">This text has NO decoration line at all</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-line: underline;</span>
+        <p class="deco-underline">This text has a line BELOW it</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-line: overline;</span>
+        <p class="deco-overline">This text has a line ABOVE it</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-line: line-through;</span>
+        <p class="deco-linethrough">This text has a line THROUGH the middle</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-line: underline overline;</span>
+        <p class="deco-both">This text has lines ABOVE and BELOW</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT DECORATION COLOR SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. text-decoration-color</h2>
+      <p>
+        Changes the COLOUR of the decoration line Line colour can be different
+        from text colour
+      </p>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-color: red;</span>
+        <p class="deco-color-red">This text has a RED underline</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-color: blue;</span>
+        <p class="deco-color-blue">This text has a BLUE underline</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-color: orange;</span>
+        <p class="deco-color-orange">This text has an ORANGE line through it</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-color: green;</span>
+        <p class="deco-color-green">This text has a GREEN overline</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT DECORATION STYLE SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. text-decoration-style</h2>
+      <p>Changes the PATTERN or STYLE of the line</p>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-style: solid;</span>
+        <p class="deco-solid">This line is SOLID - plain straight line</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-style: double;</span>
+        <p class="deco-double">This line is DOUBLE - two parallel lines</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-style: dotted;</span>
+        <p class="deco-dotted">This line is DOTTED - made of dots</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-style: dashed;</span>
+        <p class="deco-dashed">This line is DASHED - made of dashes</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-style: wavy;</span>
+        <p class="deco-wavy">
+          This line is WAVY - squiggly like spelling error
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT DECORATION THICKNESS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>4. text-decoration-thickness</h2>
+      <p>Controls how THICK or THIN the line is</p>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-thickness: 1px;</span>
+        <p class="deco-thin">This line is very THIN at 1px</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-thickness: 3px;</span>
+        <p class="deco-medium">This line is MEDIUM at 3px</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-thickness: 6px;</span>
+        <p class="deco-thick">This line is THICK at 6px</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration-thickness: 10px;</span>
+        <p class="deco-verythick">This line is VERY THICK at 10px</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT DECORATION SHORTHAND SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>5. text-decoration Shorthand</h2>
+      <p>
+        Write all decoration properties in ONE line syntax: line colour style
+        thickness
+      </p>
+
+      <div class="demo-box">
+        <span class="label">text-decoration: underline red wavy 2px;</span>
+        <p class="short-1">Red wavy underline using shorthand</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration: line-through blue solid 3px;</span>
+        <p class="short-2">Blue solid strikethrough using shorthand</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration: overline green dotted 2px;</span>
+        <p class="short-3">Green dotted overline using shorthand</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-decoration: underline orange dashed 4px;</span>
+        <p class="short-4">Orange dashed underline using shorthand</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       PRACTICAL USES OF TEXT DECORATION
+  =============================================== -->
+    <div class="section">
+      <h2>6. Practical Uses of Text Decoration</h2>
+      <p>Real examples where text decoration is used</p>
+
+      <div class="demo-box">
+        <span class="label"
+          >Remove underline from link: text-decoration: none;</span
+        >
+        <p class="link-nodeco">
+          Click here to visit website (link without underline)
+        </p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label"
+          >Old price strikethrough: text-decoration: line-through red;</span
+        >
+        <p class="old-price">Original Price: Rs 999</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label"
+          >Spelling error: text-decoration: underline red wavy;</span
+        >
+        <p class="spelling-error">This word is spelt wrongly</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label"
+          >Important text: text-decoration: underline double;</span
+        >
+        <p class="important-text">This is very important information</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT TRANSFORM SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>7. text-transform</h2>
+      <p>
+        Changes the CASE of text on screen The actual HTML text does not change
+        Only the display on screen changes
+      </p>
+
+      <div class="demo-box">
+        <span class="label">text-transform: none;</span>
+        <p class="transform-none">hElLo WoRlD - text stays exactly as typed</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-transform: uppercase;</span>
+        <p class="transform-upper">hello world becomes all capital letters</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-transform: lowercase;</span>
+        <p class="transform-lower">HELLO WORLD BECOMES ALL SMALL LETTERS</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">text-transform: capitalize;</span>
+        <p class="transform-capitalize">
+          first letter of every word becomes capital
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       PRACTICAL USES OF TEXT TRANSFORM
+  =============================================== -->
+    <div class="section">
+      <h2>8. Practical Uses of Text Transform</h2>
+      <p>Real examples where text transform is used</p>
+
+      <div class="demo-box">
+        <span class="label"
+          >Button text uppercase: text-transform: uppercase;</span
+        >
+        <br />
+        <div class="btn">buy now</div>
+        <div class="btn">add to cart</div>
+        <div class="btn">sign up</div>
+      </div>
+
+      <div class="demo-box">
+        <span class="label"
+          >Name or title capitalize: text-transform: capitalize;</span
+        >
+        <p class="heading-capitalize">my name is doraemon nobita shizuka</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label"
+          >Username lowercase: text-transform: lowercase;</span
+        >
+        <p class="username">Username: DORAEMON_123 displays as doraemon_123</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       COMBINING BOTH PROPERTIES
+  =============================================== -->
+    <div class="section">
+      <h2>9. Combining Text Decoration and Text Transform</h2>
+      <p>Both properties can be used on the SAME element at the same time</p>
+
+      <div class="demo-box">
+        <span class="label">
+          text-transform: uppercase + text-decoration: underline red wavy;
+        </span>
+        <p class="combined-1">
+          hello this text is uppercase with wavy red underline
+        </p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">
+          text-transform: capitalize + text-decoration: underline blue double;
+        </span>
+        <p class="combined-2">my favourite cartoon is doraemon</p>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">
+          text-transform: lowercase + text-decoration: line-through orange;
+        </span>
+        <p class="combined-3">THIS ITEM IS NO LONGER AVAILABLE</p>
+      </div>
+    </div>
+  </body>
+</html>

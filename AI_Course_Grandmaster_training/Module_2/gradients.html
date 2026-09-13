@@ -1,0 +1,581 @@
+<!--
+=======================================================
+  CSS GRADIENTS - CODE EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains ALL types of CSS
+Gradients using Internal CSS with examples.
+
+=======================================================
+  WHAT IS A GRADIENT?
+=======================================================
+
+  A gradient is when one colour slowly changes
+  into another colour.
+
+  Example: Blue slowly becomes Purple
+           Yellow slowly becomes Orange
+
+  In CSS gradients are used with:
+  background-image: gradient-type(...)
+
+  There are 3 main types of gradients in CSS:
+  1. Linear Gradient
+  2. Radial Gradient
+  3. Conic Gradient
+
+=======================================================
+  1. LINEAR GRADIENT
+=======================================================
+
+  Linear = in a straight LINE
+  Colours change from one side to another side
+  in a straight line direction.
+
+  Basic Syntax:
+  background-image: linear-gradient(colours);
+
+  WITH DIRECTION:
+  background-image: linear-gradient(direction, colour1, colour2);
+
+  DIRECTION OPTIONS:
+  to right        → left to right
+  to left         → right to left
+  to bottom       → top to bottom (default)
+  to top          → bottom to top
+  to bottom right → diagonal from top-left
+  to bottom left  → diagonal from top-right
+  45deg           → at 45 degree angle
+  90deg           → straight across
+  180deg          → straight down
+
+  EXAMPLES:
+
+  Two colours:
+  linear-gradient(to right, red, blue)
+  Starts red on left, becomes blue on right
+
+  Three colours:
+  linear-gradient(to right, red, yellow, blue)
+  Starts red, goes through yellow, ends blue
+
+  With angle:
+  linear-gradient(45deg, red, blue)
+  Goes diagonally at 45 degrees
+
+  With percentage (colour stops):
+  linear-gradient(to right, red 20%, blue 80%)
+  Red stays until 20%, blue starts at 80%
+  Between 20% and 80% they blend together
+
+  Memory Trick: Linear = Line = straight direction
+
+=======================================================
+  2. RADIAL GRADIENT
+=======================================================
+
+  Radial = from the CENTER outwards
+  Colours spread out from middle like a circle
+  or oval shape.
+
+  Basic Syntax:
+  background-image: radial-gradient(colours);
+
+  WITH SHAPE:
+  background-image: radial-gradient(shape, colour1, colour2);
+
+  SHAPE OPTIONS:
+  circle  → perfectly round shape
+  ellipse → oval shape (default)
+
+  EXAMPLES:
+
+  Basic circle:
+  radial-gradient(circle, yellow, orange)
+  Yellow in center, orange on outside
+
+  Ellipse (default):
+  radial-gradient(ellipse, blue, purple)
+  Blue in center oval, purple on outside
+
+  Three colours:
+  radial-gradient(circle, white, lightblue, blue)
+  White center, lightblue middle, blue outside
+
+  Dot pattern trick:
+  radial-gradient(circle, black 2px, transparent 3px)
+  Makes tiny dots - used as background pattern
+
+  Memory Trick: Radial = Radiates = spreads outward
+                Like ripples in water from center
+
+=======================================================
+  3. CONIC GRADIENT
+=======================================================
+
+  Conic = colours go AROUND a center point
+  Like a colour wheel or pie chart
+
+  Basic Syntax:
+  background-image: conic-gradient(colours);
+
+  WITH ANGLE:
+  background-image: conic-gradient(from angle, colours);
+
+  EXAMPLES:
+
+  Basic:
+  conic-gradient(red, yellow, green, blue, red)
+  Colours go around like a colour wheel
+
+  Pie chart style:
+  conic-gradient(red 0% 25%, blue 25% 50%,
+                 green 50% 75%, yellow 75% 100%)
+  Each colour takes exactly 25% of the circle
+
+  With starting angle:
+  conic-gradient(from 45deg, red, blue)
+  Starts the gradient at 45 degree angle
+
+  Memory Trick: Conic = Cone = spins around center
+                Like a spinning colour wheel
+
+=======================================================
+  REPEATING GRADIENTS
+=======================================================
+
+  You can make gradients REPEAT like a pattern
+
+  repeating-linear-gradient
+    - Repeats the linear gradient in a line
+    - Good for making stripes
+
+  Example:
+  repeating-linear-gradient(45deg,
+    red 0px, red 10px,
+    white 10px, white 20px)
+  Makes diagonal red and white stripes
+
+  repeating-radial-gradient
+    - Repeats the radial gradient in circles
+    - Good for making target or ripple pattern
+
+  Example:
+  repeating-radial-gradient(circle,
+    blue 0px, blue 10px,
+    white 10px, white 20px)
+  Makes blue and white circle rings
+
+=======================================================
+  GRADIENT WITH TRANSPARENCY
+=======================================================
+
+  You can use rgba() colours in gradients
+  rgba = Red Green Blue Alpha (transparency)
+  Alpha goes from 0 (invisible) to 1 (solid)
+
+  Example:
+  linear-gradient(to right,
+    rgba(0,0,255,1),
+    rgba(0,0,255,0))
+  Blue that fades to transparent
+
+=======================================================
+  COLOUR FORMATS USED IN GRADIENTS
+=======================================================
+
+  Colour Name : red, blue, white (simple names)
+  Hex Code    : #ff0000 (6 digit code)
+  RGB         : rgb(255, 0, 0)
+  RGBA        : rgba(255, 0, 0, 0.5) with transparency
+  HSL         : hsl(0, 100%, 50%) hue saturation light
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  background-image  → sets gradient as background
+  background-color  → sets solid backup colour
+  background-size   → sets size of background
+  background-repeat → sets if background repeats
+  width             → sets width of element
+  height            → sets height of element
+  border-radius     → makes corners rounded
+  border            → adds border around element
+  color             → sets text colour
+  font-size         → sets text size
+  font-weight       → makes text bold
+  text-align        → aligns text
+  padding           → space inside element
+  margin            → space outside element
+  display           → controls layout of elements
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Type          Syntax                    Direction
+  ----------    ----------------------    ----------
+  Linear        linear-gradient()         Straight line
+  Radial        radial-gradient()         Center outward
+  Conic         conic-gradient()          Around center
+  Rep Linear    repeating-linear-gradient Repeating line
+  Rep Radial    repeating-radial-gradient Repeating rings
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  Gradient = smooth colour change between colours
+  Linear   = straight line direction
+  Radial   = from center outward like circle
+  Conic    = spinning around center like pie chart
+  Repeating = same gradient tiled as a pattern
+  All gradients use background-image property
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Gradients</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* Body with Linear Gradient background */
+      body {
+        background-image: linear-gradient(to bottom, #87ceeb, #ffffff);
+        text-align: center;
+        color: white;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 24px;
+      }
+
+      h3 {
+        font-size: 18px;
+        color: white;
+      }
+
+      /* Box style for all gradient examples */
+      .gradient-box {
+        width: 350px;
+        height: 180px;
+        border-radius: 15px;
+        border: 3px solid white;
+        display: inline-block;
+        margin: 10px;
+        padding: 15px;
+      }
+
+      /* =============================================
+       LINEAR GRADIENTS
+    =============================================== */
+
+      /* Linear gradient - left to right - two colours */
+      .linear-lr {
+        background-image: linear-gradient(to right, red, blue);
+      }
+
+      /* Linear gradient - top to bottom - two colours */
+      .linear-tb {
+        background-image: linear-gradient(to bottom, yellow, orange);
+      }
+
+      /* Linear gradient - diagonal - two colours */
+      .linear-diagonal {
+        background-image: linear-gradient(to bottom right, purple, pink);
+      }
+
+      /* Linear gradient - with angle 45 degrees */
+      .linear-angle {
+        background-image: linear-gradient(45deg, green, lightgreen);
+      }
+
+      /* Linear gradient - three colours */
+      .linear-three {
+        background-image: linear-gradient(to right, red, yellow, blue);
+      }
+
+      /* Linear gradient - with colour stops percentage */
+      .linear-stops {
+        background-image: linear-gradient(
+          to right,
+          red 20%,
+          white 50%,
+          blue 80%
+        );
+      }
+
+      /* =============================================
+       RADIAL GRADIENTS
+    =============================================== */
+
+      /* Radial gradient - circle - two colours */
+      .radial-circle {
+        background-image: radial-gradient(circle, yellow, orange);
+      }
+
+      /* Radial gradient - ellipse - two colours */
+      .radial-ellipse {
+        background-image: radial-gradient(ellipse, lightblue, darkblue);
+      }
+
+      /* Radial gradient - circle - three colours */
+      .radial-three {
+        background-image: radial-gradient(circle, white, lightblue, blue);
+      }
+
+      /* Radial gradient - dot pattern */
+      .radial-dots {
+        background-color: #003366;
+        background-image: radial-gradient(circle, white 2px, transparent 3px);
+        background-size: 20px 20px;
+        background-repeat: repeat;
+      }
+
+      /* =============================================
+       CONIC GRADIENTS
+    =============================================== */
+
+      /* Conic gradient - colour wheel */
+      .conic-wheel {
+        background-image: conic-gradient(red, yellow, green, blue, purple, red);
+        border-radius: 50%;
+      }
+
+      /* Conic gradient - pie chart style */
+      .conic-pie {
+        background-image: conic-gradient(
+          red 0% 25%,
+          blue 25% 50%,
+          green 50% 75%,
+          yellow 75% 100%
+        );
+        border-radius: 50%;
+      }
+
+      /* Conic gradient - with starting angle */
+      .conic-angle {
+        background-image: conic-gradient(from 45deg, red, blue, green, red);
+      }
+
+      /* =============================================
+       REPEATING GRADIENTS
+    =============================================== */
+
+      /* Repeating linear gradient - diagonal stripes */
+      .repeat-linear {
+        background-image: repeating-linear-gradient(
+          45deg,
+          red 0px,
+          red 10px,
+          white 10px,
+          white 20px
+        );
+      }
+
+      /* Repeating radial gradient - circle rings */
+      .repeat-radial {
+        background-image: repeating-radial-gradient(
+          circle,
+          #003366 0px,
+          #003366 10px,
+          white 10px,
+          white 20px
+        );
+      }
+
+      /* =============================================
+       GRADIENT WITH TRANSPARENCY (RGBA)
+    =============================================== */
+
+      /* Linear gradient with rgba transparency */
+      .gradient-transparent {
+        background-image: linear-gradient(
+          to right,
+          rgba(0, 0, 255, 1),
+          rgba(0, 0, 255, 0)
+        );
+      }
+
+      /* Section divider styling */
+      .section {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 20px;
+        margin: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Gradients</h1>
+
+    <!-- ============================================
+       LINEAR GRADIENTS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>1. Linear Gradients</h2>
+      <p style="color: #003366">Colours change in a straight line direction</p>
+
+      <!-- Two colours left to right -->
+      <div class="gradient-box linear-lr">
+        <h3>Left to Right</h3>
+        <p style="color: white">linear-gradient(to right, red, blue)</p>
+      </div>
+
+      <!-- Two colours top to bottom -->
+      <div class="gradient-box linear-tb">
+        <h3>Top to Bottom</h3>
+        <p style="color: white">linear-gradient(to bottom, yellow, orange)</p>
+      </div>
+
+      <!-- Diagonal gradient -->
+      <div class="gradient-box linear-diagonal">
+        <h3>Diagonal</h3>
+        <p style="color: white">
+          linear-gradient(to bottom right, purple, pink)
+        </p>
+      </div>
+
+      <!-- Angle gradient -->
+      <div class="gradient-box linear-angle">
+        <h3>45 Degree Angle</h3>
+        <p style="color: white">linear-gradient(45deg, green, lightgreen)</p>
+      </div>
+
+      <!-- Three colours -->
+      <div class="gradient-box linear-three">
+        <h3>Three Colours</h3>
+        <p style="color: white">linear-gradient(to right, red, yellow, blue)</p>
+      </div>
+
+      <!-- Colour stops -->
+      <div class="gradient-box linear-stops">
+        <h3 style="color: #003366">Colour Stops</h3>
+        <p style="color: #003366">
+          linear-gradient(to right, red 20%, white 50%, blue 80%)
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       RADIAL GRADIENTS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. Radial Gradients</h2>
+      <p style="color: #003366">Colours spread outward from the center</p>
+
+      <!-- Circle two colours -->
+      <div class="gradient-box radial-circle">
+        <h3 style="color: #003366">Circle</h3>
+        <p style="color: #003366">radial-gradient(circle, yellow, orange)</p>
+      </div>
+
+      <!-- Ellipse two colours -->
+      <div class="gradient-box radial-ellipse">
+        <h3>Ellipse</h3>
+        <p style="color: white">
+          radial-gradient(ellipse, lightblue, darkblue)
+        </p>
+      </div>
+
+      <!-- Circle three colours -->
+      <div class="gradient-box radial-three">
+        <h3 style="color: #003366">Three Colours</h3>
+        <p style="color: #003366">
+          radial-gradient(circle, white, lightblue, blue)
+        </p>
+      </div>
+
+      <!-- Dot pattern -->
+      <div class="gradient-box radial-dots">
+        <h3>Dot Pattern</h3>
+        <p style="color: white">radial-gradient dot pattern trick</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       CONIC GRADIENTS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. Conic Gradients</h2>
+      <p style="color: #003366">
+        Colours go around a center point like a wheel
+      </p>
+
+      <!-- Colour wheel -->
+      <div class="gradient-box conic-wheel">
+        <h3>Colour Wheel</h3>
+        <p style="color: white">
+          conic-gradient(red, yellow, green, blue, red)
+        </p>
+      </div>
+
+      <!-- Pie chart -->
+      <div class="gradient-box conic-pie">
+        <h3>Pie Chart</h3>
+        <p style="color: white">conic-gradient with percentage stops</p>
+      </div>
+
+      <!-- With angle -->
+      <div class="gradient-box conic-angle">
+        <h3>With Starting Angle</h3>
+        <p style="color: white">conic-gradient(from 45deg, ...)</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       REPEATING GRADIENTS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>4. Repeating Gradients</h2>
+      <p style="color: #003366">Same gradient repeated as a pattern</p>
+
+      <!-- Repeating linear stripes -->
+      <div class="gradient-box repeat-linear">
+        <h3 style="color: #003366">Repeating Linear</h3>
+        <p style="color: #003366">repeating-linear-gradient diagonal stripes</p>
+      </div>
+
+      <!-- Repeating radial rings -->
+      <div class="gradient-box repeat-radial">
+        <h3>Repeating Radial</h3>
+        <p style="color: white">repeating-radial-gradient circle rings</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       GRADIENT WITH TRANSPARENCY SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>5. Gradient with Transparency</h2>
+      <p style="color: #003366">
+        Using rgba() to add transparency to gradients
+      </p>
+
+      <!-- Transparent gradient -->
+      <div class="gradient-box gradient-transparent">
+        <h3>Transparent Gradient</h3>
+        <p style="color: white">rgba(0, 0, 255, 1) to rgba(0, 0, 255, 0)</p>
+      </div>
+    </div>
+  </body>
+</html>

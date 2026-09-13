@@ -1,0 +1,324 @@
+<!--
+=======================================================
+  CSS SELECTORS WITH INTERNAL CSS - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows ALL types of CSS Selectors
+written using INTERNAL CSS (inside the style tag).
+
+=======================================================
+  WHAT IS INTERNAL CSS?
+=======================================================
+
+  Internal CSS = writing all CSS inside <style> tag
+  which is placed inside the <head> section.
+
+  <head>
+    <style>
+      all your css goes here
+    </style>
+  </head>
+
+=======================================================
+  ALL CSS SELECTORS EXPLAINED
+=======================================================
+
+  1. UNIVERSAL SELECTOR ( * )
+  -------------------------------------------------------
+  Symbol   : *
+  Targets  : EVERY element on the page
+  Use when : You want same style for everything
+
+  Example:
+    * {
+      font-size: 16px;
+    }
+
+  Memory Trick: * = star = applies to ALL like all
+                stars in the sky
+
+
+  2. ELEMENT SELECTOR
+  -------------------------------------------------------
+  Symbol   : just the tag name (no symbol needed)
+  Targets  : ALL elements with that tag name
+  Use when : You want to style all h1 or all p etc.
+
+  Example:
+    h1 { color: blue; }
+    p  { color: gray; }
+
+  Memory Trick: just write the tag name directly
+
+
+  3. CLASS SELECTOR ( . )
+  -------------------------------------------------------
+  Symbol   : dot (.) before the name
+  Targets  : All elements with that class name
+  Use when : You want SAME style on MANY elements
+  In HTML  : use class="your-class-name"
+
+  Example:
+    CSS  → .highlight { color: green; }
+    HTML → <p class="highlight">Hello</p>
+
+  Memory Trick: Dot = Duplicate = use on many elements
+                Like a school uniform - many students
+                wear the same uniform
+
+
+  4. ID SELECTOR ( # )
+  -------------------------------------------------------
+  Symbol   : hash (#) before the name
+  Targets  : ONE specific element with that id
+  Use when : You want to style ONE unique element
+  In HTML  : use id="your-id-name"
+
+  Example:
+    CSS  → #main-box { background: yellow; }
+    HTML → <div id="main-box">Hello</div>
+
+  Memory Trick: # = used for 1 unique thing only
+                Like your school roll number -
+                only YOU have that number
+
+
+  5. GROUPING SELECTOR ( , )
+  -------------------------------------------------------
+  Symbol   : comma (,) between selectors
+  Targets  : Multiple different elements together
+  Use when : Many elements need the SAME style
+             instead of writing same style again
+             and again
+
+  Example:
+    h1, h2, h3 { color: blue; }
+
+  Memory Trick: comma = and = style this AND that
+                AND that all together
+
+
+  6. DESCENDANT SELECTOR ( space )
+  -------------------------------------------------------
+  Symbol   : space between two selectors
+  Targets  : Element INSIDE another element
+  Use when : You want to style elements that are
+             inside a specific parent element only
+
+  Example:
+    div p { color: red; }
+    This styles only p tags that are INSIDE a div
+    Other p tags outside div are NOT affected
+
+  Memory Trick: Parent SPACE Child
+                Like saying "students inside
+                classroom A only"
+
+
+  7. PSEUDO-CLASS SELECTOR ( : )
+  -------------------------------------------------------
+  Symbol   : colon (:) after selector
+  Targets  : Element in a SPECIAL STATE
+  Use when : You want style to change on hover,
+             click, first-child etc.
+
+  Common ones:
+    :hover      → when mouse is over element
+    :first-child → first element inside a parent
+
+  Example:
+    a:hover { color: red; }
+    This changes link colour when you hover on it
+
+  Memory Trick: colon = condition
+                Style ONLY when THIS condition happens
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  background-color  → Sets background colour
+  color             → Sets text colour
+  font-size         → Sets text size (px = pixels)
+  font-weight       → Makes text bold or thin
+  padding           → Space INSIDE the element
+  margin            → Space OUTSIDE the element
+  border            → Adds a border around element
+  border-radius     → Makes corners rounded
+  text-align        → Aligns text left center right
+  font-family       → Changes the font style
+  text-decoration   → Underline, none etc for text
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Selector       Symbol   Targets          Example
+  -----------    ------   -------------    ----------
+  Universal        *      Everything       * { }
+  Element        (none)   All same tags    h1 { }
+  Class            .      Many elements    .name { }
+  ID               #      One element      #name { }
+  Grouping         ,      Many selectors   h1, h2 { }
+  Descendant     space    Child elements   div p { }
+  Pseudo-class     :      Special state    a:hover { }
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  Internal CSS = All selectors written in <style> tag
+  No separate file needed
+  All 7 selectors are shown in the code below
+  Each selector is clearly commented in the code
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Selectors with Internal CSS</title>
+
+    <style>
+      /* =============================================
+       1. UNIVERSAL SELECTOR
+       Applies to EVERY element on the page
+    =============================================== */
+      * {
+        font-size: 16px;
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* =============================================
+       2. ELEMENT SELECTOR
+       Targets all elements with that tag name
+    =============================================== */
+      body {
+        background-color: lightyellow;
+        text-align: center;
+      }
+
+      h1 {
+        color: darkblue;
+      }
+
+      h2 {
+        color: purple;
+      }
+
+      p {
+        color: dimgray;
+      }
+
+      /* =============================================
+       3. CLASS SELECTOR
+       Targets all elements with class="highlight"
+       Dot (.) is used before the class name
+    =============================================== */
+      .highlight {
+        color: darkgreen;
+        font-weight: bold;
+        background-color: lightgreen;
+        padding: 5px;
+        border-radius: 5px;
+      }
+
+      /* =============================================
+       4. ID SELECTOR
+       Targets ONE element with id="cartoon-card"
+       Hash (#) is used before the id name
+    =============================================== */
+      #cartoon-card {
+        background-color: lightcyan;
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid steelblue;
+      }
+
+      /* =============================================
+       5. GROUPING SELECTOR
+       Targets h2 AND h3 together at the same time
+       Comma (,) is used between selectors
+    =============================================== */
+      h2,
+      h3 {
+        text-align: center;
+        color: darkviolet;
+      }
+
+      /* =============================================
+       6. DESCENDANT SELECTOR
+       Targets p tags that are INSIDE #cartoon-card
+       Space is used between parent and child
+       p tags outside #cartoon-card are NOT affected
+    =============================================== */
+      #cartoon-card p {
+        color: teal;
+        font-weight: bold;
+      }
+
+      /* =============================================
+       7. PSEUDO-CLASS SELECTOR
+       :hover  → style changes when mouse goes over
+       :first-child → targets first child element
+    =============================================== */
+      .fun-fact:hover {
+        background-color: lightsalmon;
+        color: darkred;
+      }
+
+      #reasons p:first-child {
+        color: crimson;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- h1 is styled by ELEMENT SELECTOR -->
+    <h1>CSS Selectors with Internal CSS</h1>
+
+    <!-- p is styled by ELEMENT SELECTOR -->
+    <p>This page shows all CSS selectors using Internal CSS</p>
+
+    <!-- ID SELECTOR styles this div -->
+    <div id="cartoon-card">
+      <!-- h2 is styled by GROUPING SELECTOR -->
+      <h2>About My Character</h2>
+
+      <!-- DESCENDANT SELECTOR styles these p tags -->
+      <!-- because they are inside #cartoon-card -->
+      <p>Character Name: Doraemon</p>
+      <p>Best Friend: Nobita</p>
+      <p>Favourite Food: Dorayaki</p>
+      <p>Special Power: Future Gadgets</p>
+    </div>
+
+    <!-- h2 is styled by GROUPING SELECTOR -->
+    <h2>Fun Facts</h2>
+
+    <!-- h3 is styled by GROUPING SELECTOR -->
+    <h3>Hover over the facts below!</h3>
+
+    <!-- CLASS SELECTOR styles these p tags -->
+    <!-- PSEUDO-CLASS :hover changes style on hover -->
+    <p class="fun-fact highlight">Doraemon came from the 22nd century</p>
+    <p class="fun-fact highlight">His pocket is called the 4D pocket</p>
+    <p class="fun-fact highlight">He has over 4500 gadgets</p>
+
+    <!-- id="reasons" used for DESCENDANT SELECTOR -->
+    <div id="reasons">
+      <h2>Why I Like This Character</h2>
+
+      <!-- first p is styled by PSEUDO-CLASS :first-child -->
+      <p>Doraemon is kind, helpful, and funny.</p>
+      <p>He always tries to help his friends solve problems.</p>
+      <p>He teaches us about friendship and creativity.</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,136 @@
+<!--
+=======================================================
+  FILE 1 - index.html
+=======================================================
+
+WHAT IS EXTERNAL CSS?
+=======================================================
+
+  External CSS means writing all your CSS styles
+  in a SEPARATE file with .css extension.
+
+  Then we LINK that file to our HTML using:
+    <link rel="stylesheet" href="style.css">
+
+  This goes inside the <head> tag.
+
+  WHY USE EXTERNAL CSS?
+  - CSS and HTML are in SEPARATE files
+  - Very clean and organised
+  - Same CSS file can be used on MANY pages
+  - Best practice for real websites
+  - Easy to update styles for whole website
+
+  3 TYPES OF CSS - QUICK COMPARISON:
+  Inline CSS    → style inside the tag        → one element
+  Internal CSS  → style inside <style> tag    → one page
+  External CSS  → separate .css file          → many pages
+
+=======================================================
+  HTML TAGS USED
+=======================================================
+
+HEAD SECTION TAGS:
+
+  <!DOCTYPE html>
+    - Tells the browser "Hey! This is an HTML5 page"
+
+  <html lang="en">
+    - The root/main tag that wraps everything
+    - lang="en" means language is English
+
+  <head>
+    - Contains background information about the page
+    - Not visible on screen
+
+  <meta charset="UTF-8">
+    - Supports all characters and symbols on the page
+
+  <meta name="viewport">
+    - Makes the page look good on mobile phones too
+
+  <title>
+    - Sets the name shown on browser tab
+
+  <link rel="stylesheet" href="style.css">
+    - THIS IS THE KEY TAG FOR EXTERNAL CSS
+    - rel="stylesheet" means it is a CSS file
+    - href="style.css" is the name of our CSS file
+    - Links the HTML file to the CSS file
+    - No more <style> tag needed!
+
+BODY SECTION TAGS:
+
+  <body>
+    - Everything visible on screen goes here
+
+  <h1>
+    - Biggest heading
+    - Used once, for main title
+
+  <h2>
+    - Second level heading
+    - Slightly smaller than h1
+
+  <p>
+    - Paragraph tag
+    - Used for normal text
+
+  <div>
+    - A box/container to group elements together
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  HTML = Structure (like a skeleton)
+  CSS  = Style (like clothes)
+  External CSS = Styles written in separate .css file
+  <link> tag = connects HTML file to CSS file
+
+  YOUR FILES SHOULD LOOK LIKE THIS:
+  📁 My Project Folder
+     📄 index.html   (your HTML file)
+     📄 style.css    (your CSS file)
+
+  BOTH FILES MUST BE IN THE SAME FOLDER!
+
+=======================================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Cartoon Character Card</title>
+
+  <!-- This link tag connects our HTML to the CSS file -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+  <h1>My Cartoon Character Card</h1>
+
+  <p class="intro">Meet my favourite cartoon character!</p>
+
+  <div id="cartoon-card">
+
+    <h2>About My Character</h2>
+
+    <p class="cartoon-detail">Character Name: Doraemon</p>
+    <p class="cartoon-detail">Best Friend: Nobita</p>
+    <p class="cartoon-detail">Favourite Food: Dorayaki</p>
+    <p class="cartoon-detail">Special Power: Future Gadgets</p>
+
+  </div>
+
+  <h2>Why I Like This Character</h2>
+
+  <p>Doraemon is kind, helpful, and funny.</p>
+  <p>He always tries to help his friends solve problems.</p>
+  <p>He teaches us about friendship and creativity.</p>
+
+</body>
+</html>

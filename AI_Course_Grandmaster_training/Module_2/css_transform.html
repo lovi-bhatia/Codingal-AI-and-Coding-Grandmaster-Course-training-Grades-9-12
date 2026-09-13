@@ -1,0 +1,979 @@
+<!--
+=======================================================
+  CSS BASIC TRANSFORM - CODE EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains CSS Basic Transform
+using Internal CSS with simple and clear examples.
+
+=======================================================
+  WHAT IS CSS TRANSFORM?
+=======================================================
+
+  Transform = changing the POSITION SIZE or SHAPE
+  of an element on the webpage.
+
+  It does NOT affect other elements around it.
+  The space the element originally took stays the same.
+  Only the VISUAL appearance changes.
+
+  Basic Syntax:
+  transform: transformFunction(value);
+
+  Example:
+  transform: rotate(45deg);
+  transform: scale(1.5);
+  transform: translateX(100px);
+
+  There are 5 basic transform functions:
+  1. translate  - MOVES the element
+  2. rotate     - ROTATES the element
+  3. scale      - RESIZES the element
+  4. skew       - TILTS the element
+  5. matrix     - combines all transforms in one
+
+=======================================================
+  1. TRANSLATE
+=======================================================
+
+  translate = MOVES the element from its position
+
+  translateX(value)
+  -------------------------------------------------------
+  Moves element LEFT or RIGHT
+  Positive value = moves to the RIGHT
+  Negative value = moves to the LEFT
+
+  Example:
+  transform: translateX(100px);
+  Moves element 100px to the right
+
+  transform: translateX(-50px);
+  Moves element 50px to the left
+
+
+  translateY(value)
+  -------------------------------------------------------
+  Moves element UP or DOWN
+  Positive value = moves DOWN
+  Negative value = moves UP
+
+  Example:
+  transform: translateY(50px);
+  Moves element 50px downward
+
+  transform: translateY(-50px);
+  Moves element 50px upward
+
+
+  translate(x, y)
+  -------------------------------------------------------
+  Moves element in BOTH directions at once
+  First value  = horizontal movement (X)
+  Second value = vertical movement (Y)
+
+  Example:
+  transform: translate(100px, 50px);
+  Moves 100px right AND 50px down
+
+  transform: translate(-50px, -30px);
+  Moves 50px left AND 30px up
+
+  Memory Trick: translate = transfer to new position
+                Like picking up and moving a book
+
+=======================================================
+  2. ROTATE
+=======================================================
+
+  rotate = SPINS the element around its center point
+
+  rotate(angle)
+  -------------------------------------------------------
+  Rotates element clockwise or anti-clockwise
+  Positive angle = clockwise rotation
+  Negative angle = anti-clockwise rotation
+  Unit used = deg (degrees)
+
+  Example:
+  transform: rotate(45deg);
+  Rotates element 45 degrees clockwise
+
+  transform: rotate(90deg);
+  Rotates element 90 degrees clockwise (quarter turn)
+
+  transform: rotate(180deg);
+  Rotates element 180 degrees (upside down)
+
+  transform: rotate(360deg);
+  Rotates element full circle (back to start)
+
+  transform: rotate(-45deg);
+  Rotates element 45 degrees anti-clockwise
+
+  rotateX(angle)
+  -------------------------------------------------------
+  Rotates element around the HORIZONTAL axis
+  Looks like element is flipping forward or backward
+  Example: transform: rotateX(45deg);
+
+  rotateY(angle)
+  -------------------------------------------------------
+  Rotates element around the VERTICAL axis
+  Looks like element is flipping left or right
+  Example: transform: rotateY(45deg);
+
+  Memory Trick: rotate = spinning like a clock hand
+                Positive = clockwise like clock
+                Negative = anti-clockwise
+
+=======================================================
+  3. SCALE
+=======================================================
+
+  scale = makes element BIGGER or SMALLER
+
+  scale(value)
+  -------------------------------------------------------
+  Scales element both WIDTH and HEIGHT equally
+  1   = original size (no change)
+  2   = double the size (200%)
+  0.5 = half the size (50%)
+  1.5 = one and half times bigger (150%)
+  0   = element becomes invisible (size zero)
+
+  Example:
+  transform: scale(2);
+  Makes element twice as big
+
+  transform: scale(0.5);
+  Makes element half the size
+
+  transform: scale(1.5);
+  Makes element 1.5 times bigger
+
+  scaleX(value)
+  -------------------------------------------------------
+  Scales only the WIDTH of element
+  Height stays the same
+
+  Example:
+  transform: scaleX(2);
+  Makes element twice as wide
+
+  transform: scaleX(0.5);
+  Makes element half as wide
+
+
+  scaleY(value)
+  -------------------------------------------------------
+  Scales only the HEIGHT of element
+  Width stays the same
+
+  Example:
+  transform: scaleY(2);
+  Makes element twice as tall
+
+  transform: scaleY(0.5);
+  Makes element half as tall
+
+  Memory Trick: scale = like zooming in and out
+                Like making a photocopy bigger or smaller
+
+=======================================================
+  4. SKEW
+=======================================================
+
+  skew = TILTS or SLANTS the element
+         Makes it look like a parallelogram
+
+  skewX(angle)
+  -------------------------------------------------------
+  Tilts element along the HORIZONTAL direction
+  Positive = tilts to the left (leans left)
+  Negative = tilts to the right (leans right)
+  Unit used = deg (degrees)
+
+  Example:
+  transform: skewX(20deg);
+  Tilts element 20 degrees horizontally
+
+  transform: skewX(-20deg);
+  Tilts element 20 degrees other way
+
+
+  skewY(angle)
+  -------------------------------------------------------
+  Tilts element along the VERTICAL direction
+  Positive = tilts downward
+  Negative = tilts upward
+
+  Example:
+  transform: skewY(10deg);
+  Tilts element 10 degrees vertically
+
+
+  skew(x, y)
+  -------------------------------------------------------
+  Tilts element in BOTH directions at once
+  First value  = horizontal tilt (X)
+  Second value = vertical tilt (Y)
+
+  Example:
+  transform: skew(20deg, 10deg);
+  Tilts 20deg horizontally and 10deg vertically
+
+  Memory Trick: skew = slanted like italic text
+                Like pushing top of a rectangle sideways
+
+=======================================================
+  5. MULTIPLE TRANSFORMS
+=======================================================
+
+  You can combine MULTIPLE transform functions
+  in one line by putting them one after another
+  with a space between them.
+
+  Example:
+  transform: translateX(50px) rotate(45deg);
+  Moves 50px right AND rotates 45 degrees
+
+  transform: scale(1.5) rotate(30deg) translateY(-20px);
+  Makes bigger AND rotates AND moves up
+
+  IMPORTANT NOTE:
+  Order matters in multiple transforms!
+  transform: translateX(100px) rotate(45deg);
+  is DIFFERENT from
+  transform: rotate(45deg) translateX(100px);
+
+  Memory Trick: read left to right - each transform
+                is applied one after another in order
+
+=======================================================
+  TRANSFORM-ORIGIN
+=======================================================
+
+  transform-origin = changes the CENTER POINT
+  of the transformation
+
+  Default center point is: center center
+  which means the middle of the element
+
+  Values:
+  center center  - default middle of element
+  top left       - top left corner
+  top right      - top right corner
+  bottom left    - bottom left corner
+  bottom right   - bottom right corner
+  50% 50%        - same as center center
+  0% 0%          - same as top left
+
+  Example:
+  transform-origin: top left;
+  transform: rotate(45deg);
+  Now rotation happens from top left corner
+  instead of center
+
+  Memory Trick: origin = where the action starts from
+
+=======================================================
+  TRANSFORM WITH TRANSITION
+=======================================================
+
+  transition makes transform changes SMOOTH
+  Instead of jumping suddenly the change
+  happens gradually over time
+
+  Syntax:
+  transition: property duration timing;
+
+  Example:
+  transition: transform 0.5s ease;
+  When transform changes it takes 0.5 seconds
+
+  Used with :hover to create smooth effects:
+  .box:hover {
+    transform: scale(1.2);
+  }
+  .box {
+    transition: transform 0.5s ease;
+  }
+
+  Memory Trick: transition = smooth change over time
+
+=======================================================
+  UNITS USED IN TRANSFORM
+=======================================================
+
+  px  - pixels for translate
+        Example: translateX(100px)
+
+  %   - percentage for translate
+        Example: translateX(50%)
+        50% of the elements own width
+
+  deg - degrees for rotate and skew
+        Example: rotate(45deg)
+        Full circle = 360deg
+        Quarter turn = 90deg
+        Half turn = 180deg
+
+  No unit for scale
+        Example: scale(1.5)
+        Just a number multiplier
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  transform         → applies transform to element
+  transform-origin  → sets center point of transform
+  transition        → makes transform changes smooth
+  width             → sets width of element
+  height            → sets height of element
+  background-color  → background colour of element
+  color             → text colour
+  border-radius     → rounded corners
+  font-size         → text size
+  font-weight       → text thickness
+  line-height       → vertical centering of text
+  display           → controls layout
+  margin            → space outside element
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Function        What it does          Example
+  -----------     ------------------    ------------------
+  translateX()    Move left or right    translateX(100px)
+  translateY()    Move up or down       translateY(-50px)
+  translate()     Move both X and Y     translate(50px,30px)
+  rotate()        Spin clockwise        rotate(45deg)
+  rotateX()       Flip on X axis        rotateX(45deg)
+  rotateY()       Flip on Y axis        rotateY(45deg)
+  scale()         Resize equally        scale(1.5)
+  scaleX()        Resize width only     scaleX(2)
+  scaleY()        Resize height only    scaleY(0.5)
+  skewX()         Tilt horizontally     skewX(20deg)
+  skewY()         Tilt vertically       skewY(10deg)
+  skew()          Tilt both X and Y     skew(20deg,10deg)
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  Transform = change position size or shape of element
+  translate = MOVES the element
+  rotate    = SPINS the element
+  scale     = RESIZES the element
+  skew      = TILTS the element
+  Multiple transforms can be combined in one line
+  transform-origin changes the center point
+  transition makes transform changes smooth
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Basic Transform</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        text-align: center;
+        color: #333;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+      }
+
+      /* Section box to group each transform topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin: 20px auto;
+        width: 90%;
+        border: 2px solid #ddd;
+      }
+
+      /* Base box style for all transform demos */
+      .box {
+        width: 120px;
+        height: 120px;
+        background-color: #1e90ff;
+        color: white;
+        font-size: 13px;
+        font-weight: bold;
+        line-height: 120px;
+        text-align: center;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 30px;
+      }
+
+      /* Label below each box */
+      .label {
+        font-size: 13px;
+        color: #555;
+        font-family:
+          Courier New,
+          monospace;
+        display: block;
+        margin-top: 5px;
+      }
+
+      /* Wrapper to hold box and label together */
+      .demo {
+        display: inline-block;
+        margin: 20px;
+        vertical-align: top;
+      }
+
+      /* Original box shown for comparison */
+      .original {
+        background-color: #ccc;
+        color: #333;
+      }
+
+      /* =============================================
+       TRANSLATE EXAMPLES
+    =============================================== */
+
+      /* Move 80px to the right */
+      .translate-x {
+        background-color: #ff6347;
+        transform: translateX(80px);
+      }
+
+      /* Move 60px downward */
+      .translate-y {
+        background-color: #32cd32;
+        transform: translateY(60px);
+      }
+
+      /* Move 50px right and 40px down */
+      .translate-xy {
+        background-color: #9932cc;
+        transform: translate(50px, 40px);
+      }
+
+      /* Move to the left using negative value */
+      .translate-negative {
+        background-color: #ff8c00;
+        transform: translateX(-60px);
+      }
+
+      /* =============================================
+       ROTATE EXAMPLES
+    =============================================== */
+
+      /* Rotate 45 degrees clockwise */
+      .rotate-45 {
+        background-color: #ff6347;
+        transform: rotate(45deg);
+      }
+
+      /* Rotate 90 degrees clockwise */
+      .rotate-90 {
+        background-color: #32cd32;
+        transform: rotate(90deg);
+      }
+
+      /* Rotate 180 degrees - upside down */
+      .rotate-180 {
+        background-color: #9932cc;
+        transform: rotate(180deg);
+      }
+
+      /* Rotate anti-clockwise using negative */
+      .rotate-negative {
+        background-color: #ff8c00;
+        transform: rotate(-45deg);
+      }
+
+      /* Rotate around X axis - flip forward */
+      .rotate-x {
+        background-color: #dc143c;
+        transform: rotateX(60deg);
+      }
+
+      /* Rotate around Y axis - flip sideways */
+      .rotate-y {
+        background-color: #008080;
+        transform: rotateY(60deg);
+      }
+
+      /* =============================================
+       SCALE EXAMPLES
+    =============================================== */
+
+      /* Scale up - make bigger */
+      .scale-up {
+        background-color: #ff6347;
+        transform: scale(1.5);
+      }
+
+      /* Scale down - make smaller */
+      .scale-down {
+        background-color: #32cd32;
+        transform: scale(0.5);
+      }
+
+      /* Scale X only - stretch width */
+      .scale-x {
+        background-color: #9932cc;
+        transform: scaleX(2);
+      }
+
+      /* Scale Y only - stretch height */
+      .scale-y {
+        background-color: #ff8c00;
+        transform: scaleY(2);
+      }
+
+      /* =============================================
+       SKEW EXAMPLES
+    =============================================== */
+
+      /* Skew X - tilt horizontally */
+      .skew-x {
+        background-color: #ff6347;
+        transform: skewX(20deg);
+      }
+
+      /* Skew Y - tilt vertically */
+      .skew-y {
+        background-color: #32cd32;
+        transform: skewY(15deg);
+      }
+
+      /* Skew both X and Y */
+      .skew-xy {
+        background-color: #9932cc;
+        transform: skew(20deg, 10deg);
+      }
+
+      /* Skew negative - tilt other direction */
+      .skew-negative {
+        background-color: #ff8c00;
+        transform: skewX(-20deg);
+      }
+
+      /* =============================================
+       MULTIPLE TRANSFORMS EXAMPLES
+    =============================================== */
+
+      /* Translate and Rotate together */
+      .multi-1 {
+        background-color: #ff6347;
+        transform: translateX(50px) rotate(45deg);
+      }
+
+      /* Scale and Rotate together */
+      .multi-2 {
+        background-color: #32cd32;
+        transform: scale(1.3) rotate(30deg);
+      }
+
+      /* Translate Scale and Rotate all together */
+      .multi-3 {
+        background-color: #9932cc;
+        transform: translateY(-30px) scale(1.2) rotate(15deg);
+      }
+
+      /* =============================================
+       TRANSFORM ORIGIN EXAMPLES
+    =============================================== */
+
+      /* Rotate from center - default */
+      .origin-center {
+        background-color: #ff6347;
+        transform: rotate(45deg);
+        transform-origin: center center;
+      }
+
+      /* Rotate from top left corner */
+      .origin-topleft {
+        background-color: #32cd32;
+        transform: rotate(45deg);
+        transform-origin: top left;
+      }
+
+      /* Rotate from bottom right corner */
+      .origin-bottomright {
+        background-color: #9932cc;
+        transform: rotate(45deg);
+        transform-origin: bottom right;
+      }
+
+      /* =============================================
+       TRANSFORM WITH TRANSITION - HOVER EFFECTS
+       Hover over the boxes to see smooth transform
+    =============================================== */
+
+      /* Box that grows on hover */
+      .hover-scale {
+        background-color: #1e90ff;
+        transition: transform 0.4s ease;
+        cursor: pointer;
+      }
+
+      .hover-scale:hover {
+        transform: scale(1.3);
+      }
+
+      /* Box that rotates on hover */
+      .hover-rotate {
+        background-color: #ff6347;
+        transition: transform 0.5s ease;
+        cursor: pointer;
+      }
+
+      .hover-rotate:hover {
+        transform: rotate(180deg);
+      }
+
+      /* Box that slides on hover */
+      .hover-slide {
+        background-color: #32cd32;
+        transition: transform 0.4s ease-in-out;
+        cursor: pointer;
+      }
+
+      .hover-slide:hover {
+        transform: translateY(-40px);
+      }
+
+      /* Box that skews on hover */
+      .hover-skew {
+        background-color: #9932cc;
+        transition: transform 0.4s ease;
+        cursor: pointer;
+      }
+
+      .hover-skew:hover {
+        transform: skewX(20deg);
+      }
+
+      /* Box with multiple transforms on hover */
+      .hover-multi {
+        background-color: #ff8c00;
+        transition: transform 0.5s ease;
+        cursor: pointer;
+      }
+
+      .hover-multi:hover {
+        transform: scale(1.2) rotate(15deg) translateY(-20px);
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Basic Transform</h1>
+
+    <!-- ============================================
+       TRANSLATE SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>1. Translate - Move the Element</h2>
+      <p>
+        translateX moves LEFT or RIGHT translateY moves UP or DOWN Positive
+        values move right or down Negative values move left or up
+      </p>
+
+      <!-- Original for comparison -->
+      <div class="demo">
+        <div class="box original">Original</div>
+        <span class="label">No Transform</span>
+      </div>
+
+      <!-- Translate X -->
+      <div class="demo">
+        <div class="box translate-x">Moved Right</div>
+        <span class="label">translateX(80px)</span>
+      </div>
+
+      <!-- Translate Y -->
+      <div class="demo">
+        <div class="box translate-y">Moved Down</div>
+        <span class="label">translateY(60px)</span>
+      </div>
+
+      <!-- Translate X and Y -->
+      <div class="demo">
+        <div class="box translate-xy">Moved Both</div>
+        <span class="label">translate(50px, 40px)</span>
+      </div>
+
+      <!-- Translate negative -->
+      <div class="demo">
+        <div class="box translate-negative">Moved Left</div>
+        <span class="label">translateX(-60px)</span>
+      </div>
+    </div>
+
+    <!-- ============================================
+       ROTATE SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. Rotate - Spin the Element</h2>
+      <p>
+        Positive degrees rotate CLOCKWISE Negative degrees rotate ANTI-CLOCKWISE
+        Full circle = 360deg
+      </p>
+
+      <!-- Original for comparison -->
+      <div class="demo">
+        <div class="box original">Original</div>
+        <span class="label">No Transform</span>
+      </div>
+
+      <!-- Rotate 45 -->
+      <div class="demo">
+        <div class="box rotate-45">45deg</div>
+        <span class="label">rotate(45deg)</span>
+      </div>
+
+      <!-- Rotate 90 -->
+      <div class="demo">
+        <div class="box rotate-90">90deg</div>
+        <span class="label">rotate(90deg)</span>
+      </div>
+
+      <!-- Rotate 180 -->
+      <div class="demo">
+        <div class="box rotate-180">180deg</div>
+        <span class="label">rotate(180deg)</span>
+      </div>
+
+      <!-- Rotate negative -->
+      <div class="demo">
+        <div class="box rotate-negative">-45deg</div>
+        <span class="label">rotate(-45deg)</span>
+      </div>
+
+      <!-- Rotate X -->
+      <div class="demo">
+        <div class="box rotate-x">Flip X</div>
+        <span class="label">rotateX(60deg)</span>
+      </div>
+
+      <!-- Rotate Y -->
+      <div class="demo">
+        <div class="box rotate-y">Flip Y</div>
+        <span class="label">rotateY(60deg)</span>
+      </div>
+    </div>
+
+    <!-- ============================================
+       SCALE SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. Scale - Resize the Element</h2>
+      <p>
+        Value above 1 makes BIGGER Value below 1 makes SMALLER Value of 1 is
+        original size
+      </p>
+
+      <!-- Original for comparison -->
+      <div class="demo">
+        <div class="box original">Original</div>
+        <span class="label">No Transform</span>
+      </div>
+
+      <!-- Scale up -->
+      <div class="demo">
+        <div class="box scale-up">Bigger</div>
+        <span class="label">scale(1.5)</span>
+      </div>
+
+      <!-- Scale down -->
+      <div class="demo">
+        <div class="box scale-down">Smaller</div>
+        <span class="label">scale(0.5)</span>
+      </div>
+
+      <!-- Scale X -->
+      <div class="demo">
+        <div class="box scale-x">Wide</div>
+        <span class="label">scaleX(2)</span>
+      </div>
+
+      <!-- Scale Y -->
+      <div class="demo">
+        <div class="box scale-y">Tall</div>
+        <span class="label">scaleY(2)</span>
+      </div>
+    </div>
+
+    <!-- ============================================
+       SKEW SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>4. Skew - Tilt the Element</h2>
+      <p>
+        skewX tilts HORIZONTALLY skewY tilts VERTICALLY Makes element look like
+        a parallelogram
+      </p>
+
+      <!-- Original for comparison -->
+      <div class="demo">
+        <div class="box original">Original</div>
+        <span class="label">No Transform</span>
+      </div>
+
+      <!-- Skew X -->
+      <div class="demo">
+        <div class="box skew-x">Skew X</div>
+        <span class="label">skewX(20deg)</span>
+      </div>
+
+      <!-- Skew Y -->
+      <div class="demo">
+        <div class="box skew-y">Skew Y</div>
+        <span class="label">skewY(15deg)</span>
+      </div>
+
+      <!-- Skew both -->
+      <div class="demo">
+        <div class="box skew-xy">Skew Both</div>
+        <span class="label">skew(20deg, 10deg)</span>
+      </div>
+
+      <!-- Skew negative -->
+      <div class="demo">
+        <div class="box skew-negative">Skew -X</div>
+        <span class="label">skewX(-20deg)</span>
+      </div>
+    </div>
+
+    <!-- ============================================
+       MULTIPLE TRANSFORMS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>5. Multiple Transforms Combined</h2>
+      <p>
+        Write transforms one after another with a space Each transform is
+        applied in order left to right
+      </p>
+
+      <!-- Original for comparison -->
+      <div class="demo">
+        <div class="box original">Original</div>
+        <span class="label">No Transform</span>
+      </div>
+
+      <!-- Translate and Rotate -->
+      <div class="demo">
+        <div class="box multi-1">Move + Rotate</div>
+        <span class="label">translateX(50px) rotate(45deg)</span>
+      </div>
+
+      <!-- Scale and Rotate -->
+      <div class="demo">
+        <div class="box multi-2">Scale + Rotate</div>
+        <span class="label">scale(1.3) rotate(30deg)</span>
+      </div>
+
+      <!-- Three transforms -->
+      <div class="demo">
+        <div class="box multi-3">All Three</div>
+        <span class="label">translateY(-30px) scale(1.2) rotate(15deg)</span>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TRANSFORM ORIGIN SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>6. Transform Origin</h2>
+      <p>
+        Changes the CENTER POINT of the transformation Default is center center
+        which is middle of element
+      </p>
+
+      <!-- Rotate from center -->
+      <div class="demo">
+        <div class="box origin-center">Center</div>
+        <span class="label">transform-origin: center center</span>
+      </div>
+
+      <!-- Rotate from top left -->
+      <div class="demo">
+        <div class="box origin-topleft">Top Left</div>
+        <span class="label">transform-origin: top left</span>
+      </div>
+
+      <!-- Rotate from bottom right -->
+      <div class="demo">
+        <div class="box origin-bottomright">Bottom Right</div>
+        <span class="label">transform-origin: bottom right</span>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TRANSFORM WITH TRANSITION HOVER SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>7. Transform with Transition - Hover Effects</h2>
+      <p>
+        Hover over the boxes to see SMOOTH transform changes transition property
+        makes the change gradual
+      </p>
+
+      <!-- Scale on hover -->
+      <div class="demo">
+        <div class="box hover-scale">Hover to Scale</div>
+        <span class="label">scale(1.3) on hover</span>
+      </div>
+
+      <!-- Rotate on hover -->
+      <div class="demo">
+        <div class="box hover-rotate">Hover to Rotate</div>
+        <span class="label">rotate(180deg) on hover</span>
+      </div>
+
+      <!-- Slide on hover -->
+      <div class="demo">
+        <div class="box hover-slide">Hover to Slide</div>
+        <span class="label">translateY(-40px) on hover</span>
+      </div>
+
+      <!-- Skew on hover -->
+      <div class="demo">
+        <div class="box hover-skew">Hover to Skew</div>
+        <span class="label">skewX(20deg) on hover</span>
+      </div>
+
+      <!-- Multiple on hover -->
+      <div class="demo">
+        <div class="box hover-multi">Hover for All</div>
+        <span class="label">scale rotate translate on hover</span>
+      </div>
+    </div>
+  </body>
+</html>

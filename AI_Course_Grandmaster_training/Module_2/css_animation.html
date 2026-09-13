@@ -1,0 +1,667 @@
+<!--
+=======================================================
+  CSS BASIC ANIMATIONS - CODE EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains CSS Basic Animations
+using Internal CSS with simple and clear examples.
+
+=======================================================
+  WHAT IS CSS ANIMATION?
+=======================================================
+
+  Animation = making elements MOVE or CHANGE
+  on the webpage without using JavaScript.
+
+  In CSS we use TWO things to make animations:
+
+  STEP 1: @keyframes
+    - Defines WHAT the animation does
+    - What changes happen and when
+
+  STEP 2: animation property
+    - Applies the animation to an element
+    - Controls speed, repeat, direction etc.
+
+  Example:
+    Step 1 - Create animation:
+    @keyframes myAnimation {
+      from { color: red; }
+      to   { color: blue; }
+    }
+
+    Step 2 - Apply animation:
+    h1 {
+      animation: myAnimation 2s infinite;
+    }
+
+=======================================================
+  STEP 1 - @keyframes EXPLAINED
+=======================================================
+
+  @keyframes is where you write WHAT changes happen
+
+  TWO ways to write keyframes:
+
+  WAY 1 - Using from and to:
+  @keyframes animationName {
+    from { property: startValue; }
+    to   { property: endValue; }
+  }
+  from = beginning of animation
+  to   = end of animation
+
+  WAY 2 - Using percentages:
+  @keyframes animationName {
+    0%   { property: startValue; }
+    50%  { property: middleValue; }
+    100% { property: endValue; }
+  }
+  0%   = beginning of animation
+  50%  = halfway through animation
+  100% = end of animation
+
+  You can add as many percentage steps as you want
+  Example: 0%, 25%, 50%, 75%, 100%
+
+=======================================================
+  STEP 2 - animation PROPERTY EXPLAINED
+=======================================================
+
+  animation property has many sub-properties:
+
+  animation-name
+    - Name of the @keyframes to use
+    - Example: animation-name: bounce;
+
+  animation-duration
+    - How long ONE cycle of animation takes
+    - Written in seconds (s) or milliseconds (ms)
+    - Example: animation-duration: 2s;
+    - 2s = 2 seconds, 500ms = half a second
+
+  animation-iteration-count
+    - How many times animation should play
+    - infinite = plays forever and never stops
+    - 1 = plays once and stops
+    - 3 = plays 3 times and stops
+    - Example: animation-iteration-count: infinite;
+
+  animation-direction
+    - Which direction animation plays
+    - normal    = plays forward (default)
+    - reverse   = plays backward
+    - alternate = forward then backward then forward
+    - alternate-reverse = backward then forward
+    - Example: animation-direction: alternate;
+
+  animation-timing-function
+    - Controls the SPEED during animation
+    - ease        = slow start, fast middle, slow end
+    - linear      = same speed all the way through
+    - ease-in     = slow start, fast end
+    - ease-out    = fast start, slow end
+    - ease-in-out = slow start and slow end
+    - Example: animation-timing-function: ease;
+
+  animation-delay
+    - Waits before starting the animation
+    - Example: animation-delay: 1s;
+    - Waits 1 second before animation starts
+
+  animation-fill-mode
+    - What happens before and after animation
+    - none      = element goes back to original
+    - forwards  = element stays at end position
+    - backwards = element starts at first keyframe
+    - both      = combines forwards and backwards
+    - Example: animation-fill-mode: forwards;
+
+  SHORTHAND - write all in one line:
+  animation: name duration timing iteration direction;
+  Example:
+  animation: bounce 2s ease infinite alternate;
+
+=======================================================
+  TRANSFORM PROPERTY EXPLAINED
+=======================================================
+
+  transform is used inside keyframes to MOVE
+  ROTATE SCALE or SKEW elements
+
+  translateX(value)
+    - Moves element LEFT or RIGHT
+    - Positive value = moves RIGHT
+    - Negative value = moves LEFT
+    - Example: transform: translateX(100px);
+
+  translateY(value)
+    - Moves element UP or DOWN
+    - Positive value = moves DOWN
+    - Negative value = moves UP
+    - Example: transform: translateY(-50px);
+
+  translate(x, y)
+    - Moves element both X and Y direction
+    - Example: transform: translate(50px, 100px);
+
+  rotate(angle)
+    - Rotates element by given angle
+    - Positive = clockwise rotation
+    - Negative = anti-clockwise rotation
+    - Example: transform: rotate(360deg);
+
+  scale(value)
+    - Makes element BIGGER or SMALLER
+    - 1 = original size
+    - 2 = double the size
+    - 0.5 = half the size
+    - Example: transform: scale(1.5);
+
+  scaleX(value)
+    - Scales only the WIDTH of element
+    - Example: transform: scaleX(2);
+
+  scaleY(value)
+    - Scales only the HEIGHT of element
+    - Example: transform: scaleY(0.5);
+
+  skewX(angle)
+    - Tilts element to left or right
+    - Example: transform: skewX(20deg);
+
+  skewY(angle)
+    - Tilts element up or down
+    - Example: transform: skewY(10deg);
+
+  You can combine multiple transforms:
+  transform: translateX(100px) rotate(45deg) scale(1.2);
+
+=======================================================
+  BASIC ANIMATIONS COVERED IN THIS CODE
+=======================================================
+
+  1. Fade In       - element appears slowly
+  2. Fade Out      - element disappears slowly
+  3. Slide Right   - element moves to the right
+  4. Slide Up      - element moves upward
+  5. Bounce        - element bounces up and down
+  6. Spin          - element rotates 360 degrees
+  7. Pulse         - element grows and shrinks
+  8. Colour Change - element changes colour
+  9. Blink         - element blinks on and off
+  10. Shake        - element shakes left and right
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  animation         → applies animation to element
+  animation-name    → name of keyframes to use
+  animation-duration→ how long animation takes
+  animation-iteration-count → how many times to play
+  animation-direction → which direction to play
+  animation-timing-function → speed curve
+  animation-delay   → wait before starting
+  transform         → move rotate scale element
+  opacity           → transparency 0=hidden 1=visible
+  background-color  → background colour of element
+  color             → text colour
+  border-radius     → rounded corners
+  width and height  → size of element
+  display           → controls layout
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Animation       Keyframes Used      Transform Used
+  -----------     ---------------     ---------------
+  Fade In         opacity 0 to 1      none
+  Fade Out        opacity 1 to 0      none
+  Slide Right     translateX          translateX
+  Slide Up        translateY          translateY
+  Bounce          translateY          translateY
+  Spin            rotate              rotate
+  Pulse           scale               scale
+  Colour Change   background-color    none
+  Blink           opacity 0 and 1     none
+  Shake           translateX          translateX
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  Animation = movement or change on webpage
+  @keyframes = defines WHAT changes happen
+  animation  = applies animation to element
+  from/to    = start and end of animation
+  0% to 100% = steps throughout animation
+  transform  = moves rotates or scales elements
+  infinite   = animation plays forever
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Basic Animations</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        text-align: center;
+        color: #333;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+      }
+
+      /* Section box to group each animation */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 20px;
+        margin: 20px auto;
+        width: 80%;
+        border: 2px solid #ccc;
+      }
+
+      /* Animation demo box - base style */
+      .box {
+        width: 150px;
+        height: 150px;
+        border-radius: 15px;
+        display: inline-block;
+        margin: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        line-height: 150px;
+        text-align: center;
+      }
+
+      /* =============================================
+       1. FADE IN ANIMATION
+       opacity goes from 0 (invisible) to 1 (visible)
+    =============================================== */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .fade-in {
+        background-color: #1e90ff;
+        animation-name: fadeIn;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+      }
+
+      /* =============================================
+       2. FADE OUT ANIMATION
+       opacity goes from 1 (visible) to 0 (invisible)
+    =============================================== */
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      .fade-out {
+        background-color: #ff6347;
+        animation-name: fadeOut;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+      }
+
+      /* =============================================
+       3. SLIDE RIGHT ANIMATION
+       translateX moves element to the right
+    =============================================== */
+      @keyframes slideRight {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(100px);
+        }
+      }
+
+      .slide-right {
+        background-color: #32cd32;
+        animation-name: slideRight;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        animation-timing-function: ease-in-out;
+      }
+
+      /* =============================================
+       4. SLIDE UP ANIMATION
+       translateY with negative value moves UP
+    =============================================== */
+      @keyframes slideUp {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(-80px);
+        }
+      }
+
+      .slide-up {
+        background-color: #ff8c00;
+        animation-name: slideUp;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        animation-timing-function: ease-in-out;
+      }
+
+      /* =============================================
+       5. BOUNCE ANIMATION
+       uses percentage steps to create bounce effect
+    =============================================== */
+      @keyframes bounce {
+        0% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-80px);
+        }
+        50% {
+          transform: translateY(0);
+        }
+        70% {
+          transform: translateY(-40px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .bounce {
+        background-color: #9932cc;
+        animation-name: bounce;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease;
+      }
+
+      /* =============================================
+       6. SPIN ANIMATION
+       rotate goes from 0deg to 360deg (full circle)
+    =============================================== */
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .spin {
+        background-color: #dc143c;
+        animation-name: spin;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+
+      /* =============================================
+       7. PULSE ANIMATION
+       scale makes element grow and shrink
+    =============================================== */
+      @keyframes pulse {
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.4);
+        }
+      }
+
+      .pulse {
+        background-color: #008080;
+        animation-name: pulse;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        animation-timing-function: ease-in-out;
+      }
+
+      /* =============================================
+       8. COLOUR CHANGE ANIMATION
+       background-color changes through many colours
+    =============================================== */
+      @keyframes colourChange {
+        0% {
+          background-color: red;
+        }
+        25% {
+          background-color: yellow;
+        }
+        50% {
+          background-color: green;
+        }
+        75% {
+          background-color: blue;
+        }
+        100% {
+          background-color: red;
+        }
+      }
+
+      .colour-change {
+        background-color: red;
+        animation-name: colourChange;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+
+      /* =============================================
+       9. BLINK ANIMATION
+       opacity switches between 0 and 1 to blink
+    =============================================== */
+      @keyframes blink {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .blink {
+        background-color: #ff1493;
+        animation-name: blink;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+
+      /* =============================================
+       10. SHAKE ANIMATION
+       translateX moves quickly left and right
+    =============================================== */
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-15px);
+        }
+        40% {
+          transform: translateX(15px);
+        }
+        60% {
+          transform: translateX(-15px);
+        }
+        80% {
+          transform: translateX(15px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      .shake {
+        background-color: #ff8000;
+        animation-name: shake;
+        animation-duration: 0.8s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Basic Animations</h1>
+
+    <!-- ============================================
+       FADE ANIMATIONS
+  =============================================== -->
+    <div class="section">
+      <h2>1. Fade Animations</h2>
+      <p>opacity changes between 0 (invisible) and 1 (visible)</p>
+
+      <!-- Fade In box -->
+      <div class="box fade-in">Fade In</div>
+
+      <!-- Fade Out box -->
+      <div class="box fade-out">Fade Out</div>
+    </div>
+
+    <!-- ============================================
+       SLIDE ANIMATIONS
+  =============================================== -->
+    <div class="section">
+      <h2>2. Slide Animations</h2>
+      <p>
+        transform: translateX moves left or right and translateY moves up or
+        down
+      </p>
+
+      <!-- Slide Right box -->
+      <div class="box slide-right">Slide Right</div>
+
+      <!-- Slide Up box -->
+      <div class="box slide-up">Slide Up</div>
+    </div>
+
+    <!-- ============================================
+       BOUNCE ANIMATION
+  =============================================== -->
+    <div class="section">
+      <h2>3. Bounce Animation</h2>
+      <p>
+        Uses percentage steps 0% 30% 50% 70% 100% to create a realistic bounce
+        effect
+      </p>
+
+      <!-- Bounce box -->
+      <div class="box bounce">Bounce</div>
+    </div>
+
+    <!-- ============================================
+       SPIN ANIMATION
+  =============================================== -->
+    <div class="section">
+      <h2>4. Spin Animation</h2>
+      <p>
+        transform: rotate goes from 0deg to 360deg animation-timing-function:
+        linear keeps the speed the same all the way through
+      </p>
+
+      <!-- Spin box -->
+      <div class="box spin">Spin</div>
+    </div>
+
+    <!-- ============================================
+       PULSE ANIMATION
+  =============================================== -->
+    <div class="section">
+      <h2>5. Pulse Animation</h2>
+      <p>
+        transform: scale makes element grow and shrink animation-direction:
+        alternate goes forward then backward to create pulse effect
+      </p>
+
+      <!-- Pulse box -->
+      <div class="box pulse">Pulse</div>
+    </div>
+
+    <!-- ============================================
+       COLOUR CHANGE ANIMATION
+  =============================================== -->
+    <div class="section">
+      <h2>6. Colour Change Animation</h2>
+      <p>
+        background-color changes through red yellow green and blue using
+        percentage steps
+      </p>
+
+      <!-- Colour Change box -->
+      <div class="box colour-change">Colour Change</div>
+    </div>
+
+    <!-- ============================================
+       BLINK ANIMATION
+  =============================================== -->
+    <div class="section">
+      <h2>7. Blink Animation</h2>
+      <p>
+        opacity switches between 1 and 0 at 50% to make element blink on and off
+      </p>
+
+      <!-- Blink box -->
+      <div class="box blink">Blink</div>
+    </div>
+
+    <!-- ============================================
+       SHAKE ANIMATION
+  =============================================== -->
+    <div class="section">
+      <h2>8. Shake Animation</h2>
+      <p>
+        translateX moves quickly left and right using many percentage steps to
+        create a shaking effect
+      </p>
+
+      <!-- Shake box -->
+      <div class="box shake">Shake</div>
+    </div>
+  </body>
+</html>

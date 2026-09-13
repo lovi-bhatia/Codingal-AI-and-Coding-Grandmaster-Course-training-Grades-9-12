@@ -1,0 +1,384 @@
+<!--
+=======================================================
+  MY WEATHER APP HOMEPAGE - CODE EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This is a Weather App webpage that shows todays
+weather and a weekly forecast using HTML and
+Internal CSS with advanced styling properties.
+
+=======================================================
+  WHAT IS INTERNAL CSS?
+=======================================================
+
+  Internal CSS = writing all CSS inside <style> tag
+  which is placed inside the <head> section.
+
+  <head>
+    <style>
+      all your css goes here
+    </style>
+  </head>
+
+=======================================================
+  HTML TAGS USED
+=======================================================
+
+HEAD SECTION TAGS:
+
+  <!DOCTYPE html>
+    - Tells the browser "Hey! This is an HTML5 page"
+
+  <html>
+    - The root/main tag that wraps everything
+
+  <head>
+    - Contains background information about the page
+    - Not visible on screen
+
+  <title>
+    - Sets the name shown on browser tab
+
+  <style>
+    - Where we write ALL our Internal CSS
+
+BODY SECTION TAGS:
+
+  <body>
+    - Everything visible on screen goes here
+
+  <h1>
+    - Biggest heading - used for main page title
+
+  <h2>
+    - Second level heading
+
+  <h3>
+    - Third level heading - slightly smaller than h2
+
+  <p>
+    - Paragraph tag - used for normal text
+
+  <div>
+    - A box/container to group elements together
+
+=======================================================
+  CSS SELECTORS USED
+=======================================================
+
+  1. UNIVERSAL SELECTOR ( * )
+  -------------------------------------------------------
+  Symbol   : *
+  Targets  : EVERY element on the page
+  Used for : Setting box-sizing and font-family
+             for everything at once
+
+  * {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+
+  Memory Trick: * = star = applies to ALL elements
+
+
+  2. ELEMENT SELECTOR
+  -------------------------------------------------------
+  Symbol   : just the tag name (no symbol needed)
+  Targets  : ALL elements with that tag name
+  Used for : Styling body, h1, h2 etc.
+
+  body { background-color: #87ceeb; }
+  h1   { font-size: 36px; }
+
+  Memory Trick: just write the tag name directly
+
+
+  3. CLASS SELECTOR ( . )
+  -------------------------------------------------------
+  Symbol   : dot (.) before the name
+  Targets  : All elements with that class name
+  Used for : Styling subtitle, weather-card,
+             details, day etc.
+
+  .weather-card { border: 3px solid white; }
+  In HTML → <div class="weather-card">
+
+  Memory Trick: Dot = Duplicate = many elements
+                Like a uniform worn by many students
+
+
+  4. ID SELECTOR ( # )
+  -------------------------------------------------------
+  Symbol   : hash (#) before the name
+  Targets  : ONE specific unique element
+  Used for : Styling the temperature display
+
+  #temperature { font-size: 48px; }
+  In HTML → <p id="temperature">28 C</p>
+
+  Memory Trick: # = unique = only one element
+                Like your school roll number
+
+
+  5. GROUPING SELECTOR ( , )
+  -------------------------------------------------------
+  Symbol   : comma (,) between selectors
+  Targets  : Multiple selectors at the same time
+  Used for : Styling h2 and h3 together
+
+  h2, h3 { color: white; }
+
+  Memory Trick: comma = AND = style this AND that
+
+
+=======================================================
+  BACKGROUND PROPERTIES EXPLAINED
+=======================================================
+
+  background-color
+    - Sets a solid colour behind the page
+    - Example: background-color: #87ceeb;
+    - #87ceeb is a hex code for sky blue colour
+
+  background-image
+    - Sets an image or gradient as background
+    - radial-gradient = circular gradient pattern
+    - linear-gradient = straight line gradient
+    - Example: background-image: radial-gradient(...)
+
+  background-size
+    - Sets how big the background pattern is
+    - Example: background-size: 40px 40px;
+    - Makes the dot pattern repeat every 40px
+
+  background-repeat
+    - Sets if background should repeat or not
+    - repeat = tiles the background image
+    - no-repeat = shows background only once
+
+  background-position
+    - Sets where the background starts
+    - Example: background-position: top center;
+
+  background-attachment
+    - fixed = background stays still when scrolling
+    - scroll = background moves with the page
+    - Example: background-attachment: fixed;
+
+=======================================================
+  OTHER CSS PROPERTIES USED
+=======================================================
+
+  color             → Sets text colour
+  font-size         → Sets text size in pixels
+  font-weight       → bold makes text thicker
+  font-family       → Changes the font style
+  text-align        → Aligns text left center right
+  width             → Sets how wide an element is
+  border            → Adds border around element
+  border-radius     → Makes corners rounded
+  box-sizing        → Controls how width is measured
+  transform         → Moves or rotates an element
+  animation         → Makes elements move or change
+
+=======================================================
+  CSS ANIMATION EXPLAINED
+=======================================================
+
+  @keyframes is used to create animations in CSS
+
+  Step 1: Create the animation using @keyframes
+  Step 2: Apply it to an element using animation
+
+  @keyframes floatCloud {
+    from { transform: translateY(0); }
+    to   { transform: translateY(20px); }
+  }
+
+  from = starting position of animation
+  to   = ending position of animation
+  translateY = moves element UP or DOWN
+
+  animation: floatCloud 3s infinite alternate;
+    floatCloud = name of the animation
+    3s         = takes 3 seconds to complete
+    infinite   = plays forever and never stops
+    alternate  = goes forward then backward
+
+  Memory Trick: keyframes = key moments in animation
+                Like frames in a cartoon video
+
+=======================================================
+  COLOUR FORMATS USED
+=======================================================
+
+  Colour Name : white, blue (easy to remember)
+  Hex Code    : #87ceeb (6 digit code for exact colour)
+  Example:
+    #87ceeb = sky blue
+    #fffacd = light yellow
+    #003366 = dark navy blue
+    #f0f8ff = very light blue (alice blue)
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  HTML = Structure (like a skeleton)
+  CSS  = Style (like clothes)
+  Internal CSS = All styles written in style tag
+  @keyframes = Used to create CSS animations
+  background properties = Control background look
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>My Weather App Homepage</title>
+
+    <style>
+      /* Universal Selector: applies basic settings to the full page */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Element Selector: body background uses colour, image pattern,
+       repeat, position, size and attachment */
+      body {
+        background-color: #87ceeb;
+        background-image: radial-gradient(circle, white 2px, transparent 3px);
+        background-size: 40px 40px;
+        background-repeat: repeat;
+        background-position: top center;
+        background-attachment: fixed;
+        color: white;
+        text-align: center;
+      }
+
+      /* Element Selector: styles all h1 tags */
+      h1 {
+        font-size: 36px;
+        color: white;
+      }
+
+      /* Class Selector: styles subtitle paragraph */
+      .subtitle {
+        font-size: 18px;
+        color: #f0f8ff;
+      }
+
+      /* Class Selector: styles the main weather card box */
+      .weather-card {
+        width: 400px;
+        border: 3px solid white;
+        border-radius: 20px;
+        background-image: linear-gradient(to bottom right, #1e90ff, #87cefa);
+      }
+
+      /* Class Selector: styles the weather icon with animation */
+      .weather-icon {
+        font-size: 70px;
+        animation: floatCloud 3s infinite alternate;
+      }
+
+      /* ID Selector: styles only the temperature display */
+      #temperature {
+        font-size: 48px;
+        font-weight: bold;
+        color: #fffacd;
+      }
+
+      /* Class Selector: styles weather detail paragraphs */
+      .details {
+        font-size: 18px;
+        color: white;
+      }
+
+      /* Class Selector: styles the weekly forecast box */
+      .forecast-section {
+        width: 600px;
+        border: 3px solid white;
+        border-radius: 15px;
+        background-image: radial-gradient(circle, white, #add8e6);
+        color: #003366;
+      }
+
+      /* Class Selector: styles the forecast section title */
+      .forecast-title {
+        color: #003366;
+      }
+
+      /* Class Selector: styles each day forecast row */
+      .day {
+        border: 2px solid #4682b4;
+        font-size: 17px;
+        color: #003366;
+      }
+
+      /* Grouping Selector: styles both h2 and h3 together */
+      h2,
+      h3 {
+        color: white;
+      }
+
+      /* CSS Animation using @keyframes
+       floatCloud moves the icon up and down */
+      @keyframes floatCloud {
+        from {
+          transform: translateY(0);
+        }
+
+        to {
+          transform: translateY(20px);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- h1 styled by Element Selector -->
+    <h1>My Weather App Homepage</h1>
+
+    <!-- p styled by Class Selector .subtitle -->
+    <p class="subtitle">Check today's weather and plan your day better.</p>
+
+    <!-- div styled by Class Selector .weather-card -->
+    <div class="weather-card">
+      <!-- h2 styled by Grouping Selector h2, h3 -->
+      <h2>Today's Weather</h2>
+
+      <!-- p styled by Class Selector .weather-icon with animation -->
+      <div class="weather-icon">⛅</div>
+
+      <!-- p styled by ID Selector #temperature -->
+      <p id="temperature">28°C</p>
+
+      <!-- p styled by Class Selector .details -->
+      <p class="details">City: Bengaluru</p>
+      <p class="details">Condition: Partly Cloudy</p>
+      <p class="details">Humidity: 62%</p>
+      <p class="details">Wind Speed: 12 km/h</p>
+    </div>
+
+    <!-- h2 styled by Grouping Selector h2, h3 -->
+    <h2>Weekly Forecast</h2>
+
+    <!-- div styled by Class Selector .forecast-section -->
+    <div class="forecast-section">
+      <!-- h3 styled by Grouping Selector h2, h3
+         and Class Selector .forecast-title -->
+      <h3 class="forecast-title">Next 5 Days</h3>
+
+      <!-- p styled by Class Selector .day -->
+      <p class="day">Monday: Sunny - 30°C</p>
+      <p class="day">Tuesday: Cloudy - 27°C</p>
+      <p class="day">Wednesday: Rainy - 24°C</p>
+      <p class="day">Thursday: Windy - 26°C</p>
+      <p class="day">Friday: Stormy - 23°C</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1172 @@
+<!--
+=======================================================
+  CSS TYPOGRAPHY - CODE EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains CSS Typography
+using Internal CSS with simple and clear examples.
+
+=======================================================
+  WHAT IS TYPOGRAPHY?
+=======================================================
+
+  Typography = the style and appearance of TEXT
+  on a webpage.
+
+  It controls:
+  - What FONT is used
+  - How BIG the text is
+  - How BOLD or THIN the text is
+  - How much SPACE is between letters and lines
+  - How text is ALIGNED
+  - What COLOUR the text is
+  - And much more!
+
+  Good typography makes a webpage:
+  - Easy to READ
+  - Nice to LOOK AT
+  - Clear and ORGANISED
+
+=======================================================
+  FONT PROPERTIES
+=======================================================
+
+  1. font-family
+  -------------------------------------------------------
+  What it does : Changes the STYLE of the font
+  Think of it  : Like choosing a pen style to write
+
+  Values:
+  Arial           - clean simple font
+  Times New Roman - formal old style font
+  Georgia         - elegant serif font
+  Courier New     - looks like typewriter text
+  Verdana         - wide easy to read font
+  Comic Sans MS   - casual fun font
+
+  FONT TYPES:
+  Serif     - fonts WITH small lines at ends of letters
+              Example: Times New Roman, Georgia
+              Used for : formal documents books
+
+  Sans-Serif - fonts WITHOUT small lines at ends
+               Example: Arial, Verdana
+               Used for : websites modern designs
+               sans = without in French
+
+  Monospace  - every letter has SAME width
+               Example: Courier New
+               Used for : code editors terminals
+
+  FALLBACK FONTS:
+  Always give a backup font in case first one fails
+  font-family: Arial, Verdana, sans-serif;
+  Tries Arial first, then Verdana, then any sans-serif
+
+  Example:
+  font-family: Arial, sans-serif;
+
+  Memory Trick: family = group of backup fonts
+
+
+  2. font-size
+  -------------------------------------------------------
+  What it does : Changes how BIG or SMALL the text is
+
+  Units:
+  px   - pixels - fixed size - most common for beginners
+         Example: font-size: 16px;
+
+  em   - relative to PARENT element font size
+         1em = same as parent
+         2em = double the parent size
+         Example: font-size: 1.5em;
+
+  rem  - relative to ROOT element font size
+         root = html element (usually 16px)
+         2rem = 32px if root is 16px
+         Example: font-size: 2rem;
+
+  %    - percentage of parent element font size
+         Example: font-size: 150%;
+
+  Common sizes:
+  Small text    : 12px - 14px
+  Normal text   : 16px (browser default)
+  Subtitle      : 18px - 20px
+  Heading       : 24px - 48px
+  Hero heading  : 60px and above
+
+  Example:
+  font-size: 24px;
+
+
+  3. font-weight
+  -------------------------------------------------------
+  What it does : Controls how THICK or THIN the text is
+
+  Values:
+  normal  - regular thickness (same as 400)
+  bold    - thick text (same as 700)
+  bolder  - thicker than parent element
+  lighter - thinner than parent element
+  100     - thinnest possible
+  200     - very thin
+  300     - thin
+  400     - normal (regular)
+  500     - medium
+  600     - semi bold
+  700     - bold
+  800     - extra bold
+  900     - thickest (black)
+
+  Note: not all fonts support all number values
+
+  Example:
+  font-weight: bold;
+  font-weight: 700;
+
+  Memory Trick: weight = how heavy the text looks
+
+
+  4. font-style
+  -------------------------------------------------------
+  What it does : Makes text ITALIC or normal
+
+  Values:
+  normal  - regular upright text
+  italic  - slanted text (italic version of font)
+  oblique - slanted text (artificially slanted)
+
+  Example:
+  font-style: italic;
+
+  Memory Trick: italic = slanted like you are in a hurry
+
+
+  5. font-variant
+  -------------------------------------------------------
+  What it does : Changes text to SMALL CAPITALS
+
+  Values:
+  normal      - regular text
+  small-caps  - lowercase letters shown as small capitals
+
+  Example:
+  font-variant: small-caps;
+  hello world becomes HELLO WORLD (but smaller size)
+
+
+  6. font (shorthand)
+  -------------------------------------------------------
+  Combines all font properties in ONE line
+
+  Syntax:
+  font: style variant weight size/line-height family;
+
+  Example:
+  font: italic bold 20px/1.5 Arial, sans-serif;
+
+=======================================================
+  TEXT PROPERTIES
+=======================================================
+
+  7. color
+  -------------------------------------------------------
+  What it does : Sets the COLOUR of the text
+
+  Values:
+  Colour name : red, blue, darkblue
+  Hex code    : #ff0000, #003366
+  RGB         : rgb(255, 0, 0)
+  RGBA        : rgba(255, 0, 0, 0.5)
+
+  Example:
+  color: darkblue;
+  color: #ff0000;
+
+
+  8. text-align
+  -------------------------------------------------------
+  What it does : Aligns text horizontally
+
+  Values:
+  left    - text starts from left side (default)
+  right   - text starts from right side
+  center  - text is in the middle
+  justify - text is spread to fill full width
+            like in newspapers and books
+
+  Example:
+  text-align: center;
+
+  Memory Trick: align = position the text
+
+
+  9. text-decoration
+  -------------------------------------------------------
+  What it does : Adds lines to text
+
+  Values:
+  none         - no decoration (removes underline)
+  underline    - line under the text
+  overline     - line above the text
+  line-through - line through middle of text
+                 looks like strikethrough
+
+  Example:
+  text-decoration: underline;
+  text-decoration: line-through;
+  text-decoration: none; (used to remove underline
+                          from links)
+
+  Memory Trick: decoration = decorating the text
+
+
+  10. text-transform
+  -------------------------------------------------------
+  What it does : Changes the CASE of text
+
+  Values:
+  none        - text stays as typed
+  uppercase   - ALL LETTERS BECOME CAPITAL
+  lowercase   - all letters become small
+  capitalize  - First Letter Of Each Word Becomes Capital
+
+  Example:
+  text-transform: uppercase;
+
+  Memory Trick: transform = change the appearance
+
+
+  11. text-indent
+  -------------------------------------------------------
+  What it does : Adds space at the START of paragraph
+                 Like pressing Tab at beginning
+
+  Example:
+  text-indent: 40px;
+  First line of paragraph moves 40px to the right
+
+  Memory Trick: indent = push the first line in
+
+
+  12. text-shadow
+  -------------------------------------------------------
+  What it does : Adds a SHADOW behind the text
+
+  Syntax:
+  text-shadow: horizontal vertical blur colour;
+
+  horizontal - shadow position left or right
+               positive = right, negative = left
+  vertical   - shadow position up or down
+               positive = down, negative = up
+  blur       - how blurry the shadow is
+               0px = sharp, 10px = very blurry
+  colour     - colour of the shadow
+
+  Example:
+  text-shadow: 2px 2px 4px gray;
+  Shadow goes 2px right, 2px down, blur 4px, gray
+
+  Multiple shadows:
+  text-shadow: 2px 2px red, -2px -2px blue;
+
+  Memory Trick: shadow = copy of text behind it
+
+
+=======================================================
+  SPACING PROPERTIES
+=======================================================
+
+  13. line-height
+  -------------------------------------------------------
+  What it does : Controls space BETWEEN lines of text
+
+  Values:
+  normal  - default browser spacing
+  number  - multiplied by font size (recommended)
+            1.5 means 1.5 times the font size
+  px      - fixed pixel value
+  %       - percentage of font size
+
+  Example:
+  line-height: 1.5;
+  line-height: 24px;
+
+  Good values for readability: 1.4 to 1.8
+
+  Memory Trick: line-height = height of each line
+
+
+  14. letter-spacing
+  -------------------------------------------------------
+  What it does : Controls space BETWEEN letters
+
+  Values:
+  normal    - default browser spacing
+  px value  - positive = more space, negative = less
+
+  Example:
+  letter-spacing: 3px;   adds space between letters
+  letter-spacing: -1px;  removes space between letters
+
+  Memory Trick: letter-spacing = gaps between each letter
+
+
+  15. word-spacing
+  -------------------------------------------------------
+  What it does : Controls space BETWEEN words
+
+  Values:
+  normal    - default browser spacing
+  px value  - positive = more space, negative = less
+
+  Example:
+  word-spacing: 5px;
+
+  Memory Trick: word-spacing = gaps between each word
+
+
+=======================================================
+  GOOGLE FONTS
+=======================================================
+
+  Google Fonts = free fonts from Google
+  you can use on your webpage
+
+  HOW TO USE:
+  Step 1 - Go to fonts.google.com
+  Step 2 - Choose a font
+  Step 3 - Copy the link tag into your head section
+  Step 4 - Use font name in font-family
+
+  Example link tag:
+  <link href="https://fonts.googleapis.com/css2?
+  family=Roboto&display=swap" rel="stylesheet">
+
+  Then use it:
+  font-family: Roboto, sans-serif;
+
+  Popular Google Fonts:
+  Roboto      - clean modern font
+  Open Sans   - very readable
+  Lato        - professional
+  Poppins     - rounded friendly
+  Montserrat  - bold headings
+  Playfair Display - elegant serif
+
+=======================================================
+  CSS PROPERTIES QUICK REFERENCE TABLE
+=======================================================
+
+  Property          What it does           Example Value
+  ---------------   --------------------   -------------
+  font-family       font style             Arial
+  font-size         text size              16px
+  font-weight       text thickness         bold
+  font-style        italic or normal       italic
+  font-variant      small caps             small-caps
+  color             text colour            darkblue
+  text-align        text position          center
+  text-decoration   lines on text          underline
+  text-transform    text case              uppercase
+  text-indent       first line space       40px
+  text-shadow       shadow behind text     2px 2px gray
+  line-height       space between lines    1.5
+  letter-spacing    space between letters  3px
+  word-spacing      space between words    5px
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  Typography = how text looks on the webpage
+  Font properties = control font style size weight
+  Text properties = control alignment decoration case
+  Spacing properties = control line letter word space
+  Google Fonts = free extra fonts to use on webpage
+  Good typography = easy to read and nice to look at
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Typography</title>
+
+    <!-- Google Font - Poppins imported here -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f9f9f9;
+        text-align: center;
+        color: #333;
+        font-family: Arial, sans-serif;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 40px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 24px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 20px;
+        margin: 20px auto;
+        width: 85%;
+        border: 2px solid #ddd;
+        text-align: left;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px 0;
+      }
+
+      /* Label for each demo */
+      .label {
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 5px;
+        font-family:
+          Courier New,
+          monospace;
+      }
+
+      /* =============================================
+       FONT FAMILY EXAMPLES
+    =============================================== */
+
+      .font-arial {
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+      }
+
+      .font-times {
+        font-family:
+          Times New Roman,
+          serif;
+        font-size: 20px;
+      }
+
+      .font-courier {
+        font-family:
+          Courier New,
+          monospace;
+        font-size: 20px;
+      }
+
+      .font-georgia {
+        font-family: Georgia, serif;
+        font-size: 20px;
+      }
+
+      .font-poppins {
+        font-family: Poppins, sans-serif;
+        font-size: 20px;
+      }
+
+      .font-playfair {
+        font-family:
+          Playfair Display,
+          serif;
+        font-size: 20px;
+      }
+
+      /* =============================================
+       FONT SIZE EXAMPLES
+    =============================================== */
+
+      .size-12 {
+        font-size: 12px;
+      }
+      .size-16 {
+        font-size: 16px;
+      }
+      .size-24 {
+        font-size: 24px;
+      }
+      .size-36 {
+        font-size: 36px;
+      }
+      .size-48 {
+        font-size: 48px;
+      }
+
+      /* =============================================
+       FONT WEIGHT EXAMPLES
+    =============================================== */
+
+      .weight-100 {
+        font-weight: 100;
+        font-size: 22px;
+      }
+      .weight-300 {
+        font-weight: 300;
+        font-size: 22px;
+      }
+      .weight-400 {
+        font-weight: 400;
+        font-size: 22px;
+      }
+      .weight-600 {
+        font-weight: 600;
+        font-size: 22px;
+      }
+      .weight-700 {
+        font-weight: 700;
+        font-size: 22px;
+      }
+      .weight-900 {
+        font-weight: 900;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       FONT STYLE EXAMPLES
+    =============================================== */
+
+      .style-normal {
+        font-style: normal;
+        font-size: 22px;
+      }
+      .style-italic {
+        font-style: italic;
+        font-size: 22px;
+      }
+      .style-oblique {
+        font-style: oblique;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       FONT VARIANT EXAMPLES
+    =============================================== */
+
+      .variant-normal {
+        font-variant: normal;
+        font-size: 22px;
+      }
+      .variant-smallcaps {
+        font-variant: small-caps;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       TEXT ALIGN EXAMPLES
+    =============================================== */
+
+      .align-left {
+        text-align: left;
+        font-size: 18px;
+      }
+      .align-center {
+        text-align: center;
+        font-size: 18px;
+      }
+      .align-right {
+        text-align: right;
+        font-size: 18px;
+      }
+      .align-justify {
+        text-align: justify;
+        font-size: 18px;
+      }
+
+      /* =============================================
+       TEXT DECORATION EXAMPLES
+    =============================================== */
+
+      .deco-underline {
+        text-decoration: underline;
+        font-size: 22px;
+      }
+      .deco-overline {
+        text-decoration: overline;
+        font-size: 22px;
+      }
+      .deco-linethrough {
+        text-decoration: line-through;
+        font-size: 22px;
+      }
+      .deco-none {
+        text-decoration: none;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       TEXT TRANSFORM EXAMPLES
+    =============================================== */
+
+      .transform-upper {
+        text-transform: uppercase;
+        font-size: 22px;
+      }
+      .transform-lower {
+        text-transform: lowercase;
+        font-size: 22px;
+      }
+      .transform-capital {
+        text-transform: capitalize;
+        font-size: 22px;
+      }
+      .transform-none {
+        text-transform: none;
+        font-size: 22px;
+      }
+
+      /* =============================================
+       TEXT INDENT EXAMPLE
+    =============================================== */
+
+      .indent {
+        text-indent: 50px;
+        font-size: 18px;
+      }
+
+      /* =============================================
+       TEXT SHADOW EXAMPLES
+    =============================================== */
+
+      .shadow-simple {
+        text-shadow: 2px 2px 4px gray;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .shadow-colour {
+        text-shadow: 3px 3px 0px #003366;
+        font-size: 28px;
+        font-weight: bold;
+        color: #1e90ff;
+      }
+
+      .shadow-glow {
+        text-shadow:
+          0px 0px 10px #ff6347,
+          0px 0px 20px #ff6347;
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 10px;
+      }
+
+      .shadow-multiple {
+        text-shadow:
+          2px 2px red,
+          -2px -2px blue;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      /* =============================================
+       LINE HEIGHT EXAMPLES
+    =============================================== */
+
+      .line-1 {
+        line-height: 1;
+        font-size: 18px;
+      }
+      .line-1-5 {
+        line-height: 1.5;
+        font-size: 18px;
+      }
+      .line-2 {
+        line-height: 2;
+        font-size: 18px;
+      }
+      .line-3 {
+        line-height: 3;
+        font-size: 18px;
+      }
+
+      /* =============================================
+       LETTER SPACING EXAMPLES
+    =============================================== */
+
+      .letter-normal {
+        letter-spacing: normal;
+        font-size: 20px;
+      }
+      .letter-wide {
+        letter-spacing: 5px;
+        font-size: 20px;
+      }
+      .letter-wider {
+        letter-spacing: 10px;
+        font-size: 20px;
+      }
+      .letter-tight {
+        letter-spacing: -1px;
+        font-size: 20px;
+      }
+
+      /* =============================================
+       WORD SPACING EXAMPLES
+    =============================================== */
+
+      .word-normal {
+        word-spacing: normal;
+        font-size: 20px;
+      }
+      .word-wide {
+        word-spacing: 10px;
+        font-size: 20px;
+      }
+      .word-wider {
+        word-spacing: 20px;
+        font-size: 20px;
+      }
+
+      /* =============================================
+       FONT SHORTHAND EXAMPLE
+    =============================================== */
+
+      .font-shorthand {
+        /* style variant weight size/line-height family */
+        font:
+          italic small-caps bold 24px/2 Georgia,
+          serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Typography</h1>
+
+    <!-- ============================================
+       FONT FAMILY SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>1. font-family</h2>
+      <p>Controls the STYLE of the font used for text</p>
+
+      <div class="demo-box">
+        <p class="label">font-family: Arial, sans-serif;</p>
+        <p class="font-arial">This is Arial font - clean and simple</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-family: Times New Roman, serif;</p>
+        <p class="font-times">This is Times New Roman - formal and classic</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-family: Courier New, monospace;</p>
+        <p class="font-courier">This is Courier New - looks like code</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-family: Georgia, serif;</p>
+        <p class="font-georgia">This is Georgia - elegant and readable</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-family: Poppins (Google Font);</p>
+        <p class="font-poppins">This is Poppins - modern and friendly</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-family: Playfair Display (Google Font);</p>
+        <p class="font-playfair">
+          This is Playfair Display - elegant and stylish
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FONT SIZE SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. font-size</h2>
+      <p>Controls how BIG or SMALL the text appears</p>
+
+      <div class="demo-box">
+        <p class="label">font-size: 12px;</p>
+        <p class="size-12">This text is 12px - very small</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-size: 16px;</p>
+        <p class="size-16">This text is 16px - normal size</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-size: 24px;</p>
+        <p class="size-24">This text is 24px - medium</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-size: 36px;</p>
+        <p class="size-36">This text is 36px - large</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-size: 48px;</p>
+        <p class="size-48">This is 48px</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FONT WEIGHT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. font-weight</h2>
+      <p>Controls how THICK or THIN the text appears</p>
+
+      <div class="demo-box">
+        <p class="label">font-weight: 100;</p>
+        <p class="weight-100">This is font-weight 100 - thinnest</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-weight: 300;</p>
+        <p class="weight-300">This is font-weight 300 - thin</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-weight: 400 (normal);</p>
+        <p class="weight-400">This is font-weight 400 - normal</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-weight: 600;</p>
+        <p class="weight-600">This is font-weight 600 - semi bold</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-weight: 700 (bold);</p>
+        <p class="weight-700">This is font-weight 700 - bold</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-weight: 900;</p>
+        <p class="weight-900">This is font-weight 900 - thickest</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FONT STYLE SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>4. font-style</h2>
+      <p>Controls if text is ITALIC or normal</p>
+
+      <div class="demo-box">
+        <p class="label">font-style: normal;</p>
+        <p class="style-normal">This is normal font style - upright text</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-style: italic;</p>
+        <p class="style-italic">This is italic font style - slanted text</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-style: oblique;</p>
+        <p class="style-oblique">This is oblique font style - also slanted</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FONT VARIANT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>5. font-variant</h2>
+      <p>Controls if text shows as SMALL CAPITALS</p>
+
+      <div class="demo-box">
+        <p class="label">font-variant: normal;</p>
+        <p class="variant-normal">hello world - this is normal text</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">font-variant: small-caps;</p>
+        <p class="variant-smallcaps">hello world - this is small caps text</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT ALIGN SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>6. text-align</h2>
+      <p>Controls horizontal POSITION of text</p>
+
+      <div class="demo-box">
+        <p class="label">text-align: left;</p>
+        <p class="align-left">
+          This text is aligned to the LEFT side of the box
+        </p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-align: center;</p>
+        <p class="align-center">
+          This text is aligned to the CENTER of the box
+        </p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-align: right;</p>
+        <p class="align-right">
+          This text is aligned to the RIGHT side of the box
+        </p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-align: justify;</p>
+        <p class="align-justify">
+          This text is justified which means it is spread out to fill the full
+          width of the box just like you see in newspapers and books every line
+          is the same width
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT DECORATION SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>7. text-decoration</h2>
+      <p>Adds LINES to the text</p>
+
+      <div class="demo-box">
+        <p class="label">text-decoration: underline;</p>
+        <p class="deco-underline">This text has an underline below it</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-decoration: overline;</p>
+        <p class="deco-overline">This text has an overline above it</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-decoration: line-through;</p>
+        <p class="deco-linethrough">This text has a line through the middle</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-decoration: none;</p>
+        <p class="deco-none">This text has no decoration at all</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT TRANSFORM SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>8. text-transform</h2>
+      <p>Changes the CASE of the text</p>
+
+      <div class="demo-box">
+        <p class="label">text-transform: uppercase;</p>
+        <p class="transform-upper">this text becomes all capitals</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-transform: lowercase;</p>
+        <p class="transform-lower">THIS TEXT BECOMES ALL SMALL LETTERS</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-transform: capitalize;</p>
+        <p class="transform-capital">
+          first letter of every word becomes capital
+        </p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-transform: none;</p>
+        <p class="transform-none">tHiS tExT stays exactly as typed</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT INDENT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>9. text-indent</h2>
+      <p>Adds space at the START of first line like pressing Tab key</p>
+
+      <div class="demo-box">
+        <p class="label">text-indent: 50px;</p>
+        <p class="indent">
+          This paragraph has text-indent of 50px. Only the first line is pushed
+          in. The rest of the lines stay at normal position. This is just like
+          indenting in a book or essay.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT SHADOW SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>10. text-shadow</h2>
+      <p>
+        Adds a SHADOW behind the text syntax: horizontal vertical blur colour
+      </p>
+
+      <div class="demo-box">
+        <p class="label">text-shadow: 2px 2px 4px gray;</p>
+        <p class="shadow-simple">Simple Gray Shadow</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-shadow: 3px 3px 0px #003366;</p>
+        <p class="shadow-colour">Coloured Shadow Effect</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-shadow: 0px 0px 10px and 20px orange glow;</p>
+        <p class="shadow-glow">Glowing Text Effect</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">text-shadow: 2px 2px red, -2px -2px blue;</p>
+        <p class="shadow-multiple">Multiple Shadows</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       LINE HEIGHT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>11. line-height</h2>
+      <p>Controls SPACE between lines of text</p>
+
+      <div class="demo-box">
+        <p class="label">line-height: 1;</p>
+        <p class="line-1">
+          This has line-height 1. Lines are very close together. It is hard to
+          read when too tight.
+        </p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">line-height: 1.5;</p>
+        <p class="line-1-5">
+          This has line-height 1.5. This is the recommended value. It is
+          comfortable to read.
+        </p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">line-height: 2;</p>
+        <p class="line-2">
+          This has line-height 2. There is double space between lines. Good for
+          headings or quotes.
+        </p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">line-height: 3;</p>
+        <p class="line-3">
+          This has line-height 3. Lines are very far apart. Too much space
+          between lines.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       LETTER SPACING SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>12. letter-spacing</h2>
+      <p>Controls SPACE between individual letters</p>
+
+      <div class="demo-box">
+        <p class="label">letter-spacing: normal;</p>
+        <p class="letter-normal">This is normal letter spacing</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">letter-spacing: 5px;</p>
+        <p class="letter-wide">This has wide letter spacing</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">letter-spacing: 10px;</p>
+        <p class="letter-wider">This has wider spacing</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">letter-spacing: -1px;</p>
+        <p class="letter-tight">This has tight letter spacing</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       WORD SPACING SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>13. word-spacing</h2>
+      <p>Controls SPACE between words</p>
+
+      <div class="demo-box">
+        <p class="label">word-spacing: normal;</p>
+        <p class="word-normal">This has normal word spacing between words</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">word-spacing: 10px;</p>
+        <p class="word-wide">This has wide word spacing between words</p>
+      </div>
+
+      <div class="demo-box">
+        <p class="label">word-spacing: 20px;</p>
+        <p class="word-wider">This has wider word spacing between words</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FONT SHORTHAND SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>14. font Shorthand Property</h2>
+      <p>
+        Combines all font properties in ONE line syntax: style variant weight
+        size/line-height family
+      </p>
+
+      <div class="demo-box">
+        <p class="label">font: italic small-caps bold 24px/2 Georgia, serif;</p>
+        <p class="font-shorthand">
+          This uses font shorthand with all properties combined
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
