@@ -1,0 +1,1299 @@
+<!--
+=======================================================
+  CSS FOCUS STATE - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains the CSS :focus
+pseudo-class using Internal CSS with simple
+and clear examples.
+
+=======================================================
+  WHAT IS :focus?
+=======================================================
+
+  :focus = a pseudo-class that applies styles
+  to an element when it is SELECTED or ACTIVE
+  through keyboard or mouse click.
+
+  An element gets focus when:
+  - User CLICKS on it with mouse
+  - User presses TAB key to navigate to it
+  - User presses keyboard shortcut for it
+
+  An element loses focus when:
+  - User clicks somewhere else on page
+  - User presses TAB to move to next element
+  - User presses ESCAPE key
+
+  Basic Syntax:
+  element:focus {
+    property: value;
+  }
+
+  Example:
+  input:focus {
+    border-color: #1e90ff;
+    outline: none;
+  }
+  When input is clicked it gets a blue border
+
+  Works best on:
+  - input fields
+  - textarea
+  - select dropdowns
+  - buttons
+  - links (a tags)
+  - any element with tabindex attribute
+
+  Memory Trick:
+  focus = attention = element has your attention
+  Like a spotlight shining on one performer
+  Only ONE element can have focus at a time
+
+=======================================================
+  WHY USE :focus?
+=======================================================
+
+  :focus is used to:
+  - Show user WHICH input field they are typing in
+  - Give clear visual feedback on selected element
+  - Help KEYBOARD users navigate the page
+  - Make forms look more professional and modern
+  - Improve ACCESSIBILITY for all users
+  - Meet web accessibility standards
+
+  Without focus styles:
+  User cannot tell which field they are typing in
+  Keyboard navigation becomes very confusing
+  Page fails accessibility requirements
+
+  With focus styles:
+  User clearly sees the active field highlighted
+  Keyboard navigation becomes easy and clear
+  Page meets accessibility standards
+
+  ACCESSIBILITY NOTE:
+  :focus is very important for people who:
+  - Cannot use a mouse
+  - Use keyboard only for navigation
+  - Use screen readers
+  - Have motor disabilities
+
+  NEVER remove focus styles without replacement:
+  DO NOT do this:
+  * { outline: none; }
+  This removes all focus indicators completely
+  This breaks accessibility for keyboard users
+
+  If you remove outline always add your own style:
+  input:focus {
+    outline: none;
+    border-color: blue;
+    box-shadow: 0px 0px 5px blue;
+  }
+
+=======================================================
+  outline PROPERTY
+=======================================================
+
+  outline = a line drawn OUTSIDE the element border
+  It is the DEFAULT focus indicator in browsers
+
+  Difference between border and outline:
+  border   = part of element - affects layout
+  outline  = outside element - does NOT affect layout
+             Does not push other elements away
+
+  Basic Syntax:
+  outline: width style colour;
+
+  Example:
+  outline: 2px solid blue;
+  outline: 3px dashed red;
+  outline: none; (removes outline completely)
+
+  outline-offset:
+  Adds space BETWEEN element and its outline
+  outline-offset: 4px;
+  Outline appears 4px away from element edge
+
+  Values:
+  outline: none        = removes outline
+  outline: 2px solid   = solid outline
+  outline: 2px dashed  = dashed outline
+  outline: 2px dotted  = dotted outline
+
+  Memory Trick:
+  outline = outer line = line outside the border
+  Like a halo around the element
+
+=======================================================
+  :focus vs :hover vs :active
+=======================================================
+
+  :hover
+  - Triggered by MOUSE moving over element
+  - Only works with mouse
+  - Goes away when mouse moves away
+
+  :focus
+  - Triggered by CLICKING or TABBING to element
+  - Works with both mouse AND keyboard
+  - Goes away when clicking somewhere else
+  - Stays until element loses focus
+  - More important for ACCESSIBILITY
+
+  :active
+  - Triggered by PRESSING mouse button DOWN
+  - Goes away when mouse button is released
+  - Very brief moment during click
+
+  COMMON COMBINATION:
+  Style all three together for complete interaction:
+
+  button:hover  { background-color: darkblue; }
+  button:focus  { outline: 3px solid lightblue; }
+  button:active { transform: scale(0.95); }
+
+=======================================================
+  :focus-visible
+=======================================================
+
+  :focus-visible = newer version of focus
+  Shows focus styles ONLY when navigating
+  with keyboard NOT when clicking with mouse
+
+  Why use it:
+  Mouse users do not need to see focus ring
+  when clicking buttons or links
+  But keyboard users DO need to see it
+
+  Example:
+  button:focus { outline: none; }
+  button:focus-visible {
+    outline: 3px solid blue;
+  }
+
+  Now focus ring only shows for keyboard users
+  Mouse users do not see the focus ring
+
+  Memory Trick:
+  focus-visible = focus that is VISIBLE to keyboard users
+
+=======================================================
+  :focus-within
+=======================================================
+
+  :focus-within = applies style to PARENT element
+  when any CHILD element inside it has focus
+
+  Example:
+  .form-group:focus-within {
+    background-color: lightyellow;
+    border-color: blue;
+  }
+
+  When any input inside .form-group is focused
+  the whole .form-group container gets the style
+
+  Memory Trick:
+  focus-within = focus somewhere WITHIN this container
+  Parent reacts when child gets focused
+
+=======================================================
+  CSS PROPERTIES USED WITH :focus
+=======================================================
+
+  outline           → line outside element border
+  outline-offset    → space between element and outline
+  border            → border around element
+  border-color      → colour of border
+  background-color  → background colour change
+  box-shadow        → glow effect on focus
+  color             → text colour change
+  transform         → scale or move on focus
+  transition        → smooth focus change
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Pseudo-class      When it applies
+  ---------------   -----------------------------------
+  :focus            When element is clicked or tabbed
+  :focus-visible    When element is focused by keyboard
+  :focus-within     When child inside parent is focused
+
+  Element           Can it receive focus?
+  ---------------   -----------------------------------
+  input             Yes - always
+  textarea          Yes - always
+  button            Yes - always
+  select            Yes - always
+  a (link)          Yes - when it has href
+  div               Only with tabindex attribute
+  p                 Only with tabindex attribute
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  :focus = style when element is SELECTED
+  Triggered by clicking OR pressing Tab key
+  Only ONE element can be focused at a time
+  Very important for ACCESSIBILITY
+
+  outline = default focus indicator
+  outline: none = removes default browser outline
+  Always replace outline with your own focus style
+
+  :focus-visible = focus only for keyboard users
+  :focus-within  = parent styled when child focused
+
+  Always keep focus visible for keyboard users
+  Never remove focus styles without replacement
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Focus State</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        text-align: center;
+        color: #333;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 85%;
+        border: 2px solid #ddd;
+        text-align: left;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      /* Label showing CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* Instruction text */
+      .instruction {
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      /* =============================================
+       BASE INPUT STYLE
+    =============================================== */
+
+      .input-field {
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        margin: 8px;
+        width: 280px;
+        transition: all 0.3s ease;
+        display: block;
+      }
+
+      /* =============================================
+       DEFAULT BROWSER FOCUS
+    =============================================== */
+
+      /* Input with default browser outline - no CSS change */
+      .input-default {
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        margin: 8px;
+        width: 280px;
+      }
+
+      /* =============================================
+       FOCUS - BORDER COLOUR CHANGE
+    =============================================== */
+
+      /* Blue border on focus */
+      .focus-border-blue {
+        outline: none;
+      }
+
+      .focus-border-blue:focus {
+        border-color: #1e90ff;
+      }
+
+      /* Green border on focus */
+      .focus-border-green {
+        outline: none;
+      }
+
+      .focus-border-green:focus {
+        border-color: #32cd32;
+      }
+
+      /* Red border on focus */
+      .focus-border-red {
+        outline: none;
+      }
+
+      .focus-border-red:focus {
+        border-color: #dc143c;
+      }
+
+      /* Purple border on focus */
+      .focus-border-purple {
+        outline: none;
+      }
+
+      .focus-border-purple:focus {
+        border-color: #9932cc;
+      }
+
+      /* =============================================
+       FOCUS - GLOW SHADOW EFFECT
+    =============================================== */
+
+      /* Blue glow on focus */
+      .focus-glow-blue {
+        outline: none;
+      }
+
+      .focus-glow-blue:focus {
+        border-color: #1e90ff;
+        box-shadow: 0px 0px 8px rgba(30, 144, 255, 0.6);
+      }
+
+      /* Green glow on focus */
+      .focus-glow-green {
+        outline: none;
+      }
+
+      .focus-glow-green:focus {
+        border-color: #32cd32;
+        box-shadow: 0px 0px 8px rgba(50, 205, 50, 0.6);
+      }
+
+      /* Red glow on focus */
+      .focus-glow-red {
+        outline: none;
+      }
+
+      .focus-glow-red:focus {
+        border-color: #dc143c;
+        box-shadow: 0px 0px 8px rgba(220, 20, 60, 0.6);
+      }
+
+      /* Orange glow on focus */
+      .focus-glow-orange {
+        outline: none;
+      }
+
+      .focus-glow-orange:focus {
+        border-color: #ff8c00;
+        box-shadow: 0px 0px 8px rgba(255, 140, 0, 0.6);
+      }
+
+      /* =============================================
+       FOCUS - BACKGROUND COLOUR CHANGE
+    =============================================== */
+
+      /* Light blue background on focus */
+      .focus-bg-blue {
+        outline: none;
+        background-color: white;
+      }
+
+      .focus-bg-blue:focus {
+        background-color: #e0f0ff;
+        border-color: #1e90ff;
+      }
+
+      /* Light yellow background on focus */
+      .focus-bg-yellow {
+        outline: none;
+        background-color: white;
+      }
+
+      .focus-bg-yellow:focus {
+        background-color: lightyellow;
+        border-color: #ff8c00;
+      }
+
+      /* Light green background on focus */
+      .focus-bg-green {
+        outline: none;
+        background-color: white;
+      }
+
+      .focus-bg-green:focus {
+        background-color: #e8ffe8;
+        border-color: #32cd32;
+      }
+
+      /* =============================================
+       FOCUS - OUTLINE STYLES
+    =============================================== */
+
+      /* Solid outline */
+      .focus-outline-solid {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 16px;
+        width: 280px;
+        margin: 8px;
+        display: block;
+      }
+
+      .focus-outline-solid:focus {
+        outline: 3px solid #1e90ff;
+        outline-offset: 2px;
+      }
+
+      /* Dashed outline */
+      .focus-outline-dashed {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 16px;
+        width: 280px;
+        margin: 8px;
+        display: block;
+      }
+
+      .focus-outline-dashed:focus {
+        outline: 3px dashed #9932cc;
+        outline-offset: 3px;
+      }
+
+      /* Dotted outline */
+      .focus-outline-dotted {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 16px;
+        width: 280px;
+        margin: 8px;
+        display: block;
+      }
+
+      .focus-outline-dotted:focus {
+        outline: 3px dotted #32cd32;
+        outline-offset: 3px;
+      }
+
+      /* Large offset outline */
+      .focus-outline-offset {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 16px;
+        width: 280px;
+        margin: 8px;
+        display: block;
+      }
+
+      .focus-outline-offset:focus {
+        outline: 3px solid #ff6347;
+        outline-offset: 8px;
+      }
+
+      /* =============================================
+       FOCUS - COMBINED EFFECTS
+    =============================================== */
+
+      /* Lift up on focus */
+      .focus-lift {
+        outline: none;
+      }
+
+      .focus-lift:focus {
+        border-color: #1e90ff;
+        box-shadow: 0px 5px 15px rgba(30, 144, 255, 0.4);
+        transform: translateY(-3px);
+      }
+
+      /* Scale up on focus */
+      .focus-scale {
+        outline: none;
+      }
+
+      .focus-scale:focus {
+        border-color: #9932cc;
+        box-shadow: 0px 0px 10px rgba(153, 50, 204, 0.4);
+        transform: scale(1.02);
+      }
+
+      /* =============================================
+       FOCUS ON BUTTONS
+    =============================================== */
+
+      /* Base button style */
+      .btn {
+        padding: 12px 28px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 8px;
+        transition: all 0.3s ease;
+      }
+
+      /* Button 1 - outline on focus */
+      .btn-focus-outline {
+        background-color: #1e90ff;
+        color: white;
+      }
+
+      .btn-focus-outline:focus {
+        outline: 3px solid #003366;
+        outline-offset: 3px;
+      }
+
+      /* Button 2 - glow on focus */
+      .btn-focus-glow {
+        background-color: #32cd32;
+        color: white;
+        outline: none;
+      }
+
+      .btn-focus-glow:focus {
+        box-shadow: 0px 0px 15px 4px rgba(50, 205, 50, 0.7);
+      }
+
+      /* Button 3 - border on focus */
+      .btn-focus-border {
+        background-color: #ff6347;
+        color: white;
+        outline: none;
+      }
+
+      .btn-focus-border:focus {
+        border: 3px solid darkred;
+        box-shadow: 0px 0px 10px rgba(220, 20, 60, 0.5);
+      }
+
+      /* Button 4 - colour change on focus */
+      .btn-focus-colour {
+        background-color: #9932cc;
+        color: white;
+        outline: none;
+      }
+
+      .btn-focus-colour:focus {
+        background-color: #003366;
+        box-shadow: 0px 0px 10px rgba(0, 51, 102, 0.5);
+      }
+
+      /* =============================================
+       FOCUS ON TEXTAREA
+    =============================================== */
+
+      .textarea-field {
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        margin: 8px;
+        width: 350px;
+        height: 100px;
+        resize: vertical;
+        transition: all 0.3s ease;
+        display: block;
+      }
+
+      /* Textarea - glow on focus */
+      .textarea-glow {
+        outline: none;
+      }
+
+      .textarea-glow:focus {
+        border-color: #1e90ff;
+        box-shadow: 0px 0px 10px rgba(30, 144, 255, 0.5);
+        background-color: #f0f8ff;
+      }
+
+      /* =============================================
+       FOCUS ON SELECT DROPDOWN
+    =============================================== */
+
+      .select-field {
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        margin: 8px;
+        width: 280px;
+        transition: all 0.3s ease;
+        display: block;
+        background-color: white;
+      }
+
+      /* Select - glow on focus */
+      .select-glow {
+        outline: none;
+      }
+
+      .select-glow:focus {
+        border-color: #9932cc;
+        box-shadow: 0px 0px 8px rgba(153, 50, 204, 0.5);
+        background-color: #f8f0ff;
+      }
+
+      /* =============================================
+       FOCUS-WITHIN EXAMPLE
+       Parent changes when child is focused
+    =============================================== */
+
+      /* Form group container */
+      .form-group {
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin: 10px 0;
+        background-color: white;
+        transition: all 0.3s ease;
+      }
+
+      /* Form group label */
+      .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 5px;
+        transition: all 0.3s ease;
+      }
+
+      /* Form group input */
+      .form-group input {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        transition: all 0.3s ease;
+      }
+
+      /* FOCUS-WITHIN - whole group highlights when input is focused */
+      .form-group:focus-within {
+        border-color: #1e90ff;
+        background-color: #f0f8ff;
+        box-shadow: 0px 0px 10px rgba(30, 144, 255, 0.2);
+      }
+
+      /* Label changes colour when input inside is focused */
+      .form-group:focus-within label {
+        color: #1e90ff;
+        font-size: 15px;
+      }
+
+      /* Input changes when focused */
+      .form-group input:focus {
+        border-color: #1e90ff;
+        box-shadow: 0px 0px 5px rgba(30, 144, 255, 0.4);
+      }
+
+      /* =============================================
+       FOCUS-VISIBLE EXAMPLE
+       Focus only shows for keyboard users
+    =============================================== */
+
+      /* Button that hides focus ring for mouse users */
+      .btn-focus-visible {
+        background-color: #ff8c00;
+        color: white;
+        padding: 12px 28px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 8px;
+        transition: all 0.3s ease;
+      }
+
+      /* Remove focus for ALL users */
+      .btn-focus-visible:focus {
+        outline: none;
+      }
+
+      /* Add focus back ONLY for keyboard users */
+      .btn-focus-visible:focus-visible {
+        outline: 3px solid #003366;
+        outline-offset: 3px;
+        box-shadow: 0px 0px 10px rgba(0, 51, 102, 0.5);
+      }
+
+      /* =============================================
+       REAL WORLD FORM EXAMPLE
+    =============================================== */
+
+      /* Form container */
+      .form-card {
+        background-color: white;
+        border: 2px solid #ddd;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 420px;
+        margin: 10px auto;
+        text-align: left;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Form heading */
+      .form-card h3 {
+        color: #003366;
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+
+      /* Form label */
+      .form-label {
+        display: block;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 5px;
+        margin-top: 15px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+      }
+
+      /* Form input */
+      .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        transition: all 0.3s ease;
+        background-color: white;
+      }
+
+      /* Form input focus - blue glow */
+      .form-input:focus {
+        border-color: #1e90ff;
+        box-shadow: 0px 0px 8px rgba(30, 144, 255, 0.5);
+        background-color: #f0f8ff;
+      }
+
+      /* Form submit button */
+      .form-submit {
+        width: 100%;
+        padding: 13px;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #1e90ff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0px 4px 0px #003366;
+      }
+
+      .form-submit:hover {
+        background-color: #1570cd;
+      }
+
+      /* Submit button focus */
+      .form-submit:focus {
+        outline: 3px solid #003366;
+        outline-offset: 3px;
+        background-color: #003366;
+      }
+
+      .form-submit:active {
+        transform: translateY(4px);
+        box-shadow: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Focus State</h1>
+
+    <!-- ============================================
+       DEFAULT BROWSER FOCUS
+  =============================================== -->
+    <div class="section">
+      <h2>1. Default Browser Focus</h2>
+      <p>
+        Browsers add a default focus indicator automatically Click on the input
+        below to see default outline
+      </p>
+
+      <div class="demo-box">
+        <span class="label">No CSS added - browser default focus outline</span>
+        <span class="instruction"
+          >Click on the input to see default browser focus</span
+        >
+        <input
+          class="input-default"
+          type="text"
+          placeholder="Click here to see default focus"
+        />
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS - BORDER COLOUR CHANGE
+  =============================================== -->
+    <div class="section">
+      <h2>2. :focus - Border Colour Change</h2>
+      <p>
+        Most common focus effect Border colour changes when input is clicked
+        outline: none removes the default browser outline
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >input:focus { border-color: #1e90ff; outline: none; }</span
+        >
+        <span class="instruction"
+          >Click each input to see border colour change</span
+        >
+
+        <input
+          class="input-field focus-border-blue"
+          type="text"
+          placeholder="Click - Blue border on focus"
+        />
+
+        <input
+          class="input-field focus-border-green"
+          type="text"
+          placeholder="Click - Green border on focus"
+        />
+
+        <input
+          class="input-field focus-border-red"
+          type="text"
+          placeholder="Click - Red border on focus"
+        />
+
+        <input
+          class="input-field focus-border-purple"
+          type="text"
+          placeholder="Click - Purple border on focus"
+        />
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS - GLOW SHADOW EFFECT
+  =============================================== -->
+    <div class="section">
+      <h2>3. :focus - Glow Shadow Effect</h2>
+      <p>
+        box-shadow creates a glow around the input Makes focused input very
+        clear and visible Used in most modern websites and apps
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >input:focus { border-color: blue; box-shadow: 0px 0px 8px rgba(blue,
+          0.6); }</span
+        >
+        <span class="instruction">Click each input to see glowing shadow</span>
+
+        <input
+          class="input-field focus-glow-blue"
+          type="text"
+          placeholder="Click - Blue glow on focus"
+        />
+
+        <input
+          class="input-field focus-glow-green"
+          type="text"
+          placeholder="Click - Green glow on focus"
+        />
+
+        <input
+          class="input-field focus-glow-red"
+          type="text"
+          placeholder="Click - Red glow on focus"
+        />
+
+        <input
+          class="input-field focus-glow-orange"
+          type="text"
+          placeholder="Click - Orange glow on focus"
+        />
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS - BACKGROUND COLOUR CHANGE
+  =============================================== -->
+    <div class="section">
+      <h2>4. :focus - Background Colour Change</h2>
+      <p>
+        Background colour of input changes on focus Makes it very clear which
+        field is active
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >input:focus { background-color: #e0f0ff; border-color: #1e90ff;
+          }</span
+        >
+        <span class="instruction"
+          >Click each input to see background colour change</span
+        >
+
+        <input
+          class="input-field focus-bg-blue"
+          type="text"
+          placeholder="Click - Light blue background"
+        />
+
+        <input
+          class="input-field focus-bg-yellow"
+          type="text"
+          placeholder="Click - Light yellow background"
+        />
+
+        <input
+          class="input-field focus-bg-green"
+          type="text"
+          placeholder="Click - Light green background"
+        />
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS - OUTLINE STYLES
+  =============================================== -->
+    <div class="section">
+      <h2>5. :focus - Custom Outline Styles</h2>
+      <p>
+        Custom outline styles instead of default browser outline outline-offset
+        adds space between element and outline
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >input:focus { outline: 3px solid blue; outline-offset: 2px; }</span
+        >
+        <span class="instruction"
+          >Click each input to see different outline styles</span
+        >
+
+        <input
+          class="focus-outline-solid"
+          type="text"
+          placeholder="Click - Solid outline on focus"
+        />
+
+        <input
+          class="focus-outline-dashed"
+          type="text"
+          placeholder="Click - Dashed outline on focus"
+        />
+
+        <input
+          class="focus-outline-dotted"
+          type="text"
+          placeholder="Click - Dotted outline on focus"
+        />
+
+        <input
+          class="focus-outline-offset"
+          type="text"
+          placeholder="Click - Large offset outline on focus"
+        />
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS - COMBINED EFFECTS
+  =============================================== -->
+    <div class="section">
+      <h2>6. :focus - Combined Effects</h2>
+      <p>
+        Multiple CSS properties changed at once on focus Creates more dramatic
+        and impressive effects
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >input:focus { border-color + box-shadow + transform combined; }</span
+        >
+        <span class="instruction"
+          >Click each input to see combined effects</span
+        >
+
+        <input
+          class="input-field focus-lift"
+          type="text"
+          placeholder="Click - Lifts up with glow on focus"
+        />
+
+        <input
+          class="input-field focus-scale"
+          type="text"
+          placeholder="Click - Scales slightly with glow on focus"
+        />
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS ON BUTTONS
+  =============================================== -->
+    <div class="section">
+      <h2>7. :focus on Buttons</h2>
+      <p>
+        Buttons also need focus styles for keyboard users Press Tab key to
+        navigate to buttons and see focus
+      </p>
+
+      <div class="demo-box">
+        <span class="label">Various button focus styles shown below</span>
+        <span class="instruction"
+          >Click buttons OR press Tab key to focus them</span
+        >
+
+        <button class="btn btn-focus-outline">Outline Focus</button>
+
+        <button class="btn btn-focus-glow">Glow Focus</button>
+
+        <button class="btn btn-focus-border">Border Focus</button>
+
+        <button class="btn btn-focus-colour">Colour Focus</button>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS ON TEXTAREA
+  =============================================== -->
+    <div class="section">
+      <h2>8. :focus on Textarea</h2>
+      <p>
+        Textarea gets the same focus styles as input Click inside the textarea
+        to see focus effect
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >textarea:focus { border-color: #1e90ff; box-shadow: glow;
+          background-color: #f0f8ff; }</span
+        >
+        <span class="instruction"
+          >Click inside the textarea to see focus effect</span
+        >
+
+        <textarea
+          class="textarea-field textarea-glow"
+          placeholder="Click here to focus this textarea and see the glow effect"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS ON SELECT DROPDOWN
+  =============================================== -->
+    <div class="section">
+      <h2>9. :focus on Select Dropdown</h2>
+      <p>
+        Select dropdowns also support focus styles Click the dropdown to see
+        focus effect
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >select:focus { border-color: #9932cc; box-shadow: purple glow;
+          }</span
+        >
+        <span class="instruction"
+          >Click the dropdown to see purple focus glow</span
+        >
+
+        <select class="select-field select-glow">
+          <option>Select your favourite character</option>
+          <option>Doraemon</option>
+          <option>Nobita</option>
+          <option>Shizuka</option>
+          <option>Gian</option>
+          <option>Suneo</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS-WITHIN SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>10. :focus-within</h2>
+      <p>
+        Parent element changes style when any child inside it gets focused The
+        whole group highlights on input focus
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >.form-group:focus-within { border-color: blue; background-color:
+          #f0f8ff; }</span
+        >
+        <span class="instruction"
+          >Click inside each input to see whole group highlight</span
+        >
+
+        <!-- Form group 1 -->
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="Enter your full name" />
+        </div>
+
+        <!-- Form group 2 -->
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="Enter your email" />
+        </div>
+
+        <!-- Form group 3 -->
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="text" placeholder="Enter your phone number" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FOCUS-VISIBLE SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>11. :focus-visible</h2>
+      <p>
+        Shows focus ring ONLY for keyboard users Mouse users do not see the
+        focus ring Press Tab key to focus the button and see ring
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >btn:focus { outline: none; } btn:focus-visible { outline: 3px solid
+          blue; }</span
+        >
+        <span class="instruction"
+          >Click button with mouse - no ring visible Press Tab key to reach
+          button - ring appears</span
+        >
+
+        <button class="btn-focus-visible">
+          Click with Mouse - No Ring
+          <br />
+          Tab to Here - Ring Appears
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================
+       REAL WORLD FORM EXAMPLE
+  =============================================== -->
+    <div class="section">
+      <h2>12. Real World Form with Focus Styles</h2>
+      <p>
+        A complete form showing professional focus effects Click each field to
+        see focus styles in action
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >Complete form with proper focus styles on all elements</span
+        >
+        <span class="instruction"
+          >Click each field to see blue glow focus effect</span
+        >
+
+        <div class="form-card">
+          <h3>Register Here</h3>
+
+          <label class="form-label">Full Name</label>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="Enter your full name"
+          />
+
+          <label class="form-label">Email Address</label>
+          <input
+            class="form-input"
+            type="email"
+            placeholder="Enter your email"
+          />
+
+          <label class="form-label">Password</label>
+          <input
+            class="form-input"
+            type="password"
+            placeholder="Enter your password"
+          />
+
+          <label class="form-label">Phone Number</label>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="Enter your phone number"
+          />
+
+          <button class="form-submit">Create Account</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

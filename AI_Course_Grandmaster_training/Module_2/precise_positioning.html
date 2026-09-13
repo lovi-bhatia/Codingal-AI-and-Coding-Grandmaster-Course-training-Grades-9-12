@@ -1,0 +1,1605 @@
+<!--
+=======================================================
+  CSS PRECISE POSITIONING - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains CSS Precise
+Positioning using Internal CSS with simple
+and clear examples.
+
+=======================================================
+  WHAT IS CSS POSITIONING?
+=======================================================
+
+  Positioning = controlling EXACTLY WHERE an element
+  appears on the webpage.
+
+  By default elements follow NORMAL FLOW:
+  Block elements stack vertically top to bottom
+  Inline elements sit side by side left to right
+
+  CSS positioning lets you BREAK OUT of normal flow
+  and place elements EXACTLY where you want them.
+
+  The position property has 5 values:
+  1. static   = default no special positioning
+  2. relative = moved RELATIVE to its normal position
+  3. absolute = placed RELATIVE to nearest positioned parent
+  4. fixed    = placed RELATIVE to the browser window
+  5. sticky   = switches between relative and fixed
+
+  After setting position you use these to move element:
+  top    = distance from top edge
+  right  = distance from right edge
+  bottom = distance from bottom edge
+  left   = distance from left edge
+
+  Basic Syntax:
+  .box {
+    position: relative;
+    top: 20px;
+    left: 30px;
+  }
+
+  Memory Trick:
+  Think of positioning like placing furniture in a room
+  static   = furniture stays where delivered (default)
+  relative = move furniture slightly from where it was
+  absolute = place furniture at exact spot in room
+  fixed    = furniture is nailed to the wall
+  sticky   = furniture moves with you until edge of room
+
+=======================================================
+  z-index PROPERTY
+=======================================================
+
+  z-index = controls which element appears ON TOP
+  when elements overlap each other
+
+  Think of it as layers stacked on top of each other
+  Higher z-index = appears in FRONT
+  Lower z-index  = appears BEHIND
+
+  Values:
+  z-index: 1;   = layer 1 (behind higher numbers)
+  z-index: 10;  = layer 10
+  z-index: 100; = layer 100 (in front of lower numbers)
+  z-index: -1;  = behind all elements with z-index 0
+
+  IMPORTANT:
+  z-index ONLY works on positioned elements
+  element must have position: relative, absolute,
+  fixed or sticky for z-index to work
+
+  Example:
+  .box-back  { position: absolute; z-index: 1; }
+  .box-front { position: absolute; z-index: 2; }
+  box-front appears in front of box-back
+
+  Memory Trick:
+  z-index = z axis = depth
+  Like floors of a building
+  Higher floor number = higher up you are
+
+=======================================================
+  1. position: static
+=======================================================
+
+  static = DEFAULT position value
+  Element stays in NORMAL DOCUMENT FLOW
+  top right bottom left have NO EFFECT
+  z-index has NO EFFECT
+
+  This is how ALL elements behave by default
+  You rarely need to write position: static
+  unless you are resetting a position set earlier
+
+  Example:
+  .box {
+    position: static;
+  }
+  Same as not writing position at all
+
+  Memory Trick:
+  static = stationary = stays exactly where it is
+  No movement at all
+
+=======================================================
+  2. position: relative
+=======================================================
+
+  relative = element is positioned RELATIVE to
+  its OWN NORMAL POSITION in the document flow
+
+  IMPORTANT FACTS:
+  - Element STILL takes up its original space
+  - Other elements are NOT affected by the move
+  - It just VISUALLY shifts from its normal position
+  - Becomes a REFERENCE POINT for absolute children
+
+  top    = moves element DOWN from its top edge
+  bottom = moves element UP from its bottom edge
+  left   = moves element RIGHT from its left edge
+  right  = moves element LEFT from its right edge
+
+  Example:
+  .box {
+    position: relative;
+    top: 20px;
+    left: 30px;
+  }
+  Box moves 20px DOWN and 30px RIGHT from where
+  it would normally be placed
+
+  MOST COMMON USE:
+  Set parent to position: relative
+  so that absolute children position relative to it
+
+  Memory Trick:
+  relative = relative to yourself
+  Like moving 10 steps from where YOU are standing
+
+=======================================================
+  3. position: absolute
+=======================================================
+
+  absolute = element is positioned RELATIVE to
+  its nearest POSITIONED ANCESTOR (parent)
+
+  WHAT IS A POSITIONED ANCESTOR?
+  Any parent element with position value OTHER than static
+  Usually the parent has position: relative
+
+  IMPORTANT FACTS:
+  - Element is REMOVED from normal flow completely
+  - Element does NOT take up space in document
+  - Other elements IGNORE the absolute element
+  - If no positioned parent found it positions
+    relative to the html element (the whole page)
+
+  top    = distance from top of positioned parent
+  right  = distance from right of positioned parent
+  bottom = distance from bottom of positioned parent
+  left   = distance from left of positioned parent
+
+  Example:
+  .parent {
+    position: relative;
+  }
+  .child {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+  }
+  Child is placed 10px from top and 20px from right
+  of the parent element
+
+  COMMON USES:
+  - Badges on cards (like notification numbers)
+  - Labels on images
+  - Tooltips
+  - Decorative elements on cards
+  - Overlay text on images
+
+  Memory Trick:
+  absolute = absolutely placed at exact coordinates
+  Like GPS coordinates in a room
+  Measured from the parent container
+
+=======================================================
+  4. position: fixed
+=======================================================
+
+  fixed = element is positioned RELATIVE to the
+  BROWSER VIEWPORT (the visible browser window)
+
+  IMPORTANT FACTS:
+  - Element is REMOVED from normal flow
+  - Element stays in SAME POSITION even when scrolling
+  - Element does NOT move with page content
+  - Always visible no matter how far you scroll
+
+  top    = distance from top of viewport
+  right  = distance from right of viewport
+  bottom = distance from bottom of viewport
+  left   = distance from left of viewport
+
+  Example:
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  Navbar sticks to top of browser window always
+
+  COMMON USES:
+  - Fixed navigation bars at top of page
+  - Fixed footer bars at bottom of page
+  - Chat buttons in bottom corner
+  - Cookie consent banners
+  - Back to top buttons
+
+  Memory Trick:
+  fixed = nailed = stuck to the screen
+  Like a sticker on your glasses
+  It moves with your eyes everywhere you look
+
+=======================================================
+  5. position: sticky
+=======================================================
+
+  sticky = combination of RELATIVE and FIXED
+  Acts like relative UNTIL it reaches a threshold
+  Then acts like FIXED and sticks to that position
+
+  IMPORTANT FACTS:
+  - Starts as relative in normal flow
+  - When scrolled to the threshold it STICKS
+  - Stays stuck until parent element scrolls away
+  - Requires top right bottom or left value to work
+
+  Example:
+  .header {
+    position: sticky;
+    top: 0;
+  }
+  Header scrolls normally at first
+  When it reaches top of viewport it STICKS there
+  It unsticks when parent container scrolls away
+
+  COMMON USES:
+  - Section headers that stick while in that section
+  - Table headers that stick while scrolling table
+  - Sidebars that stick while scrolling content
+
+  Memory Trick:
+  sticky = like a sticky note
+  It sits normally but sticks when it hits the edge
+  Like a boat that drifts until it hits the dock
+
+=======================================================
+  top right bottom left PROPERTIES
+=======================================================
+
+  These four properties MOVE the positioned element
+
+  Only work when position is NOT static
+
+  top: value;
+  Moves element FROM the top edge
+  Positive = moves DOWN
+  Negative = moves UP
+  Example: top: 20px;  moves 20px down from top
+
+  right: value;
+  Moves element FROM the right edge
+  Positive = moves element LEFT (away from right)
+  Negative = moves element RIGHT (beyond right edge)
+  Example: right: 0;  touches the right edge
+
+  bottom: value;
+  Moves element FROM the bottom edge
+  Positive = moves element UP (away from bottom)
+  Negative = moves element DOWN (beyond bottom)
+  Example: bottom: 0;  touches the bottom edge
+
+  left: value;
+  Moves element FROM the left edge
+  Positive = moves element RIGHT (away from left)
+  Negative = moves element LEFT (beyond left edge)
+  Example: left: 20px;  moves 20px from left edge
+
+  Units:
+  px  = fixed pixels
+  %   = percentage of parent element size
+  em  = relative to font size
+  auto = browser calculates
+
+=======================================================
+  CENTERING WITH ABSOLUTE POSITION
+=======================================================
+
+  Classic way to center absolutely positioned element:
+
+  .parent {
+    position: relative;
+  }
+
+  .child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  HOW IT WORKS:
+  top: 50%    = moves top edge to center of parent
+  left: 50%   = moves left edge to center of parent
+  transform: translate(-50%, -50%) = shifts back
+  by half the element's own width and height
+  This perfectly centers the element
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  position        → positioning method
+  top             → distance from top
+  right           → distance from right
+  bottom          → distance from bottom
+  left            → distance from left
+  z-index         → stacking order (depth)
+  transform       → used for centering trick
+  width           → element width
+  height          → element height
+  overflow        → controls content overflow
+  background-color → element colour
+  border          → border around element
+  border-radius   → rounded corners
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Value     Normal Flow   Scrolls    Reference Point
+  -------   -----------   --------   ------------------
+  static    Yes           Yes        None (default)
+  relative  Yes (space)   Yes        Own position
+  absolute  No            Yes        Positioned parent
+  fixed     No            No         Browser window
+  sticky    Yes then No   Partial    Viewport threshold
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  position: static   = default no positioning
+  position: relative = moved from own position
+                       still takes up space
+                       parent for absolute children
+
+  position: absolute = exact placement in parent
+                       removed from normal flow
+                       needs positioned parent
+
+  position: fixed    = stuck to browser window
+                       does not scroll with page
+
+  position: sticky   = relative then fixed when scrolled
+                       sticks at threshold position
+
+  top right bottom left = move the positioned element
+  z-index = controls which element is on top
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Precise Positioning</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        color: #333;
+        padding: 20px;
+        padding-top: 70px;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+      }
+
+      h3 {
+        color: #555;
+        font-size: 17px;
+        margin-bottom: 8px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 90%;
+        border: 2px solid #ddd;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      /* Label showing CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* Instruction text */
+      .instruction {
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      /* =============================================
+       FIXED NAVIGATION BAR
+       position: fixed - stays at top always
+    =============================================== */
+
+      .fixed-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #003366;
+        color: white;
+        padding: 15px 30px;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .fixed-navbar .nav-brand {
+        font-size: 18px;
+        font-weight: bold;
+        color: #ffd700;
+      }
+
+      .fixed-navbar .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .fixed-navbar .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .fixed-navbar .nav-links a:hover {
+        color: #87ceeb;
+      }
+
+      /* =============================================
+       position: static EXAMPLES
+    =============================================== */
+
+      /* Static container */
+      .static-container {
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 15px;
+        margin: 10px 0;
+        height: 120px;
+      }
+
+      /* Static box - default positioning */
+      .static-box {
+        position: static;
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        display: inline-block;
+      }
+
+      /* =============================================
+       position: relative EXAMPLES
+    =============================================== */
+
+      /* Relative container */
+      .relative-container {
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 15px;
+        margin: 10px 0;
+        height: 160px;
+      }
+
+      /* Ghost box showing original position */
+      .ghost-box {
+        background-color: transparent;
+        border: 3px dashed #aaa;
+        color: #aaa;
+        font-weight: bold;
+        font-size: 13px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        margin: 5px;
+      }
+
+      /* Relative box - moved from normal position */
+      .relative-box {
+        position: relative;
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        margin: 5px;
+      }
+
+      /* Move down and right */
+      .rel-down-right {
+        top: 30px;
+        left: 40px;
+      }
+
+      /* Move up and right */
+      .rel-up-right {
+        top: -15px;
+        left: 20px;
+        background-color: #32cd32;
+      }
+
+      /* Move down only */
+      .rel-down {
+        top: 25px;
+        background-color: #dc143c;
+      }
+
+      /* Move right only */
+      .rel-right {
+        left: 50px;
+        background-color: #9932cc;
+      }
+
+      /* =============================================
+       position: absolute EXAMPLES
+    =============================================== */
+
+      /* Absolute parent container - position: relative */
+      .absolute-parent {
+        position: relative;
+        background-color: #ffe4b5;
+        border: 3px solid #ff8c00;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px 0;
+        height: 220px;
+      }
+
+      /* Absolute child boxes */
+      .abs-box {
+        position: absolute;
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        padding: 10px 15px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      /* Top left corner */
+      .abs-top-left {
+        top: 10px;
+        left: 10px;
+        background-color: #1e90ff;
+      }
+
+      /* Top right corner */
+      .abs-top-right {
+        top: 10px;
+        right: 10px;
+        background-color: #32cd32;
+      }
+
+      /* Bottom left corner */
+      .abs-bottom-left {
+        bottom: 10px;
+        left: 10px;
+        background-color: #dc143c;
+      }
+
+      /* Bottom right corner */
+      .abs-bottom-right {
+        bottom: 10px;
+        right: 10px;
+        background-color: #9932cc;
+      }
+
+      /* Center of parent */
+      .abs-center {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ff8c00;
+      }
+
+      /* =============================================
+       ABSOLUTE POSITION PRACTICAL USES
+    =============================================== */
+
+      /* Card with badge - absolute positioning */
+      .card-with-badge {
+        position: relative;
+        background-color: white;
+        border: 2px solid #ddd;
+        border-radius: 15px;
+        padding: 20px;
+        width: 200px;
+        display: inline-block;
+        margin: 20px 30px 10px 10px;
+        vertical-align: top;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Badge positioned at top right of card */
+      .badge {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background-color: #dc143c;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+      }
+
+      /* Card content */
+      .card-icon {
+        font-size: 40px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .card-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #003366;
+        text-align: center;
+      }
+
+      /* Image card with overlay label */
+      .img-card {
+        position: relative;
+        width: 200px;
+        height: 150px;
+        border-radius: 15px;
+        display: inline-block;
+        margin: 10px;
+        overflow: hidden;
+        vertical-align: top;
+      }
+
+      /* Image placeholder */
+      .img-placeholder {
+        width: 100%;
+        height: 100%;
+        background-color: #87ceeb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+      }
+
+      /* Label on image - absolutely positioned */
+      .img-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 51, 102, 0.8);
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        padding: 8px 12px;
+      }
+
+      /* Top left tag on image */
+      .img-tag {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #ff6347;
+        color: white;
+        font-size: 11px;
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 5px;
+      }
+
+      /* =============================================
+       position: fixed EXAMPLE
+    =============================================== */
+
+      /* Fixed button in bottom right corner */
+      .fixed-chat-btn {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background-color: #32cd32;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 15px 20px;
+        border-radius: 50px;
+        cursor: pointer;
+        z-index: 999;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+
+      .fixed-chat-btn:hover {
+        background-color: #228b22;
+        transform: scale(1.05);
+      }
+
+      /* Fixed back to top button */
+      .fixed-top-btn {
+        position: fixed;
+        bottom: 90px;
+        right: 25px;
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 999;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        line-height: 45px;
+        transition: all 0.3s ease;
+      }
+
+      .fixed-top-btn:hover {
+        background-color: #003366;
+        transform: scale(1.1);
+      }
+
+      /* Fixed demo box to show fixed positioning */
+      .fixed-demo {
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 20px;
+        margin: 10px 0;
+        min-height: 100px;
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      /* =============================================
+       position: sticky EXAMPLE
+    =============================================== */
+
+      /* Sticky demo scroll container */
+      .sticky-scroll-container {
+        height: 350px;
+        overflow-y: scroll;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        margin: 10px 0;
+      }
+
+      /* Sticky header inside scroll container */
+      .sticky-header {
+        position: sticky;
+        top: 0;
+        background-color: #003366;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        padding: 12px 20px;
+        z-index: 10;
+      }
+
+      /* Content sections inside scroll container */
+      .scroll-section {
+        padding: 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .scroll-section h3 {
+        color: #003366;
+        margin-bottom: 8px;
+      }
+
+      .scroll-section p {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      /* Alternating backgrounds for sections */
+      .scroll-section:nth-child(even) {
+        background-color: #f0f8ff;
+      }
+
+      .scroll-section:nth-child(odd) {
+        background-color: white;
+      }
+
+      /* =============================================
+       Z-INDEX EXAMPLES
+    =============================================== */
+
+      /* Z-index container */
+      .zindex-container {
+        position: relative;
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 20px;
+        margin: 10px 0;
+        height: 200px;
+      }
+
+      /* Base z-index box style */
+      .z-box {
+        position: absolute;
+        width: 150px;
+        height: 100px;
+        font-weight: bold;
+        font-size: 14px;
+        color: white;
+        border-radius: 10px;
+        padding: 15px;
+        border: 3px solid white;
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      /* Box with z-index 1 - behind */
+      .z-box-1 {
+        background-color: #1e90ff;
+        top: 20px;
+        left: 20px;
+        z-index: 1;
+      }
+
+      /* Box with z-index 2 - middle */
+      .z-box-2 {
+        background-color: #32cd32;
+        top: 50px;
+        left: 80px;
+        z-index: 2;
+      }
+
+      /* Box with z-index 3 - front */
+      .z-box-3 {
+        background-color: #dc143c;
+        top: 80px;
+        left: 140px;
+        z-index: 3;
+      }
+
+      /* Box with z-index -1 - behind everything */
+      .z-box-behind {
+        background-color: #9932cc;
+        top: 30px;
+        left: 200px;
+        z-index: -1;
+      }
+
+      /* =============================================
+       CENTERING WITH ABSOLUTE POSITION
+    =============================================== */
+
+      /* Center demo parent */
+      .center-parent {
+        position: relative;
+        background-color: #ffe4b5;
+        border: 3px solid #ff8c00;
+        border-radius: 10px;
+        height: 200px;
+        margin: 10px 0;
+      }
+
+      /* Centered child using absolute + transform */
+      .center-child {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 20px 30px;
+        border-radius: 10px;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      /* Top left corner child */
+      .corner-tl {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #32cd32;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        padding: 8px 12px;
+        border-radius: 6px;
+      }
+
+      /* Top right corner child */
+      .corner-tr {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #dc143c;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        padding: 8px 12px;
+        border-radius: 6px;
+      }
+
+      /* Bottom left corner child */
+      .corner-bl {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        background-color: #ff8c00;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        padding: 8px 12px;
+        border-radius: 6px;
+      }
+
+      /* Bottom right corner child */
+      .corner-br {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background-color: #9932cc;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        padding: 8px 12px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ============================================
+       FIXED NAVIGATION BAR - position: fixed
+       This stays at top even when scrolling
+  =============================================== -->
+    <div class="fixed-navbar">
+      <div class="nav-brand">CSS Positioning</div>
+      <div class="nav-links">
+        <a>Static</a>
+        <a>Relative</a>
+        <a>Absolute</a>
+        <a>Fixed</a>
+        <a>Sticky</a>
+      </div>
+    </div>
+
+    <!-- Fixed chat button - bottom right -->
+    <div class="fixed-chat-btn">💬 Chat</div>
+
+    <!-- Fixed back to top button -->
+    <div class="fixed-top-btn">↑</div>
+
+    <h1>CSS Precise Positioning</h1>
+
+    <!-- ============================================
+       position: static SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>1. position: static (Default)</h2>
+      <p>
+        Default value for all elements Elements follow normal document flow top
+        right bottom left have NO effect
+      </p>
+
+      <div class="demo-box">
+        <span class="label">position: static; (default - no change)</span>
+        <span class="instruction">
+          Static elements stack normally in document flow top left right bottom
+          properties do nothing
+        </span>
+
+        <div class="static-container">
+          <div class="static-box">
+            position: static
+            <br />
+            top: 50px has no effect
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       position: relative SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. position: relative</h2>
+      <p>
+        Element moves RELATIVE to its own normal position Original space is
+        STILL reserved in document flow Other elements are NOT affected by the
+        move
+      </p>
+
+      <!-- Down and right -->
+      <div class="demo-box">
+        <span class="label">position: relative; top: 30px; left: 40px;</span>
+        <span class="instruction">
+          Dashed box shows original position Blue box moved 30px down and 40px
+          right from there
+        </span>
+
+        <div class="relative-container">
+          <div class="ghost-box">Original position here</div>
+          <div class="relative-box rel-down-right">
+            top: 30px
+            <br />
+            left: 40px
+          </div>
+        </div>
+      </div>
+
+      <!-- Up and right -->
+      <div class="demo-box">
+        <span class="label">position: relative; top: -15px; left: 20px;</span>
+        <span class="instruction">
+          Negative top moves element UPWARD from its normal position
+        </span>
+
+        <div class="relative-container">
+          <div class="ghost-box">Original position here</div>
+          <div class="relative-box rel-up-right">
+            top: -15px
+            <br />
+            left: 20px
+          </div>
+        </div>
+      </div>
+
+      <!-- Multiple boxes showing relative -->
+      <div class="demo-box">
+        <span class="label">Multiple elements - each moved relatively</span>
+
+        <div class="relative-container">
+          <div class="relative-box" style="position: relative; left: 10px">
+            left: 10px
+          </div>
+
+          <div
+            class="relative-box"
+            style="
+              position: relative;
+              top: 20px;
+              left: 30px;
+              background-color: #32cd32;
+            "
+          >
+            top: 20px left: 30px
+          </div>
+
+          <div
+            class="relative-box"
+            style="position: relative; top: -10px; background-color: #dc143c"
+          >
+            top: -10px
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       position: absolute SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. position: absolute</h2>
+      <p>
+        Element placed at EXACT position inside parent Parent must have
+        position: relative Absolute element is REMOVED from normal flow
+      </p>
+
+      <!-- Basic absolute positioning -->
+      <div class="demo-box">
+        <span class="label">
+          Parent: position: relative; Children: position: absolute; with top
+          right bottom left
+        </span>
+        <span class="instruction">
+          Each coloured box is placed at an exact corner or center of the orange
+          parent container
+        </span>
+
+        <div class="absolute-parent">
+          <div class="abs-box abs-top-left">top: 10px left: 10px</div>
+
+          <div class="abs-box abs-top-right">top: 10px right: 10px</div>
+
+          <div class="abs-box abs-bottom-left">bottom: 10px left: 10px</div>
+
+          <div class="abs-box abs-bottom-right">bottom: 10px right: 10px</div>
+
+          <div class="abs-box abs-center">
+            top: 50% left: 50% transform: translate (-50%, -50%)
+          </div>
+        </div>
+      </div>
+
+      <!-- Practical use 1 - Cards with badges -->
+      <div class="demo-box">
+        <span class="label"
+          >Practical use: Notification badges on cards using position:
+          absolute</span
+        >
+
+        <!-- Card with notification badge -->
+        <div class="card-with-badge">
+          <div class="badge">5</div>
+          <div class="card-icon">📬</div>
+          <div class="card-title">Messages</div>
+        </div>
+
+        <div class="card-with-badge">
+          <div class="badge">12</div>
+          <div class="card-icon">🔔</div>
+          <div class="card-title">Notifications</div>
+        </div>
+
+        <div class="card-with-badge">
+          <div class="badge">3</div>
+          <div class="card-icon">🛒</div>
+          <div class="card-title">Cart Items</div>
+        </div>
+      </div>
+
+      <!-- Practical use 2 - Image labels -->
+      <div class="demo-box">
+        <span class="label"
+          >Practical use: Labels on images using position: absolute</span
+        >
+
+        <div class="img-card">
+          <div class="img-placeholder">🌅</div>
+          <div class="img-tag">NEW</div>
+          <div class="img-label">Sunset Photo</div>
+        </div>
+
+        <div class="img-card">
+          <div class="img-placeholder" style="background-color: #90ee90">
+            🌿
+          </div>
+          <div class="img-tag" style="background-color: #32cd32">SALE</div>
+          <div class="img-label">Nature Photo</div>
+        </div>
+
+        <div class="img-card">
+          <div class="img-placeholder" style="background-color: #ffb6c1">
+            🌸
+          </div>
+          <div class="img-tag" style="background-color: #9932cc">HOT</div>
+          <div class="img-label">Flower Photo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       CENTERING WITH ABSOLUTE
+  =============================================== -->
+    <div class="section">
+      <h2>4. Centering with Absolute Position</h2>
+      <p>
+        Classic method to perfectly center an element top: 50% + left: 50% +
+        transform: translate(-50%, -50%)
+      </p>
+
+      <div class="demo-box">
+        <span class="label">
+          position: absolute; top: 50%; left: 50%; transform: translate(-50%,
+          -50%);
+        </span>
+        <span class="instruction">
+          Blue box is perfectly centered inside orange parent Corner boxes show
+          other absolute positions for comparison
+        </span>
+
+        <div class="center-parent">
+          <!-- Four corner boxes -->
+          <div class="corner-tl">top-left</div>
+          <div class="corner-tr">top-right</div>
+          <div class="corner-bl">bottom-left</div>
+          <div class="corner-br">bottom-right</div>
+
+          <!-- Perfectly centered box -->
+          <div class="center-child">
+            Perfectly Centered
+            <br />
+            top: 50% + left: 50%
+            <br />
+            + transform: translate(-50%, -50%)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       position: fixed SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>5. position: fixed</h2>
+      <p>
+        Element is fixed to the BROWSER WINDOW Does NOT move when page is
+        scrolled Always visible in same position
+      </p>
+
+      <div class="demo-box">
+        <span class="label">
+          .navbar { position: fixed; top: 0; left: 0; width: 100%; } .chat-btn {
+          position: fixed; bottom: 25px; right: 25px; }
+        </span>
+        <span class="instruction">
+          The BLUE NAVIGATION BAR at the very top of this page is using
+          position: fixed - it stays there always. The GREEN CHAT button and
+          BLUE UP button at bottom right are also using position: fixed. Scroll
+          up and down to confirm they do not move.
+        </span>
+
+        <div class="fixed-demo">
+          <strong>Fixed elements on this page:</strong>
+          <br /><br />
+          1. Blue navigation bar at TOP = position: fixed; top: 0; left: 0;
+          <br /><br />
+          2. Green Chat button at BOTTOM RIGHT = position: fixed; bottom: 25px;
+          right: 25px;
+          <br /><br />
+          3. Blue Up arrow at BOTTOM RIGHT = position: fixed; bottom: 90px;
+          right: 25px;
+          <br /><br />
+          All three stay in same place no matter how much you scroll. This is
+          the most common real world use of position: fixed.
+        </div>
+      </div>
+
+      <!-- Common fixed uses -->
+      <div class="demo-box">
+        <span class="label">Common uses of position: fixed</span>
+
+        <div
+          style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px"
+        >
+          <div
+            style="
+              background: #1e90ff;
+              color: white;
+              padding: 15px 20px;
+              border-radius: 10px;
+              font-weight: bold;
+              font-size: 14px;
+              flex: 1;
+              min-width: 150px;
+              text-align: center;
+            "
+          >
+            Fixed Navigation Bar
+            <br />top: 0; left: 0; <br />width: 100%;
+          </div>
+
+          <div
+            style="
+              background: #32cd32;
+              color: white;
+              padding: 15px 20px;
+              border-radius: 10px;
+              font-weight: bold;
+              font-size: 14px;
+              flex: 1;
+              min-width: 150px;
+              text-align: center;
+            "
+          >
+            Chat Button
+            <br />bottom: 20px; <br />right: 20px;
+          </div>
+
+          <div
+            style="
+              background: #dc143c;
+              color: white;
+              padding: 15px 20px;
+              border-radius: 10px;
+              font-weight: bold;
+              font-size: 14px;
+              flex: 1;
+              min-width: 150px;
+              text-align: center;
+            "
+          >
+            Cookie Banner
+            <br />bottom: 0; left: 0; <br />width: 100%;
+          </div>
+
+          <div
+            style="
+              background: #9932cc;
+              color: white;
+              padding: 15px 20px;
+              border-radius: 10px;
+              font-weight: bold;
+              font-size: 14px;
+              flex: 1;
+              min-width: 150px;
+              text-align: center;
+            "
+          >
+            Back to Top
+            <br />bottom: 80px; <br />right: 20px;
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       position: sticky SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>6. position: sticky</h2>
+      <p>
+        Combination of relative and fixed Scrolls normally then STICKS at
+        threshold position Scroll inside the box below to see it work
+      </p>
+
+      <div class="demo-box">
+        <span class="label">position: sticky; top: 0;</span>
+        <span class="instruction">
+          Scroll DOWN inside the box below The dark blue header will STICK to
+          the top when it reaches there while you scroll
+        </span>
+
+        <div class="sticky-scroll-container">
+          <!-- Sticky header - sticks when reached -->
+          <div class="sticky-header">
+            📌 This header is position: sticky; top: 0; - Scroll down to see it
+            stick!
+          </div>
+
+          <!-- Content sections to scroll through -->
+          <div class="scroll-section">
+            <h3>Section 1 - Doraemon</h3>
+            <p>
+              Doraemon is a robotic cat from the 22nd century. He was sent back
+              in time to help Nobita Nobi. His magical pocket contains many
+              amazing gadgets. Scroll down to see more sections and watch the
+              blue header stick to the top.
+            </p>
+          </div>
+
+          <div class="scroll-section">
+            <h3>Section 2 - Nobita</h3>
+            <p>
+              Nobita is a lazy and clumsy student who relies on Doraemon's
+              gadgets too much. He has a kind heart and always means well.
+              Despite his poor grades he is a good friend and a good person deep
+              inside. Keep scrolling to see more content below.
+            </p>
+          </div>
+
+          <div class="scroll-section">
+            <h3>Section 3 - Shizuka</h3>
+            <p>
+              Shizuka is the most intelligent and kind character in the Doraemon
+              series. She is Nobita's love interest and is known for playing the
+              violin. She is always polite helpful and caring towards everyone
+              around her. Scroll more to see the next section.
+            </p>
+          </div>
+
+          <div class="scroll-section">
+            <h3>Section 4 - Gian</h3>
+            <p>
+              Gian is the big bully of the neighbourhood. Despite his tough
+              exterior he has a soft side and deeply cares for his friends. He
+              is known for his loud singing voice which everyone pretends to
+              enjoy. He is loyal and brave.
+            </p>
+          </div>
+
+          <div class="scroll-section">
+            <h3>Section 5 - Suneo</h3>
+            <p>
+              Suneo is the rich and boastful friend in the group. He often shows
+              off his expensive toys and trips abroad. Despite being spoilt he
+              values friendship and is always part of the gang's adventures with
+              Doraemon. This is the last section of the scroll demo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       z-index SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>7. z-index - Stacking Order</h2>
+      <p>
+        Controls which element appears ON TOP when elements overlap Higher
+        z-index = in front
+      </p>
+
+      <div class="demo-box">
+        <span class="label">
+          Blue: z-index: 1 (behind) Green: z-index: 2 (middle) Red: z-index: 3
+          (front) Purple: z-index: -1 (behind everything)
+        </span>
+        <span class="instruction">
+          Boxes overlap each other Higher z-index number appears in front
+        </span>
+
+        <div class="zindex-container">
+          <!-- z-index 1 - behind -->
+          <div class="z-box z-box-1">
+            z-index: 1
+            <br />
+            Behind green
+            <br />
+            and red
+          </div>
+
+          <!-- z-index 2 - middle -->
+          <div class="z-box z-box-2">
+            z-index: 2
+            <br />
+            In front of
+            <br />
+            blue box
+          </div>
+
+          <!-- z-index 3 - front -->
+          <div class="z-box z-box-3">
+            z-index: 3
+            <br />
+            In FRONT of
+            <br />
+            all boxes
+          </div>
+
+          <!-- z-index -1 - behind everything -->
+          <div class="z-box z-box-behind">
+            z-index: -1
+            <br />
+            Behind ALL
+            <br />
+            elements
+          </div>
+        </div>
+      </div>
+
+      <!-- Z-index reference -->
+      <div class="demo-box">
+        <span class="label">z-index stacking reference</span>
+
+        <div
+          style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px"
+        >
+          <div
+            style="
+              background: #9932cc;
+              color: white;
+              padding: 12px 18px;
+              border-radius: 8px;
+              font-weight: bold;
+              font-size: 14px;
+              text-align: center;
+            "
+          >
+            z-index: -1
+            <br />
+            Behind all
+          </div>
+
+          <div style="font-size: 20px; line-height: 50px">→</div>
+
+          <div
+            style="
+              background: #1e90ff;
+              color: white;
+              padding: 12px 18px;
+              border-radius: 8px;
+              font-weight: bold;
+              font-size: 14px;
+              text-align: center;
+            "
+          >
+            z-index: 1
+            <br />
+            Layer 1
+          </div>
+
+          <div style="font-size: 20px; line-height: 50px">→</div>
+
+          <div
+            style="
+              background: #32cd32;
+              color: white;
+              padding: 12px 18px;
+              border-radius: 8px;
+              font-weight: bold;
+              font-size: 14px;
+              text-align: center;
+            "
+          >
+            z-index: 2
+            <br />
+            Layer 2
+          </div>
+
+          <div style="font-size: 20px; line-height: 50px">→</div>
+
+          <div
+            style="
+              background: #dc143c;
+              color: white;
+              padding: 12px 18px;
+              border-radius: 8px;
+              font-weight: bold;
+              font-size: 14px;
+              text-align: center;
+            "
+          >
+            z-index: 3
+            <br />
+            Layer 3 (front)
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

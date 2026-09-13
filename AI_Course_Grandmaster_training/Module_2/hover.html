@@ -1,0 +1,1292 @@
+<!--
+=======================================================
+  CSS HOVER STATE - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains the CSS :hover
+pseudo-class using Internal CSS with simple
+and clear examples.
+
+=======================================================
+  WHAT IS :hover?
+=======================================================
+
+  :hover = a pseudo-class that applies styles
+  to an element when the MOUSE POINTER is placed
+  over or on top of that element.
+
+  It is active only WHILE the mouse is on the element:
+  - Mouse moves ONTO element = hover styles apply
+  - Mouse moves AWAY from element = styles go back
+
+  Basic Syntax:
+  element:hover {
+    property: value;
+  }
+
+  Example:
+  button:hover {
+    background-color: darkblue;
+  }
+  When mouse goes over button it turns dark blue
+
+  Works on ALL HTML elements:
+  - buttons
+  - links (a tags)
+  - divs and cards
+  - images
+  - paragraphs
+  - headings
+  - list items
+  - table rows
+  - any element at all
+
+  Memory Trick:
+  hover = hovering = mouse floating over element
+  Like hovering your hand over a candle
+  You feel the heat only when hand is ABOVE it
+
+=======================================================
+  WHY USE :hover?
+=======================================================
+
+  :hover is used to:
+  - Show user which element they are pointing at
+  - Give FEEDBACK that element is clickable
+  - Create interactive and fun effects
+  - Make webpage feel alive and responsive
+  - Highlight menu items and navigation links
+  - Show extra information on mouse over
+  - Create beautiful visual effects
+
+  Without hover:
+  Webpage feels flat and boring
+  User cannot tell what is clickable
+
+  With hover:
+  Webpage feels interactive and modern
+  User gets clear feedback on clickable items
+
+=======================================================
+  :hover WITH transition
+=======================================================
+
+  Without transition:
+  Hover effect happens INSTANTLY - looks jumpy
+
+  With transition:
+  Hover effect happens SMOOTHLY over time
+
+  Always add transition to make hover look smooth:
+
+  .box {
+    background-color: blue;
+    transition: all 0.3s ease;
+  }
+
+  .box:hover {
+    background-color: darkblue;
+  }
+
+  transition values:
+  all       = applies to all changing properties
+  0.3s      = takes 0.3 seconds to complete
+  ease      = slow start fast middle slow end
+  ease-in   = slow start fast end
+  ease-out  = fast start slow end
+  linear    = same speed throughout
+
+  Good transition times:
+  0.1s - 0.2s = very quick snappy feel
+  0.3s - 0.4s = smooth natural feel
+  0.5s - 1s   = slow dramatic feel
+
+  Memory Trick:
+  transition = smooth change between states
+  Like a traffic light slowly changing colour
+
+=======================================================
+  COMMON :hover EFFECTS
+=======================================================
+
+  1. Colour Change
+     Change background or text colour on hover
+     Most basic and common hover effect
+
+  2. Scale Up
+     Make element slightly bigger on hover
+     transform: scale(1.05) or scale(1.1)
+     Draws attention to hovered element
+
+  3. Lift Up
+     Move element slightly upward on hover
+     transform: translateY(-5px)
+     Looks like card is floating up
+
+  4. Shadow Appear
+     Add or increase box-shadow on hover
+     Makes element look elevated and lifted
+
+  5. Border Change
+     Change border colour or style on hover
+     Good for cards and input fields
+
+  6. Text Change
+     Change text colour or size on hover
+     Common for navigation links
+
+  7. Underline Appear
+     Add underline to text on hover
+     Classic link hover effect
+
+  8. Rotate
+     Slightly rotate element on hover
+     transform: rotate(5deg)
+     Used for icons and images
+
+  9. Brightness Change
+     Make image brighter or darker on hover
+     filter: brightness(1.2)
+
+  10. Overlay Appear
+      Show a coloured overlay on image hover
+      Common card and image hover effect
+
+=======================================================
+  :hover ON NAVIGATION MENUS
+=======================================================
+
+  Navigation menus are the most common place
+  where :hover is used.
+
+  Basic nav hover:
+  nav a:hover {
+    color: white;
+    background-color: darkblue;
+  }
+
+  Underline slide effect:
+  Use border-bottom or text-decoration
+  on hover to show which link is selected
+
+  Memory Trick:
+  Nav hover = showing which page you will go to
+  Like highlighting a button on a remote control
+
+=======================================================
+  :hover ON IMAGES
+=======================================================
+
+  Images can have hover effects too:
+
+  Zoom in on hover:
+  img:hover {
+    transform: scale(1.1);
+  }
+
+  Brightness change:
+  img:hover {
+    filter: brightness(0.7);
+  }
+
+  Grayscale to colour:
+  img { filter: grayscale(100%); }
+  img:hover { filter: grayscale(0%); }
+
+  Blur on hover:
+  img:hover {
+    filter: blur(3px);
+  }
+
+=======================================================
+  filter PROPERTY
+=======================================================
+
+  filter = applies visual effects to elements
+  Commonly used with images on hover
+
+  Values:
+  brightness(value)
+    - Makes element brighter or darker
+    - 1 = normal, 1.5 = brighter, 0.5 = darker
+    - Example: filter: brightness(1.3);
+
+  grayscale(percentage)
+    - Makes element gray or coloured
+    - 0% = full colour, 100% = fully gray
+    - Example: filter: grayscale(100%);
+
+  blur(px)
+    - Makes element blurry
+    - 0px = sharp, 5px = very blurry
+    - Example: filter: blur(3px);
+
+  opacity(value)
+    - Makes element transparent
+    - 1 = solid, 0 = invisible
+    - Example: filter: opacity(0.5);
+
+  sepia(percentage)
+    - Adds old brown photo effect
+    - 0% = normal, 100% = full sepia
+    - Example: filter: sepia(100%);
+
+  contrast(value)
+    - Changes contrast of element
+    - 1 = normal, 2 = high contrast
+    - Example: filter: contrast(1.5);
+
+  Multiple filters combined:
+  filter: brightness(1.2) grayscale(50%);
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  :hover              → style when mouse is over
+  transition          → smooth change between states
+  transform           → move scale rotate element
+  background-color    → background colour
+  color               → text colour
+  box-shadow          → shadow around element
+  border              → border around element
+  border-radius       → rounded corners
+  filter              → visual effects on elements
+  opacity             → transparency of element
+  text-decoration     → underline overline etc
+  cursor              → mouse pointer shape
+  padding             → space inside element
+  font-size           → text size
+  font-weight         → text thickness
+  letter-spacing      → space between letters
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Hover Effect      CSS Property Used
+  ---------------   -------------------------
+  Colour change     background-color or color
+  Scale up          transform: scale()
+  Lift up           transform: translateY()
+  Shadow appear     box-shadow
+  Rotate            transform: rotate()
+  Brightness        filter: brightness()
+  Grayscale         filter: grayscale()
+  Blur              filter: blur()
+  Underline         text-decoration
+  Border change     border
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  :hover = style applies when MOUSE is over element
+  Works on ANY HTML element
+  Always add transition for smooth effects
+  Common uses: buttons links cards images nav menus
+  filter property adds visual effects to elements
+  transform changes size position rotation on hover
+  Makes webpage feel interactive and modern
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Hover State</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        text-align: center;
+        color: #333;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 85%;
+        border: 2px solid #ddd;
+        text-align: left;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      /* Label showing CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* Instruction text */
+      .instruction {
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      /* =============================================
+       BASE BUTTON STYLE
+    =============================================== */
+
+      .btn {
+        padding: 12px 28px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 8px;
+        transition: all 0.3s ease;
+      }
+
+      /* =============================================
+       HOVER ON BUTTONS
+    =============================================== */
+
+      /* Button 1 - background colour change */
+      .btn-bg {
+        background-color: #1e90ff;
+        color: white;
+      }
+
+      .btn-bg:hover {
+        background-color: #003366;
+        color: white;
+      }
+
+      /* Button 2 - text colour change */
+      .btn-text {
+        background-color: white;
+        color: #1e90ff;
+        border: 2px solid #1e90ff;
+      }
+
+      .btn-text:hover {
+        color: #003366;
+        border-color: #003366;
+      }
+
+      /* Button 3 - scale up */
+      .btn-scale {
+        background-color: #32cd32;
+        color: white;
+      }
+
+      .btn-scale:hover {
+        transform: scale(1.1);
+        background-color: #228b22;
+      }
+
+      /* Button 4 - lift up with shadow */
+      .btn-lift {
+        background-color: #ff6347;
+        color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+        background-color: #e5533d;
+      }
+
+      /* Button 5 - glow shadow */
+      .btn-glow {
+        background-color: #9932cc;
+        color: white;
+      }
+
+      .btn-glow:hover {
+        box-shadow: 0px 0px 15px 5px rgba(153, 50, 204, 0.6);
+        background-color: #7a1fa2;
+      }
+
+      /* Button 6 - border fill */
+      .btn-fill {
+        background-color: transparent;
+        color: #ff8c00;
+        border: 3px solid #ff8c00;
+      }
+
+      .btn-fill:hover {
+        background-color: #ff8c00;
+        color: white;
+      }
+
+      /* Button 7 - rotate on hover */
+      .btn-rotate {
+        background-color: #008080;
+        color: white;
+      }
+
+      .btn-rotate:hover {
+        transform: rotate(5deg) scale(1.05);
+        background-color: #006060;
+      }
+
+      /* Button 8 - letter spacing expand */
+      .btn-expand {
+        background-color: #dc143c;
+        color: white;
+        letter-spacing: 1px;
+      }
+
+      .btn-expand:hover {
+        letter-spacing: 5px;
+        background-color: #a50e2d;
+      }
+
+      /* =============================================
+       HOVER ON LINKS
+    =============================================== */
+
+      /* Base link style */
+      .link {
+        font-size: 20px;
+        margin: 10px 15px;
+        display: inline-block;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      /* Link 1 - colour change */
+      .link-colour {
+        color: #1e90ff;
+        text-decoration: none;
+      }
+
+      .link-colour:hover {
+        color: darkred;
+      }
+
+      /* Link 2 - underline appear */
+      .link-underline {
+        color: #003366;
+        text-decoration: none;
+      }
+
+      .link-underline:hover {
+        text-decoration: underline;
+        color: #1e90ff;
+      }
+
+      /* Link 3 - background highlight */
+      .link-highlight {
+        color: #333;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+
+      .link-highlight:hover {
+        background-color: #003366;
+        color: white;
+      }
+
+      /* Link 4 - lift with shadow */
+      .link-lift {
+        color: #9932cc;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+
+      .link-lift:hover {
+        transform: translateY(-3px);
+        color: #7a1fa2;
+        text-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      /* =============================================
+       HOVER ON CARDS
+    =============================================== */
+
+      /* Base card style */
+      .card {
+        width: 200px;
+        height: 130px;
+        border-radius: 15px;
+        display: inline-block;
+        margin: 15px;
+        padding: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        text-align: center;
+        line-height: 1.5;
+        vertical-align: top;
+        transition: all 0.3s ease;
+      }
+
+      /* Card 1 - lift and shadow */
+      .card-lift {
+        background-color: white;
+        color: #003366;
+        border: 2px solid #ddd;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-lift:hover {
+        transform: translateY(-10px);
+        box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
+        border-color: #1e90ff;
+      }
+
+      /* Card 2 - colour fill */
+      .card-colour {
+        background-color: white;
+        color: #1e90ff;
+        border: 2px solid #1e90ff;
+      }
+
+      .card-colour:hover {
+        background-color: #1e90ff;
+        color: white;
+      }
+
+      /* Card 3 - scale up */
+      .card-scale {
+        background-color: #f0f8ff;
+        color: #003366;
+        border: 2px solid #87ceeb;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-scale:hover {
+        transform: scale(1.08);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+        background-color: #003366;
+        color: white;
+      }
+
+      /* Card 4 - rotate slightly */
+      .card-rotate {
+        background-color: #fff5e6;
+        color: #ff8c00;
+        border: 2px solid #ff8c00;
+      }
+
+      .card-rotate:hover {
+        transform: rotate(3deg) scale(1.05);
+        background-color: #ff8c00;
+        color: white;
+      }
+
+      /* =============================================
+       HOVER ON NAVIGATION MENU
+    =============================================== */
+
+      /* Nav bar container */
+      .navbar {
+        background-color: #003366;
+        border-radius: 10px;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        margin: 10px 0;
+      }
+
+      /* Nav items */
+      .navbar li {
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Nav links */
+      .navbar a {
+        display: block;
+        padding: 15px 25px;
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 10px;
+      }
+
+      /* Nav hover - background change */
+      .navbar a:hover {
+        background-color: #1e90ff;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Underline nav bar */
+      .navbar-underline {
+        background-color: #333;
+        border-radius: 10px;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        margin: 10px 0;
+      }
+
+      .navbar-underline a {
+        display: block;
+        padding: 15px 25px;
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-bottom: 3px solid transparent;
+      }
+
+      /* Nav hover - underline appear */
+      .navbar-underline a:hover {
+        color: #1e90ff;
+        border-bottom: 3px solid #1e90ff;
+      }
+
+      /* =============================================
+       HOVER ON LIST ITEMS
+    =============================================== */
+
+      .hover-list {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0;
+        width: 300px;
+      }
+
+      .hover-list li {
+        padding: 12px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #ddd;
+        color: #333;
+      }
+
+      .hover-list li:hover {
+        background-color: #003366;
+        color: white;
+        padding-left: 35px;
+      }
+
+      /* =============================================
+       HOVER ON TABLE ROWS
+    =============================================== */
+
+      .hover-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0;
+      }
+
+      .hover-table th {
+        background-color: #003366;
+        color: white;
+        padding: 12px 15px;
+        text-align: left;
+      }
+
+      .hover-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ddd;
+        transition: all 0.3s ease;
+      }
+
+      .hover-table tr:hover td {
+        background-color: #e0f0ff;
+        color: #003366;
+        font-weight: bold;
+      }
+
+      /* =============================================
+       HOVER WITH FILTER ON IMAGES
+    =============================================== */
+
+      /* Image box placeholder */
+      .img-box {
+        width: 180px;
+        height: 140px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 10px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        font-size: 40px;
+        line-height: 140px;
+        text-align: center;
+        vertical-align: top;
+      }
+
+      /* Image 1 - brightness increase */
+      .img-bright {
+        background-color: #87ceeb;
+        filter: brightness(0.7);
+      }
+
+      .img-bright:hover {
+        filter: brightness(1.3);
+      }
+
+      /* Image 2 - grayscale to colour */
+      .img-gray {
+        background-color: #ff6347;
+        filter: grayscale(100%);
+      }
+
+      .img-gray:hover {
+        filter: grayscale(0%);
+      }
+
+      /* Image 3 - blur on hover */
+      .img-blur {
+        background-color: #32cd32;
+      }
+
+      .img-blur:hover {
+        filter: blur(3px);
+      }
+
+      /* Image 4 - sepia effect */
+      .img-sepia {
+        background-color: #ff8c00;
+      }
+
+      .img-sepia:hover {
+        filter: sepia(100%);
+      }
+
+      /* Image 5 - zoom in */
+      .img-zoom {
+        background-color: #9932cc;
+        overflow: hidden;
+      }
+
+      .img-zoom:hover {
+        transform: scale(1.15);
+      }
+
+      /* Image 6 - contrast increase */
+      .img-contrast {
+        background-color: #dc143c;
+        filter: contrast(1);
+      }
+
+      .img-contrast:hover {
+        filter: contrast(2);
+      }
+
+      /* =============================================
+       HOVER ON PARAGRAPH TEXT
+    =============================================== */
+
+      .hover-para {
+        font-size: 18px;
+        color: #333;
+        padding: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: white;
+        border: 2px solid #ddd;
+        margin: 10px 0;
+      }
+
+      .hover-para:hover {
+        color: #003366;
+        background-color: #e0f0ff;
+        border-color: #1e90ff;
+        font-weight: bold;
+      }
+
+      /* =============================================
+       HOVER OVERLAY EFFECT ON CARDS
+    =============================================== */
+
+      /* Card with overlay effect */
+      .overlay-card {
+        width: 200px;
+        height: 150px;
+        border-radius: 15px;
+        display: inline-block;
+        margin: 15px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        vertical-align: top;
+        transition: all 0.3s ease;
+      }
+
+      /* Background colour of card */
+      .overlay-blue {
+        background-color: #1e90ff;
+      }
+      .overlay-green {
+        background-color: #32cd32;
+      }
+      .overlay-red {
+        background-color: #ff6347;
+      }
+
+      /* Card text content */
+      .overlay-card .card-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      /* Overlay div that appears on hover */
+      .overlay-card .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      /* Overlay becomes visible on hover */
+      .overlay-card:hover .overlay {
+        opacity: 1;
+      }
+
+      .overlay-card:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Hover State</h1>
+
+    <!-- ============================================
+       HOVER ON BUTTONS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>1. :hover on Buttons</h2>
+      <p>
+        Move your mouse OVER the buttons to see the effect Move mouse AWAY to
+        see it go back to normal
+      </p>
+
+      <!-- Background colour change -->
+      <div class="demo-box">
+        <span class="label">btn:hover { background-color: #003366; }</span>
+        <span class="instruction">Hover to change background colour</span>
+        <button class="btn btn-bg">Colour Change</button>
+      </div>
+
+      <!-- Text colour change -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:hover { color: #003366; border-color: #003366; }</span
+        >
+        <span class="instruction">Hover to change text and border colour</span>
+        <button class="btn btn-text">Text Colour Change</button>
+      </div>
+
+      <!-- Scale up -->
+      <div class="demo-box">
+        <span class="label">btn:hover { transform: scale(1.1); }</span>
+        <span class="instruction">Hover to see button grow bigger</span>
+        <button class="btn btn-scale">Scale Up</button>
+      </div>
+
+      <!-- Lift up with shadow -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:hover { transform: translateY(-5px); box-shadow: bigger; }</span
+        >
+        <span class="instruction">Hover to see button lift up with shadow</span>
+        <button class="btn btn-lift">Lift Up Effect</button>
+      </div>
+
+      <!-- Glow shadow -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:hover { box-shadow: 0px 0px 15px 5px purple; }</span
+        >
+        <span class="instruction">Hover to see glowing shadow appear</span>
+        <button class="btn btn-glow">Glow Effect</button>
+      </div>
+
+      <!-- Border fill -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:hover { background-color: #ff8c00; color: white; }</span
+        >
+        <span class="instruction">Hover to see button fill with colour</span>
+        <button class="btn btn-fill">Border Fill</button>
+      </div>
+
+      <!-- Rotate -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:hover { transform: rotate(5deg) scale(1.05); }</span
+        >
+        <span class="instruction">Hover to see button rotate slightly</span>
+        <button class="btn btn-rotate">Rotate Effect</button>
+      </div>
+
+      <!-- Letter spacing -->
+      <div class="demo-box">
+        <span class="label">btn:hover { letter-spacing: 5px; }</span>
+        <span class="instruction">Hover to see letters spread apart</span>
+        <button class="btn btn-expand">Letter Spacing</button>
+      </div>
+    </div>
+
+    <!-- ============================================
+       HOVER ON LINKS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. :hover on Links</h2>
+      <p>Hover over the links to see different effects</p>
+
+      <div class="demo-box">
+        <span class="label">a:hover { color: darkred; }</span>
+        <span class="instruction">Hover to see colour change</span>
+        <br />
+        <a class="link link-colour">Hover Me - Colour Change</a>
+      </div>
+
+      <div class="demo-box">
+        <span class="label"
+          >a:hover { text-decoration: underline; color: #1e90ff; }</span
+        >
+        <span class="instruction">Hover to see underline appear</span>
+        <br />
+        <a class="link link-underline">Hover Me - Underline Appear</a>
+      </div>
+
+      <div class="demo-box">
+        <span class="label"
+          >a:hover { background-color: #003366; color: white; }</span
+        >
+        <span class="instruction">Hover to see background highlight</span>
+        <br />
+        <a class="link link-highlight">Hover Me - Background Highlight</a>
+      </div>
+
+      <div class="demo-box">
+        <span class="label"
+          >a:hover { transform: translateY(-3px); text-shadow: ...; }</span
+        >
+        <span class="instruction">Hover to see link lift up</span>
+        <br />
+        <a class="link link-lift">Hover Me - Lift Up Effect</a>
+      </div>
+    </div>
+
+    <!-- ============================================
+       HOVER ON CARDS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. :hover on Cards</h2>
+      <p>Hover over the cards to see different effects</p>
+
+      <div class="demo-box">
+        <span class="label">Various card hover effects shown below</span>
+        <span class="instruction">Hover over each card to see its effect</span>
+        <br />
+
+        <div class="card card-lift">Lift Up<br />with Shadow</div>
+
+        <div class="card card-colour">Colour<br />Fill Effect</div>
+
+        <div class="card card-scale">Scale Up<br />Effect</div>
+
+        <div class="card card-rotate">Rotate<br />Effect</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       HOVER ON NAVIGATION MENUS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>4. :hover on Navigation Menus</h2>
+      <p>
+        The most common use of hover in real websites Hover over the nav links
+        to see effects
+      </p>
+
+      <!-- Background change nav -->
+      <div class="demo-box">
+        <span class="label"
+          >nav a:hover { background-color: #1e90ff; transform: translateY(-2px);
+          }</span
+        >
+        <span class="instruction">Hover over nav items below</span>
+
+        <ul class="navbar">
+          <li><a>Home</a></li>
+          <li><a>About</a></li>
+          <li><a>Gallery</a></li>
+          <li><a>Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Underline nav -->
+      <div class="demo-box">
+        <span class="label"
+          >nav a:hover { color: #1e90ff; border-bottom: 3px solid #1e90ff;
+          }</span
+        >
+        <span class="instruction"
+          >Hover over nav items to see underline appear</span
+        >
+
+        <ul class="navbar-underline">
+          <li><a>Home</a></li>
+          <li><a>About</a></li>
+          <li><a>Gallery</a></li>
+          <li><a>Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============================================
+       HOVER ON LIST ITEMS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>5. :hover on List Items</h2>
+      <p>Hover over the list items to see highlight and slide effect</p>
+
+      <div class="demo-box">
+        <span class="label"
+          >li:hover { background-color: #003366; color: white; padding-left:
+          35px; }</span
+        >
+        <span class="instruction">Hover over each list item below</span>
+
+        <ul class="hover-list">
+          <li>Doraemon</li>
+          <li>Nobita</li>
+          <li>Shizuka</li>
+          <li>Gian</li>
+          <li>Suneo</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============================================
+       HOVER ON TABLE ROWS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>6. :hover on Table Rows</h2>
+      <p>Hover over table rows to highlight them Very useful for data tables</p>
+
+      <div class="demo-box">
+        <span class="label"
+          >tr:hover td { background-color: #e0f0ff; color: #003366; font-weight:
+          bold; }</span
+        >
+        <span class="instruction">Hover over each row to see highlight</span>
+
+        <table class="hover-table">
+          <tr>
+            <th>Character</th>
+            <th>Show</th>
+            <th>Special Power</th>
+          </tr>
+          <tr>
+            <td>Doraemon</td>
+            <td>Doraemon</td>
+            <td>Future Gadgets</td>
+          </tr>
+          <tr>
+            <td>Naruto</td>
+            <td>Naruto</td>
+            <td>Shadow Clone</td>
+          </tr>
+          <tr>
+            <td>Pikachu</td>
+            <td>Pokemon</td>
+            <td>Thunderbolt</td>
+          </tr>
+          <tr>
+            <td>SpongeBob</td>
+            <td>SpongeBob</td>
+            <td>Fry Cook Skills</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================================
+       HOVER WITH FILTER ON IMAGE BOXES SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>7. :hover with filter Property</h2>
+      <p>
+        filter property adds visual effects Hover over the boxes to see filter
+        effects
+      </p>
+
+      <div class="demo-box">
+        <span class="label">Various filter effects used with :hover</span>
+        <span class="instruction"
+          >Hover over each coloured box to see effect</span
+        >
+        <br />
+
+        <!-- Brightness -->
+        <div class="img-box img-bright">
+          ☁️
+          <br />
+          <span style="font-size: 14px; line-height: 1">Brightness</span>
+        </div>
+
+        <!-- Grayscale to colour -->
+        <div class="img-box img-gray">
+          🌺
+          <br />
+          <span style="font-size: 14px; line-height: 1">Grayscale</span>
+        </div>
+
+        <!-- Blur -->
+        <div class="img-box img-blur">
+          🌿
+          <br />
+          <span style="font-size: 14px; line-height: 1">Blur</span>
+        </div>
+
+        <!-- Sepia -->
+        <div class="img-box img-sepia">
+          🌟
+          <br />
+          <span style="font-size: 14px; line-height: 1">Sepia</span>
+        </div>
+
+        <!-- Zoom -->
+        <div class="img-box img-zoom">
+          🔮
+          <br />
+          <span style="font-size: 14px; line-height: 1">Zoom</span>
+        </div>
+
+        <!-- Contrast -->
+        <div class="img-box img-contrast">
+          🎯
+          <br />
+          <span style="font-size: 14px; line-height: 1">Contrast</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       HOVER ON PARAGRAPH TEXT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>8. :hover on Paragraph Text</h2>
+      <p>
+        Even paragraphs can have hover effects Hover over the text boxes below
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >p:hover { background-color: #e0f0ff; color: #003366; font-weight:
+          bold; }</span
+        >
+        <span class="instruction">Hover over each paragraph below</span>
+
+        <p class="hover-para">
+          Doraemon is a robotic cat from the future. He has a magical pocket
+          full of amazing gadgets.
+        </p>
+        <p class="hover-para">
+          Nobita is Doraemon's best friend. He is lazy but has a kind heart.
+        </p>
+        <p class="hover-para">
+          The future gadgets of Doraemon can solve any problem in the world.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       OVERLAY HOVER EFFECT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>9. Overlay Effect on Hover</h2>
+      <p>
+        A dark overlay appears on hover Very common effect used on image cards
+        in modern websites
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >card .overlay { opacity: 0; } card:hover .overlay { opacity: 1;
+          }</span
+        >
+        <span class="instruction">Hover over cards to see overlay appear</span>
+        <br />
+
+        <div class="overlay-card overlay-blue">
+          <div class="card-content">Blue Card</div>
+          <div class="overlay">View More</div>
+        </div>
+
+        <div class="overlay-card overlay-green">
+          <div class="card-content">Green Card</div>
+          <div class="overlay">View More</div>
+        </div>
+
+        <div class="overlay-card overlay-red">
+          <div class="card-content">Red Card</div>
+          <div class="overlay">View More</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

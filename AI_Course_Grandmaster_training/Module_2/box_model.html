@@ -1,0 +1,1318 @@
+<!--
+=======================================================
+  CSS BOX MODEL - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains the CSS Box Model
+using Internal CSS with simple and clear examples.
+
+=======================================================
+  WHAT IS THE CSS BOX MODEL?
+=======================================================
+
+  Every HTML element on a webpage is a RECTANGLE BOX.
+  The CSS Box Model describes how this box is made up
+  of different layers around the content.
+
+  The Box Model has 4 layers from INSIDE to OUTSIDE:
+
+  Layer 1 - CONTENT  (innermost - where text lives)
+  Layer 2 - PADDING  (space inside between content and border)
+  Layer 3 - BORDER   (line around the padding)
+  Layer 4 - MARGIN   (space outside between elements)
+
+  Visual Diagram:
+  ┌─────────────────────────────────┐
+  │           MARGIN                │
+  │  ┌───────────────────────────┐  │
+  │  │         BORDER            │  │
+  │  │  ┌─────────────────────┐  │  │
+  │  │  │       PADDING       │  │  │
+  │  │  │  ┌───────────────┐  │  │  │
+  │  │  │  │    CONTENT    │  │  │  │
+  │  │  │  │  (text image) │  │  │  │
+  │  │  │  └───────────────┘  │  │  │
+  │  │  │       PADDING       │  │  │
+  │  │  └─────────────────────┘  │  │
+  │  │         BORDER            │  │
+  │  └───────────────────────────┘  │
+  │           MARGIN                │
+  └─────────────────────────────────┘
+
+  Memory Trick:
+  Think of a PICTURE FRAME:
+  Content = the actual photograph
+  Padding = white space around photo inside frame
+  Border  = the frame itself
+  Margin  = space between this frame and other frames
+
+=======================================================
+  LAYER 1 - CONTENT
+=======================================================
+
+  Content = the actual information inside the element
+  This is where TEXT or IMAGES are displayed
+
+  Properties that control content size:
+  width  = sets how WIDE the content area is
+  height = sets how TALL the content area is
+
+  Units:
+  px  = fixed pixel size
+        Example: width: 200px;
+  %   = percentage of parent element
+        Example: width: 50%;
+  em  = relative to font size
+        Example: width: 10em;
+  auto = browser decides the size (default)
+
+  Example:
+  .box {
+    width: 300px;
+    height: 150px;
+  }
+  This creates a content area 300px wide and 150px tall
+
+  min-width and max-width:
+  min-width = element cannot be smaller than this
+  max-width = element cannot be larger than this
+
+  Example:
+  .box {
+    min-width: 200px;
+    max-width: 500px;
+    width: 80%;
+  }
+
+  Memory Trick:
+  Content = what is INSIDE the box
+  Like the food inside a lunchbox
+
+=======================================================
+  LAYER 2 - PADDING
+=======================================================
+
+  Padding = EMPTY SPACE inside the element
+  between the CONTENT and the BORDER
+
+  Padding is INSIDE the element
+  Padding has the SAME background colour as element
+  Padding INCREASES the size of the element
+
+  Basic Syntax:
+  padding: value;
+
+  FOUR SIDES - Individual properties:
+  padding-top    : space on top
+  padding-right  : space on right
+  padding-bottom : space on bottom
+  padding-left   : space on left
+
+  SHORTHAND - Different ways to write padding:
+
+  One value - all four sides same:
+  padding: 20px;
+  Top=20 Right=20 Bottom=20 Left=20
+
+  Two values - top/bottom and left/right:
+  padding: 10px 20px;
+  Top=10 Bottom=10 Left=20 Right=20
+
+  Three values - top, left/right, bottom:
+  padding: 10px 20px 30px;
+  Top=10 Left=20 Right=20 Bottom=30
+
+  Four values - top right bottom left (clockwise):
+  padding: 10px 20px 30px 40px;
+  Top=10 Right=20 Bottom=30 Left=40
+
+  Memory Trick for four values:
+  Trouble Reaching Bottom Left
+  T = Top, R = Right, B = Bottom, L = Left
+  Goes CLOCKWISE like a clock
+
+  Example:
+  .box {
+    padding: 20px;
+    padding: 10px 20px;
+    padding: 10px 20px 30px 40px;
+    padding-top: 15px;
+  }
+
+  Memory Trick:
+  Padding = pillow = soft space inside around content
+  Like bubble wrap inside a delivery box
+
+=======================================================
+  LAYER 3 - BORDER
+=======================================================
+
+  Border = a LINE drawn around the PADDING
+  Border sits between padding and margin
+
+  Border needs THREE things:
+  1. border-width = how thick the line is
+  2. border-style = what type of line
+  3. border-color = what colour the line is
+
+  SHORTHAND - all three in one line:
+  border: width style colour;
+
+  Example:
+  border: 2px solid black;
+  border: 3px dashed red;
+  border: 5px dotted blue;
+
+  border-width values:
+  px value  = exact pixel thickness
+  thin      = 1px
+  medium    = 3px
+  thick     = 5px
+
+  border-style values:
+  solid   = straight solid line
+  dashed  = line made of dashes  - - - -
+  dotted  = line made of dots    . . . .
+  double  = two parallel lines
+  none    = no border at all
+  hidden  = hidden border
+  groove  = carved in look
+  ridge   = raised look
+  inset   = pressed in look
+  outset  = pressed out look
+
+  border-color values:
+  Any colour - name hex rgb rgba
+
+  INDIVIDUAL SIDES:
+  border-top    : width style colour;
+  border-right  : width style colour;
+  border-bottom : width style colour;
+  border-left   : width style colour;
+
+  Example:
+  border-top: 3px solid red;
+  border-bottom: 2px dashed blue;
+
+  border-radius:
+  Makes corners ROUNDED
+  border-radius: 10px;  slightly rounded
+  border-radius: 50%;   makes it a circle
+
+  Example:
+  border-radius: 10px;
+  border-radius: 50%;
+  border-top-left-radius: 20px;
+
+  Memory Trick:
+  Border = boundary = the wall around the element
+  Like the walls of a room
+
+=======================================================
+  LAYER 4 - MARGIN
+=======================================================
+
+  Margin = EMPTY SPACE OUTSIDE the element
+  between this element and other elements
+
+  Margin is OUTSIDE the element
+  Margin is always TRANSPARENT (no colour)
+  Margin creates DISTANCE between elements
+
+  Basic Syntax:
+  margin: value;
+
+  Same shorthand rules as padding:
+  margin: 20px;           all four sides
+  margin: 10px 20px;      top/bottom left/right
+  margin: 10px 20px 30px; top left/right bottom
+  margin: 10px 20px 30px 40px; top right bottom left
+
+  INDIVIDUAL SIDES:
+  margin-top    : space above element
+  margin-right  : space to right of element
+  margin-bottom : space below element
+  margin-left   : space to left of element
+
+  SPECIAL VALUE - auto:
+  margin: 0 auto;
+  This CENTERS the element horizontally
+  left and right margins are equal automatically
+  Works only when element has a set width
+
+  Example:
+  .box {
+    width: 300px;
+    margin: 0 auto;
+  }
+  This centres the box on the page
+
+  MARGIN COLLAPSE:
+  When two vertical margins meet they COLLAPSE
+  into ONE margin (the bigger one)
+
+  Example:
+  Element A has margin-bottom: 30px
+  Element B has margin-top: 20px
+  Space between them = 30px NOT 50px
+  The larger margin wins
+
+  This only happens with VERTICAL margins
+  Horizontal margins do NOT collapse
+
+  Memory Trick:
+  Margin = distance = space around the outside
+  Like personal space between people
+
+=======================================================
+  box-sizing PROPERTY
+=======================================================
+
+  box-sizing controls HOW width and height are measured
+
+  TWO VALUES:
+
+  content-box (default):
+  width and height = content area ONLY
+  Total size = content + padding + border + margin
+
+  Example:
+  width: 200px + padding: 20px + border: 2px
+  Total visible width = 200 + 20 + 20 + 2 + 2 = 244px
+
+  border-box (recommended):
+  width and height INCLUDE padding and border
+  Total size = what you set (padding and border inside)
+
+  Example:
+  width: 200px + padding: 20px + border: 2px
+  Total visible width = 200px (padding and border inside)
+  Content area = 200 - 20 - 20 - 2 - 2 = 156px
+
+  Recommended setting - use for all elements:
+  * {
+    box-sizing: border-box;
+  }
+
+  Memory Trick:
+  content-box = width is JUST content (default)
+  border-box  = width INCLUDES border and padding
+  border-box is easier to work with for layouts
+
+=======================================================
+  TOTAL ELEMENT SIZE CALCULATION
+=======================================================
+
+  WITH content-box (default):
+  Total Width  = margin-left + border-left + padding-left
+               + width
+               + padding-right + border-right + margin-right
+
+  Total Height = margin-top + border-top + padding-top
+               + height
+               + padding-bottom + border-bottom + margin-bottom
+
+  WITH border-box:
+  Total Width  = margin-left + width + margin-right
+  Total Height = margin-top + height + margin-bottom
+  (padding and border are already inside width and height)
+
+  Example with content-box:
+  width: 200px
+  padding: 20px (all sides)
+  border: 5px (all sides)
+  margin: 10px (all sides)
+
+  Visible width = 200 + 20 + 20 + 5 + 5 = 250px
+  Space taken   = 250 + 10 + 10 = 270px
+
+=======================================================
+  DISPLAY PROPERTY AND BOX MODEL
+=======================================================
+
+  display property affects how box model works
+
+  block elements:
+  - Take FULL WIDTH of parent
+  - Start on NEW LINE
+  - Width height margin padding all work normally
+  - Examples: div p h1 h2 ul li
+
+  inline elements:
+  - Take only as much WIDTH as content needs
+  - Stay on SAME LINE as other elements
+  - Width and height do NOT work
+  - Top and bottom margin do NOT work fully
+  - Examples: span a strong em
+
+  inline-block elements:
+  - Stay on SAME LINE like inline
+  - Width height margin padding ALL work
+  - Best of both worlds
+  - Examples: buttons images
+
+  Memory Trick:
+  block   = takes whole shelf like a big box
+  inline  = shares shelf like small items
+  inline-block = small box that respects all spacing
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  width            → content width
+  height           → content height
+  min-width        → minimum width
+  max-width        → maximum width
+  padding          → space inside element
+  padding-top      → space inside top
+  padding-right    → space inside right
+  padding-bottom   → space inside bottom
+  padding-left     → space inside left
+  border           → line around element
+  border-width     → thickness of border
+  border-style     → style of border line
+  border-color     → colour of border
+  border-radius    → rounded corners
+  margin           → space outside element
+  margin-top       → space above element
+  margin-right     → space to right
+  margin-bottom    → space below element
+  margin-left      → space to left
+  box-sizing       → how width is calculated
+  display          → block inline inline-block
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Layer     Property    Position        Colour
+  -------   ---------   -------------   -----------
+  Content   width       Innermost       Content colour
+            height
+  Padding   padding     Inside border   Same as bg
+  Border    border      Around padding  Any colour
+  Margin    margin      Outermost       Always transparent
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  Box Model = 4 layers around every HTML element
+  Content   = where text and images live
+  Padding   = space inside between content and border
+  Border    = line around the padding
+  Margin    = space outside between elements
+
+  box-sizing: border-box = recommended for all elements
+  Makes width include padding and border
+
+  margin: 0 auto = centers element horizontally
+  border-radius: 50% = makes element a circle
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Box Model</title>
+
+    <style>
+      /* Universal Selector - border-box recommended */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        text-align: center;
+        color: #333;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+      }
+
+      h3 {
+        color: #555;
+        font-size: 17px;
+        margin-bottom: 8px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 90%;
+        border: 2px solid #ddd;
+        text-align: left;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      /* Label showing CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* Instruction text */
+      .instruction {
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      /* =============================================
+       BOX MODEL DIAGRAM
+    =============================================== */
+
+      /* Outer margin layer - blue */
+      .diagram-margin {
+        background-color: #ffd700;
+        padding: 30px;
+        display: inline-block;
+        border-radius: 5px;
+        position: relative;
+      }
+
+      /* Border layer - dark */
+      .diagram-border {
+        background-color: #003366;
+        padding: 25px;
+        border-radius: 5px;
+      }
+
+      /* Padding layer - green */
+      .diagram-padding {
+        background-color: #90ee90;
+        padding: 25px;
+        border-radius: 5px;
+      }
+
+      /* Content layer - white */
+      .diagram-content {
+        background-color: #add8e6;
+        padding: 20px 40px;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #003366;
+      }
+
+      /* Diagram labels */
+      .diagram-label-margin {
+        position: absolute;
+        top: 5px;
+        left: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      /* =============================================
+       CONTENT EXAMPLES
+    =============================================== */
+
+      /* Fixed width and height */
+      .content-fixed {
+        width: 250px;
+        height: 100px;
+        background-color: #87ceeb;
+        color: #003366;
+        font-weight: bold;
+        font-size: 14px;
+        display: inline-block;
+        margin: 10px;
+        vertical-align: top;
+      }
+
+      /* Width in percentage */
+      .content-percent {
+        width: 60%;
+        height: 80px;
+        background-color: #90ee90;
+        color: #003366;
+        font-weight: bold;
+        font-size: 14px;
+        margin: 10px 0;
+      }
+
+      /* Min and max width */
+      .content-minmax {
+        min-width: 150px;
+        max-width: 400px;
+        width: 50%;
+        height: 80px;
+        background-color: #ffd700;
+        color: #333;
+        font-weight: bold;
+        font-size: 14px;
+        margin: 10px 0;
+      }
+
+      /* =============================================
+       PADDING EXAMPLES
+    =============================================== */
+
+      /* Base box for padding demos */
+      .pad-box {
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        border: 3px solid #003366;
+        display: inline-block;
+        margin: 10px;
+        vertical-align: top;
+        width: 200px;
+      }
+
+      /* No padding */
+      .pad-none {
+        padding: 0;
+      }
+
+      /* Same padding all sides */
+      .pad-all {
+        padding: 20px;
+      }
+
+      /* Different top bottom left right */
+      .pad-diff {
+        padding: 5px 30px;
+      }
+
+      /* Four different values */
+      .pad-four {
+        padding: 5px 20px 30px 40px;
+      }
+
+      /* Individual sides */
+      .pad-top {
+        padding-top: 30px;
+      }
+
+      .pad-left {
+        padding-left: 40px;
+      }
+
+      /* =============================================
+       BORDER EXAMPLES
+    =============================================== */
+
+      /* Base box for border demos */
+      .border-box {
+        width: 200px;
+        height: 80px;
+        background-color: #f0f8ff;
+        color: #003366;
+        font-weight: bold;
+        font-size: 13px;
+        display: inline-block;
+        margin: 10px;
+        padding: 10px;
+        vertical-align: top;
+        line-height: 1.4;
+      }
+
+      /* Border styles */
+      .border-solid {
+        border: 3px solid #003366;
+      }
+      .border-dashed {
+        border: 3px dashed #dc143c;
+      }
+      .border-dotted {
+        border: 3px dotted #32cd32;
+      }
+      .border-double {
+        border: 6px double #9932cc;
+      }
+      .border-groove {
+        border: 5px groove #ff8c00;
+      }
+      .border-ridge {
+        border: 5px ridge #008080;
+      }
+      .border-inset {
+        border: 5px inset #003366;
+      }
+      .border-outset {
+        border: 5px outset #dc143c;
+      }
+
+      /* Different border on each side */
+      .border-mixed {
+        border-top: 4px solid red;
+        border-right: 4px dashed blue;
+        border-bottom: 4px dotted green;
+        border-left: 4px double purple;
+      }
+
+      /* Border radius examples */
+      .radius-box {
+        width: 150px;
+        height: 150px;
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        display: inline-block;
+        margin: 10px;
+        padding: 15px;
+        vertical-align: top;
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      .radius-small {
+        border-radius: 5px;
+      }
+      .radius-medium {
+        border-radius: 15px;
+      }
+      .radius-large {
+        border-radius: 30px;
+      }
+      .radius-circle {
+        border-radius: 50%;
+      }
+      .radius-mixed {
+        border-top-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+      }
+
+      /* =============================================
+       MARGIN EXAMPLES
+    =============================================== */
+
+      /* Container to show margins clearly */
+      .margin-container {
+        background-color: #ffe4b5;
+        padding: 5px;
+        border: 2px dashed #ff8c00;
+      }
+
+      /* Base margin box */
+      .margin-box {
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        padding: 15px;
+        height: 60px;
+        line-height: 30px;
+      }
+
+      /* No margin */
+      .margin-none {
+        margin: 0;
+      }
+
+      /* All sides same */
+      .margin-all {
+        margin: 20px;
+      }
+
+      /* Top and bottom only */
+      .margin-tb {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      /* Left only */
+      .margin-left {
+        margin-left: 60px;
+      }
+
+      /* Auto - center the element */
+      .margin-auto {
+        width: 60%;
+        margin: 10px auto;
+      }
+
+      /* =============================================
+       BOX-SIZING EXAMPLES
+    =============================================== */
+
+      /* content-box example */
+      .sizing-content {
+        box-sizing: content-box;
+        width: 200px;
+        padding: 20px;
+        border: 5px solid #003366;
+        background-color: #87ceeb;
+        color: #003366;
+        font-weight: bold;
+        font-size: 13px;
+        display: inline-block;
+        margin: 10px;
+        vertical-align: top;
+      }
+
+      /* border-box example */
+      .sizing-border {
+        box-sizing: border-box;
+        width: 200px;
+        padding: 20px;
+        border: 5px solid #dc143c;
+        background-color: #ffb6c1;
+        color: #333;
+        font-weight: bold;
+        font-size: 13px;
+        display: inline-block;
+        margin: 10px;
+        vertical-align: top;
+      }
+
+      /* =============================================
+       PADDING VS MARGIN COMPARISON
+    =============================================== */
+
+      /* Box with padding */
+      .compare-padding {
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        border: 3px solid #003366;
+        padding: 30px;
+        display: inline-block;
+        margin: 10px;
+        vertical-align: top;
+      }
+
+      /* Box with margin */
+      .compare-margin {
+        background-color: #32cd32;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        border: 3px solid #228b22;
+        padding: 10px;
+        margin: 30px;
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      /* =============================================
+       DISPLAY PROPERTY EXAMPLES
+    =============================================== */
+
+      /* Block element */
+      .display-block {
+        display: block;
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        margin: 5px 0;
+        border-radius: 5px;
+        width: 60%;
+      }
+
+      /* Inline element */
+      .display-inline {
+        display: inline;
+        background-color: #32cd32;
+        color: white;
+        font-weight: bold;
+        padding: 5px 15px;
+        margin: 5px;
+        border-radius: 5px;
+      }
+
+      /* Inline-block element */
+      .display-inline-block {
+        display: inline-block;
+        background-color: #ff6347;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        width: 150px;
+        height: 60px;
+        vertical-align: top;
+      }
+
+      /* =============================================
+       COMPLETE BOX MODEL EXAMPLE
+    =============================================== */
+
+      /* Box with all box model properties set */
+      .complete-box {
+        /* Content */
+        width: 300px;
+        height: 150px;
+
+        /* Padding */
+        padding: 20px;
+
+        /* Border */
+        border: 4px solid #003366;
+        border-radius: 15px;
+
+        /* Margin */
+        margin: 30px auto;
+
+        /* Visual */
+        background-color: #e0f0ff;
+        color: #003366;
+        font-size: 15px;
+        font-weight: bold;
+
+        /* Recommended */
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Box Model</h1>
+
+    <!-- ============================================
+       BOX MODEL DIAGRAM SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>1. Box Model Diagram</h2>
+      <p>
+        Every HTML element is made of 4 layers From outside to inside: Margin
+        Border Padding Content
+      </p>
+
+      <div class="demo-box" style="text-align: center">
+        <span class="label"
+          >Visual diagram of all 4 layers of the Box Model</span
+        >
+
+        <!-- Margin layer - yellow -->
+        <div class="diagram-margin">
+          <span style="font-size: 13px; font-weight: bold; color: #333">
+            MARGIN (yellow) - space outside
+          </span>
+          <br /><br />
+
+          <!-- Border layer - dark blue -->
+          <div class="diagram-border">
+            <span style="font-size: 13px; font-weight: bold; color: white">
+              BORDER (dark) - line around padding
+            </span>
+            <br /><br />
+
+            <!-- Padding layer - green -->
+            <div class="diagram-padding">
+              <span style="font-size: 13px; font-weight: bold; color: #333">
+                PADDING (green) - space inside
+              </span>
+              <br /><br />
+
+              <!-- Content layer - blue -->
+              <div class="diagram-content">
+                CONTENT (blue)
+                <br />
+                Text and Images live here
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       CONTENT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. Content - width and height</h2>
+      <p>
+        Content is the innermost layer where text lives width and height control
+        the size of content area
+      </p>
+
+      <!-- Fixed width height -->
+      <div class="demo-box">
+        <span class="label">width: 250px; height: 100px;</span>
+        <span class="instruction">Fixed size in pixels - always same size</span>
+        <div class="content-fixed">
+          width: 250px
+          <br />
+          height: 100px
+          <br />
+          Fixed pixel size
+        </div>
+      </div>
+
+      <!-- Percentage width -->
+      <div class="demo-box">
+        <span class="label">width: 60%; height: 80px;</span>
+        <span class="instruction"
+          >Width is 60% of parent - changes with screen size</span
+        >
+        <div class="content-percent">width: 60% of parent container</div>
+      </div>
+
+      <!-- Min max width -->
+      <div class="demo-box">
+        <span class="label"
+          >min-width: 150px; max-width: 400px; width: 50%;</span
+        >
+        <span class="instruction"
+          >Width is 50% but never smaller than 150px or bigger than 400px</span
+        >
+        <div class="content-minmax">min-width: 150px max-width: 400px</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       PADDING SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. Padding - Space Inside</h2>
+      <p>
+        Padding is space INSIDE the element between content and border Padding
+        has same background colour as the element
+      </p>
+
+      <!-- No padding -->
+      <div class="demo-box">
+        <span class="label">padding: 0; (no padding)</span>
+        <div class="pad-box pad-none">No Padding - content touches border</div>
+      </div>
+
+      <!-- Same all sides -->
+      <div class="demo-box">
+        <span class="label">padding: 20px; (all four sides same)</span>
+        <div class="pad-box pad-all">padding: 20px all sides</div>
+      </div>
+
+      <!-- Two values -->
+      <div class="demo-box">
+        <span class="label"
+          >padding: 5px 30px; (top/bottom=5px left/right=30px)</span
+        >
+        <div class="pad-box pad-diff">padding: 5px 30px</div>
+      </div>
+
+      <!-- Four values -->
+      <div class="demo-box">
+        <span class="label"
+          >padding: 5px 20px 30px 40px; (top right bottom left)</span
+        >
+        <div class="pad-box pad-four">padding: 5px 20px 30px 40px</div>
+      </div>
+
+      <!-- Individual sides -->
+      <div class="demo-box">
+        <span class="label">padding-top: 30px;</span>
+        <div class="pad-box pad-top">padding-top: 30px only</div>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">padding-left: 40px;</span>
+        <div class="pad-box pad-left">padding-left: 40px only</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       BORDER SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>4. Border - Line Around Element</h2>
+      <p>
+        Border sits between padding and margin Needs three values: width style
+        colour
+      </p>
+
+      <!-- Border styles -->
+      <div class="demo-box">
+        <span class="label">Different border-style values</span>
+
+        <div class="border-box border-solid">border: 3px solid blue</div>
+
+        <div class="border-box border-dashed">border: 3px dashed red</div>
+
+        <div class="border-box border-dotted">border: 3px dotted green</div>
+
+        <div class="border-box border-double">border: 6px double purple</div>
+
+        <div class="border-box border-groove">border: 5px groove orange</div>
+
+        <div class="border-box border-ridge">border: 5px ridge teal</div>
+
+        <div class="border-box border-inset">border: 5px inset navy</div>
+
+        <div class="border-box border-outset">border: 5px outset crimson</div>
+
+        <div class="border-box border-mixed">
+          Different border on each side top solid red right dashed blue bottom
+          dotted green left double purple
+        </div>
+      </div>
+
+      <!-- Border radius -->
+      <div class="demo-box">
+        <span class="label">border-radius values for rounded corners</span>
+
+        <div class="radius-box radius-small">
+          border-radius: 5px slight round
+        </div>
+
+        <div class="radius-box radius-medium">
+          border-radius: 15px medium round
+        </div>
+
+        <div class="radius-box radius-large">
+          border-radius: 30px very round
+        </div>
+
+        <div class="radius-box radius-circle">
+          border-radius: 50% full circle
+        </div>
+
+        <div class="radius-box radius-mixed">
+          top-left and bottom-right rounded only
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       MARGIN SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>5. Margin - Space Outside</h2>
+      <p>
+        Margin is space OUTSIDE the element between elements Margin is always
+        transparent no background colour
+      </p>
+
+      <!-- No margin -->
+      <div class="demo-box">
+        <span class="label">margin: 0; (no margin - boxes touch)</span>
+        <div class="margin-container">
+          <div class="margin-box margin-none">Box A - no margin</div>
+          <div class="margin-box margin-none" style="background-color: #32cd32">
+            Box B - no margin
+          </div>
+        </div>
+      </div>
+
+      <!-- Margin all sides -->
+      <div class="demo-box">
+        <span class="label">margin: 20px; (space on all sides)</span>
+        <div class="margin-container">
+          <div class="margin-box margin-all">Box with margin: 20px</div>
+          <div class="margin-box margin-all" style="background-color: #32cd32">
+            Box with margin: 20px
+          </div>
+        </div>
+      </div>
+
+      <!-- Top and bottom margin -->
+      <div class="demo-box">
+        <span class="label">margin-top: 20px; margin-bottom: 20px;</span>
+        <div class="margin-container">
+          <div class="margin-box margin-tb">margin top and bottom 20px</div>
+          <div class="margin-box margin-tb" style="background-color: #32cd32">
+            margin top and bottom 20px
+          </div>
+        </div>
+      </div>
+
+      <!-- Left margin -->
+      <div class="demo-box">
+        <span class="label">margin-left: 60px; (pushes box to the right)</span>
+        <div class="margin-container">
+          <div class="margin-box margin-left">margin-left: 60px</div>
+        </div>
+      </div>
+
+      <!-- Auto margin - center -->
+      <div class="demo-box">
+        <span class="label"
+          >margin: 10px auto; (centers element horizontally)</span
+        >
+        <span class="instruction"
+          >width must be set for auto margin to work</span
+        >
+        <div class="margin-container">
+          <div class="margin-box margin-auto">
+            margin: auto - I am centered!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       BOX-SIZING SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>6. box-sizing Property</h2>
+      <p>
+        Controls how width and height are calculated content-box = default,
+        border-box = recommended
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >Both boxes have width: 200px padding: 20px border: 5px</span
+        >
+        <span class="instruction">
+          content-box total visible width = 200+20+20+5+5 = 250px border-box
+          total visible width = 200px (padding inside)
+        </span>
+
+        <div class="sizing-content">
+          box-sizing: content-box
+          <br />
+          width: 200px
+          <br />
+          Actual visible: 250px
+          <br />
+          Padding ADDED to width
+        </div>
+
+        <div class="sizing-border">
+          box-sizing: border-box
+          <br />
+          width: 200px
+          <br />
+          Actual visible: 200px
+          <br />
+          Padding INSIDE width
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       PADDING VS MARGIN COMPARISON
+  =============================================== -->
+    <div class="section">
+      <h2>7. Padding vs Margin Comparison</h2>
+      <p>
+        Padding = space INSIDE (background colour shows) Margin = space OUTSIDE
+        (always transparent)
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >Left box has padding: 30px - Right box has margin: 30px</span
+        >
+
+        <div class="compare-padding">
+          padding: 30px
+          <br />
+          Space is INSIDE
+          <br />
+          Blue background shows
+        </div>
+
+        <div class="compare-margin">
+          margin: 30px
+          <br />
+          Space is OUTSIDE
+          <br />
+          Transparent space
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       DISPLAY PROPERTY SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>8. Display Property and Box Model</h2>
+      <p>
+        display controls how the box model behaves block inline and inline-block
+        all work differently
+      </p>
+
+      <!-- Block elements -->
+      <div class="demo-box">
+        <span class="label"
+          >display: block; (takes full width starts on new line)</span
+        >
+
+        <div class="display-block">Block Element One</div>
+        <div class="display-block">Block Element Two</div>
+        <div class="display-block">Block Element Three</div>
+      </div>
+
+      <!-- Inline elements -->
+      <div class="demo-box">
+        <span class="label"
+          >display: inline; (stays on same line width height do not work)</span
+        >
+
+        <span class="display-inline">Inline One</span>
+        <span class="display-inline">Inline Two</span>
+        <span class="display-inline">Inline Three</span>
+      </div>
+
+      <!-- Inline-block elements -->
+      <div class="demo-box">
+        <span class="label"
+          >display: inline-block; (same line AND width height work)</span
+        >
+
+        <div class="display-inline-block">Inline Block One</div>
+        <div class="display-inline-block">Inline Block Two</div>
+        <div class="display-inline-block">Inline Block Three</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       COMPLETE BOX MODEL EXAMPLE
+  =============================================== -->
+    <div class="section">
+      <h2>9. Complete Box Model Example</h2>
+      <p>All four layers used together on one element</p>
+
+      <div class="demo-box">
+        <span class="label">
+          width: 300px | height: 150px | padding: 20px | border: 4px solid |
+          border-radius: 15px | margin: 30px auto
+        </span>
+
+        <div class="complete-box">
+          This box uses ALL box model properties:
+          <br />Content + Padding + Border + Margin <br />box-sizing: border-box
+          <br />margin: auto = centered
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1465 @@
+<!--
+=======================================================
+  CSS OPACITY PROPERTY - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains the CSS Opacity
+property using Internal CSS with simple and
+clear examples.
+
+=======================================================
+  WHAT IS OPACITY?
+=======================================================
+
+  Opacity = how TRANSPARENT or VISIBLE an element is.
+
+  Think of opacity like a GLASS WINDOW:
+  Fully transparent glass = you can see through it
+  Fully solid wall        = you cannot see through it
+
+  Opacity controls how much you can SEE THROUGH
+  an element on the webpage.
+
+  Basic Syntax:
+  opacity: value;
+
+  Values go from 0 to 1:
+  0    = completely INVISIBLE (transparent)
+  0.1  = almost invisible (10% visible)
+  0.2  = very transparent (20% visible)
+  0.3  = mostly transparent (30% visible)
+  0.5  = half transparent half visible (50%)
+  0.7  = more visible than transparent (70%)
+  0.8  = mostly visible (80% visible)
+  0.9  = almost fully visible (90% visible)
+  1    = completely SOLID and VISIBLE (default)
+
+  Example:
+  .box {
+    opacity: 0.5;
+  }
+  Element is 50% transparent - you can see through it
+
+  Memory Trick:
+  opacity 0 = ZERO visibility = invisible ghost
+  opacity 1 = ONE full visibility = solid wall
+  In between = partially see-through like frosted glass
+
+=======================================================
+  HOW OPACITY AFFECTS CHILDREN
+=======================================================
+
+  IMPORTANT RULE:
+  When you set opacity on a parent element
+  ALL children inside also become transparent
+  at the same level.
+
+  You CANNOT make a child more opaque
+  than its transparent parent.
+
+  Example:
+  .parent {
+    opacity: 0.5;
+  }
+  .child {
+    opacity: 1;
+  }
+  Child will STILL appear at 50% opacity
+  because parent is 50% transparent
+  The child opacity of 1 means 100% of parent's 50%
+  which is still 50% overall
+
+  This is a common mistake beginners make!
+
+  SOLUTION:
+  Use rgba() colour instead of opacity
+  rgba only makes the BACKGROUND transparent
+  not the text or children inside
+
+=======================================================
+  OPACITY vs rgba()
+=======================================================
+
+  opacity property:
+  - Makes the ENTIRE element transparent
+  - Including text images and all children
+  - Affects everything inside the element
+
+  rgba() colour:
+  - Only makes the COLOUR (background) transparent
+  - Text and children stay fully visible
+  - rgba = Red Green Blue Alpha
+
+  SYNTAX of rgba():
+  background-color: rgba(red, green, blue, alpha);
+  alpha = 0 (transparent) to 1 (solid)
+
+  Example:
+  background-color: rgba(30, 144, 255, 0.5);
+  Background is 50% transparent
+  But TEXT inside is still fully visible
+
+  WHEN TO USE WHICH:
+
+  Use opacity when:
+  - You want everything to fade including text
+  - Creating hover fade effects
+  - Showing disabled elements
+  - Animating element fade in or fade out
+
+  Use rgba() when:
+  - You want transparent background only
+  - Text should stay fully visible
+  - Creating overlay effects
+  - Card backgrounds with see-through effect
+
+  Memory Trick:
+  opacity = everything fades together
+  rgba    = only background fades text stays
+
+=======================================================
+  OPACITY WITH TRANSITION
+=======================================================
+
+  Adding transition makes opacity changes SMOOTH
+  Instead of suddenly appearing or disappearing
+  the element fades gradually.
+
+  .element {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+
+  .element:hover {
+    opacity: 0.5;
+  }
+
+  On hover element fades to 50% over 0.5 seconds
+  When mouse leaves it fades back to full over 0.5s
+
+  transition values for opacity:
+  0.2s = quick fade
+  0.5s = smooth natural fade
+  1s   = slow dramatic fade
+
+=======================================================
+  COMMON USES OF OPACITY
+=======================================================
+
+  1. Hover fade effect
+     Elements become transparent on hover
+     Shows interactivity and focus
+
+  2. Disabled elements
+     Grayed out look for unavailable items
+     opacity: 0.4 or 0.5 for disabled feel
+
+  3. Image overlays
+     Transparent coloured layer over images
+     Text on top remains readable
+
+  4. Loading states
+     Elements fade in when content loads
+     Smooth appearance animation
+
+  5. Modal backgrounds
+     Semi-transparent dark background
+     Behind popup dialog boxes
+
+  6. Watermark effect
+     Very low opacity text behind content
+     Looks like watermark on document
+
+=======================================================
+  opacity VALUES VISUAL GUIDE
+=======================================================
+
+  opacity: 0.0  = invisible
+  opacity: 0.1  = barely visible - like ghost
+  opacity: 0.2  = very faint
+  opacity: 0.3  = faint
+  opacity: 0.4  = light
+  opacity: 0.5  = half and half
+  opacity: 0.6  = more visible
+  opacity: 0.7  = mostly visible
+  opacity: 0.8  = almost solid
+  opacity: 0.9  = nearly solid
+  opacity: 1.0  = completely solid (default)
+
+=======================================================
+  filter: opacity() vs opacity property
+=======================================================
+
+  Two ways to control opacity in CSS:
+
+  Method 1: opacity property
+  opacity: 0.5;
+
+  Method 2: filter property
+  filter: opacity(50%);
+
+  Both do the same thing visually
+  opacity property is simpler and more common
+  filter: opacity uses percentage (0% to 100%)
+  opacity property uses decimal (0 to 1)
+
+  Example:
+  opacity: 0.5;       = same as filter: opacity(50%);
+  opacity: 0.75;      = same as filter: opacity(75%);
+  opacity: 1;         = same as filter: opacity(100%);
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  opacity           → transparency of element
+  background-color  → rgba for transparent background
+  transition        → smooth opacity changes
+  color             → text colour
+  border            → border around element
+  border-radius     → rounded corners
+  padding           → space inside element
+  width             → element width
+  height            → element height
+  position          → used for overlay effects
+  z-index           → stacking order
+  filter            → alternative opacity method
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Value       Visibility    Look
+  -------     ----------    ---------------------
+  opacity: 0  0% visible    Completely invisible
+  opacity:.1  10% visible   Almost ghost-like
+  opacity:.2  20% visible   Very faint
+  opacity:.3  30% visible   Faint watermark look
+  opacity:.5  50% visible   Half transparent
+  opacity:.7  70% visible   Mostly visible
+  opacity:.9  90% visible   Nearly solid
+  opacity: 1  100% visible  Fully solid (default)
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  opacity = how transparent or visible an element is
+  0 = invisible, 1 = fully visible (default)
+  Values between 0 and 1 are partially transparent
+
+  opacity affects EVERYTHING inside element
+  rgba() only affects the background colour
+
+  Use opacity for: hover fades, disabled look,
+  animations, overlays
+
+  Use rgba() for: transparent backgrounds while
+  keeping text fully visible
+
+  Always add transition for smooth opacity changes
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Opacity Property</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        color: #333;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+        text-align: center;
+        margin-bottom: 10px;
+        padding: 15px 0;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+      }
+
+      h3 {
+        color: #555;
+        font-size: 17px;
+        margin-bottom: 8px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 90%;
+        border: 2px solid #ddd;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      /* Label showing CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* Instruction text */
+      .instruction {
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      /* =============================================
+       OPACITY VALUES 0 TO 1 - ALL STEPS
+    =============================================== */
+
+      /* Base box for opacity scale */
+      .opacity-box {
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 15px 10px;
+        border-radius: 8px;
+        display: inline-block;
+        margin: 5px;
+        width: 120px;
+        text-align: center;
+        vertical-align: top;
+      }
+
+      /* All opacity levels */
+      .op-0 {
+        opacity: 0;
+      }
+      .op-01 {
+        opacity: 0.1;
+      }
+      .op-02 {
+        opacity: 0.2;
+      }
+      .op-03 {
+        opacity: 0.3;
+      }
+      .op-04 {
+        opacity: 0.4;
+      }
+      .op-05 {
+        opacity: 0.5;
+      }
+      .op-06 {
+        opacity: 0.6;
+      }
+      .op-07 {
+        opacity: 0.7;
+      }
+      .op-08 {
+        opacity: 0.8;
+      }
+      .op-09 {
+        opacity: 0.9;
+      }
+      .op-1 {
+        opacity: 1;
+      }
+
+      /* =============================================
+       OPACITY ON DIFFERENT COLOURS
+    =============================================== */
+
+      .colour-box {
+        width: 130px;
+        height: 100px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 8px;
+        font-weight: bold;
+        font-size: 13px;
+        color: white;
+        text-align: center;
+        line-height: 100px;
+        vertical-align: top;
+      }
+
+      /* Red boxes with different opacity */
+      .red-full {
+        background-color: #dc143c;
+        opacity: 1;
+      }
+      .red-half {
+        background-color: #dc143c;
+        opacity: 0.5;
+      }
+      .red-quarter {
+        background-color: #dc143c;
+        opacity: 0.2;
+      }
+
+      /* Green boxes with different opacity */
+      .green-full {
+        background-color: #32cd32;
+        opacity: 1;
+      }
+      .green-half {
+        background-color: #32cd32;
+        opacity: 0.5;
+      }
+      .green-quarter {
+        background-color: #32cd32;
+        opacity: 0.2;
+      }
+
+      /* Purple boxes with different opacity */
+      .purple-full {
+        background-color: #9932cc;
+        opacity: 1;
+      }
+      .purple-half {
+        background-color: #9932cc;
+        opacity: 0.5;
+      }
+      .purple-quarter {
+        background-color: #9932cc;
+        opacity: 0.2;
+      }
+
+      /* =============================================
+       OPACITY AFFECTS CHILDREN TOO
+    =============================================== */
+
+      /* Parent with opacity set */
+      .parent-opaque {
+        background-color: #1e90ff;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 10px;
+        display: inline-block;
+        width: 250px;
+        vertical-align: top;
+      }
+
+      /* Child inside opaque parent */
+      .child-inside {
+        background-color: #dc143c;
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 10px;
+        opacity: 1;
+      }
+
+      /* Parent text */
+      .parent-text {
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      /* Opacity on parent affects child too */
+      .op-parent-full {
+        opacity: 1;
+      }
+      .op-parent-half {
+        opacity: 0.5;
+      }
+      .op-parent-low {
+        opacity: 0.2;
+      }
+
+      /* =============================================
+       OPACITY vs RGBA COMPARISON
+    =============================================== */
+
+      /* Comparison boxes */
+      .compare-box {
+        width: 280px;
+        padding: 20px;
+        border-radius: 15px;
+        display: inline-block;
+        margin: 10px;
+        vertical-align: top;
+        border: 2px solid #ddd;
+      }
+
+      /* Using opacity - everything fades */
+      .opacity-method {
+        background-color: #1e90ff;
+        opacity: 0.4;
+      }
+
+      /* Using rgba - only background fades */
+      .rgba-method {
+        background-color: rgba(30, 144, 255, 0.4);
+        opacity: 1;
+      }
+
+      /* Text inside comparison boxes */
+      .compare-heading {
+        font-size: 16px;
+        font-weight: bold;
+        color: #003366;
+        margin-bottom: 8px;
+      }
+
+      .compare-text {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.5;
+      }
+
+      /* =============================================
+       OPACITY HOVER EFFECTS
+    =============================================== */
+
+      /* Base hover box */
+      .hover-opacity-box {
+        width: 160px;
+        height: 120px;
+        border-radius: 12px;
+        display: inline-block;
+        margin: 10px;
+        font-weight: bold;
+        font-size: 14px;
+        color: white;
+        text-align: center;
+        line-height: 120px;
+        cursor: pointer;
+        vertical-align: top;
+        transition: opacity 0.4s ease;
+      }
+
+      /* Hover - fade to low opacity */
+      .hover-fade {
+        background-color: #1e90ff;
+        opacity: 1;
+      }
+
+      .hover-fade:hover {
+        opacity: 0.4;
+      }
+
+      /* Hover - fade from low to full */
+      .hover-appear {
+        background-color: #32cd32;
+        opacity: 0.3;
+      }
+
+      .hover-appear:hover {
+        opacity: 1;
+      }
+
+      /* Hover - mid opacity changes */
+      .hover-mid {
+        background-color: #dc143c;
+        opacity: 0.7;
+      }
+
+      .hover-mid:hover {
+        opacity: 1;
+      }
+
+      /* Hover - image card fade */
+      .hover-img-card {
+        width: 180px;
+        height: 140px;
+        background-color: #9932cc;
+        border-radius: 12px;
+        display: inline-block;
+        margin: 10px;
+        cursor: pointer;
+        vertical-align: top;
+        transition: opacity 0.3s ease;
+        opacity: 1;
+        font-size: 40px;
+        text-align: center;
+        line-height: 140px;
+      }
+
+      .hover-img-card:hover {
+        opacity: 0.5;
+      }
+
+      /* =============================================
+       OPACITY FOR DISABLED LOOK
+    =============================================== */
+
+      /* Base button */
+      .btn {
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 8px;
+        display: inline-block;
+        transition: opacity 0.3s ease;
+      }
+
+      /* Enabled button */
+      .btn-enabled {
+        background-color: #1e90ff;
+        color: white;
+        opacity: 1;
+      }
+
+      .btn-enabled:hover {
+        opacity: 0.85;
+      }
+
+      /* Disabled look using opacity */
+      .btn-disabled {
+        background-color: #1e90ff;
+        color: white;
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      /* Card enabled */
+      .card-enabled {
+        width: 200px;
+        height: 100px;
+        background-color: white;
+        border: 2px solid #1e90ff;
+        border-radius: 12px;
+        display: inline-block;
+        margin: 10px;
+        padding: 15px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #003366;
+        text-align: center;
+        line-height: 1.4;
+        vertical-align: top;
+        opacity: 1;
+      }
+
+      /* Card disabled look using opacity */
+      .card-disabled {
+        width: 200px;
+        height: 100px;
+        background-color: white;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+        display: inline-block;
+        margin: 10px;
+        padding: 15px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #999;
+        text-align: center;
+        line-height: 1.4;
+        vertical-align: top;
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      /* =============================================
+       OPACITY FOR IMAGE OVERLAY
+    =============================================== */
+
+      /* Image card with overlay */
+      .overlay-card {
+        position: relative;
+        width: 220px;
+        height: 160px;
+        border-radius: 15px;
+        display: inline-block;
+        margin: 10px;
+        overflow: hidden;
+        vertical-align: top;
+        cursor: pointer;
+      }
+
+      /* Image placeholder */
+      .img-placeholder {
+        width: 100%;
+        height: 100%;
+        font-size: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Dark overlay using opacity */
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #003366;
+        opacity: 0.6;
+      }
+
+      /* Text on top of overlay */
+      .overlay-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: center;
+        z-index: 2;
+        width: 90%;
+      }
+
+      /* =============================================
+       rgba() BACKGROUND EXAMPLES
+    =============================================== */
+
+      /* rgba background boxes */
+      .rgba-box {
+        width: 220px;
+        padding: 20px;
+        border-radius: 12px;
+        display: inline-block;
+        margin: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #003366;
+        vertical-align: top;
+        text-align: center;
+      }
+
+      /* Different rgba transparency levels */
+      .rgba-100 {
+        background-color: rgba(30, 144, 255, 1);
+        color: white;
+      }
+      .rgba-80 {
+        background-color: rgba(30, 144, 255, 0.8);
+        color: white;
+      }
+      .rgba-60 {
+        background-color: rgba(30, 144, 255, 0.6);
+      }
+      .rgba-40 {
+        background-color: rgba(30, 144, 255, 0.4);
+      }
+      .rgba-20 {
+        background-color: rgba(30, 144, 255, 0.2);
+      }
+
+      /* rgba red examples */
+      .rgba-red-100 {
+        background-color: rgba(220, 20, 60, 1);
+        color: white;
+      }
+      .rgba-red-70 {
+        background-color: rgba(220, 20, 60, 0.7);
+        color: white;
+      }
+      .rgba-red-40 {
+        background-color: rgba(220, 20, 60, 0.4);
+      }
+      .rgba-red-10 {
+        background-color: rgba(220, 20, 60, 0.1);
+      }
+
+      /* =============================================
+       WATERMARK EFFECT USING OPACITY
+    =============================================== */
+
+      /* Watermark container */
+      .watermark-container {
+        position: relative;
+        background-color: white;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        padding: 30px;
+        margin: 10px 0;
+        min-height: 150px;
+      }
+
+      /* Watermark text - very low opacity */
+      .watermark-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-30deg);
+        font-size: 50px;
+        font-weight: bold;
+        color: #003366;
+        opacity: 0.08;
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Normal content on top of watermark */
+      .watermark-content {
+        position: relative;
+        z-index: 1;
+        font-size: 15px;
+        color: #333;
+        line-height: 1.7;
+      }
+
+      /* =============================================
+       OPACITY FADE IN ANIMATION
+    =============================================== */
+
+      /* Fade in animation using keyframes */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeInSlow {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse-opacity {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Fade in box */
+      .fade-in-box {
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 20px 30px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 10px;
+        text-align: center;
+        animation: fadeIn 2s ease infinite alternate;
+      }
+
+      /* Pulse opacity box */
+      .pulse-opacity-box {
+        background-color: #dc143c;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 20px 30px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 10px;
+        text-align: center;
+        animation: pulse-opacity 2s ease infinite;
+      }
+
+      /* Slow fade in box */
+      .slow-fade-box {
+        background-color: #32cd32;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 20px 30px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 10px;
+        text-align: center;
+        animation: fadeInSlow 3s ease infinite alternate;
+      }
+
+      /* =============================================
+       FILTER OPACITY vs OPACITY PROPERTY
+    =============================================== */
+
+      /* Base comparison box */
+      .filter-compare {
+        width: 220px;
+        height: 100px;
+        background-color: #9932cc;
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 10px;
+        padding: 15px;
+        vertical-align: top;
+        text-align: center;
+        line-height: 1.5;
+      }
+
+      /* Using opacity property */
+      .filter-opacity-prop {
+        opacity: 0.5;
+      }
+
+      /* Using filter: opacity() */
+      .filter-opacity-filter {
+        filter: opacity(50%);
+      }
+
+      /* Full opacity for comparison */
+      .filter-opacity-full {
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Opacity Property</h1>
+
+    <!-- ============================================
+       OPACITY VALUES 0 TO 1
+  =============================================== -->
+    <div class="section">
+      <h2>1. Opacity Values from 0 to 1</h2>
+      <p>
+        opacity goes from 0 (invisible) to 1 (fully visible) All values in
+        between are partially transparent
+      </p>
+
+      <div class="demo-box">
+        <span class="label">opacity: 0 to opacity: 1 shown below</span>
+        <span class="instruction">
+          Each box has the same blue colour Only the opacity value is different
+          Background shows through more transparent boxes
+        </span>
+
+        <div class="opacity-box op-0">
+          opacity: 0
+          <br />invisible
+        </div>
+
+        <div class="opacity-box op-01">
+          opacity: 0.1
+          <br />10%
+        </div>
+
+        <div class="opacity-box op-02">
+          opacity: 0.2
+          <br />20%
+        </div>
+
+        <div class="opacity-box op-03">
+          opacity: 0.3
+          <br />30%
+        </div>
+
+        <div class="opacity-box op-04">
+          opacity: 0.4
+          <br />40%
+        </div>
+
+        <div class="opacity-box op-05">
+          opacity: 0.5
+          <br />50%
+        </div>
+
+        <div class="opacity-box op-06">
+          opacity: 0.6
+          <br />60%
+        </div>
+
+        <div class="opacity-box op-07">
+          opacity: 0.7
+          <br />70%
+        </div>
+
+        <div class="opacity-box op-08">
+          opacity: 0.8
+          <br />80%
+        </div>
+
+        <div class="opacity-box op-09">
+          opacity: 0.9
+          <br />90%
+        </div>
+
+        <div class="opacity-box op-1">
+          opacity: 1
+          <br />100% solid
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       OPACITY ON DIFFERENT COLOURS
+  =============================================== -->
+    <div class="section">
+      <h2>2. Opacity on Different Colours</h2>
+      <p>
+        Opacity affects all colours the same way Showing opacity 1 (full), 0.5
+        (half), 0.2 (faint)
+      </p>
+
+      <div class="demo-box">
+        <span class="label">Same colour three different opacity values</span>
+
+        <!-- Red boxes -->
+        <div class="colour-box red-full">Red opacity: 1</div>
+        <div class="colour-box red-half">Red opacity: 0.5</div>
+        <div class="colour-box red-quarter" style="color: #dc143c">
+          Red opacity: 0.2
+        </div>
+
+        <br /><br />
+
+        <!-- Green boxes -->
+        <div class="colour-box green-full">Green opacity: 1</div>
+        <div class="colour-box green-half">Green opacity: 0.5</div>
+        <div class="colour-box green-quarter" style="color: #32cd32">
+          Green opacity: 0.2
+        </div>
+
+        <br /><br />
+
+        <!-- Purple boxes -->
+        <div class="colour-box purple-full">Purple opacity: 1</div>
+        <div class="colour-box purple-half">Purple opacity: 0.5</div>
+        <div class="colour-box purple-quarter" style="color: #9932cc">
+          Purple opacity: 0.2
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       OPACITY AFFECTS CHILDREN
+  =============================================== -->
+    <div class="section">
+      <h2>3. Opacity Affects ALL Children</h2>
+      <p>
+        When parent has opacity all children become transparent too even if
+        child has opacity: 1
+      </p>
+
+      <div class="demo-box">
+        <span class="label">Parent opacity affects red child box too</span>
+        <span class="instruction">
+          Notice how the red child box also becomes transparent when parent
+          opacity decreases even though child has opacity: 1
+        </span>
+
+        <!-- Full opacity parent -->
+        <div class="parent-opaque op-parent-full">
+          <p class="parent-text">Parent: opacity: 1</p>
+          <div class="child-inside">
+            Child: opacity: 1
+            <br />
+            Both fully visible
+          </div>
+        </div>
+
+        <!-- Half opacity parent -->
+        <div class="parent-opaque op-parent-half">
+          <p class="parent-text">Parent: opacity: 0.5</p>
+          <div class="child-inside">
+            Child: opacity: 1
+            <br />
+            Both at 50% visible
+          </div>
+        </div>
+
+        <!-- Low opacity parent -->
+        <div class="parent-opaque op-parent-low">
+          <p class="parent-text">Parent: opacity: 0.2</p>
+          <div class="child-inside">
+            Child: opacity: 1
+            <br />
+            Both at 20% visible
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       OPACITY vs RGBA COMPARISON
+  =============================================== -->
+    <div class="section">
+      <h2>4. opacity vs rgba() - Key Difference</h2>
+      <p>
+        opacity = everything fades including text rgba() = only background fades
+        text stays visible
+      </p>
+
+      <div class="demo-box">
+        <span class="label">
+          Left: opacity: 0.4 (text also fades) Right: rgba(30, 144, 255, 0.4)
+          (text stays clear)
+        </span>
+        <span class="instruction">
+          Notice how text in the left box is also faded Text in the right box
+          stays fully visible
+        </span>
+
+        <!-- Using opacity - text fades too -->
+        <div class="compare-box opacity-method">
+          <p class="compare-heading">Using opacity: 0.4</p>
+          <p class="compare-text">
+            This text is ALSO faded because opacity affects everything including
+            text. Hard to read!
+          </p>
+        </div>
+
+        <!-- Using rgba - text stays clear -->
+        <div class="compare-box rgba-method">
+          <p class="compare-heading">Using rgba(blue, 0.4)</p>
+          <p class="compare-text">
+            This text is FULLY VISIBLE because rgba only makes background
+            transparent. Easy to read!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       rgba() BACKGROUND EXAMPLES
+  =============================================== -->
+    <div class="section">
+      <h2>5. rgba() - Transparent Background Only</h2>
+      <p>
+        rgba makes ONLY the background transparent Text inside stays fully
+        visible at all times
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >rgba(30, 144, 255, alpha) - only background transparency
+          changes</span
+        >
+        <span class="instruction"
+          >Text is always clearly readable regardless of alpha value</span
+        >
+
+        <!-- Blue rgba levels -->
+        <div class="rgba-box rgba-100">rgba(blue, 1.0)<br />100% opaque</div>
+        <div class="rgba-box rgba-80">rgba(blue, 0.8)<br />80% opaque</div>
+        <div class="rgba-box rgba-60">rgba(blue, 0.6)<br />60% opaque</div>
+        <div class="rgba-box rgba-40">rgba(blue, 0.4)<br />40% opaque</div>
+        <div class="rgba-box rgba-20">rgba(blue, 0.2)<br />20% opaque</div>
+
+        <br /><br />
+
+        <!-- Red rgba levels -->
+        <div class="rgba-box rgba-red-100">rgba(red, 1.0)<br />100% opaque</div>
+        <div class="rgba-box rgba-red-70">rgba(red, 0.7)<br />70% opaque</div>
+        <div class="rgba-box rgba-red-40">rgba(red, 0.4)<br />40% opaque</div>
+        <div class="rgba-box rgba-red-10">rgba(red, 0.1)<br />10% opaque</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       OPACITY HOVER EFFECTS
+  =============================================== -->
+    <div class="section">
+      <h2>6. Opacity with Hover Effects</h2>
+      <p>
+        Combine opacity with transition and hover for smooth fade in and fade
+        out effects
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >transition: opacity 0.4s ease; with :hover opacity changes</span
+        >
+        <span class="instruction"
+          >Hover over each box to see opacity change smoothly</span
+        >
+
+        <!-- Fade out on hover -->
+        <div class="hover-opacity-box hover-fade">
+          Hover to FADE
+          <br />
+          opacity: 1 → 0.4
+        </div>
+
+        <!-- Appear on hover -->
+        <div class="hover-opacity-box hover-appear">
+          Hover to APPEAR
+          <br />
+          opacity: 0.3 → 1
+        </div>
+
+        <!-- Highlight on hover -->
+        <div class="hover-opacity-box hover-mid">
+          Hover to HIGHLIGHT
+          <br />
+          opacity: 0.7 → 1
+        </div>
+
+        <!-- Image card fade on hover -->
+        <div class="hover-img-card">🌅</div>
+        <div class="hover-img-card" style="background-color: #32cd32">🌿</div>
+        <div class="hover-img-card" style="background-color: #ff6347">🌺</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       OPACITY FOR DISABLED LOOK
+  =============================================== -->
+    <div class="section">
+      <h2>7. Opacity for Disabled Look</h2>
+      <p>
+        Low opacity gives a grayed out disabled appearance Shows user that
+        element is unavailable
+      </p>
+
+      <div class="demo-box">
+        <span class="label">Enabled: opacity: 1 vs Disabled: opacity: 0.4</span>
+        <span class="instruction">
+          Left items are enabled and fully visible Right items appear disabled
+          and faded with low opacity
+        </span>
+
+        <!-- Buttons enabled vs disabled -->
+        <button class="btn btn-enabled">Enabled Button</button>
+        <button class="btn btn-disabled">Disabled Button</button>
+
+        <br /><br />
+
+        <!-- Cards enabled vs disabled -->
+        <div class="card-enabled">
+          ✅ Enabled Card
+          <br />
+          opacity: 1
+          <br />
+          Fully available
+        </div>
+
+        <div class="card-disabled">
+          ❌ Disabled Card
+          <br />
+          opacity: 0.4
+          <br />
+          Not available
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       OPACITY FOR IMAGE OVERLAY
+  =============================================== -->
+    <div class="section">
+      <h2>8. Opacity for Image Overlay</h2>
+      <p>
+        Use opacity on a dark layer over images Text on top of overlay remains
+        fully readable
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >Dark overlay div has opacity: 0.6 - text on top uses z-index: 2</span
+        >
+
+        <!-- Overlay card 1 -->
+        <div class="overlay-card">
+          <div class="img-placeholder" style="background-color: #87ceeb">
+            🌅
+          </div>
+          <div class="overlay"></div>
+          <div class="overlay-text">
+            Sunset Photo
+            <br />
+            Dark overlay opacity: 0.6
+          </div>
+        </div>
+
+        <!-- Overlay card 2 -->
+        <div class="overlay-card">
+          <div class="img-placeholder" style="background-color: #90ee90">
+            🌿
+          </div>
+          <div class="overlay" style="opacity: 0.4"></div>
+          <div class="overlay-text">
+            Nature Photo
+            <br />
+            Dark overlay opacity: 0.4
+          </div>
+        </div>
+
+        <!-- Overlay card 3 -->
+        <div class="overlay-card">
+          <div class="img-placeholder" style="background-color: #ffb6c1">
+            🌸
+          </div>
+          <div class="overlay" style="opacity: 0.75"></div>
+          <div class="overlay-text">
+            Flower Photo
+            <br />
+            Dark overlay opacity: 0.75
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       WATERMARK EFFECT
+  =============================================== -->
+    <div class="section">
+      <h2>9. Watermark Effect Using Opacity</h2>
+      <p>
+        Very low opacity text in background Creates watermark effect like on
+        documents
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >Watermark text has opacity: 0.08 - barely visible behind
+          content</span
+        >
+
+        <div class="watermark-container">
+          <!-- Watermark behind content -->
+          <div class="watermark-text">DORAEMON</div>
+
+          <!-- Normal content on top -->
+          <div class="watermark-content">
+            <strong>About Doraemon</strong>
+            <br /><br />
+            Doraemon is a robotic cat from the 22nd century. He was sent back in
+            time to help young Nobita Nobi become a better person. His
+            four-dimensional pocket contains thousands of amazing future
+            gadgets. His favourite food is dorayaki sweet pancakes.
+            <br /><br />
+            The watermark behind this text uses opacity: 0.08 which makes it
+            barely visible in the background.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       OPACITY ANIMATIONS
+  =============================================== -->
+    <div class="section">
+      <h2>10. Opacity with Animation</h2>
+      <p>
+        Using opacity with @keyframes creates fade in fade out and pulse effects
+      </p>
+
+      <div class="demo-box">
+        <span class="label">
+          fadeIn: opacity 0 to 1 pulse: opacity 1 to 0.3 to 1 fadeSlow: opacity
+          0 to 1 slowly
+        </span>
+        <span class="instruction">Watch the animated boxes below</span>
+
+        <!-- Fade in animation -->
+        <div class="fade-in-box">
+          Fade In
+          <br />
+          opacity: 0 → 1
+          <br />
+          2s alternate
+        </div>
+
+        <!-- Pulse opacity animation -->
+        <div class="pulse-opacity-box">
+          Pulse Opacity
+          <br />
+          opacity: 1 → 0.3 → 1
+          <br />
+          2s infinite
+        </div>
+
+        <!-- Slow fade animation -->
+        <div class="slow-fade-box">
+          Slow Fade
+          <br />
+          opacity: 0 → 1
+          <br />
+          3s alternate
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FILTER OPACITY vs OPACITY PROPERTY
+  =============================================== -->
+    <div class="section">
+      <h2>11. filter: opacity() vs opacity Property</h2>
+      <p>
+        Two ways to set opacity in CSS Both give same result different syntax
+      </p>
+
+      <div class="demo-box">
+        <span class="label">
+          Full: opacity: 1 Middle: opacity: 0.5 = filter: opacity(50%) Both give
+          same visual result
+        </span>
+
+        <!-- Full opacity -->
+        <div class="filter-compare filter-opacity-full">
+          opacity: 1
+          <br />
+          filter: opacity(100%)
+          <br />
+          Fully visible
+        </div>
+
+        <!-- opacity property -->
+        <div class="filter-compare filter-opacity-prop">
+          opacity: 0.5
+          <br />
+          Uses opacity
+          <br />
+          property
+        </div>
+
+        <!-- filter opacity -->
+        <div class="filter-compare filter-opacity-filter">
+          filter: opacity(50%)
+          <br />
+          Uses filter
+          <br />
+          property
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

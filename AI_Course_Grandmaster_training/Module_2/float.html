@@ -1,0 +1,1268 @@
+<!--
+=======================================================
+  CSS FLOAT - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains CSS Float property
+using Internal CSS with simple and clear examples.
+
+=======================================================
+  WHAT IS CSS FLOAT?
+=======================================================
+
+  Float = makes an element move to the LEFT or RIGHT
+  side of its container and allows other content
+  to WRAP AROUND it.
+
+  Originally float was created to make TEXT wrap
+  around IMAGES like in newspapers and magazines.
+
+  Later it was also used to create LAYOUTS
+  like columns and sidebars on webpages.
+
+  Basic Syntax:
+  float: value;
+
+  Values:
+  left  = element floats to the LEFT side
+  right = element floats to the RIGHT side
+  none  = element does not float (default)
+
+  Example:
+  img {
+    float: left;
+  }
+  Image moves to left and text wraps around it
+
+  Memory Trick:
+  float = floating = element moves to one side
+  Like an ice cube floating to the side of a glass
+  Everything else fills around it
+
+=======================================================
+  HOW FLOAT WORKS
+=======================================================
+
+  BEFORE float:
+  Elements stack on top of each other normally
+  Each block element takes full width
+
+  AFTER float:
+  Floated element moves LEFT or RIGHT
+  Floated element is REMOVED from normal flow
+  Other elements flow AROUND the floated element
+  Floated element only takes as much width as needed
+
+  WHAT IS NORMAL FLOW?
+  Normal flow = default way elements are arranged
+  Block elements stack vertically top to bottom
+  Float takes element OUT of this normal flow
+
+  FLOATED ELEMENT BEHAVIOUR:
+  - Moves to the specified side
+  - Other content wraps around it
+  - Parent element may COLLAPSE in height
+    because floated child is out of normal flow
+  - Floated elements sit next to each other
+    if there is enough space
+
+  Memory Trick:
+  Normal flow = queue of people standing in line
+  Float = one person steps to the side
+  Others fill in around that person
+
+=======================================================
+  float: left
+=======================================================
+
+  float: left;
+  Element moves to the LEFT side of container
+  Other content appears on the RIGHT side
+
+  Common use:
+  img {
+    float: left;
+    margin-right: 15px;
+  }
+  Image goes left, text wraps on the right
+
+  Memory Trick:
+  float left = moves to left wall of container
+
+=======================================================
+  float: right
+=======================================================
+
+  float: right;
+  Element moves to the RIGHT side of container
+  Other content appears on the LEFT side
+
+  Common use:
+  img {
+    float: right;
+    margin-left: 15px;
+  }
+  Image goes right, text wraps on the left
+
+  Memory Trick:
+  float right = moves to right wall of container
+
+=======================================================
+  float: none
+=======================================================
+
+  float: none;
+  Element does NOT float (default value)
+  Element stays in normal document flow
+
+  Used to OVERRIDE a float that was set earlier
+  Example: reset float on smaller screens
+
+=======================================================
+  WHAT IS clear?
+=======================================================
+
+  clear = stops an element from wrapping around
+  floated elements above it
+
+  After using float the next elements may wrap
+  around the floated element which we do not want.
+  clear tells the element to move BELOW all floats.
+
+  Basic Syntax:
+  clear: value;
+
+  Values:
+  left  = element moves below left-floated elements
+  right = element moves below right-floated elements
+  both  = element moves below ALL floated elements
+  none  = element wraps normally (default)
+
+  Example:
+  .footer {
+    clear: both;
+  }
+  Footer always appears below any floated elements
+
+  Memory Trick:
+  clear = clear the way = go below the floats
+  Like a sweeper clearing the floor so you can walk
+
+=======================================================
+  THE CLEARFIX PROBLEM
+=======================================================
+
+  PROBLEM:
+  When all children inside a parent are floated
+  the parent COLLAPSES to zero height
+  because floated elements are out of normal flow
+
+  Example:
+  <div class="parent">
+    <div style="float:left;">Box 1</div>
+    <div style="float:left;">Box 2</div>
+  </div>
+  The parent div collapses to height 0
+  It cannot see its floated children
+
+  SOLUTION 1 - overflow: hidden:
+  .parent {
+    overflow: hidden;
+  }
+  Forces parent to contain its floated children
+
+  SOLUTION 2 - clearfix hack:
+  .clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+  Adds an invisible element after floated children
+  that forces parent to expand
+
+  SOLUTION 3 - float the parent:
+  .parent {
+    float: left;
+  }
+  Makes parent float too so it contains children
+  But this takes parent out of flow too
+
+  Memory Trick:
+  Clearfix = fixing the collapse problem
+  Adding an invisible floor after floating boxes
+
+=======================================================
+  FLOAT FOR LAYOUTS
+=======================================================
+
+  Float was used to create multi-column layouts
+  before modern CSS like Flexbox and Grid existed.
+
+  Two column layout:
+  .left-column {
+    float: left;
+    width: 70%;
+  }
+  .right-sidebar {
+    float: right;
+    width: 28%;
+  }
+  .footer {
+    clear: both;
+  }
+
+  Three column layout:
+  .column {
+    float: left;
+    width: 33.33%;
+  }
+
+  Note: Today Flexbox and Grid are better for layouts
+  Float is mainly used for text wrapping around images
+
+=======================================================
+  FLOAT WITH IMAGES
+=======================================================
+
+  Most common and correct use of float:
+  Making text wrap around images like a magazine
+
+  .article-image {
+    float: left;
+    margin: 0 15px 10px 0;
+    width: 200px;
+  }
+  Image floats left and article text wraps right
+
+  Always add margin to floated images:
+  margin-right for left-floated images
+  margin-left for right-floated images
+  This prevents text from touching the image
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  float         → moves element left or right
+  clear         → stops wrapping around floats
+  overflow      → used for clearfix solution
+  width         → controls element width
+  height        → controls element height
+  margin        → space around elements
+  padding       → space inside elements
+  background-color → element colour
+  border        → border around element
+  border-radius → rounded corners
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Property      Value     What it does
+  ---------     ------    --------------------------
+  float         left      Element goes to left side
+  float         right     Element goes to right side
+  float         none      No float (default)
+  clear         left      Go below left floats
+  clear         right     Go below right floats
+  clear         both      Go below all floats
+  overflow      hidden    Contains floated children
+
+=======================================================
+  FLOAT vs MODERN CSS
+=======================================================
+
+  Float (old way):
+  - Originally for text wrapping around images
+  - Used for layouts before flexbox and grid
+  - Has clearfix problems to solve
+  - Still useful for text and image wrapping
+
+  Flexbox (modern):
+  - Better for one-dimensional layouts
+  - Rows or columns
+  - No clearfix needed
+
+  Grid (modern):
+  - Better for two-dimensional layouts
+  - Rows AND columns together
+  - No clearfix needed
+
+  Use float for: text wrapping around images
+  Use flexbox for: navigation menus, cards, rows
+  Use grid for: full page layouts
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  float: left  = element moves to LEFT side
+  float: right = element moves to RIGHT side
+  float: none  = no float (default)
+
+  clear: both  = go below all floated elements
+  Used on elements AFTER floated elements
+
+  Clearfix = fix for parent height collapse
+  overflow: hidden = simple clearfix solution
+
+  Best use of float = text wrapping around images
+  Modern layouts = use Flexbox or Grid instead
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Float</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        color: #333;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+      }
+
+      h3 {
+        color: #555;
+        font-size: 17px;
+        margin-bottom: 8px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 90%;
+        border: 2px solid #ddd;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      /* Label showing CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* Instruction text */
+      .instruction {
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      /* =============================================
+       NORMAL FLOW - NO FLOAT
+    =============================================== */
+
+      /* Container for normal flow demo */
+      .normal-container {
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 10px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      /* Normal block boxes - no float */
+      .normal-box {
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 15px;
+        margin: 5px;
+        border-radius: 5px;
+      }
+
+      /* =============================================
+       FLOAT LEFT EXAMPLES
+    =============================================== */
+
+      /* Container for float demos */
+      .float-container {
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 10px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      /* Floating box - left */
+      .float-left-box {
+        float: left;
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 20px;
+        margin: 5px 15px 5px 5px;
+        border-radius: 5px;
+        width: 150px;
+        height: 100px;
+        text-align: center;
+        line-height: 60px;
+      }
+
+      /* Text that wraps around float */
+      .wrap-text {
+        font-size: 15px;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /* =============================================
+       FLOAT RIGHT EXAMPLES
+    =============================================== */
+
+      /* Floating box - right */
+      .float-right-box {
+        float: right;
+        background-color: #dc143c;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 20px;
+        margin: 5px 5px 5px 15px;
+        border-radius: 5px;
+        width: 150px;
+        height: 100px;
+        text-align: center;
+        line-height: 60px;
+      }
+
+      /* =============================================
+       FLOAT WITH IMAGE PLACEHOLDER
+    =============================================== */
+
+      /* Image placeholder floated left */
+      .img-float-left {
+        float: left;
+        width: 180px;
+        height: 140px;
+        background-color: #87ceeb;
+        border: 3px solid #4682b4;
+        border-radius: 10px;
+        margin: 0 20px 10px 0;
+        font-size: 14px;
+        font-weight: bold;
+        color: #003366;
+        text-align: center;
+        line-height: 140px;
+      }
+
+      /* Image placeholder floated right */
+      .img-float-right {
+        float: right;
+        width: 180px;
+        height: 140px;
+        background-color: #ffb6c1;
+        border: 3px solid #dc143c;
+        border-radius: 10px;
+        margin: 0 0 10px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #8b0000;
+        text-align: center;
+        line-height: 140px;
+      }
+
+      /* Article text */
+      .article-text {
+        font-size: 15px;
+        color: #333;
+        line-height: 1.7;
+      }
+
+      /* =============================================
+       MULTIPLE FLOATS - SIDE BY SIDE
+    =============================================== */
+
+      /* Container for multiple floats */
+      .multi-float-container {
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 10px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      /* Multiple float boxes side by side */
+      .multi-box {
+        float: left;
+        width: 120px;
+        height: 100px;
+        font-weight: bold;
+        font-size: 13px;
+        color: white;
+        text-align: center;
+        line-height: 100px;
+        margin: 5px;
+        border-radius: 8px;
+      }
+
+      .multi-box-1 {
+        background-color: #1e90ff;
+      }
+      .multi-box-2 {
+        background-color: #32cd32;
+      }
+      .multi-box-3 {
+        background-color: #ff6347;
+      }
+      .multi-box-4 {
+        background-color: #9932cc;
+      }
+
+      /* =============================================
+       CLEAR PROPERTY EXAMPLES
+    =============================================== */
+
+      /* Clear container */
+      .clear-container {
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 10px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      /* Float box for clear demo */
+      .clear-float-box {
+        float: left;
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        padding: 20px;
+        margin: 5px 15px 5px 5px;
+        border-radius: 5px;
+        width: 150px;
+        text-align: center;
+      }
+
+      /* Element WITHOUT clear - wraps around float */
+      .no-clear {
+        background-color: #ffb6c1;
+        color: #333;
+        font-weight: bold;
+        padding: 15px;
+        margin: 5px;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      /* Element WITH clear: both - goes below float */
+      .with-clear {
+        clear: both;
+        background-color: #90ee90;
+        color: #333;
+        font-weight: bold;
+        padding: 15px;
+        margin: 5px;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      /* =============================================
+       CLEARFIX - PARENT COLLAPSE PROBLEM
+    =============================================== */
+
+      /* Parent WITHOUT clearfix - collapses */
+      .parent-no-fix {
+        background-color: #ffe4b5;
+        border: 3px solid #ff8c00;
+        padding: 10px;
+        margin: 10px 0;
+      }
+
+      /* Parent WITH overflow:hidden clearfix */
+      .parent-overflow {
+        background-color: #d0f0d0;
+        border: 3px solid #32cd32;
+        padding: 10px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      /* Parent WITH ::after clearfix */
+      .parent-clearfix {
+        background-color: #d0e8ff;
+        border: 3px solid #1e90ff;
+        padding: 10px;
+        margin: 10px 0;
+      }
+
+      /* Clearfix using ::after pseudo element */
+      .parent-clearfix::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+
+      /* Child floated boxes for clearfix demo */
+      .child-float {
+        float: left;
+        background-color: #ff6347;
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        padding: 15px;
+        margin: 5px;
+        border-radius: 5px;
+        width: 120px;
+        height: 80px;
+        text-align: center;
+        line-height: 50px;
+      }
+
+      /* =============================================
+       TWO COLUMN LAYOUT USING FLOAT
+    =============================================== */
+
+      /* Two column layout container */
+      .two-col-container {
+        background-color: #f5f5f5;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 10px 0;
+      }
+
+      /* Left column - main content */
+      .col-main {
+        float: left;
+        width: 65%;
+        background-color: #e0f0ff;
+        padding: 20px;
+        min-height: 200px;
+      }
+
+      /* Right column - sidebar */
+      .col-sidebar {
+        float: right;
+        width: 33%;
+        background-color: #fff3e0;
+        padding: 20px;
+        min-height: 200px;
+      }
+
+      /* Footer clears both columns */
+      .col-footer {
+        clear: both;
+        background-color: #003366;
+        color: white;
+        padding: 15px 20px;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      /* Column headings */
+      .col-heading {
+        font-size: 16px;
+        font-weight: bold;
+        color: #003366;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+      }
+
+      .col-heading-side {
+        font-size: 16px;
+        font-weight: bold;
+        color: #cc6600;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #cc6600;
+        padding-bottom: 5px;
+      }
+
+      /* Column text */
+      .col-text {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /* =============================================
+       THREE COLUMN LAYOUT USING FLOAT
+    =============================================== */
+
+      /* Three column container */
+      .three-col-container {
+        background-color: #f5f5f5;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 10px 0;
+      }
+
+      /* Three equal columns */
+      .col-three {
+        float: left;
+        width: 33.33%;
+        padding: 20px;
+        min-height: 150px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .col-three-1 {
+        background-color: #e0f0ff;
+      }
+      .col-three-2 {
+        background-color: #e8ffe8;
+      }
+      .col-three-3 {
+        background-color: #fff0e0;
+      }
+
+      /* Footer clears all columns */
+      .three-col-footer {
+        clear: both;
+        background-color: #333;
+        color: white;
+        padding: 12px 20px;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      /* =============================================
+       FLOAT FOR NAVIGATION MENU
+    =============================================== */
+
+      /* Nav container */
+      .float-nav {
+        background-color: #003366;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 10px 0;
+      }
+
+      /* Nav list */
+      .float-nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Nav list items - floated left */
+      .float-nav ul li {
+        float: left;
+      }
+
+      /* Nav links */
+      .float-nav ul li a {
+        display: block;
+        padding: 15px 25px;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Nav link hover */
+      .float-nav ul li a:hover {
+        background-color: #1e90ff;
+      }
+
+      /* Logo floated right in nav */
+      .float-nav .nav-logo {
+        float: right;
+        color: #ffd700;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 15px 20px;
+      }
+
+      /* =============================================
+       FLOAT NONE - RESET FLOAT
+    =============================================== */
+
+      /* Container for float none demo */
+      .none-container {
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 10px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      /* Box that was floated but reset to none */
+      .float-reset {
+        float: none;
+        background-color: #9932cc;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 20px;
+        margin: 5px;
+        border-radius: 5px;
+        width: 200px;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Float</h1>
+
+    <!-- ============================================
+       NORMAL FLOW - NO FLOAT
+  =============================================== -->
+    <div class="section">
+      <h2>1. Normal Flow - Without Float</h2>
+      <p>
+        Without float block elements stack VERTICALLY Each block takes full
+        width of parent container
+      </p>
+
+      <div class="demo-box">
+        <span class="label">No float - default normal flow</span>
+        <span class="instruction"
+          >Block elements stack top to bottom by default</span
+        >
+
+        <div class="normal-container">
+          <div class="normal-box">Block Box One - takes full width</div>
+          <div class="normal-box">Block Box Two - stacks below</div>
+          <div class="normal-box">Block Box Three - stacks below</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FLOAT LEFT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. float: left</h2>
+      <p>
+        Element moves to the LEFT side of container Other content wraps around
+        it on the RIGHT
+      </p>
+
+      <div class="demo-box">
+        <span class="label">float: left; margin-right: 15px;</span>
+        <span class="instruction"
+          >Blue box floats left - text wraps on right side</span
+        >
+
+        <div class="float-container">
+          <!-- This box floats to the left -->
+          <div class="float-left-box">float: left</div>
+
+          <!-- This text wraps around the floated box -->
+          <p class="wrap-text">
+            This text wraps around the floated blue box on the left. The float:
+            left property moves the blue box to the left side and this text
+            fills in around it on the right side. This is similar to how text
+            wraps around images in newspapers and magazines. The text continues
+            to flow naturally until it passes the bottom of the floated element.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FLOAT RIGHT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. float: right</h2>
+      <p>
+        Element moves to the RIGHT side of container Other content wraps around
+        it on the LEFT
+      </p>
+
+      <div class="demo-box">
+        <span class="label">float: right; margin-left: 15px;</span>
+        <span class="instruction"
+          >Red box floats right - text wraps on left side</span
+        >
+
+        <div class="float-container">
+          <!-- This box floats to the right -->
+          <div class="float-right-box">float: right</div>
+
+          <!-- This text wraps on the left of the floated box -->
+          <p class="wrap-text">
+            This text wraps around the floated red box on the right. The float:
+            right property moves the red box to the right side and this text
+            fills in around it on the left side. This is the opposite of float
+            left. The text continues to flow naturally on the left side until it
+            passes the bottom of the floated red element.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FLOAT WITH IMAGES - REAL USE
+  =============================================== -->
+    <div class="section">
+      <h2>4. Float with Images - Real Use</h2>
+      <p>
+        The most correct and original use of float Makes text wrap around images
+        like a magazine
+      </p>
+
+      <!-- Image float left -->
+      <div class="demo-box">
+        <span class="label">img { float: left; margin: 0 20px 10px 0; }</span>
+        <span class="instruction"
+          >Image floats left - article text wraps on right</span
+        >
+
+        <div class="float-container">
+          <div class="img-float-left">Image Here</div>
+
+          <p class="article-text">
+            <strong>Doraemon - The Robot Cat</strong>
+            <br /><br />
+            Doraemon is a robotic cat from the 22nd century who was sent back in
+            time to help a young boy named Nobita Nobi. He is best known for his
+            four-dimensional pocket from which he produces various gadgets from
+            the future. Doraemon was created by the manga artist duo Fujiko F.
+            Fujio and first appeared in 1969. The character has become a
+            cultural icon in Japan and many Asian countries. His favourite food
+            is dorayaki which is a sweet red bean pancake. Doraemon's most
+            famous gadget is the Take-copter which allows him to fly.
+          </p>
+        </div>
+      </div>
+
+      <!-- Image float right -->
+      <div class="demo-box">
+        <span class="label">img { float: right; margin: 0 0 10px 20px; }</span>
+        <span class="instruction"
+          >Image floats right - article text wraps on left</span
+        >
+
+        <div class="float-container">
+          <div class="img-float-right">Image Here</div>
+
+          <p class="article-text">
+            <strong>Nobita Nobi - The Lazy Student</strong>
+            <br /><br />
+            Nobita Nobi is the main human character in the Doraemon series. He
+            is a lazy and clumsy boy who struggles with school and everyday
+            life. Despite his many failures Nobita has a kind heart and
+            genuinely cares for his friends and family. Doraemon was sent from
+            the future by Nobita's own descendants to help improve his life so
+            that his future would be brighter. Nobita is best known for his poor
+            grades and his habit of sleeping in class and avoiding homework.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       MULTIPLE FLOATS SIDE BY SIDE
+  =============================================== -->
+    <div class="section">
+      <h2>5. Multiple Floats - Side by Side</h2>
+      <p>
+        Multiple elements floated in same direction sit next to each other if
+        there is enough space
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >All boxes have float: left; - they sit side by side</span
+        >
+
+        <div class="multi-float-container">
+          <div class="multi-box multi-box-1">Box 1 float left</div>
+          <div class="multi-box multi-box-2">Box 2 float left</div>
+          <div class="multi-box multi-box-3">Box 3 float left</div>
+          <div class="multi-box multi-box-4">Box 4 float left</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       CLEAR PROPERTY SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>6. clear Property</h2>
+      <p>
+        clear: both makes element go BELOW floated elements Stops element from
+        wrapping around floats
+      </p>
+
+      <!-- Without clear -->
+      <div class="demo-box">
+        <span class="label"
+          >Without clear: both - pink box wraps next to float</span
+        >
+
+        <div class="clear-container">
+          <div class="clear-float-box">float: left box</div>
+          <div class="no-clear">
+            No clear - I wrap next to the floated box on the right side
+          </div>
+        </div>
+      </div>
+
+      <!-- With clear -->
+      <div class="demo-box">
+        <span class="label"
+          >With clear: both - green box goes BELOW the float</span
+        >
+
+        <div class="clear-container">
+          <div class="clear-float-box">float: left box</div>
+          <div class="with-clear">
+            clear: both - I go BELOW the floated box not next to it
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       CLEARFIX - PARENT COLLAPSE SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>7. Clearfix - Fixing Parent Collapse</h2>
+      <p>
+        When all children float the parent COLLAPSES to zero height Three ways
+        to fix this problem shown below
+      </p>
+
+      <!-- Problem - no clearfix -->
+      <div class="demo-box">
+        <span class="label">PROBLEM: Parent collapses when children float</span>
+        <span class="instruction"
+          >Orange border parent cannot see floated children</span
+        >
+
+        <div class="parent-no-fix">
+          <div class="child-float">Child 1 float left</div>
+          <div class="child-float">Child 2 float left</div>
+          <div class="child-float">Child 3 float left</div>
+        </div>
+
+        <p style="color: red; font-size: 13px; margin-top: 5px">
+          Parent has height 0 - orange border is just a line at top
+        </p>
+      </div>
+
+      <!-- Solution 1 - overflow hidden -->
+      <div class="demo-box">
+        <span class="label">SOLUTION 1: overflow: hidden on parent</span>
+        <span class="instruction"
+          >Green border parent now contains its floated children</span
+        >
+
+        <div class="parent-overflow">
+          <div class="child-float">Child 1 float left</div>
+          <div class="child-float">Child 2 float left</div>
+          <div class="child-float">Child 3 float left</div>
+        </div>
+      </div>
+
+      <!-- Solution 2 - clearfix after -->
+      <div class="demo-box">
+        <span class="label"
+          >SOLUTION 2: clearfix using ::after pseudo element</span
+        >
+        <span class="instruction"
+          >Blue border parent uses clearfix hack to contain children</span
+        >
+
+        <div class="parent-clearfix">
+          <div class="child-float">Child 1 float left</div>
+          <div class="child-float">Child 2 float left</div>
+          <div class="child-float">Child 3 float left</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TWO COLUMN LAYOUT
+  =============================================== -->
+    <div class="section">
+      <h2>8. Two Column Layout Using Float</h2>
+      <p>Classic layout using float Main content on left sidebar on right</p>
+
+      <div class="demo-box">
+        <span class="label">
+          .col-main { float: left; width: 65%; } .col-sidebar { float: right;
+          width: 33%; } .footer { clear: both; }
+        </span>
+
+        <div class="two-col-container">
+          <!-- Main content column - float left -->
+          <div class="col-main">
+            <p class="col-heading">Main Content Area</p>
+            <p class="col-text">
+              This is the main content area floating to the left. It takes up
+              65% of the container width. This is where the main article or page
+              content goes. Float was used here to create a two column layout.
+              The sidebar appears to the right of this content.
+            </p>
+          </div>
+
+          <!-- Sidebar column - float right -->
+          <div class="col-sidebar">
+            <p class="col-heading-side">Sidebar</p>
+            <p class="col-text">
+              This sidebar floats to the right. It takes 33% of width. Used for
+              extra info links or ads.
+            </p>
+          </div>
+
+          <!-- Footer clears both -->
+          <div class="col-footer">
+            Footer - clear: both - appears below both columns
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       THREE COLUMN LAYOUT
+  =============================================== -->
+    <div class="section">
+      <h2>9. Three Column Layout Using Float</h2>
+      <p>
+        Three equal columns each taking 33.33% width All floated left to sit
+        side by side
+      </p>
+
+      <div class="demo-box">
+        <span class="label">.column { float: left; width: 33.33%; }</span>
+
+        <div class="three-col-container">
+          <div class="col-three col-three-1">
+            <strong>Column 1</strong>
+            <br /><br />
+            float: left width: 33.33%
+            <br /><br />
+            First column content goes here.
+          </div>
+
+          <div class="col-three col-three-2">
+            <strong>Column 2</strong>
+            <br /><br />
+            float: left width: 33.33%
+            <br /><br />
+            Second column content goes here.
+          </div>
+
+          <div class="col-three col-three-3">
+            <strong>Column 3</strong>
+            <br /><br />
+            float: left width: 33.33%
+            <br /><br />
+            Third column content goes here.
+          </div>
+
+          <div class="three-col-footer">
+            Footer - clear: both - below all three columns
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FLOAT FOR NAVIGATION
+  =============================================== -->
+    <div class="section">
+      <h2>10. Float for Navigation Menu</h2>
+      <p>
+        Float was used to create horizontal navigation bars List items floated
+        left sit side by side
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >li { float: left; } - creates horizontal nav menu</span
+        >
+
+        <div class="float-nav">
+          <!-- Logo floated right -->
+          <div class="nav-logo">MyWebsite</div>
+
+          <!-- Nav links floated left -->
+          <ul>
+            <li><a>Home</a></li>
+            <li><a>About</a></li>
+            <li><a>Gallery</a></li>
+            <li><a>Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       FLOAT NONE - RESET
+  =============================================== -->
+    <div class="section">
+      <h2>11. float: none - Reset Float</h2>
+      <p>
+        float: none removes any float that was applied Element goes back to
+        normal document flow
+      </p>
+
+      <div class="demo-box">
+        <span class="label">float: none; (default - no floating)</span>
+        <span class="instruction"
+          >Purple box has float: none so it stays in normal flow</span
+        >
+
+        <div class="none-container">
+          <div class="float-reset">
+            float: none
+            <br />
+            No floating
+            <br />
+            Normal flow
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

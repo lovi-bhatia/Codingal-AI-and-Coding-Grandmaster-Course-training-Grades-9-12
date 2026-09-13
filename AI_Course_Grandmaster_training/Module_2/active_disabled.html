@@ -1,0 +1,1157 @@
+<!--
+=======================================================
+  CSS ACTIVE AND DISABLED STATES - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains CSS Active and
+Disabled states using Internal CSS with simple
+and clear examples.
+
+=======================================================
+  WHAT ARE CSS STATES?
+=======================================================
+
+  CSS States = special conditions that an element
+  can be in at different times.
+
+  Elements on a webpage can be in different states:
+  - Normal    = default state no interaction
+  - Hover     = mouse is over the element
+  - Active    = element is being clicked right now
+  - Focus     = element is selected by keyboard
+  - Disabled  = element is turned off cannot be used
+  - Visited   = a link that has been clicked before
+
+  In this lesson we focus on:
+  ACTIVE   = what happens WHILE clicking
+  DISABLED = element is turned off
+
+  These are called PSEUDO-CLASSES in CSS
+  Pseudo = fake or acting like something
+
+=======================================================
+  PART 1 - WHAT IS :active?
+=======================================================
+
+  :active = a pseudo-class that applies styles
+  to an element ONLY while it is being CLICKED
+
+  It is active for a very short time:
+  - The moment mouse button is PRESSED DOWN
+  - Until the mouse button is RELEASED
+
+  After releasing the mouse the active state ends
+  and the element goes back to normal style
+
+  Basic Syntax:
+  element:active {
+    property: value;
+  }
+
+  Example:
+  button:active {
+    background-color: darkblue;
+    transform: scale(0.95);
+  }
+  When button is clicked it turns dark and shrinks
+
+  Works on:
+  - buttons
+  - links (a tags)
+  - divs
+  - any clickable element
+
+  Common uses of :active:
+  - Make button look PRESSED when clicked
+  - Change colour when clicked
+  - Shrink element to simulate pressing
+  - Add inset shadow to look pushed in
+
+  Memory Trick:
+  active = action = happening RIGHT NOW
+  Like pressing a physical button down
+
+=======================================================
+  WHAT CHANGES LOOK GOOD WITH :active?
+=======================================================
+
+  background-color change:
+  Shows button is being pressed by colour change
+
+  transform: scale(0.95):
+  Slightly shrinks element to look pressed in
+  0.95 = 95% of original size (slightly smaller)
+
+  transform: translateY(2px):
+  Moves element slightly DOWN to look pushed in
+  Simulates a physical button being pressed
+
+  box-shadow change:
+  Remove shadow or add inset shadow
+  When pressed the raised shadow disappears
+  This makes it look like button went down
+
+  color change:
+  Text colour changes when pressed
+
+  border change:
+  Border style or colour changes when pressed
+
+  COMBINING ACTIVE WITH TRANSITION:
+  Add transition to make the click feel smooth
+
+  button {
+    transition: all 0.1s ease;
+  }
+  button:active {
+    transform: scale(0.95);
+  }
+
+  The 0.1s makes the press feel snappy and quick
+
+=======================================================
+  PART 2 - WHAT IS disabled?
+=======================================================
+
+  disabled = an HTML attribute that TURNS OFF
+  an element so the user cannot interact with it
+
+  When an element is disabled:
+  - Cannot be clicked
+  - Cannot be typed into
+  - Cannot be selected
+  - Is usually shown as grayed out
+  - Is skipped when pressing Tab key
+
+  HOW TO ADD disabled IN HTML:
+  Just add the word disabled inside the tag
+
+  <button disabled>Click Me</button>
+  <input disabled>
+  <select disabled>
+
+  No value needed just write disabled
+
+  HOW TO STYLE disabled IN CSS:
+  Use the :disabled pseudo-class
+
+  element:disabled {
+    property: value;
+  }
+
+  Example:
+  button:disabled {
+    background-color: gray;
+    color: #aaa;
+    cursor: not-allowed;
+  }
+
+  cursor: not-allowed shows a NO symbol
+  when mouse hovers over disabled element
+
+  Works on form elements:
+  - button
+  - input
+  - textarea
+  - select
+  - fieldset
+  - option
+
+  Memory Trick:
+  disabled = turned off = cannot use
+  Like a broken button on a TV remote
+
+=======================================================
+  DIFFERENCE BETWEEN :active AND disabled
+=======================================================
+
+  :active
+  - Element IS working and can be used
+  - Style applies only WHILE being clicked
+  - Normal interaction just with click style
+  - Added in CSS using :active pseudo-class
+
+  disabled
+  - Element is TURNED OFF cannot be used
+  - Cannot be clicked or typed into at all
+  - Looks different to show it is unavailable
+  - Added in HTML using disabled attribute
+  - Styled in CSS using :disabled pseudo-class
+
+=======================================================
+  CURSOR PROPERTY
+=======================================================
+
+  cursor = changes the mouse pointer shape
+  when hovering over an element
+
+  Values:
+  default      - normal arrow cursor
+  pointer      - hand cursor (for links buttons)
+  not-allowed  - circle with line through it
+                 Shows user cannot interact
+  text         - text cursor (I beam)
+  wait         - loading spinner
+  move         - four arrow cursor
+  grab         - open hand cursor
+  crosshair    - plus sign cursor
+
+  Used with disabled:
+  cursor: not-allowed;
+  Shows user that element cannot be interacted with
+
+  Used with buttons and links:
+  cursor: pointer;
+  Shows user that element is clickable
+
+=======================================================
+  OPACITY PROPERTY
+=======================================================
+
+  opacity = controls how TRANSPARENT an element is
+
+  Values go from 0 to 1:
+  0   = completely invisible (transparent)
+  0.5 = half transparent half visible
+  1   = completely solid visible (default)
+
+  Used with disabled to make it look faded:
+  opacity: 0.5;
+  Makes disabled element look grayed out and faded
+
+  Example:
+  button:disabled {
+    opacity: 0.5;
+  }
+  Button looks 50% faded when disabled
+
+  Memory Trick:
+  opacity 0 = see through like glass
+  opacity 1 = solid like a wall
+
+=======================================================
+  POINTER-EVENTS PROPERTY
+=======================================================
+
+  pointer-events = controls if element can
+  receive mouse clicks or not
+
+  Values:
+  auto = normal (element responds to clicks)
+  none = element IGNORES all mouse events
+         Cannot be clicked hovered or selected
+
+  Used to make non-form elements unclickable:
+  .disabled-div {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  Note: disabled attribute only works on form elements
+  pointer-events: none works on ANY element
+
+  Memory Trick:
+  pointer-events: none = mouse does nothing on element
+  Like a glass wall you can see through but not touch
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  :active              → style while being clicked
+  :disabled            → style when disabled
+  disabled             → HTML attribute to disable
+  cursor               → changes mouse pointer shape
+  opacity              → controls transparency
+  pointer-events       → controls mouse interaction
+  transform            → move or resize on click
+  box-shadow           → shadow around element
+  background-color     → background colour
+  color                → text colour
+  border               → border around element
+  transition           → smooth state changes
+  border-radius        → rounded corners
+  padding              → space inside element
+  font-size            → text size
+  font-weight          → text thickness
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  State         How to write          When it applies
+  ----------    ------------------    ----------------
+  Active        element:active { }    While clicking
+  Disabled      element:disabled { }  When disabled
+  HTML disable  disabled attribute    Always disabled
+
+  Cursor Values     What it shows
+  ---------------   ---------------------------
+  pointer           Hand - element is clickable
+  not-allowed       No symbol - cannot interact
+  default           Normal arrow cursor
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  :active   = style applies WHILE element is clicked
+              Good for button press effects
+              Use transform and shadow changes
+
+  disabled  = element is TURNED OFF cannot be used
+              Add disabled in HTML tag
+              Style with :disabled in CSS
+              Use opacity cursor not-allowed
+
+  cursor: pointer     = shows element is clickable
+  cursor: not-allowed = shows element is disabled
+  opacity: 0.5        = makes element look faded
+  pointer-events: none = makes any element unclickable
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>Active and Disabled States</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        text-align: center;
+        color: #333;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+      }
+
+      h3 {
+        color: #555;
+        font-size: 18px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 85%;
+        border: 2px solid #ddd;
+        text-align: left;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      /* Label showing CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* Instruction text */
+      .instruction {
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* =============================================
+       BASE BUTTON STYLE
+       All buttons start with this style
+    =============================================== */
+
+      .btn {
+        padding: 12px 28px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 8px;
+        transition: all 0.15s ease;
+      }
+
+      /* =============================================
+       :active EXAMPLES
+    =============================================== */
+
+      /* Button 1 - colour change on active */
+      .btn-colour {
+        background-color: #1e90ff;
+        color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-colour:active {
+        background-color: #003366;
+        color: white;
+      }
+
+      /* Button 2 - scale shrink on active */
+      .btn-scale {
+        background-color: #32cd32;
+        color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-scale:active {
+        transform: scale(0.92);
+        background-color: #228b22;
+      }
+
+      /* Button 3 - translateY push down on active */
+      .btn-push {
+        background-color: #ff6347;
+        color: white;
+        box-shadow: 0px 6px 0px darkred;
+      }
+
+      .btn-push:active {
+        transform: translateY(4px);
+        box-shadow: 0px 2px 0px darkred;
+      }
+
+      /* Button 4 - inset shadow on active */
+      .btn-inset {
+        background-color: #9932cc;
+        color: white;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn-inset:active {
+        box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.4);
+        background-color: #7a1fa2;
+      }
+
+      /* Button 5 - border change on active */
+      .btn-border {
+        background-color: white;
+        color: #003366;
+        border: 3px solid #003366;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-border:active {
+        background-color: #003366;
+        color: white;
+        border: 3px solid #003366;
+      }
+
+      /* Button 6 - scale and colour change combined */
+      .btn-combined {
+        background-color: #ff8c00;
+        color: white;
+        box-shadow: 0px 5px 0px darkorange;
+      }
+
+      .btn-combined:active {
+        transform: scale(0.95) translateY(3px);
+        box-shadow: 0px 2px 0px darkorange;
+        background-color: #cc7000;
+      }
+
+      /* =============================================
+       :active ON LINKS
+    =============================================== */
+
+      .link-normal {
+        color: #1e90ff;
+        font-size: 20px;
+        text-decoration: underline;
+        cursor: pointer;
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 5px;
+      }
+
+      /* Link colour change on active */
+      .link-colour:active {
+        color: red;
+      }
+
+      /* Link background change on active */
+      .link-bg {
+        background-color: #f0f8ff;
+        border-radius: 5px;
+      }
+
+      .link-bg:active {
+        background-color: #003366;
+        color: white;
+      }
+
+      /* =============================================
+       :active ON DIV CARDS
+    =============================================== */
+
+      .card {
+        width: 180px;
+        height: 100px;
+        background-color: white;
+        border-radius: 12px;
+        border: 2px solid #4682b4;
+        display: inline-block;
+        margin: 15px;
+        padding: 15px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #003366;
+        text-align: center;
+        line-height: 70px;
+        transition: all 0.15s ease;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Card shrinks and shadow disappears on click */
+      .card:active {
+        transform: scale(0.95);
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        background-color: #e0f0ff;
+      }
+
+      /* =============================================
+       DISABLED BUTTON EXAMPLES
+    =============================================== */
+
+      /* Normal enabled button for comparison */
+      .btn-enabled {
+        background-color: #1e90ff;
+        color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-enabled:active {
+        transform: translateY(3px);
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        background-color: #003366;
+      }
+
+      /* Disabled style 1 - gray and faded */
+      .btn-disabled-gray:disabled {
+        background-color: #cccccc;
+        color: #888888;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      /* Disabled style 2 - opacity faded */
+      .btn-disabled-opacity:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      /* Disabled style 3 - different border */
+      .btn-disabled-border {
+        background-color: white;
+        color: #003366;
+        border: 3px solid #003366;
+      }
+
+      .btn-disabled-border:disabled {
+        background-color: white;
+        color: #aaaaaa;
+        border: 3px solid #cccccc;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      /* Disabled style 4 - strikethrough text look */
+      .btn-disabled-strike:disabled {
+        background-color: #f5f5f5;
+        color: #aaaaaa;
+        cursor: not-allowed;
+        text-decoration: line-through;
+        box-shadow: none;
+      }
+
+      /* =============================================
+       DISABLED INPUT EXAMPLES
+    =============================================== */
+
+      /* Base input style */
+      .input-field {
+        padding: 10px 15px;
+        font-size: 16px;
+        border: 2px solid #4682b4;
+        border-radius: 8px;
+        margin: 8px;
+        width: 250px;
+        outline: none;
+        transition: all 0.2s ease;
+      }
+
+      /* Enabled input active glow */
+      .input-field:active {
+        border-color: #1e90ff;
+        box-shadow: 0px 0px 8px rgba(30, 144, 255, 0.4);
+      }
+
+      /* Disabled input - gray and faded */
+      .input-field:disabled {
+        background-color: #eeeeee;
+        color: #aaaaaa;
+        border-color: #cccccc;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      /* =============================================
+       DISABLED TEXTAREA EXAMPLE
+    =============================================== */
+
+      .textarea-field {
+        padding: 10px 15px;
+        font-size: 16px;
+        border: 2px solid #4682b4;
+        border-radius: 8px;
+        margin: 8px;
+        width: 300px;
+        height: 100px;
+        outline: none;
+        resize: vertical;
+        transition: all 0.2s ease;
+      }
+
+      .textarea-field:disabled {
+        background-color: #eeeeee;
+        color: #aaaaaa;
+        border-color: #cccccc;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      /* =============================================
+       DISABLED DIV USING POINTER-EVENTS
+       For non-form elements we use pointer-events
+    =============================================== */
+
+      .div-enabled {
+        width: 200px;
+        height: 80px;
+        background-color: #1e90ff;
+        color: white;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 10px;
+        line-height: 80px;
+        text-align: center;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .div-enabled:active {
+        transform: scale(0.95);
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Div disabled using pointer-events: none */
+      .div-disabled {
+        width: 200px;
+        height: 80px;
+        background-color: #cccccc;
+        color: #888888;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 10px;
+        line-height: 80px;
+        text-align: center;
+        font-weight: bold;
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.6;
+      }
+
+      /* =============================================
+       REAL WORLD EXAMPLE - FORM
+    =============================================== */
+
+      .form-box {
+        background-color: white;
+        border: 2px solid #ddd;
+        border-radius: 15px;
+        padding: 25px;
+        max-width: 400px;
+        margin: 10px auto;
+        text-align: left;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: bold;
+        color: #003366;
+        margin-bottom: 5px;
+        margin-top: 15px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 15px;
+        border: 2px solid #4682b4;
+        border-radius: 8px;
+        outline: none;
+        transition: all 0.2s ease;
+      }
+
+      .form-input:disabled {
+        background-color: #eeeeee;
+        color: #aaaaaa;
+        border-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      .form-submit {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #1e90ff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: all 0.15s ease;
+        box-shadow: 0px 4px 0px #003366;
+      }
+
+      .form-submit:active {
+        transform: translateY(4px);
+        box-shadow: 0px 0px 0px #003366;
+        background-color: #003366;
+      }
+
+      .form-submit:disabled {
+        background-color: #cccccc;
+        color: #888888;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Active and Disabled States</h1>
+
+    <!-- ============================================
+       :active ON BUTTONS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>1. :active on Buttons</h2>
+      <p>
+        Style applies ONLY while the button is being clicked Click and hold the
+        buttons to see the effect
+      </p>
+
+      <!-- Colour change -->
+      <div class="demo-box">
+        <span class="label">btn:active { background-color: darkblue; }</span>
+        <span class="instruction">Click and hold to see colour change</span>
+        <button class="btn btn-colour">Colour Change</button>
+      </div>
+
+      <!-- Scale shrink -->
+      <div class="demo-box">
+        <span class="label">btn:active { transform: scale(0.92); }</span>
+        <span class="instruction">Click and hold to see button shrink</span>
+        <button class="btn btn-scale">Scale Shrink</button>
+      </div>
+
+      <!-- Push down -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:active { transform: translateY(4px); box-shadow: smaller; }</span
+        >
+        <span class="instruction">Click and hold to see button push down</span>
+        <button class="btn btn-push">Push Down Effect</button>
+      </div>
+
+      <!-- Inset shadow -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:active { box-shadow: inset 3px 3px 8px rgba(0,0,0,0.4); }</span
+        >
+        <span class="instruction"
+          >Click and hold to see inset shadow appear</span
+        >
+        <button class="btn btn-inset">Inset Shadow</button>
+      </div>
+
+      <!-- Border change -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:active { background-color: #003366; color: white; }</span
+        >
+        <span class="instruction"
+          >Click and hold to see button fill with colour</span
+        >
+        <button class="btn btn-border">Border Button</button>
+      </div>
+
+      <!-- Combined effect -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:active { transform: scale(0.95) translateY(3px); box-shadow:
+          smaller; }</span
+        >
+        <span class="instruction">Click and hold to see combined effects</span>
+        <button class="btn btn-combined">Combined Effect</button>
+      </div>
+    </div>
+
+    <!-- ============================================
+       :active ON LINKS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. :active on Links</h2>
+      <p>
+        Links also support :active state Click and hold the links to see the
+        effect
+      </p>
+
+      <!-- Link colour change -->
+      <div class="demo-box">
+        <span class="label">a:active { color: red; }</span>
+        <span class="instruction"
+          >Click and hold to see colour change to red</span
+        >
+        <br />
+        <a class="link-normal link-colour">Click and hold this link</a>
+      </div>
+
+      <!-- Link background change -->
+      <div class="demo-box">
+        <span class="label"
+          >a:active { background-color: #003366; color: white; }</span
+        >
+        <span class="instruction">Click and hold to see background change</span>
+        <br />
+        <a class="link-normal link-bg">Click and hold this link</a>
+      </div>
+    </div>
+
+    <!-- ============================================
+       :active ON CARDS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. :active on Div Cards</h2>
+      <p>
+        Any element can have :active state Click and hold the cards to see the
+        effect
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >div:active { transform: scale(0.95); box-shadow: smaller; }</span
+        >
+        <span class="instruction">Click and hold the cards below</span>
+        <br />
+
+        <div class="card">Card One</div>
+        <div class="card">Card Two</div>
+        <div class="card">Card Three</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       DISABLED BUTTONS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>4. Disabled Buttons</h2>
+      <p>
+        Add disabled in HTML tag to turn off the button Style with :disabled in
+        CSS Disabled buttons CANNOT be clicked at all
+      </p>
+
+      <!-- Enabled vs disabled comparison -->
+      <div class="demo-box">
+        <span class="label">Enabled button vs Disabled button comparison</span>
+        <span class="instruction"
+          >Left button works - Right button is disabled</span
+        >
+        <br />
+        <button class="btn btn-enabled">Enabled Button</button>
+        <button class="btn btn-enabled" disabled>Disabled Button</button>
+      </div>
+
+      <!-- Gray disabled style -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:disabled { background-color: #ccc; color: #888; cursor:
+          not-allowed; }</span
+        >
+        <br />
+        <button class="btn btn-colour btn-disabled-gray">Enabled</button>
+        <button class="btn btn-colour btn-disabled-gray" disabled>
+          Gray Disabled
+        </button>
+      </div>
+
+      <!-- Opacity disabled style -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:disabled { opacity: 0.4; cursor: not-allowed; }</span
+        >
+        <br />
+        <button class="btn btn-scale">Enabled</button>
+        <button class="btn btn-scale btn-disabled-opacity" disabled>
+          Opacity Disabled
+        </button>
+      </div>
+
+      <!-- Border button disabled -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:disabled { color: #aaa; border-color: #ccc; cursor: not-allowed;
+          }</span
+        >
+        <br />
+        <button class="btn btn-disabled-border">Enabled</button>
+        <button class="btn btn-disabled-border" disabled>
+          Border Disabled
+        </button>
+      </div>
+
+      <!-- Strikethrough disabled -->
+      <div class="demo-box">
+        <span class="label"
+          >btn:disabled { text-decoration: line-through; color: #aaa; }</span
+        >
+        <br />
+        <button class="btn btn-push">Enabled</button>
+        <button class="btn btn-push btn-disabled-strike" disabled>
+          Strike Disabled
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================
+       DISABLED INPUTS SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>5. Disabled Input Fields</h2>
+      <p>
+        Input fields can also be disabled Disabled inputs cannot be typed into
+      </p>
+
+      <!-- Enabled input vs disabled input -->
+      <div class="demo-box">
+        <span class="label"
+          >input:disabled { background-color: #eee; cursor: not-allowed;
+          opacity: 0.7; }</span
+        >
+        <span class="instruction"
+          >Top input is enabled - Bottom input is disabled</span
+        >
+        <br />
+        <input
+          class="input-field"
+          type="text"
+          placeholder="Enabled - you can type here"
+        />
+        <br />
+        <input
+          class="input-field"
+          type="text"
+          placeholder="Disabled - you cannot type here"
+          disabled
+        />
+      </div>
+
+      <!-- Different input types disabled -->
+      <div class="demo-box">
+        <span class="label">Different input types with disabled attribute</span>
+        <br />
+        <input class="input-field" type="text" value="Enabled text input" />
+        <input
+          class="input-field"
+          type="text"
+          value="Disabled text input"
+          disabled
+        />
+        <br />
+        <input
+          class="input-field"
+          type="email"
+          placeholder="Enabled email input"
+        />
+        <input
+          class="input-field"
+          type="email"
+          placeholder="Disabled email input"
+          disabled
+        />
+        <br />
+        <input
+          class="input-field"
+          type="password"
+          placeholder="Enabled password"
+        />
+        <input
+          class="input-field"
+          type="password"
+          placeholder="Disabled password"
+          disabled
+        />
+      </div>
+    </div>
+
+    <!-- ============================================
+       DISABLED TEXTAREA SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>6. Disabled Textarea</h2>
+      <p>
+        Textarea can also be disabled Disabled textarea cannot be typed into
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >textarea:disabled { background-color: #eee; cursor: not-allowed;
+          }</span
+        >
+        <br />
+        <textarea
+          class="textarea-field"
+          placeholder="Enabled textarea - you can type here"
+        ></textarea>
+        <textarea
+          class="textarea-field"
+          placeholder="Disabled textarea - you cannot type here"
+          disabled
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- ============================================
+       DISABLED DIV USING POINTER-EVENTS
+  =============================================== -->
+    <div class="section">
+      <h2>7. Disabled Div using pointer-events</h2>
+      <p>
+        Div and other non-form elements cannot use the disabled attribute in
+        HTML. We use pointer-events: none in CSS instead
+      </p>
+
+      <div class="demo-box">
+        <span class="label">
+          .div-disabled { pointer-events: none; opacity: 0.6; cursor:
+          not-allowed; }
+        </span>
+        <span class="instruction"
+          >Left div is clickable - Right div is disabled</span
+        >
+        <br />
+
+        <div class="div-enabled">Enabled Div</div>
+        <div class="div-disabled">Disabled Div</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       REAL WORLD EXAMPLE - FORM
+  =============================================== -->
+    <div class="section">
+      <h2>8. Real World Example - Form with Active and Disabled</h2>
+      <p>A registration form showing both active and disabled states</p>
+
+      <div class="demo-box">
+        <span class="label"
+          >Real form example with enabled and disabled fields</span
+        >
+
+        <!-- Form 1 - All enabled -->
+        <div class="form-box">
+          <h3 style="color: #003366; text-align: center">
+            Active Form - Click Submit Button
+          </h3>
+
+          <label class="form-label">Full Name</label>
+          <input class="form-input" type="text" placeholder="Enter your name" />
+
+          <label class="form-label">Email</label>
+          <input
+            class="form-input"
+            type="email"
+            placeholder="Enter your email"
+          />
+
+          <label class="form-label">Phone (Auto Filled - Disabled)</label>
+          <input
+            class="form-input"
+            type="text"
+            value="+91 98765 43210"
+            disabled
+          />
+
+          <button class="form-submit">Submit Form</button>
+        </div>
+
+        <!-- Form 2 - Submit disabled -->
+        <div class="form-box">
+          <h3 style="color: #003366; text-align: center">
+            Disabled Submit Button Form
+          </h3>
+
+          <label class="form-label">Full Name</label>
+          <input class="form-input" type="text" placeholder="Enter your name" />
+
+          <label class="form-label">Email</label>
+          <input
+            class="form-input"
+            type="email"
+            placeholder="Enter your email"
+          />
+
+          <label class="form-label">Phone</label>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="Enter your phone"
+          />
+
+          <button class="form-submit" disabled>Submit Disabled</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

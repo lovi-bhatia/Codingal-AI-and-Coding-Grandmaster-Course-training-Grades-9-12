@@ -1,0 +1,940 @@
+<!--
+=======================================================
+  TEXT SHADOW, TEXT INDENT, BOX SHADOW - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains CSS Text Shadow
+Text Indent and Box Shadow properties using
+Internal CSS with simple and clear examples.
+
+=======================================================
+  PART 1 - WHAT IS TEXT SHADOW?
+=======================================================
+
+  Text Shadow = adds a SHADOW behind the text
+  Makes text look 3D lifted or glowing
+
+  Basic Syntax:
+  text-shadow: horizontal vertical blur colour;
+
+  It has 4 values:
+
+  VALUE 1 - Horizontal Offset
+  -------------------------------------------------------
+  Controls shadow position LEFT or RIGHT of text
+  Positive value = shadow goes to the RIGHT
+  Negative value = shadow goes to the LEFT
+  Unit = px (pixels)
+  Example: 3px means shadow is 3px to the right
+
+  VALUE 2 - Vertical Offset
+  -------------------------------------------------------
+  Controls shadow position UP or DOWN of text
+  Positive value = shadow goes DOWNWARD
+  Negative value = shadow goes UPWARD
+  Unit = px (pixels)
+  Example: 3px means shadow is 3px downward
+
+  VALUE 3 - Blur Radius (optional)
+  -------------------------------------------------------
+  Controls how BLURRY or SHARP the shadow is
+  0px   = very sharp shadow no blur at all
+  5px   = slightly blurry shadow
+  10px  = very blurry soft shadow
+  20px  = extremely blurry glow effect
+  Higher value = more blurry and spread out
+  Example: 4px means shadow has 4px blur
+
+  VALUE 4 - Shadow Colour
+  -------------------------------------------------------
+  Controls the COLOUR of the shadow
+  Can use any colour format:
+  Colour name : gray, black, red
+  Hex code    : #333333
+  RGB         : rgb(0, 0, 0)
+  RGBA        : rgba(0, 0, 0, 0.5) with transparency
+
+  FULL EXAMPLE:
+  text-shadow: 3px 3px 5px gray;
+  3px right + 3px down + 5px blur + gray colour
+
+  MULTIPLE SHADOWS:
+  You can add MORE THAN ONE shadow
+  Separate them with a comma
+
+  text-shadow: 2px 2px red, -2px -2px blue;
+  Adds red shadow on one side and blue on other
+
+  Memory Trick:
+  Think of a torch shining on text from one side
+  The shadow falls on the opposite side
+
+=======================================================
+  TEXT SHADOW EFFECTS
+=======================================================
+
+  Simple Shadow:
+  text-shadow: 2px 2px 4px gray;
+  Basic shadow slightly right and down
+
+  Dark Shadow:
+  text-shadow: 3px 3px 0px #333;
+  No blur very sharp dark shadow
+
+  Coloured Shadow:
+  text-shadow: 3px 3px 0px red;
+  Bright coloured shadow
+
+  Glow Effect:
+  text-shadow: 0px 0px 10px yellow;
+  0 horizontal 0 vertical = shadow directly behind
+  High blur = creates glowing effect
+
+  Neon Effect:
+  text-shadow: 0px 0px 5px cyan,
+               0px 0px 15px cyan,
+               0px 0px 30px cyan;
+  Multiple glows create strong neon light effect
+
+  3D Effect:
+  text-shadow: 1px 1px #ccc,
+               2px 2px #ccc,
+               3px 3px #ccc,
+               4px 4px #ccc;
+  Stacked shadows create 3D depth effect
+
+  Emboss Effect:
+  text-shadow: -1px -1px white, 1px 1px #333;
+  Light from top left dark from bottom right
+
+=======================================================
+  PART 2 - WHAT IS TEXT INDENT?
+=======================================================
+
+  Text Indent = adds EMPTY SPACE at the very
+  beginning of the FIRST LINE of a paragraph.
+
+  Like pressing the TAB key before starting
+  to write in a notebook or Word document.
+
+  Only the FIRST LINE gets the indent
+  All other lines stay at normal position
+
+  Basic Syntax:
+  text-indent: value;
+
+  Units:
+  px  - fixed pixel amount
+        Example: text-indent: 40px;
+
+  em  - relative to font size
+        Example: text-indent: 2em;
+        If font is 16px then 2em = 32px
+
+  %   - percentage of containing element width
+        Example: text-indent: 5%;
+
+  Positive value = indent moves to the RIGHT
+  Negative value = hanging indent moves to LEFT
+                   First line sticks out to left
+                   This is called hanging indent
+
+  EXAMPLE POSITIVE:
+  text-indent: 50px;
+  paragraph text starts here
+  this line is at normal position
+  this line is also at normal position
+
+  EXAMPLE NEGATIVE (HANGING INDENT):
+  text-indent: -30px;
+  first line sticks out to left side
+      rest of lines are at normal position
+      this is used in bibliography lists
+
+  Memory Trick:
+  Indent = push the first line in
+  Like indenting the first line in an essay
+
+=======================================================
+  PART 3 - WHAT IS BOX SHADOW?
+=======================================================
+
+  Box Shadow = adds a SHADOW around an HTML element
+  The shadow follows the shape of the element box
+
+  Similar to text-shadow but for the whole ELEMENT
+  not just the text inside it
+
+  Basic Syntax:
+  box-shadow: horizontal vertical blur colour;
+
+  OR with spread:
+  box-shadow: horizontal vertical blur spread colour;
+
+  It has 5 values:
+
+  VALUE 1 - Horizontal Offset
+  -------------------------------------------------------
+  Shadow position LEFT or RIGHT of element
+  Positive = shadow to the RIGHT
+  Negative = shadow to the LEFT
+  Example: 5px means shadow 5px to the right
+
+  VALUE 2 - Vertical Offset
+  -------------------------------------------------------
+  Shadow position UP or DOWN of element
+  Positive = shadow DOWNWARD
+  Negative = shadow UPWARD
+  Example: 5px means shadow 5px downward
+
+  VALUE 3 - Blur Radius (optional)
+  -------------------------------------------------------
+  How BLURRY the shadow edges are
+  0px  = sharp edges no blur
+  5px  = slightly blurry
+  15px = very soft blurry shadow
+  Example: 10px means 10px blur
+
+  VALUE 4 - Spread Radius (optional)
+  -------------------------------------------------------
+  How much the shadow EXPANDS or SHRINKS
+  Positive = shadow grows bigger than element
+  Negative = shadow shrinks smaller than element
+  0px = shadow same size as element (default)
+  Example: 5px means shadow spreads 5px outward
+
+  VALUE 5 - Shadow Colour
+  -------------------------------------------------------
+  Colour of the shadow
+  rgba() recommended to control transparency
+  Example: rgba(0, 0, 0, 0.3) = semi-transparent black
+
+  FULL EXAMPLE:
+  box-shadow: 5px 5px 10px 2px rgba(0,0,0,0.3);
+  5px right + 5px down + 10px blur +
+  2px spread + semi-transparent black
+
+  INSET SHADOW:
+  Add the word inset at the beginning
+  Shadow appears INSIDE the element instead of outside
+  box-shadow: inset 3px 3px 5px gray;
+
+  MULTIPLE SHADOWS:
+  Separate with comma just like text-shadow
+  box-shadow: 3px 3px red, -3px -3px blue;
+
+  Memory Trick:
+  Box shadow = shadow of the whole box or card
+  Like a card floating above a table casting shadow
+
+=======================================================
+  BOX SHADOW EFFECTS
+=======================================================
+
+  Simple Shadow:
+  box-shadow: 3px 3px 5px gray;
+  Basic shadow to the right and down
+
+  Deep Shadow:
+  box-shadow: 8px 8px 15px rgba(0,0,0,0.4);
+  Darker and more spread out shadow
+
+  Soft Shadow (Card Effect):
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+  0 horizontal keeps shadow centered below
+  Creates floating card look used in websites
+
+  Glow Effect:
+  box-shadow: 0px 0px 15px 5px cyan;
+  0 offsets + high blur + spread = glowing border
+
+  Inset Shadow:
+  box-shadow: inset 3px 3px 8px rgba(0,0,0,0.3);
+  Shadow goes INSIDE the box looks pressed in
+
+  Multiple Shadows:
+  box-shadow: 3px 3px 5px red, -3px -3px 5px blue;
+  Red shadow one side blue shadow other side
+
+  3D Button Effect:
+  box-shadow: 0px 6px 0px darkblue;
+  Creates a 3D raised button effect
+
+=======================================================
+  DIFFERENCE BETWEEN TEXT SHADOW AND BOX SHADOW
+=======================================================
+
+  text-shadow:
+  - Shadow is behind the TEXT ONLY
+  - Follows the shape of letters
+  - Used on text elements like p h1 h2
+
+  box-shadow:
+  - Shadow is around the whole ELEMENT BOX
+  - Follows the rectangular shape of the element
+  - Used on div cards buttons images etc
+  - Has extra SPREAD value that text-shadow lacks
+  - Has INSET option that text-shadow lacks
+
+=======================================================
+  CSS PROPERTIES QUICK REFERENCE TABLE
+=======================================================
+
+  Property       Syntax                        Used For
+  -----------    --------------------------    ----------
+  text-shadow    h v blur colour               Text only
+  text-indent    px or em or %                 First line
+  box-shadow     h v blur spread colour        Whole box
+  box-shadow     inset h v blur colour         Inside box
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  text-shadow  = shadow BEHIND the text
+                 values: horizontal vertical blur colour
+                 Multiple shadows separated by comma
+
+  text-indent  = empty space at START of first line
+                 Positive = indent right
+                 Negative = hanging indent left
+
+  box-shadow   = shadow AROUND the whole element
+                 values: horizontal vertical blur
+                         spread colour
+                 inset keyword = shadow goes inside
+                 Multiple shadows separated by comma
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>Text Shadow, Text Indent, Box Shadow</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 10px;
+        padding: 5px;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        text-align: center;
+        color: #333;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 85%;
+        border: 2px solid #ddd;
+        text-align: left;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      /* Label showing CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* =============================================
+       TEXT SHADOW EXAMPLES
+    =============================================== */
+
+      /* Simple shadow - right and down */
+      .tshadow-simple {
+        font-size: 30px;
+        font-weight: bold;
+        color: #003366;
+        text-shadow: 3px 3px 4px gray;
+      }
+
+      /* Dark sharp shadow - no blur */
+      .tshadow-dark {
+        font-size: 30px;
+        font-weight: bold;
+        color: #1e90ff;
+        text-shadow: 4px 4px 0px #333;
+      }
+
+      /* Coloured shadow */
+      .tshadow-colour {
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+        text-shadow: 3px 3px 0px darkred;
+        background-color: #ff6347;
+        padding: 10px;
+        border-radius: 10px;
+        display: inline-block;
+      }
+
+      /* Left side shadow - negative horizontal */
+      .tshadow-left {
+        font-size: 30px;
+        font-weight: bold;
+        color: #003366;
+        text-shadow: -4px 4px 4px gray;
+      }
+
+      /* Up side shadow - negative vertical */
+      .tshadow-up {
+        font-size: 30px;
+        font-weight: bold;
+        color: #003366;
+        text-shadow: 3px -4px 4px gray;
+      }
+
+      /* Glow effect - 0 offset high blur */
+      .tshadow-glow {
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+        text-shadow:
+          0px 0px 15px yellow,
+          0px 0px 30px yellow;
+        background-color: #222;
+        padding: 15px;
+        border-radius: 10px;
+        display: inline-block;
+      }
+
+      /* Neon effect - multiple cyan glows */
+      .tshadow-neon {
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+        text-shadow:
+          0px 0px 5px cyan,
+          0px 0px 15px cyan,
+          0px 0px 30px cyan;
+        background-color: #111;
+        padding: 15px;
+        border-radius: 10px;
+        display: inline-block;
+      }
+
+      /* 3D effect - stacked shadows */
+      .tshadow-3d {
+        font-size: 36px;
+        font-weight: bold;
+        color: #003366;
+        text-shadow:
+          1px 1px #aaa,
+          2px 2px #aaa,
+          3px 3px #aaa,
+          4px 4px #aaa,
+          5px 5px #aaa;
+      }
+
+      /* Emboss effect - light and dark shadows */
+      .tshadow-emboss {
+        font-size: 36px;
+        font-weight: bold;
+        color: #888;
+        text-shadow:
+          -1px -1px white,
+          1px 1px #444;
+        background-color: #aaa;
+        padding: 15px;
+        border-radius: 10px;
+        display: inline-block;
+      }
+
+      /* Multiple colour shadows */
+      .tshadow-multi {
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+        text-shadow:
+          3px 3px 0px red,
+          -3px -3px 0px blue;
+      }
+
+      /* Fire effect */
+      .tshadow-fire {
+        font-size: 36px;
+        font-weight: bold;
+        color: white;
+        text-shadow:
+          0px 0px 5px yellow,
+          0px -5px 10px orange,
+          0px -10px 20px red;
+        background-color: #111;
+        padding: 15px;
+        border-radius: 10px;
+        display: inline-block;
+      }
+
+      /* =============================================
+       TEXT INDENT EXAMPLES
+    =============================================== */
+
+      /* Positive indent - first line pushed right */
+      .indent-30 {
+        text-indent: 30px;
+        font-size: 18px;
+        text-align: left;
+      }
+
+      .indent-60 {
+        text-indent: 60px;
+        font-size: 18px;
+        text-align: left;
+      }
+
+      .indent-100 {
+        text-indent: 100px;
+        font-size: 18px;
+        text-align: left;
+      }
+
+      /* Em unit indent */
+      .indent-em {
+        text-indent: 3em;
+        font-size: 18px;
+        text-align: left;
+      }
+
+      /* Percentage indent */
+      .indent-percent {
+        text-indent: 5%;
+        font-size: 18px;
+        text-align: left;
+      }
+
+      /* Negative indent - hanging indent */
+      .indent-negative {
+        text-indent: -30px;
+        padding-left: 30px;
+        font-size: 18px;
+        text-align: left;
+      }
+
+      /* =============================================
+       BOX SHADOW EXAMPLES
+    =============================================== */
+
+      /* Box used for all box shadow demos */
+      .shadow-box {
+        width: 220px;
+        height: 120px;
+        background-color: white;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 20px;
+        padding: 15px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #003366;
+        vertical-align: top;
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      /* Simple shadow - right and down */
+      .bshadow-simple {
+        box-shadow: 5px 5px 8px gray;
+      }
+
+      /* Dark deep shadow */
+      .bshadow-dark {
+        box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Soft card shadow - used in modern websites */
+      .bshadow-card {
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Left side shadow - negative horizontal */
+      .bshadow-left {
+        box-shadow: -6px 6px 10px gray;
+      }
+
+      /* Top shadow - negative vertical */
+      .bshadow-top {
+        box-shadow: 0px -6px 10px gray;
+      }
+
+      /* Spread shadow - grows bigger */
+      .bshadow-spread {
+        box-shadow: 0px 0px 10px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Negative spread - shadow shrinks */
+      .bshadow-spread-neg {
+        box-shadow: 5px 5px 10px -3px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Glow effect - coloured spread shadow */
+      .bshadow-glow {
+        box-shadow: 0px 0px 15px 5px cyan;
+        background-color: #003366;
+        color: white;
+      }
+
+      /* Red glow */
+      .bshadow-glow-red {
+        box-shadow: 0px 0px 15px 5px red;
+      }
+
+      /* Inset shadow - inside the box */
+      .bshadow-inset {
+        box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Inset from all sides */
+      .bshadow-inset-all {
+        box-shadow: inset 0px 0px 15px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Multiple shadows */
+      .bshadow-multi {
+        box-shadow:
+          5px 5px 8px red,
+          -5px -5px 8px blue;
+      }
+
+      /* 3D button effect */
+      .bshadow-3d {
+        box-shadow: 0px 6px 0px #003366;
+        background-color: #1e90ff;
+        color: white;
+        cursor: pointer;
+      }
+
+      /* Layered shadow - depth effect */
+      .bshadow-layered {
+        box-shadow:
+          2px 2px 5px rgba(0, 0, 0, 0.1),
+          5px 5px 10px rgba(0, 0, 0, 0.1),
+          10px 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      /* No shadow for comparison */
+      .bshadow-none {
+        border: 2px solid #ddd;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Text Shadow, Text Indent and Box Shadow</h1>
+
+    <!-- ============================================
+       TEXT SHADOW SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>1. text-shadow</h2>
+      <p>
+        Adds a shadow BEHIND the text Syntax: text-shadow: horizontal vertical
+        blur colour;
+      </p>
+
+      <!-- Simple shadow -->
+      <div class="demo-box">
+        <span class="label">text-shadow: 3px 3px 4px gray;</span>
+        <p class="tshadow-simple">Simple Shadow Effect</p>
+      </div>
+
+      <!-- Dark sharp shadow -->
+      <div class="demo-box">
+        <span class="label">text-shadow: 4px 4px 0px #333; (no blur)</span>
+        <p class="tshadow-dark">Dark Sharp Shadow</p>
+      </div>
+
+      <!-- Coloured shadow -->
+      <div class="demo-box">
+        <span class="label">text-shadow: 3px 3px 0px darkred;</span>
+        <p class="tshadow-colour">Coloured Shadow Effect</p>
+      </div>
+
+      <!-- Left side shadow -->
+      <div class="demo-box">
+        <span class="label"
+          >text-shadow: -4px 4px 4px gray; (negative horizontal)</span
+        >
+        <p class="tshadow-left">Shadow on Left Side</p>
+      </div>
+
+      <!-- Up side shadow -->
+      <div class="demo-box">
+        <span class="label"
+          >text-shadow: 3px -4px 4px gray; (negative vertical)</span
+        >
+        <p class="tshadow-up">Shadow Goes Upward</p>
+      </div>
+
+      <!-- Glow effect -->
+      <div class="demo-box">
+        <span class="label"
+          >text-shadow: 0px 0px 15px yellow, 0px 0px 30px yellow;</span
+        >
+        <p class="tshadow-glow">Yellow Glow Effect</p>
+      </div>
+
+      <!-- Neon effect -->
+      <div class="demo-box">
+        <span class="label"
+          >text-shadow: 0px 0px 5px cyan, 0px 0px 15px cyan, 0px 0px 30px
+          cyan;</span
+        >
+        <p class="tshadow-neon">Neon Cyan Effect</p>
+      </div>
+
+      <!-- 3D effect -->
+      <div class="demo-box">
+        <span class="label"
+          >text-shadow: 1px 1px, 2px 2px, 3px 3px, 4px 4px, 5px 5px #aaa;</span
+        >
+        <p class="tshadow-3d">3D Depth Effect</p>
+      </div>
+
+      <!-- Emboss effect -->
+      <div class="demo-box">
+        <span class="label">text-shadow: -1px -1px white, 1px 1px #444;</span>
+        <p class="tshadow-emboss">Emboss Effect</p>
+      </div>
+
+      <!-- Multiple colour shadows -->
+      <div class="demo-box">
+        <span class="label"
+          >text-shadow: 3px 3px 0px red, -3px -3px 0px blue;</span
+        >
+        <p class="tshadow-multi">Multiple Colour Shadows</p>
+      </div>
+
+      <!-- Fire effect -->
+      <div class="demo-box">
+        <span class="label"
+          >text-shadow: yellow orange red layers stacked upward;</span
+        >
+        <p class="tshadow-fire">Fire Glow Effect</p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       TEXT INDENT SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>2. text-indent</h2>
+      <p>
+        Adds empty space at the START of the first line only Like pressing Tab
+        before writing a paragraph
+      </p>
+
+      <!-- No indent for comparison -->
+      <div class="demo-box">
+        <span class="label">text-indent: 0px; (no indent - default)</span>
+        <p>
+          This paragraph has no indent. The first line starts at the same
+          position as all other lines. All lines are aligned to the left edge of
+          the box.
+        </p>
+      </div>
+
+      <!-- 30px indent -->
+      <div class="demo-box">
+        <span class="label">text-indent: 30px;</span>
+        <p class="indent-30">
+          This paragraph has 30px indent. Only the first line is pushed 30px to
+          the right. The second line goes back to the normal left position as
+          you can see.
+        </p>
+      </div>
+
+      <!-- 60px indent -->
+      <div class="demo-box">
+        <span class="label">text-indent: 60px;</span>
+        <p class="indent-60">
+          This paragraph has 60px indent. The first line is pushed quite far to
+          the right. Remaining lines are at the normal left position without any
+          indent.
+        </p>
+      </div>
+
+      <!-- 100px indent -->
+      <div class="demo-box">
+        <span class="label">text-indent: 100px;</span>
+        <p class="indent-100">
+          This paragraph has 100px indent. The first line starts very far to the
+          right. Only the first line is affected all other lines are at normal
+          position.
+        </p>
+      </div>
+
+      <!-- Em unit -->
+      <div class="demo-box">
+        <span class="label">text-indent: 3em; (3 times the font size)</span>
+        <p class="indent-em">
+          This paragraph uses em unit for indent. 3em means 3 times the font
+          size. If font is 18px then indent is 54px. Em is relative to the font
+          size used.
+        </p>
+      </div>
+
+      <!-- Percentage unit -->
+      <div class="demo-box">
+        <span class="label"
+          >text-indent: 5%; (5 percent of container width)</span
+        >
+        <p class="indent-percent">
+          This paragraph uses percentage for indent. 5% means 5 percent of the
+          width of this container box. This is useful for responsive designs on
+          any screen size.
+        </p>
+      </div>
+
+      <!-- Negative indent -->
+      <div class="demo-box">
+        <span class="label"
+          >text-indent: -30px; (hanging indent - first line sticks out)</span
+        >
+        <p class="indent-negative">
+          This paragraph has a negative indent called hanging indent. The first
+          line sticks out to the left side while all other lines are at the
+          normal position. This style is used in bibliography and reference
+          lists.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+       BOX SHADOW SECTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. box-shadow</h2>
+      <p>
+        Adds a shadow around the WHOLE element box Syntax: box-shadow:
+        horizontal vertical blur spread colour;
+      </p>
+
+      <!-- No shadow for comparison -->
+      <div class="shadow-box bshadow-none">
+        No Shadow
+        <br />border only
+      </div>
+
+      <!-- Simple shadow -->
+      <div class="shadow-box bshadow-simple">
+        Simple Shadow
+        <br />5px 5px 8px gray
+      </div>
+
+      <!-- Dark shadow -->
+      <div class="shadow-box bshadow-dark">
+        Dark Shadow
+        <br />8px 8px 15px black
+      </div>
+
+      <!-- Soft card shadow -->
+      <div class="shadow-box bshadow-card">
+        Soft Card Shadow
+        <br />0px 4px 15px rgba <br />Used in websites
+      </div>
+
+      <!-- Left side shadow -->
+      <div class="shadow-box bshadow-left">
+        Left Shadow
+        <br />-6px 6px 10px gray <br />Negative horizontal
+      </div>
+
+      <!-- Top shadow -->
+      <div class="shadow-box bshadow-top">
+        Top Shadow
+        <br />0px -6px 10px gray <br />Negative vertical
+      </div>
+
+      <!-- Spread shadow -->
+      <div class="shadow-box bshadow-spread">
+        Spread Shadow
+        <br />0px 0px 10px 8px <br />Shadow grows bigger
+      </div>
+
+      <!-- Negative spread -->
+      <div class="shadow-box bshadow-spread-neg">
+        Negative Spread
+        <br />5px 5px 10px -3px <br />Shadow shrinks
+      </div>
+
+      <!-- Cyan glow -->
+      <div class="shadow-box bshadow-glow">
+        Cyan Glow Effect
+        <br />0px 0px 15px 5px cyan
+      </div>
+
+      <!-- Red glow -->
+      <div class="shadow-box bshadow-glow-red">
+        Red Glow Effect
+        <br />0px 0px 15px 5px red
+      </div>
+
+      <!-- Inset shadow -->
+      <div class="shadow-box bshadow-inset">
+        Inset Shadow
+        <br />inset 5px 5px 10px <br />Shadow goes INSIDE
+      </div>
+
+      <!-- Inset all sides -->
+      <div class="shadow-box bshadow-inset-all">
+        Inset All Sides
+        <br />inset 0px 0px 15px <br />Shadow from all sides
+      </div>
+
+      <!-- Multiple shadows -->
+      <div class="shadow-box bshadow-multi">
+        Multiple Shadows
+        <br />Red and Blue <br />on opposite sides
+      </div>
+
+      <!-- 3D button -->
+      <div class="shadow-box bshadow-3d">
+        3D Button Effect
+        <br />0px 6px 0px darkblue <br />Looks raised up
+      </div>
+
+      <!-- Layered shadow -->
+      <div class="shadow-box bshadow-layered">
+        Layered Shadow
+        <br />3 shadows combined <br />Creates depth effect
+      </div>
+    </div>
+  </body>
+</html>
