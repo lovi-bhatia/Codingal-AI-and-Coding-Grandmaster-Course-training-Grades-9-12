@@ -1,0 +1,191 @@
+<!--
+=======================================================
+  MY CARTOON CHARACTER CARD - CODE EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This is a webpage that shows a cartoon character card
+for Doraemon using HTML (structure) and CSS (styling).
+
+=======================================================
+  HTML TAGS USED
+=======================================================
+
+HEAD SECTION TAGS:
+
+  <!DOCTYPE html>
+    - Tells the browser "Hey! This is an HTML5 page"
+
+  <html lang="en">
+    - The root/main tag that wraps everything
+    - lang="en" means language is English
+
+  <head>
+    - Contains background information about the page
+    - Not visible on screen
+
+  <meta charset="UTF-8">
+    - Supports all characters and symbols on the page
+
+  <meta name="viewport">
+    - Makes the page look good on mobile phones too
+
+  <title>
+    - Sets the name shown on browser tab
+
+  <style>
+    - Where we write CSS styling inside HTML
+
+BODY SECTION TAGS:
+
+  <body>
+    - Everything visible on screen goes here
+
+  <h1>
+    - Biggest heading
+    - Used once, for main title
+
+  <h2>
+    - Second level heading
+    - Slightly smaller than h1
+
+  <p>
+    - Paragraph tag
+    - Used for normal text
+
+  <div>
+    - A box/container to group elements together
+
+=======================================================
+  CSS SELECTORS USED
+=======================================================
+
+  CSS Selector = used to SELECT which element to style
+
+  1. Universal Selector ( * )
+     - The * means "apply to EVERYTHING" on the page
+     - Here it sets font size to 16px for all elements
+
+  2. Element Selectors
+     - Directly targets the HTML tag by its name
+     - Example: writing h1 styles ALL h1 tags on page
+
+  3. Class Selector ( .cartoon-detail )
+     - Written with a dot (.) before the name
+     - Applied using class="cartoon-detail"
+     - Can be used on MULTIPLE elements
+     - Like a label you can stick on many things
+     - MEMORY TRICK: Dot = Duplicate (many elements)
+
+  4. ID Selector ( #cartoon-card )
+     - Written with a hash (#) before the name
+     - Applied using id="cartoon-card"
+     - Used only ONCE per page (like a roll number!)
+     - MEMORY TRICK: # = 1 unique thing
+
+  5. Inline CSS
+     - CSS written directly inside the HTML tag
+     - Uses style="" attribute
+     - Applies to that ONE element only
+     - Highest priority - overrides other CSS styles
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  background-color  → Sets background colour
+  color             → Sets text colour
+  font-size         → Sets text size (px = pixels)
+  font-weight       → Makes text bold or thin
+
+=======================================================
+  KEY DIFFERENCES TO REMEMBER
+=======================================================
+
+  Class  (.)  → MANY elements  → like a uniform
+  ID     (#)  → ONE element    → like a roll number
+  Inline      → ONE tag only   → highest priority
+  Universal(*) → ALL elements  → every star in sky
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  HTML = Structure (like a skeleton)
+  CSS  = Style (like clothes)
+  Together they make a beautiful webpage!
+
+=======================================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Cartoon Character Card</title>
+
+  <style>
+
+    /* Universal Selector - applies to everything on the page */
+    * {
+      font-size: 16px;
+    }
+
+    /* Element Selectors */
+    body {
+      background-color: lightyellow;
+    }
+
+    h1 {
+      color: darkblue;
+    }
+
+    h2 {
+      color: purple;
+    }
+
+    p {
+      color: dimgray;
+    }
+
+    /* Class Selector */
+    .cartoon-detail {
+      color: darkgreen;
+      font-weight: bold;
+    }
+
+    /* ID Selector */
+    #cartoon-card {
+      background-color: lightcyan;
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <h1>My Cartoon Character Card</h1>
+
+  <!-- Inline CSS -->
+  <p style="color: crimson;">Meet my favourite cartoon character!</p>
+
+  <div id="cartoon-card">
+
+    <h2>About My Character</h2>
+
+    <p class="cartoon-detail">Character Name: Doraemon</p>
+    <p class="cartoon-detail">Best Friend: Nobita</p>
+    <p class="cartoon-detail">Favourite Food: Dorayaki</p>
+    <p class="cartoon-detail">Special Power: Future Gadgets</p>
+
+  </div>
+
+  <h2>Why I Like This Character</h2>
+
+  <p>Doraemon is kind, helpful, and funny.</p>
+  <p>He always tries to help his friends solve problems.</p>
+  <p>He teaches us about friendship and creativity.</p>
+
+</body>
+</html>
