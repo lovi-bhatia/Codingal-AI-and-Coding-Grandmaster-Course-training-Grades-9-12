@@ -1,0 +1,701 @@
+<!--
+=======================================================
+  JAVASCRIPT: VARIABLES, STATEMENTS, VALUES, TYPES, OPERATORS
+=======================================================
+
+-------------------------------------------------------
+1. VARIABLES
+-------------------------------------------------------
+A variable is a named container that stores a value.
+
+THREE WAYS TO DECLARE:
+  const  → cannot be reassigned (use by default)
+  let    → can be reassigned (use when value changes)
+  var    → old style, function-scoped, avoid in new code
+
+SYNTAX:
+  const name = "Alex";
+  let age = 20;
+  var old = true;      // avoid
+
+NAMING RULES:
+  - Must start with a letter, _ or $
+  - Cannot start with a number          (1name is invalid)
+  - Cannot be a reserved word           (let, if, return...)
+  - Case-sensitive                      (Name ≠ name)
+  - Use camelCase                       (userAge, totalPrice)
+
+SCOPE QUICK NOTE:
+  let / const are block-scoped { } — they die at the closing brace.
+  var is function-scoped and leaks out of blocks.
+
+-------------------------------------------------------
+2. STATEMENTS
+-------------------------------------------------------
+A statement is a single instruction the browser executes.
+A program is just a list of statements run top to bottom.
+
+EXPRESSION vs STATEMENT:
+  Expression → produces a value       (5 + 3, "hi", x * 2)
+  Statement  → performs an action     (let x = 5; if (...) { })
+
+COMMON STATEMENT TYPES:
+  Declaration    let x = 10;
+  Assignment     x = 20;
+  Conditional    if / else, switch
+  Loop           for, while
+  Function       function greet() { }
+  Return         return x;
+  Block          { ... }
+
+SEMICOLONS:
+  Statements should end with ; (best practice).
+  JavaScript inserts them automatically in most cases,
+  but relying on it can cause subtle bugs.
+
+-------------------------------------------------------
+3. VALUES AND TYPES
+-------------------------------------------------------
+A value is the actual data a variable holds.
+JavaScript has 8 types — 7 primitives + 1 object type.
+
+PRIMITIVES (immutable single values):
+  String      "hello"  'hello'  `hello`
+  Number      42, 3.14, -7, Infinity, NaN
+  Boolean     true / false
+  Undefined   declared but not assigned
+  Null        intentionally empty
+  Symbol      unique identifier
+  BigInt      9007199254740993n (very large integers)
+
+OBJECTS (collections / complex values):
+  Object   { name: "Alex", age: 20 }
+  Array    [1, 2, 3]        (arrays are objects)
+  Function function () {}   (functions are objects)
+  Date, Map, Set, etc.
+
+typeof OPERATOR:
+  typeof "hi"       → "string"
+  typeof 42         → "number"
+  typeof true       → "boolean"
+  typeof undefined  → "undefined"
+  typeof null       → "object"   (historic bug in JS)
+  typeof []         → "object"
+  typeof {}         → "object"
+
+TRUTHY / FALSY:
+  Falsy values:  false, 0, "", null, undefined, NaN
+  Everything else is truthy.
+
+-------------------------------------------------------
+4. OPERATORS
+-------------------------------------------------------
+A. ARITHMETIC
+   +  -  *  /  %   (remainder)   **   (power)
+   + also joins strings:  "Hi " + "Sam" → "Hi Sam"
+
+B. ASSIGNMENT
+   =   +=   -=   *=   /=   %=
+   x += 5   is shorthand for   x = x + 5
+
+C. COMPARISON
+   ===  strict equal (value AND type)     ← preferred
+   !==  strict not equal
+   ==   loose equal (converts types)      ← avoid
+   !=   loose not equal
+   >   <   >=   <=
+
+D. LOGICAL
+   &&   both must be true
+   ||   at least one is true
+   !    flips true/false
+
+E. UNARY / INCREMENT
+   ++  --   increment / decrement
+   typeof   returns the type string
+   -x       negates
+
+F. TERNARY (short if/else)
+   condition ? valueIfTrue : valueIfFalse
+
+G. NULLISH COALESCING
+   a ?? b   → uses b only if a is null or undefined
+
+PRECEDENCE (high to low, simplified):
+   1. ()  grouping
+   2. ++ -- ! typeof
+   3. * / %
+   4. + -
+   5. < > <= >=
+   6. === !==  == !=
+   7. &&
+   8. ||
+   9. ?:
+  10. = += -=
+
+Memory Trick:
+  const by default, let when it changes, var never.
+  === compares value AND type, == converts then compares.
+  Falsy = 0, "", false, null, undefined, NaN.
+  Statements do, expressions give.
+  Most operators follow math class order — use () when unsure.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript: Variables, Statements, Values, Types, Operators</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">
+        JavaScript: Variables, Statements, Values, Types, Operators
+      </h1>
+
+      <!-- 1. VARIABLES -->
+      <div class="section">
+        <h2>1. Variables</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Three ways to declare
+const name = "Alex";   // fixed
+let age = 20;          // changes later
+var old = true;        // legacy (avoid)
+
+age = 21;              // let can be reassigned
+// name = "Sam";       // ERROR: const cannot change
+
+let a = 1, b = 2, c;   // multiple at once
+c = a + b;
+
+console.log(name, age, old, c);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. STATEMENTS -->
+      <div class="section">
+        <h2>2. Statements vs Expressions</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Expression: produces a value
+const result = 5 + 3;      // 8
+
+// Statement: performs an action
+if (result > 5) {
+  console.log("Big number");
+}
+
+// Block statement { } groups statements
+{
+  let hidden = "inside block";
+  console.log(hidden);
+}
+// console.log(hidden);  // ERROR: out of scope
+
+// Statements end with ; 
+let x = 1;
+x = x + 1;</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. VALUES AND TYPES -->
+      <div class="section">
+        <h2>3. Values and Types</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Primitives
+const s = "hello";       // string
+const n = 42;            // number
+const f = 3.14;          // number
+const bool = true;       // boolean
+const nothing = null;    // null
+let notSet;              // undefined
+
+// Objects
+const arr = [1, 2, 3];
+const obj = { city: "Delhi" };
+
+// typeof reveals the type
+console.log(typeof s);
+console.log(typeof n);
+console.log(typeof bool);
+console.log(typeof notSet);
+console.log(typeof nothing);  // "object" (known bug)
+console.log(typeof arr);
+console.log(typeof obj);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. TRUTHY / FALSY -->
+      <div class="section">
+        <h2>4. Truthy and Falsy Values</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// All of these are FALSY
+console.log(Boolean(false));
+console.log(Boolean(0));
+console.log(Boolean(""));
+console.log(Boolean(null));
+console.log(Boolean(undefined));
+console.log(Boolean(NaN));
+
+// Everything else is TRUTHY
+console.log(Boolean("0"));
+console.log(Boolean([]));
+console.log(Boolean({}));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. ARITHMETIC OPERATORS -->
+      <div class="section">
+        <h2>5. Arithmetic Operators</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>let a = 10, b = 3;
+
+console.log(a + b);   // add
+console.log(a - b);   // subtract
+console.log(a * b);   // multiply
+console.log(a / b);   // divide
+console.log(a % b);   // remainder
+console.log(a ** b);  // power
+
+// + also joins strings
+console.log("Hi " + "Sam");</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. ASSIGNMENT OPERATORS -->
+      <div class="section">
+        <h2>6. Assignment Operators</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>let x = 10;
+
+x += 5;   // x = x + 5  → 15
+x -= 3;   // x = x - 3  → 12
+x *= 2;   // x = x * 2  → 24
+x /= 4;   // x = x / 4  → 6
+
+let count = 0;
+count++;  // 1
+count--;  // 0
+
+console.log(x, count);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. COMPARISON OPERATORS -->
+      <div class="section">
+        <h2>7. Comparison — === vs ==</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>let a = 10, b = "10";
+
+console.log(a == b);    // true (loose — converts)
+console.log(a === b);   // false (strict — type differs)
+
+console.log(5 !== "5"); // true
+console.log(3 > 1);     // true
+console.log(3 <= 3);    // true
+
+// Rule: always prefer === and !==</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. LOGICAL OPERATORS -->
+      <div class="section">
+        <h2>8. Logical Operators</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const age = 20;
+const hasId = true;
+
+console.log(age > 18 && hasId);   // true
+console.log(age > 30 || hasId);   // true
+console.log(!hasId);              // false
+
+// Default value trick with ||
+const userName = "" || "Guest";
+
+// Nullish coalescing (null/undefined only)
+const port = null ?? 3000;
+
+console.log(userName, port);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. TERNARY OPERATOR -->
+      <div class="section">
+        <h2>9. Ternary Operator (short if/else)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const marks = 72;
+
+const grade =
+  marks >= 90 ? "A" :
+  marks >= 60 ? "B" : "C";
+
+console.log("Grade:", grade);
+
+const canVote = marks >= 18 ? "yes" : "no";
+console.log(canVote);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out9" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. OPERATOR PRECEDENCE -->
+      <div class="section">
+        <h2>10. Operator Precedence</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Multiplication runs before addition
+console.log(2 + 3 * 4);     // 14
+
+// Use () to control order
+console.log((2 + 3) * 4);   // 20
+
+// Comparison before &&
+console.log(5 > 3 && 2 < 4);  // true
+
+// Group with () when unsure</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out10" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. QUICK REFERENCE -->
+      <div class="section">
+        <h2>11. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Concept</th>
+                <th>Syntax</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Fixed variable</td>
+                <td><code>const x = 5;</code></td>
+                <td>Cannot be reassigned</td>
+              </tr>
+              <tr>
+                <td>Changeable variable</td>
+                <td><code>let y = 5;</code></td>
+                <td>Can be reassigned</td>
+              </tr>
+              <tr>
+                <td>Legacy variable</td>
+                <td><code>var z = 5;</code></td>
+                <td>Avoid in new code</td>
+              </tr>
+              <tr>
+                <td>Declaration statement</td>
+                <td><code>let x = 10;</code></td>
+                <td>Creates a variable</td>
+              </tr>
+              <tr>
+                <td>Expression</td>
+                <td><code>5 + 3</code></td>
+                <td>Produces a value</td>
+              </tr>
+              <tr>
+                <td>Block statement</td>
+                <td><code>{ ... }</code></td>
+                <td>Groups statements, own scope</td>
+              </tr>
+              <tr>
+                <td>String</td>
+                <td><code>"hi"</code></td>
+                <td>Text in quotes</td>
+              </tr>
+              <tr>
+                <td>Number</td>
+                <td><code>42</code></td>
+                <td>Int or float</td>
+              </tr>
+              <tr>
+                <td>Boolean</td>
+                <td><code>true</code></td>
+                <td>true / false</td>
+              </tr>
+              <tr>
+                <td>Null</td>
+                <td><code>null</code></td>
+                <td>Intentionally empty</td>
+              </tr>
+              <tr>
+                <td>Undefined</td>
+                <td><code>let x;</code></td>
+                <td>Declared, no value</td>
+              </tr>
+              <tr>
+                <td>Check type</td>
+                <td><code>typeof x</code></td>
+                <td>Returns type as string</td>
+              </tr>
+              <tr>
+                <td>Strict comparison</td>
+                <td><code>a === b</code></td>
+                <td>Value AND type — preferred</td>
+              </tr>
+              <tr>
+                <td>Loose comparison</td>
+                <td><code>a == b</code></td>
+                <td>Converts types first — avoid</td>
+              </tr>
+              <tr>
+                <td>Logical AND</td>
+                <td><code>a &amp;&amp; b</code></td>
+                <td>Both true → true</td>
+              </tr>
+              <tr>
+                <td>Logical OR</td>
+                <td><code>a || b</code></td>
+                <td>Either true → true</td>
+              </tr>
+              <tr>
+                <td>Nullish coalescing</td>
+                <td><code>a ?? b</code></td>
+                <td>Uses b only if a is null/undefined</td>
+              </tr>
+              <tr>
+                <td>Ternary</td>
+                <td><code>c ? x : y</code></td>
+                <td>Short if/else</td>
+              </tr>
+              <tr>
+                <td>Power</td>
+                <td><code>2 ** 3</code></td>
+                <td>2 to the power 3 → 8</td>
+              </tr>
+              <tr>
+                <td>Remainder</td>
+                <td><code>10 % 3</code></td>
+                <td>Returns 1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Variables
+      const name = "Alex";
+      let age = 20;
+      var old = true;
+      age = 21;
+      let a1 = 1,
+        b1 = 2,
+        c1;
+      c1 = a1 + b1;
+      write("out1", [name + " " + age + " " + old + " " + c1]);
+
+      // 2. Statements
+      const sLines = [];
+      const result = 5 + 3;
+      if (result > 5) sLines.push("Big number");
+      {
+        let hidden = "inside block";
+        sLines.push(hidden);
+      }
+      write("out2", sLines);
+
+      // 3. Types
+      const s = "hello",
+        n = 42,
+        bool = true,
+        nothing = null;
+      let notSet;
+      const arr = [1, 2, 3],
+        obj = { city: "Delhi" };
+      write("out3", [
+        "typeof s        → " + typeof s,
+        "typeof n        → " + typeof n,
+        "typeof bool     → " + typeof bool,
+        "typeof notSet   → " + typeof notSet,
+        "typeof nothing  → " + typeof nothing,
+        "typeof arr      → " + typeof arr,
+        "typeof obj      → " + typeof obj,
+      ]);
+
+      // 4. Truthy / Falsy
+      write("out4", [
+        "Boolean(false)     → " + Boolean(false),
+        "Boolean(0)         → " + Boolean(0),
+        'Boolean("")        → ' + Boolean(""),
+        "Boolean(null)      → " + Boolean(null),
+        "Boolean(undefined) → " + Boolean(undefined),
+        "Boolean(NaN)       → " + Boolean(NaN),
+        'Boolean("0")       → ' + Boolean("0"),
+        "Boolean([])        → " + Boolean([]),
+        "Boolean({})        → " + Boolean({}),
+      ]);
+
+      // 5. Arithmetic
+      let a5 = 10,
+        b5 = 3;
+      write("out5", [
+        a5 + b5,
+        a5 - b5,
+        a5 * b5,
+        a5 / b5,
+        a5 % b5,
+        a5 ** b5,
+        "Hi " + "Sam",
+      ]);
+
+      // 6. Assignment
+      let x6 = 10;
+      x6 += 5;
+      x6 -= 3;
+      x6 *= 2;
+      x6 /= 4;
+      let count = 0;
+      count++;
+      count--;
+      write("out6", [x6 + " " + count]);
+
+      // 7. Comparison
+      let a7 = 10,
+        b7 = "10";
+      write("out7", [a7 == b7, a7 === b7, 5 !== "5", 3 > 1, 3 <= 3]);
+
+      // 8. Logical
+      const age8 = 20,
+        hasId = true;
+      const userName = "" || "Guest";
+      const port = null ?? 3000;
+      write("out8", [
+        age8 > 18 && hasId,
+        age8 > 30 || hasId,
+        !hasId,
+        userName + " / " + port,
+      ]);
+
+      // 9. Ternary
+      const marks9 = 72;
+      const grade = marks9 >= 90 ? "A" : marks9 >= 60 ? "B" : "C";
+      write("out9", ["Grade: " + grade, marks9 >= 18 ? "yes" : "no"]);
+
+      // 10. Precedence
+      write("out10", [2 + 3 * 4, (2 + 3) * 4, 5 > 3 && 2 < 4]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

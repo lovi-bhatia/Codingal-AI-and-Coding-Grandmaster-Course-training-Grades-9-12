@@ -1,0 +1,245 @@
+<!--
+=======================================================
+  REAL-TIME APP WITH EXTERNAL JAVASCRIPT FILE
+  Project: Live Task Manager
+=======================================================
+
+-------------------------------------------------------
+WHY AN EXTERNAL JS FILE?
+-------------------------------------------------------
+  <script src="app.js"></script>
+
+  - HTML keeps structure, CSS keeps style, JS keeps behaviour.
+  - One .js file can be shared by many pages.
+  - The browser caches it — faster reloads.
+  - Easier to debug, read and reuse.
+
+-------------------------------------------------------
+WHERE TO PUT THE SCRIPT TAG
+-------------------------------------------------------
+Option 1 - end of <body> (classic):
+  <body>
+    ...content...
+    <script src="app.js"></script>
+  </body>
+  By the time the tag runs, every element above already exists.
+
+Option 2 - in <head> with defer (modern):
+  <head>
+    <script src="app.js" defer></script>
+  </head>
+  defer = download in parallel, run AFTER the HTML is parsed.
+  This is the recommended modern approach.
+
+defer  → run in order, after HTML parsed     ← use this
+async  → run as soon as downloaded, order NOT guaranteed
+neither (in head) → runs immediately, DOM not ready yet → error
+
+-------------------------------------------------------
+RULES FOR THE EXTERNAL FILE
+-------------------------------------------------------
+  - Save as .js (NOT .html).
+  - Contains ONLY JavaScript — no <html>, no <script> tags.
+  - Link with the exact filename: <script src="app.js"></script>
+  - Both files must sit in the same folder (or use a correct path).
+  - Load order matters — helper files first, then app.js.
+
+COMMON ERRORS:
+  "app.js not found" (404) → wrong filename or path
+  "Cannot read properties of null" → script ran before the DOM:
+      fix by using defer, or moving the tag to the bottom
+  Changes not showing → browser cache: hard reload (Ctrl + F5)
+
+-------------------------------------------------------
+HOW A REAL-TIME APP WORKS
+-------------------------------------------------------
+A real-time app is a loop, not a straight line:
+
+  1. STATE      one source of truth (a JS array or object)
+  2. EVENTS     user does something (click, type, submit)
+  3. UPDATE     change the state, save it (localStorage)
+  4. RENDER     rebuild the visible UI from the state
+  5. REPEAT     every change pushes the UI back in sync
+
+Rule: never edit the screen directly. Edit the state,
+then re-render. The screen is always a mirror of the state.
+
+-------------------------------------------------------
+TECHNIQUES USED IN THIS PROJECT
+-------------------------------------------------------
+  - Event delegation : one listener on the list handles
+                       every task's checkbox and delete button.
+  - DocumentFragment : build all rows off-screen, insert once
+                       → one reflow instead of many.
+  - textContent      : user input is inserted safely, never innerHTML.
+  - localStorage     : tasks survive a page reload.
+  - setInterval      : live clock updates every second.
+  - Data flow        : render() is the ONLY function that touches the UI.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Task Manager</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f1f3f7;
+      }
+      .app-header {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: #fff;
+      }
+      .clock {
+        font-family: monospace;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 6px 14px;
+        border-radius: 999px;
+      }
+      .task-app {
+        max-width: 720px;
+      }
+      .list-group-item {
+        transition: background 0.15s ease;
+      }
+      .list-group-item:hover {
+        background: #f8faff;
+      }
+      .empty-state {
+        color: #8b93a7;
+      }
+      .stat-chip {
+        font-family: monospace;
+        font-size: 12px;
+        background: #eef2ff;
+        color: #3730a3;
+        padding: 3px 10px;
+        border-radius: 999px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============ HEADER with live clock ============ -->
+    <div class="app-header py-4 mb-4 shadow-sm">
+      <div
+        class="container task-app d-flex flex-wrap justify-content-between align-items-center gap-2"
+      >
+        <div>
+          <h1 class="h4 mb-0 fw-bold">Live Task Manager</h1>
+          <small class="text-white-50"
+            >Real-time app — external JavaScript</small
+          >
+        </div>
+        <div id="clock" class="clock">--:--:--</div>
+      </div>
+    </div>
+
+    <div class="container task-app pb-5">
+      <!-- ============ ADD TASK FORM ============ -->
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+          <form id="taskForm" class="d-flex gap-2" autocomplete="off">
+            <input
+              id="taskInput"
+              class="form-control"
+              type="text"
+              placeholder="What needs to be done?"
+              maxlength="80"
+              required
+            />
+            <button class="btn btn-primary px-4" type="submit">Add</button>
+          </form>
+          <small class="text-muted d-block mt-2">
+            Press Enter or click Add. Tasks are saved automatically.
+          </small>
+        </div>
+      </div>
+
+      <!-- ============ FILTERS ============ -->
+      <div
+        class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2"
+      >
+        <div id="filterBar" class="btn-group btn-group-sm" role="group">
+          <button class="btn btn-outline-primary active" data-filter="all">
+            All
+          </button>
+          <button class="btn btn-outline-primary" data-filter="active">
+            Active
+          </button>
+          <button class="btn btn-outline-primary" data-filter="done">
+            Done
+          </button>
+        </div>
+
+        <div class="d-flex gap-2">
+          <span class="stat-chip">total <span id="statTotal">0</span></span>
+          <span class="stat-chip">done <span id="statDone">0</span></span>
+          <span class="stat-chip">left <span id="statLeft">0</span></span>
+        </div>
+      </div>
+
+      <!-- ============ TASK LIST ============ -->
+      <div class="card shadow-sm border-0">
+        <ul id="taskList" class="list-group list-group-flush"></ul>
+
+        <div id="emptyState" class="empty-state text-center py-5">
+          <div class="fs-5">No tasks here</div>
+          <small>Add one above to get started.</small>
+        </div>
+
+        <div class="card-footer bg-white d-flex justify-content-end">
+          <button id="clearBtn" class="btn btn-sm btn-outline-danger">
+            Clear completed
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ DATA FLOW NOTE ============ -->
+      <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body">
+          <h2 class="h6 fw-bold mb-3">How this app works</h2>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="badge bg-primary">1. STATE</span>
+            <span class="badge bg-primary">2. EVENT</span>
+            <span class="badge bg-primary">3. UPDATE STATE</span>
+            <span class="badge bg-primary">4. render()</span>
+            <span class="badge bg-primary">5. UI MATCHES STATE</span>
+          </div>
+          <ul class="small text-muted mb-0 ps-3">
+            <li>
+              All data lives in the <code>tasks</code> array in
+              <code>app.js</code>.
+            </li>
+            <li>
+              No code edits the screen directly — only
+              <code>render()</code> does.
+            </li>
+            <li>
+              Every change writes to <code>localStorage</code> so tasks survive
+              reload.
+            </li>
+            <li>
+              The clock uses <code>setInterval</code> — updates every 1000 ms.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ EXTERNAL JS FILE ============ -->
+    <script src="app.js" defer></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
+  </body>
+</html>

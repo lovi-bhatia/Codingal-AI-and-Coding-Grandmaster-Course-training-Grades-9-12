@@ -1,0 +1,381 @@
+<!--
+=======================================================
+  JAVASCRIPT SYNTAX, GUIDE AND COMMENTING
+=======================================================
+
+WHAT IS JAVASCRIPT?
+HTML defines structure, CSS defines style, JavaScript defines
+behavior. It runs inside the browser and makes pages interactive.
+
+-------------------------------------------------------
+1. SYNTAX RULES
+-------------------------------------------------------
+- Case-sensitive: `myVar` and `myvar` are different.
+- Statements end with a semicolon `;` (best practice).
+- Blocks are wrapped in curly braces `{ }`.
+- Strings use single quotes, double quotes, or backticks.
+- Code runs top to bottom, one statement at a time.
+
+-------------------------------------------------------
+2. VARIABLES
+-------------------------------------------------------
+- const → cannot be reassigned (default choice)
+- let   → can be reassigned
+- var   → old way, avoid it
+
+-------------------------------------------------------
+3. DATA TYPES
+-------------------------------------------------------
+- String    "Hello"
+- Number    25, 3.14
+- Boolean   true / false
+- Array     [1, 2, 3]
+- Object    { name: "Alex", age: 20 }
+- null      intentionally empty
+- undefined declared but not assigned
+
+-------------------------------------------------------
+4. OPERATORS
+-------------------------------------------------------
+- Assignment   =   +=  -=  *=
+- Arithmetic   +   -   *   /   %
+- Comparison   ===  !==  >  <  >=  <=
+- Logical      &&  ||  !
+
+Use === not == (strict comparison checks value AND type).
+
+-------------------------------------------------------
+5. TEMPLATE LITERALS
+-------------------------------------------------------
+Backticks let you insert variables directly into a string:
+  const msg = `Hello ${name}, you are ${age}`;
+
+-------------------------------------------------------
+6. COMMENTS
+-------------------------------------------------------
+// Single-line comment
+
+/* Multi-line
+   comment */
+
+/**
+ * Documentation comment for functions
+ * @param {number} a
+ * @returns {number}
+ */
+
+-------------------------------------------------------
+7. FUNCTIONS
+-------------------------------------------------------
+function add(a, b) {        // declaration
+  return a + b;
+}
+const sub = (a, b) => a - b; // arrow function
+
+-------------------------------------------------------
+8. CONDITIONALS AND LOOPS
+-------------------------------------------------------
+if (score >= 50) { ... } else { ... }
+for (let i = 0; i < 5; i++) { ... }
+array.forEach(item => { ... });
+
+-------------------------------------------------------
+9. WHERE TO RUN IT
+-------------------------------------------------------
+- <script> ... </script> inside the HTML
+- <script src="app.js"></script> for an external file
+- F12 → Console tab to test single lines instantly
+- console.log() prints values for debugging
+
+-------------------------------------------------------
+10. DOM BASICS
+-------------------------------------------------------
+document.getElementById("id").textContent = "New text";
+document.querySelector(".myClass").style.color = "red";
+element.addEventListener("click", myFunction);
+
+Memory Trick:
+  const by default, let when it changes, var never.
+  === to compare, = to assign.
+  ${} inside backticks to inject values.
+  // comment for one line, /* */ for many.
+
+=======================================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Syntax, Guide and Commenting</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#f8f9fa; }
+    .label { font-family: monospace; font-size:13px; color:#555; margin-bottom:6px; display:block; }
+    .section { margin-bottom: 34px; }
+    .output { background:#1e1e1e; color:#00ff66; font-family:monospace;
+              padding:12px; border-radius:6px; white-space:pre-wrap; min-height:44px; }
+    pre { background:#1e1e1e; color:#e6e6e6; padding:14px; border-radius:6px;
+          font-size:13px; margin:0; }
+    code { background:#eef; padding:2px 6px; border-radius:4px; color:#0d6efd; }
+  </style>
+</head>
+<body class="p-4">
+
+  <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+
+    <h1 class="mb-4">JavaScript Syntax, Guide and Commenting</h1>
+
+    <!-- 1. VARIABLES AND DATA TYPES -->
+    <div class="section">
+      <h2>1. Variables and Data Types</h2>
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <span class="label">Code:</span>
+          <pre><code>const name = "Alex";        // String  (fixed)
+let age = 20;               // Number  (changeable)
+const active = true;        // Boolean
+const marks = [85, 90, 78]; // Array
+const student = {           // Object
+  city: "Delhi",
+  year: 2
+};
+
+age = 21;                   // let can be reassigned
+
+console.log(name, age, active);
+console.log(marks[0]);
+console.log(student.city);</code></pre>
+        </div>
+        <div class="col-lg-6">
+          <span class="label">Output (console):</span>
+          <div id="out1" class="output"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. TEMPLATE LITERALS -->
+    <div class="section">
+      <h2>2. Template Literals (backticks)</h2>
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <span class="label">Code:</span>
+          <pre><code>const user = "Sam";
+const score = 92;
+
+const message =
+  `Hello ${user}, your score is ${score}`;
+
+console.log(message);</code></pre>
+        </div>
+        <div class="col-lg-6">
+          <span class="label">Output:</span>
+          <div id="out2" class="output"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. OPERATORS -->
+    <div class="section">
+      <h2>3. Operators</h2>
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <span class="label">Code:</span>
+          <pre><code>let a = 10, b = 3;
+
+console.log(a + b);      // 13
+console.log(a - b);      // 7
+console.log(a * b);      // 30
+console.log(a % b);      // 1
+
+console.log(a > b);      // true
+console.log(a === "10"); // false (type differs)
+console.log(a == "10");  // true  (avoid ==)</code></pre>
+        </div>
+        <div class="col-lg-6">
+          <span class="label">Output:</span>
+          <div id="out3" class="output"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. COMMENTS -->
+    <div class="section">
+      <h2>4. Commenting</h2>
+      <span class="label">Code:</span>
+      <pre><code>// Single-line comment — explains one line
+
+/*
+  Multi-line comment — explains a bigger block
+  or temporarily disables code
+*/
+
+/**
+ * Adds two numbers.
+ * @param {number} a - first number
+ * @param {number} b - second number
+ * @returns {number} sum
+ */
+function add(a, b) {
+  return a + b;   // returns the result
+}
+
+console.log(add(4, 6));</code></pre>
+    </div>
+
+    <!-- 5. FUNCTIONS -->
+    <div class="section">
+      <h2>5. Functions</h2>
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <span class="label">Code:</span>
+          <pre><code>// Function declaration
+function greet(name) {
+  return `Hi ${name}`;
+}
+
+// Arrow function (shorter)
+const square = n => n * n;
+
+console.log(greet("Ravi"));
+console.log(square(5));</code></pre>
+        </div>
+        <div class="col-lg-6">
+          <span class="label">Output:</span>
+          <div id="out5" class="output"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. CONDITIONALS AND LOOPS -->
+    <div class="section">
+      <h2>6. Conditionals and Loops</h2>
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <span class="label">Code:</span>
+          <pre><code>const marks = 72;
+
+if (marks >= 90) {
+  console.log("Grade A");
+} else if (marks >= 60) {
+  console.log("Grade B");
+} else {
+  console.log("Grade C");
+}
+
+for (let i = 1; i <= 3; i++) {
+  console.log("Count: " + i);
+}</code></pre>
+        </div>
+        <div class="col-lg-6">
+          <span class="label">Output:</span>
+          <div id="out6" class="output"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. DOM MANIPULATION -->
+    <div class="section">
+      <h2>7. Running Code on the Page (DOM)</h2>
+      <span class="label">Code:</span>
+      <pre><code>function showMessage() {
+  const time = new Date().toLocaleTimeString();
+  document.getElementById("out7").textContent =
+    "Button clicked at " + time;
+}
+
+// element.addEventListener("click", showMessage);</code></pre>
+
+      <button class="btn btn-primary btn-sm my-3" onclick="showMessage()">Click Me</button>
+      <div id="out7" class="output">Click the button above...</div>
+    </div>
+
+    <!-- 8. QUICK REFERENCE -->
+    <div class="section">
+      <h2>8. Quick Reference</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered bg-white align-middle">
+          <thead class="table-dark">
+            <tr><th>Concept</th><th>Syntax</th><th>Note</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Fixed variable</td><td><code>const x = 5;</code></td><td>Cannot be reassigned</td></tr>
+            <tr><td>Changeable variable</td><td><code>let y = 5;</code></td><td>Can be reassigned</td></tr>
+            <tr><td>Template string</td><td><code>`Hello ${name}`</code></td><td>Backticks, not quotes</td></tr>
+            <tr><td>Strict comparison</td><td><code>a === b</code></td><td>Checks value and type</td></tr>
+            <tr><td>Function</td><td><code>function f(a) { return a; }</code></td><td>Named block of code</td></tr>
+            <tr><td>Arrow function</td><td><code>const f = a => a;</code></td><td>Shorter syntax</td></tr>
+            <tr><td>Single-line comment</td><td><code>// text</code></td><td>Ignored by browser</td></tr>
+            <tr><td>Multi-line comment</td><td><code>/* text */</code></td><td>Ignored by browser</td></tr>
+            <tr><td>Print to console</td><td><code>console.log(x)</code></td><td>Open with F12</td></tr>
+            <tr><td>Find an element</td><td><code>document.getElementById("id")</code></td><td>Returns the DOM node</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= DEMO SCRIPT (output for each section) ================= -->
+  <script>
+    // Small helper to write multiple lines into an output box
+    const write = (id, lines) => {
+      document.getElementById(id).textContent = lines.join("\n");
+    };
+
+    // --- 1. Variables and Data Types ---
+    const name = "Alex";
+    let age = 20;
+    const active = true;
+    const marks = [85, 90, 78];
+    const student = { city: "Delhi", year: 2 };
+    age = 21;
+
+    write("out1", [
+      name + " " + age + " " + active,
+      marks[0],
+      student.city
+    ]);
+
+    // --- 2. Template Literals ---
+    const user = "Sam";
+    const score = 92;
+    write("out2", [`Hello ${user}, your score is ${score}`]);
+
+    // --- 3. Operators ---
+    let a = 10, b = 3;
+    write("out3", [
+      a + b,
+      a - b,
+      a * b,
+      a % b,
+      a > b,
+      a === "10",
+      a == "10"
+    ]);
+
+    // --- 5. Functions ---
+    function greet(person) { return `Hi ${person}`; }
+    const square = n => n * n;
+    write("out5", [greet("Ravi"), square(5)]);
+
+    // --- 6. Conditionals and Loops ---
+    const examMarks = 72;
+    let grade = examMarks >= 90 ? "Grade A"
+              : examMarks >= 60 ? "Grade B"
+              : "Grade C";
+    const loopLines = [];
+    for (let i = 1; i <= 3; i++) loopLines.push("Count: " + i);
+    write("out6", [grade, ...loopLines]);
+
+    // --- 7. DOM Function ---
+    function showMessage() {
+      const time = new Date().toLocaleTimeString();
+      document.getElementById("out7").textContent = "Button clicked at " + time;
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

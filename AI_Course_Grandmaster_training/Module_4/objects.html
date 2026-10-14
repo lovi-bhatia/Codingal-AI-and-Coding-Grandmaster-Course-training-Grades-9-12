@@ -1,0 +1,886 @@
+<!--
+=======================================================
+  JAVASCRIPT: OBJECTS, PROPERTIES, MATH OBJECT,
+  ARGUMENTS OBJECT, OBJECT DATA STRUCTURE
+=======================================================
+
+-------------------------------------------------------
+1. OBJECTS
+-------------------------------------------------------
+An object is a collection of key : value pairs.
+It groups related data under one name.
+
+  const user = {
+    name: "Alex",
+    age: 20,
+    active: true
+  };
+
+RULES:
+  - Created with { } (object literal).
+  - Keys are strings (or symbols). Quotes are optional if the
+    key is a valid identifier: name : "Alex"  is same as "name": "Alex".
+  - Values can be anything: string, number, boolean, array,
+    function, even another object.
+  - const prevents REASSIGNING the binding, not editing the contents.
+    const obj = {};  obj.a = 1;  ✓   obj = {};  ✗
+
+-------------------------------------------------------
+2. PROPERTIES OF AN OBJECT
+-------------------------------------------------------
+A property is one key : value pair inside the object.
+
+ACCESS:
+  obj.name         // dot notation  — most common
+  obj["name"]      // bracket notation — needed when key is dynamic,
+                   // has spaces, or starts with a number
+
+ADD / UPDATE / DELETE:
+  obj.city = "Delhi";      // add or update
+  obj.age = 21;            // update
+  delete obj.active;       // remove
+
+CHECK:
+  "name" in obj            // true / false
+  obj.hasOwnProperty("name")
+  obj.name !== undefined
+
+NESTED:
+  const order = { user: { address: { city: "Mumbai" } } };
+  order.user.address.city
+
+SPECIAL FORMS:
+  Shorthand:        const n = "Alex";  const o = { n };     // { n: "Alex" }
+  Computed key:     { [dynamicKey]: value }
+  Method:           { greet() { return "hi"; } }
+  this inside a method → the object itself (only in normal methods)
+
+-------------------------------------------------------
+3. OBJECT DATA STRUCTURE
+-------------------------------------------------------
+Objects organize data with NAMES. Arrays organize data with ORDER.
+
+  Array  [10, 20, 30]               → ordered list
+  Object { width: 10, height: 20 }  → labelled data
+
+Array of objects → a table (each object is one record):
+  const users = [
+    { name: "Alex", age: 20 },
+    { name: "Sam", age: 25 }
+  ];
+  users[0].name                       // "Alex"
+  users.filter(u => u.age > 21)       // row filtering
+
+Nested objects → a tree. This is exactly what JSON looks like,
+which is why it is the standard for APIs and config files.
+
+-------------------------------------------------------
+4. MATH OBJECT (BUILT-IN)
+-------------------------------------------------------
+Math is a built-in object, always available, no import needed.
+
+  IMPORTANT: Math is NOT a constructor.
+  Write  Math.round(x)   —  NOT  new Math()
+
+CONSTANTS:
+  Math.PI            3.14159...
+  Math.E             2.71828...
+
+METHODS:
+  Math.round(x)      nearest integer  (4.5 → 5, 4.4 → 4)
+  Math.floor(x)      round DOWN       (4.9 → 4)
+  Math.ceil(x)       round UP         (4.1 → 5)
+  Math.trunc(x)      drop decimals    (-4.9 → -4)
+  Math.abs(x)        absolute value
+  Math.pow(x, y)     x to the power y (same as x ** y)
+  Math.sqrt(x)       square root
+  Math.max(a, b, …)  largest
+  Math.min(a, b, …)  smallest
+  Math.sign(x)       -1, 0 or 1
+  Math.random()      0 ≤ n < 1  (never exactly 1)
+
+RANDOM INTEGER IN A RANGE:
+  Math.floor(Math.random() * (max - min + 1)) + min
+
+Math.max(...array) → spread the array, since max takes separate args.
+
+-------------------------------------------------------
+5. ARGUMENTS OBJECT
+-------------------------------------------------------
+Inside every REGULAR function, JavaScript automatically creates a
+local variable called `arguments` holding all values passed in.
+
+  function sum() {
+    console.log(arguments.length);
+    console.log(arguments[0]);
+  }
+  sum(1, 2, 3);        // length: 3, first: 1
+
+PROPERTIES:
+  - Array-LIKE, not a real array: has .length and [index],
+    but NO .map / .filter / .reduce / .forEach
+  - Convert when needed:  Array.from(arguments)   or   [...arguments]
+  - Not available in ARROW functions
+  - Ignores the declared parameter list — it holds everything passed
+
+MODERN REPLACEMENT — REST PARAMETERS:
+  function sum(...nums) { }        // nums is a REAL array
+Prefer rest params in new code. `arguments` remains useful when
+reading legacy code.
+
+Memory Trick:
+  Array = order, Object = name.
+  Dot for fixed keys, brackets for dynamic keys.
+  Math is a toolbox, not a constructor — never `new Math()`.
+  round = nearest, floor = down, ceil = up, trunc = throw away.
+  `arguments` = old, array-like, only in normal functions.
+  ...rest = new, real array, works everywhere.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Objects, Properties and Math</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Objects, Properties and Math</h1>
+
+      <!-- 1. OBJECT BASICS -->
+      <div class="section">
+        <h2>1. Creating an Object</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const user = {
+  name: "Alex",
+  "age": 20,          // quotes optional on valid keys
+  active: true
+};
+
+console.log(user);
+console.log(user.name);
+console.log(user["age"]);
+
+// const blocks reassignment, not editing
+user.city = "Delhi";
+console.log(user.city);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ACCESSING PROPERTIES -->
+      <div class="section">
+        <h2>2. Dot vs Bracket Access</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const car = {
+  brand: "Toyota",
+  "model year": 2020,
+  make: "Corolla"
+};
+
+// Dot notation — fixed, known keys
+console.log(car.brand);
+
+// Bracket — keys with spaces
+console.log(car["model year"]);
+
+// Bracket — dynamic key from a variable
+const key = "make";
+console.log(car[key]);
+
+// WRONG: car.model year   ← space breaks it
+// WRONG: car.key          ← looks for a property named "key"</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. ADD / UPDATE / DELETE / CHECK -->
+      <div class="section">
+        <h2>3. Adding, Updating, Deleting, Checking</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const book = { title: "JS Basics", price: 300 };
+
+book.price = 250;              // update
+book.author = "Sam";           // add
+delete book.title;             // delete
+
+console.log(book.price);
+console.log(book.author);
+
+// Checking
+console.log("author" in book);
+console.log(book.hasOwnProperty("price"));
+console.log("title" in book);   // deleted → false</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. NESTED + SHORTHAND + METHODS -->
+      <div class="section">
+        <h2>4. Nested Objects, Shorthand, Methods and this</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Nested object (tree)
+const order = {
+  id: 101,
+  customer: { name: "Sam", address: { city: "Mumbai" } }
+};
+console.log(order.customer.address.city);
+
+// Shorthand (variable name becomes the key)
+const name = "Alex";
+const age = 20;
+const person = { name, age };
+console.log(person);
+
+// Computed key
+const field = "role";
+const account = { [field]: "admin" };
+console.log(account.role);
+
+// Method and `this`
+const counter = {
+  count: 0,
+  increment() { this.count++; }
+};
+counter.increment();
+counter.increment();
+console.log(counter.count);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. ITERATING AN OBJECT -->
+      <div class="section">
+        <h2>5. Looping Over Object Properties</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const scores = { math: 90, science: 85, english: 78 };
+
+// for...in → keys
+for (const key in scores) {
+  console.log(key + " = " + scores[key]);
+}
+
+// Object.keys / values / entries
+console.log(Object.keys(scores));
+console.log(Object.values(scores));
+
+// entries + destructuring
+for (const [k, v] of Object.entries(scores)) {
+  console.log(k, "→", v);
+}
+
+// Total via values
+const total = Object.values(scores)
+  .reduce((sum, n) => sum + n, 0);
+console.log("Total: " + total);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. OBJECT AS A DATA STRUCTURE -->
+      <div class="section">
+        <h2>6. Object Data Structure — Array of Objects</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const students = [
+  { name: "Alex", marks: 85, city: "Delhi" },
+  { name: "Sam",  marks: 72, city: "Mumbai" },
+  { name: "Ravi", marks: 91, city: "Delhi" }
+];
+
+// Access one record
+console.log(students[0].name);
+
+// Filter rows
+const topStudents = students.filter(s => s.marks > 80);
+console.log(topStudents.map(s => s.name));
+
+// Extract one column
+console.log(students.map(s => s.marks));
+
+// Sum one column
+const avg = students.reduce((t, s) => t + s.marks, 0)
+              / students.length;
+console.log("Average: " + avg.toFixed(1));
+
+// Group by a property
+const byCity = students.reduce((acc, s) => {
+  (acc[s.city] ??= []).push(s.name);
+  return acc;
+}, {});
+console.log(JSON.stringify(byCity));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. MATH CONSTANTS + ROUNDING -->
+      <div class="section">
+        <h2>7. Math Object — Constants and Rounding</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>console.log(Math.PI);
+console.log(Math.E);
+
+// round = nearest integer
+console.log(Math.round(4.4));
+console.log(Math.round(4.5));
+
+// floor = always down
+console.log(Math.floor(4.9));
+console.log(Math.floor(-4.1));
+
+// ceil = always up
+console.log(Math.ceil(4.1));
+console.log(Math.ceil(-4.9));
+
+// trunc = drop the decimals
+console.log(Math.trunc(4.9));
+console.log(Math.trunc(-4.9));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. MATH CALCULATION METHODS -->
+      <div class="section">
+        <h2>8. Math Object — Calculations</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>console.log(Math.abs(-7));
+console.log(Math.pow(2, 3));
+console.log(2 ** 3);
+console.log(Math.sqrt(81));
+console.log(Math.max(3, 9, 1, 7));
+console.log(Math.min(3, 9, 1, 7));
+console.log(Math.sign(-5));
+console.log(Math.sign(0));
+console.log(Math.sign(5));
+
+// max/min need separate args,
+// so spread an array
+const nums = [12, 45, 7, 30];
+console.log(Math.max(...nums));
+console.log(Math.min(...nums));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. MATH.RANDOM -->
+      <div class="section">
+        <h2>9. Math.random()</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Random decimal: 0 ≤ x < 1
+console.log(Math.random());
+
+// Random 0–9 integer
+console.log(Math.floor(Math.random() * 10));
+
+// Random integer between min and max (inclusive)
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+console.log(randomInt(1, 6));    // dice
+console.log(randomInt(1, 6));
+console.log(randomInt(50, 100));
+
+// Pick a random array element
+const colors = ["red", "green", "blue"];
+const pick = colors[Math.floor(Math.random() * colors.length)];
+console.log(pick);
+
+// NOTE: values change every time the page reloads</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out9" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. ARGUMENTS OBJECT -->
+      <div class="section">
+        <h2>10. The Arguments Object (old way)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function total() {
+  // `arguments` is auto-created
+  console.log("length:", arguments.length);
+  console.log("first:", arguments[0]);
+
+  // Sum without knowing the count
+  let sum = 0;
+  for (let i = 0; i < arguments.length; i++) {
+    sum += arguments[i];
+  }
+  return sum;
+}
+
+console.log(total(1, 2, 3));
+console.log(total(10, 20, 30, 40));
+
+// Array-like, NOT an array
+function check() {
+  console.log(Array.isArray(arguments));
+  console.log(typeof arguments.map);   // undefined
+}
+check(1, 2);
+
+// Convert to a real array
+function convert() {
+  const arr = [...arguments];
+  return arr.map(n => n * 2);
+}
+console.log(convert(1, 2, 3));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out10" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. REST PARAMETERS -->
+      <div class="section">
+        <h2>11. Rest Parameters — The Modern Replacement</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Real array, no conversion needed
+function total(...nums) {
+  console.log(Array.isArray(nums));
+  return nums.reduce((sum, n) => sum + n, 0);
+}
+
+console.log(total(1, 2, 3));
+console.log(total(10, 20, 30));
+
+// Mix normal + rest (rest must be last)
+function tag(label, ...items) {
+  return label + ": " + items.join(", ");
+}
+console.log(tag("Fruits", "apple", "mango", "kiwi"));
+
+// Arrow functions have NO arguments object
+const arrow = (...args) => args.length;
+console.log(arrow(1, 2, 3, 4));
+
+// Prefer rest (...) in new code.
+// Use `arguments` only when reading legacy code.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out11" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. QUICK REFERENCE -->
+      <div class="section">
+        <h2>12. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Concept</th>
+                <th>Syntax</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Create object</td>
+                <td><code>const o = { a: 1 };</code></td>
+                <td>Key : value pairs</td>
+              </tr>
+              <tr>
+                <td>Dot access</td>
+                <td><code>o.a</code></td>
+                <td>Fixed key names</td>
+              </tr>
+              <tr>
+                <td>Bracket access</td>
+                <td><code>o["a"]</code></td>
+                <td>Dynamic / space keys</td>
+              </tr>
+              <tr>
+                <td>Add / update</td>
+                <td><code>o.b = 2;</code></td>
+                <td>Creates if missing</td>
+              </tr>
+              <tr>
+                <td>Delete</td>
+                <td><code>delete o.a;</code></td>
+                <td>Removes the property</td>
+              </tr>
+              <tr>
+                <td>Check</td>
+                <td><code>"a" in o</code></td>
+                <td>Or <code>hasOwnProperty</code></td>
+              </tr>
+              <tr>
+                <td>Nested</td>
+                <td><code>o.user.address.city</code></td>
+                <td>Tree structure</td>
+              </tr>
+              <tr>
+                <td>Shorthand</td>
+                <td><code>{ name, age }</code></td>
+                <td>Variables as keys</td>
+              </tr>
+              <tr>
+                <td>Computed key</td>
+                <td><code>{ [k]: v }</code></td>
+                <td>Dynamic property name</td>
+              </tr>
+              <tr>
+                <td>Method</td>
+                <td><code>{ greet() { } }</code></td>
+                <td>Function as property</td>
+              </tr>
+              <tr>
+                <td>Keys / values</td>
+                <td><code>Object.keys(o)</code></td>
+                <td>Arrays</td>
+              </tr>
+              <tr>
+                <td>Loop keys</td>
+                <td><code>for (const k in o)</code></td>
+                <td>Objects only</td>
+              </tr>
+              <tr>
+                <td>Math constant</td>
+                <td><code>Math.PI</code></td>
+                <td>Not a constructor</td>
+              </tr>
+              <tr>
+                <td>Round nearest</td>
+                <td><code>Math.round(4.5)</code></td>
+                <td>→ 5</td>
+              </tr>
+              <tr>
+                <td>Round down / up</td>
+                <td><code>Math.floor()</code> / <code>Math.ceil()</code></td>
+                <td>Always down / up</td>
+              </tr>
+              <tr>
+                <td>Drop decimals</td>
+                <td><code>Math.trunc(4.9)</code></td>
+                <td>→ 4</td>
+              </tr>
+              <tr>
+                <td>Max / min</td>
+                <td><code>Math.max(...arr)</code></td>
+                <td>Spread for arrays</td>
+              </tr>
+              <tr>
+                <td>Random decimal</td>
+                <td><code>Math.random()</code></td>
+                <td>0 ≤ n &lt; 1</td>
+              </tr>
+              <tr>
+                <td>Random integer</td>
+                <td><code>Math.floor(Math.random()*(max-min+1))+min</code></td>
+                <td>Inclusive both ends</td>
+              </tr>
+              <tr>
+                <td>Arguments object</td>
+                <td><code>arguments[0]</code></td>
+                <td>Array-like, not an array</td>
+              </tr>
+              <tr>
+                <td>Rest parameters</td>
+                <td><code>function f(...args)</code></td>
+                <td>Real array — preferred</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Basics
+      const user1 = { name: "Alex", age: 20, active: true };
+      user1.city = "Delhi";
+      write("out1", [
+        "name (dot)     : " + user1.name,
+        "age (bracket)  : " + user1["age"],
+        "added city     : " + user1.city,
+        "all keys       : " + Object.keys(user1).join(", "),
+      ]);
+
+      // 2. Dot vs bracket
+      const car2 = { brand: "Toyota", "model year": 2020, make: "Corolla" };
+      const key2 = "make";
+      write("out2", [
+        "car.brand           → " + car2.brand,
+        'car["model year"]   → ' + car2["model year"],
+        "car[key] (key='make') → " + car2[key2],
+      ]);
+
+      // 3. Add / update / delete / check
+      const book3 = { title: "JS Basics", price: 300 };
+      const before3 = book3.price;
+      book3.price = 250;
+      book3.author = "Sam";
+      delete book3.title;
+      write("out3", [
+        "price before : " + before3,
+        "price after  : " + book3.price,
+        "author added : " + book3.author,
+        '"author" in book       → ' + ("author" in book3),
+        'book.hasOwnProperty("price") → ' + book3.hasOwnProperty("price"),
+        '"title" in book (deleted)    → ' + ("title" in book3),
+      ]);
+
+      // 4. Nested, shorthand, computed, method
+      const order4 = {
+        id: 101,
+        customer: { name: "Sam", address: { city: "Mumbai" } },
+      };
+      const name4 = "Alex",
+        age4 = 20;
+      const person4 = { name: name4, age: age4 };
+      const field4 = "role";
+      const account4 = { [field4]: "admin" };
+      const counter4 = {
+        count: 0,
+        increment() {
+          this.count++;
+        },
+      };
+      counter4.increment();
+      counter4.increment();
+      write("out4", [
+        "nested city    : " + order4.customer.address.city,
+        "shorthand obj  : " + JSON.stringify(person4),
+        "computed key   : " + account4.role,
+        "method + this  : count = " + counter4.count,
+      ]);
+
+      // 5. Iterating
+      const scores5 = { math: 90, science: 85, english: 78 };
+      const l5 = [];
+      for (const key in scores5) l5.push(key + " = " + scores5[key]);
+      l5.push("keys    : " + Object.keys(scores5).join(", "));
+      l5.push("values  : " + Object.values(scores5).join(", "));
+      for (const [k, v] of Object.entries(scores5))
+        l5.push("entry   : " + k + " → " + v);
+      const total5 = Object.values(scores5).reduce((s, n) => s + n, 0);
+      l5.push("total   : " + total5);
+      write("out5", l5);
+
+      // 6. Array of objects
+      const students6 = [
+        { name: "Alex", marks: 85, city: "Delhi" },
+        { name: "Sam", marks: 72, city: "Mumbai" },
+        { name: "Ravi", marks: 91, city: "Delhi" },
+      ];
+      const l6 = [];
+      l6.push("first record    : " + students6[0].name);
+      l6.push(
+        "marks > 80      : " +
+          students6
+            .filter((s) => s.marks > 80)
+            .map((s) => s.name)
+            .join(", "),
+      );
+      l6.push("all marks       : " + students6.map((s) => s.marks).join(", "));
+      const avg6 =
+        students6.reduce((t, s) => t + s.marks, 0) / students6.length;
+      l6.push("average marks   : " + avg6.toFixed(1));
+      const byCity6 = students6.reduce((acc, s) => {
+        (acc[s.city] ??= []).push(s.name);
+        return acc;
+      }, {});
+      l6.push("grouped by city : " + JSON.stringify(byCity6));
+      write("out6", l6);
+
+      // 7. Math constants and rounding
+      write("out7", [
+        "Math.PI             → " + Math.PI.toFixed(5),
+        "Math.E              → " + Math.E.toFixed(5),
+        "Math.round(4.4)     → " + Math.round(4.4),
+        "Math.round(4.5)     → " + Math.round(4.5),
+        "Math.floor(4.9)     → " + Math.floor(4.9),
+        "Math.floor(-4.1)    → " + Math.floor(-4.1),
+        "Math.ceil(4.1)      → " + Math.ceil(4.1),
+        "Math.ceil(-4.9)     → " + Math.ceil(-4.9),
+        "Math.trunc(4.9)     → " + Math.trunc(4.9),
+        "Math.trunc(-4.9)    → " + Math.trunc(-4.9),
+      ]);
+
+      // 8. Math calculations
+      const nums8 = [12, 45, 7, 30];
+      write("out8", [
+        "Math.abs(-7)        → " + Math.abs(-7),
+        "Math.pow(2, 3)      → " + Math.pow(2, 3),
+        "2 ** 3              → " + 2 ** 3,
+        "Math.sqrt(81)       → " + Math.sqrt(81),
+        "Math.max(3,9,1,7)   → " + Math.max(3, 9, 1, 7),
+        "Math.min(3,9,1,7)   → " + Math.min(3, 9, 1, 7),
+        "Math.sign(-5)       → " + Math.sign(-5),
+        "Math.sign(0)        → " + Math.sign(0),
+        "Math.sign(5)        → " + Math.sign(5),
+        "Math.max(...array)  → " + Math.max(...nums8),
+        "Math.min(...array)  → " + Math.min(...nums8),
+      ]);
+
+      // 9. Math.random
+      function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      const colors9 = ["red", "green", "blue"];
+      write("out9", [
+        "Math.random()          → " + Math.random().toFixed(6),
+        "0–9 integer            → " + Math.floor(Math.random() * 10),
+        "randomInt(1, 6)        → " + randomInt(1, 6),
+        "randomInt(1, 6)        → " + randomInt(1, 6),
+        "randomInt(50, 100)     → " + randomInt(50, 100),
+        "random array item      → " +
+          colors9[Math.floor(Math.random() * colors9.length)],
+        "(reload the page — these change every time)",
+      ]);
+
+      // 10. Arguments object
+      const l10 = [];
+      function total10() {
+        l10.push("length        : " + arguments.length);
+        l10.push("first         : " + arguments[0]);
+        let sum = 0;
+        for (let i = 0; i < arguments.length; i++) sum += arguments[i];
+        return sum;
+      }
+      l10.push("total(1,2,3)        → " + total10(1, 2, 3));
+      l10.push("total(10,20,30,40)  → " + total10(10, 20, 30, 40));
+      function check10() {
+        l10.push("Array.isArray(arguments) → " + Array.isArray(arguments));
+        l10.push("typeof arguments.map     → " + typeof arguments.map);
+      }
+      check10(1, 2);
+      function convert10() {
+        return [...arguments].map((n) => n * 2).join(", ");
+      }
+      l10.push("converted + mapped  → " + convert10(1, 2, 3));
+      write("out10", l10);
+
+      // 11. Rest parameters
+      function total11(...nums) {
+        return nums.reduce((s, n) => s + n, 0);
+      }
+      function tag11(label, ...items) {
+        return label + ": " + items.join(", ");
+      }
+      const arrow11 = (...args) => args.length;
+      write("out11", [
+        "Array.isArray(nums) inside rest → " + Array.isArray([]),
+        "total(1,2,3)          → " + total11(1, 2, 3),
+        "total(10,20,30)       → " + total11(10, 20, 30),
+        'tag("Fruits", ...)    → ' + tag11("Fruits", "apple", "mango", "kiwi"),
+        "arrow(...args).length → " + arrow11(1, 2, 3, 4),
+      ]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

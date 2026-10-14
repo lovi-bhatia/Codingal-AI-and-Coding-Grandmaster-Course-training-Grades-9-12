@@ -1,0 +1,656 @@
+<!--
+=======================================================
+  JAVASCRIPT LOOPS
+=======================================================
+
+WHAT IS A LOOP?
+A loop repeats a block of code while a condition is true,
+so you don't write the same line many times.
+
+-------------------------------------------------------
+1. THE for LOOP
+-------------------------------------------------------
+Best when you know how many times to run.
+
+  for (let i = 0; i < 5; i++) {
+    // body runs 5 times (i = 0,1,2,3,4)
+  }
+
+THREE PARTS inside the parentheses:
+  let i = 0    → initialization (runs once, before loop starts)
+  i < 5        → condition (checked BEFORE each iteration)
+  i++          → update (runs AFTER each iteration)
+
+FLOW:
+  1. initialization
+  2. check condition → if false, loop ends
+  3. run body
+  4. run update
+  5. back to step 2
+
+-------------------------------------------------------
+2. THE while LOOP
+-------------------------------------------------------
+Best when the number of iterations is unknown.
+
+  let i = 0;
+  while (i < 5) {
+    // body
+    i++;        // update is YOUR responsibility
+  }
+
+Rule: if you forget the update, you get an INFINITE LOOP.
+
+-------------------------------------------------------
+3. THE do...while LOOP
+-------------------------------------------------------
+Like while, but runs the body AT LEAST ONCE.
+Condition is checked AFTER the body.
+
+  let i = 0;
+  do {
+    // body
+    i++;
+  } while (i < 5);
+
+Use when the loop must run once regardless of the condition
+(e.g. asking for input until it's valid).
+
+-------------------------------------------------------
+4. for...of  (arrays, strings, iterables)
+-------------------------------------------------------
+Gives you the VALUES directly. Cleanest way to loop an array.
+
+  for (const item of [10, 20, 30]) {
+    console.log(item);          // 10, 20, 30
+  }
+
+  for (const ch of "abc") {
+    console.log(ch);            // a, b, c
+  }
+
+  // With index using .entries()
+  for (const [i, item] of arr.entries()) { ... }
+
+CANNOT be used on plain objects.
+
+-------------------------------------------------------
+5. for...in  (OBJECTS)
+-------------------------------------------------------
+Loops over the KEYS of an object.
+
+  const user = { name: "Alex", age: 20 };
+  for (const key in user) {
+    console.log(key, user[key]);   // name Alex / age 20
+  }
+
+Avoid for...in on arrays — it loops over indexes as strings
+and also includes inherited properties.
+
+-------------------------------------------------------
+6. break AND continue
+-------------------------------------------------------
+break     → exits the loop immediately
+continue  → skips the rest of this iteration, goes to the next
+
+  for (let i = 1; i <= 10; i++) {
+    if (i === 5) break;         // stop at 5
+    if (i % 2 === 0) continue;  // skip evens
+    console.log(i);
+  }
+
+-------------------------------------------------------
+7. NESTED LOOPS
+-------------------------------------------------------
+A loop inside another loop. Total iterations = outer × inner.
+
+  for (let i = 1; i <= 3; i++) {
+    for (let j = 1; j <= 3; j++) {
+      console.log(i, j);        // 9 total combinations
+    }
+  }
+
+An inner `break` only breaks the INNER loop, not the outer one.
+
+-------------------------------------------------------
+8. CHOOSING THE RIGHT LOOP
+-------------------------------------------------------
+  Know the count?              → for
+  Unknown count, check first?  → while
+  Must run at least once?      → do...while
+  Loop array / string values?  → for...of
+  Loop object keys?            → for...in
+
+The Array.forEach() method is also common but it's a method,
+not a loop keyword — it cannot use break or continue.
+
+-------------------------------------------------------
+9. COMMON LOOP PATTERNS
+-------------------------------------------------------
+SUM:      let sum = 0;      for (const n of arr) sum += n;
+COUNT:    let c = 0;        for (const n of arr) if (n > 5) c++;
+FIND:     let found;        for (const n of arr) if (n === 7) { found = n; break; }
+BUILD:    let out = "";     for (const n of arr) out += n + " ";
+
+Memory Trick:
+  for       = counted loop.
+  while     = keep going until condition flips.
+  do while  = run once, then check.
+  for...of  = values (arrays, strings).
+  for...in  = keys (objects).
+  break     = stop.   continue = skip this one.
+  Nested loops multiply: 3 × 3 = 9.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Loops Guide</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Loops</h1>
+
+      <!-- 1. for LOOP -->
+      <div class="section">
+        <h2>1. The for Loop</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Count 1 to 5
+for (let i = 1; i <= 5; i++) {
+  console.log("i =", i);
+}
+
+// Count backwards
+for (let i = 5; i >= 1; i--) {
+  console.log("down:", i);
+}
+
+// Step by 2
+for (let i = 0; i <= 10; i += 2) {
+  console.log("step:", i);
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. while LOOP -->
+      <div class="section">
+        <h2>2. The while Loop</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>let i = 1;
+
+while (i <= 5) {
+  console.log("i =", i);
+  i++;                     // must update yourself
+}
+
+// Halving until value is small
+let n = 100;
+while (n > 10) {
+  console.log("n =", n);
+  n = n / 2;
+}
+
+// Guarding against infinite loops:
+// every while body must move the
+// condition toward false.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. do...while -->
+      <div class="section">
+        <h2>3. The do...while Loop</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Runs once even when condition is false
+let a = 10;
+
+do {
+  console.log("runs once, a =", a);
+  a++;
+} while (a < 5);
+
+// Normal use
+let count = 0;
+do {
+  console.log("count =", count);
+  count++;
+} while (count < 3);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. for...of -->
+      <div class="section">
+        <h2>4. for...of — Values of an Array or String</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const fruits = ["apple", "mango", "kiwi"];
+
+for (const fruit of fruits) {
+  console.log(fruit);
+}
+
+// Loop a string
+for (const ch of "abc") {
+  console.log("char:", ch);
+}
+
+// With index using .entries()
+for (const [i, fruit] of fruits.entries()) {
+  console.log(i, fruit);
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. for...in -->
+      <div class="section">
+        <h2>5. for...in — Keys of an Object</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const user = {
+  name: "Alex",
+  age: 20,
+  city: "Delhi"
+};
+
+for (const key in user) {
+  console.log(key + ": " + user[key]);
+}
+
+// Count properties
+let total = 0;
+for (const k in user) total++;
+console.log("properties:", total);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. break and continue -->
+      <div class="section">
+        <h2>6. break and continue</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// break — stop the loop
+for (let i = 1; i <= 10; i++) {
+  if (i === 5) break;
+  console.log("break test:", i);
+}
+
+// continue — skip this iteration
+for (let i = 1; i <= 6; i++) {
+  if (i % 2 === 0) continue;
+  console.log("odd:", i);
+}
+
+// Combined search pattern
+const nums = [3, 8, 12, 15, 20];
+let firstBig;
+for (const n of nums) {
+  if (n > 10) { firstBig = n; break; }
+}
+console.log("first > 10:", firstBig);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. NESTED LOOPS -->
+      <div class="section">
+        <h2>7. Nested Loops</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Outer x inner combinations
+for (let i = 1; i <= 3; i++) {
+  for (let j = 1; j <= 3; j++) {
+    console.log(i + " x " + j + " = " + (i * j));
+  }
+}
+
+// Triangle pattern
+let star = "";
+for (let i = 1; i <= 4; i++) {
+  star += "*";
+  console.log(star);
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. COMMON PATTERNS -->
+      <div class="section">
+        <h2>8. Common Loop Patterns</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const data = [4, 8, 15, 16, 23, 42];
+
+// SUM
+let sum = 0;
+for (const n of data) sum += n;
+
+// COUNT
+let evens = 0;
+for (const n of data) if (n % 2 === 0) evens++;
+
+// MAX
+let max = data[0];
+for (const n of data) if (n > max) max = n;
+
+// BUILD a string
+let text = "";
+for (const n of data) text += n + " ";
+
+console.log("sum   :", sum);
+console.log("evens :", evens);
+console.log("max   :", max);
+console.log("text  :", text.trim());</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. forEach method (bonus) -->
+      <div class="section">
+        <h2>9. forEach — The Array Method Version</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const items = ["pen", "book", "bag"];
+
+items.forEach(function (item, index) {
+  console.log(index, item);
+});
+
+// Arrow version
+items.forEach((item, i) => console.log(i + ": " + item));
+
+// Same result as for...of, but:
+// - cannot use break or continue
+// - is a method, not a loop keyword</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out9" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. QUICK REFERENCE -->
+      <div class="section">
+        <h2>10. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Loop</th>
+                <th>Syntax</th>
+                <th>Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>for</td>
+                <td><code>for (let i = 0; i &lt; n; i++) { }</code></td>
+                <td>Known number of iterations</td>
+              </tr>
+              <tr>
+                <td>while</td>
+                <td><code>while (cond) { }</code></td>
+                <td>Unknown count, check first</td>
+              </tr>
+              <tr>
+                <td>do...while</td>
+                <td><code>do { } while (cond);</code></td>
+                <td>Must run at least once</td>
+              </tr>
+              <tr>
+                <td>for...of</td>
+                <td><code>for (const x of arr) { }</code></td>
+                <td>Array / string values</td>
+              </tr>
+              <tr>
+                <td>for...in</td>
+                <td><code>for (const k in obj) { }</code></td>
+                <td>Object keys</td>
+              </tr>
+              <tr>
+                <td>break</td>
+                <td><code>if (cond) break;</code></td>
+                <td>Exit the loop early</td>
+              </tr>
+              <tr>
+                <td>continue</td>
+                <td><code>if (cond) continue;</code></td>
+                <td>Skip rest of this iteration</td>
+              </tr>
+              <tr>
+                <td>Nested</td>
+                <td>loop inside loop</td>
+                <td>Grids, tables, combinations</td>
+              </tr>
+              <tr>
+                <td>forEach</td>
+                <td><code>arr.forEach(fn)</code></td>
+                <td>Clean array loop (no break)</td>
+              </tr>
+              <tr>
+                <td>Infinite loop</td>
+                <td>condition never flips</td>
+                <td>Bug — always update your counter</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. for loop
+      const l1 = [];
+      for (let i = 1; i <= 5; i++) l1.push("i = " + i);
+      for (let i = 5; i >= 1; i--) l1.push("down: " + i);
+      for (let i = 0; i <= 10; i += 2) l1.push("step: " + i);
+      write("out1", l1);
+
+      // 2. while
+      const l2 = [];
+      let i2 = 1;
+      while (i2 <= 5) {
+        l2.push("i = " + i2);
+        i2++;
+      }
+      let n2 = 100;
+      while (n2 > 10) {
+        l2.push("n = " + n2);
+        n2 = n2 / 2;
+      }
+      write("out2", l2);
+
+      // 3. do...while
+      const l3 = [];
+      let a3 = 10;
+      do {
+        l3.push("runs once, a = " + a3);
+        a3++;
+      } while (a3 < 5);
+      let c3 = 0;
+      do {
+        l3.push("count = " + c3);
+        c3++;
+      } while (c3 < 3);
+      write("out3", l3);
+
+      // 4. for...of
+      const l4 = [];
+      const fruits = ["apple", "mango", "kiwi"];
+      for (const fruit of fruits) l4.push(fruit);
+      for (const ch of "abc") l4.push("char: " + ch);
+      for (const [i, fruit] of fruits.entries()) l4.push(i + " " + fruit);
+      write("out4", l4);
+
+      // 5. for...in
+      const l5 = [];
+      const user = { name: "Alex", age: 20, city: "Delhi" };
+      for (const key in user) l5.push(key + ": " + user[key]);
+      let total = 0;
+      for (const k in user) total++;
+      l5.push("properties: " + total);
+      write("out5", l5);
+
+      // 6. break / continue
+      const l6 = [];
+      for (let i = 1; i <= 10; i++) {
+        if (i === 5) break;
+        l6.push("break test: " + i);
+      }
+      for (let i = 1; i <= 6; i++) {
+        if (i % 2 === 0) continue;
+        l6.push("odd: " + i);
+      }
+      const nums6 = [3, 8, 12, 15, 20];
+      let firstBig;
+      for (const n of nums6) {
+        if (n > 10) {
+          firstBig = n;
+          break;
+        }
+      }
+      l6.push("first > 10: " + firstBig);
+      write("out6", l6);
+
+      // 7. nested
+      const l7 = [];
+      for (let i = 1; i <= 3; i++) {
+        for (let j = 1; j <= 3; j++) {
+          l7.push(i + " x " + j + " = " + i * j);
+        }
+      }
+      let star = "";
+      for (let i = 1; i <= 4; i++) {
+        star += "*";
+        l7.push(star);
+      }
+      write("out7", l7);
+
+      // 8. patterns
+      const data8 = [4, 8, 15, 16, 23, 42];
+      let sum8 = 0;
+      for (const n of data8) sum8 += n;
+      let evens8 = 0;
+      for (const n of data8) if (n % 2 === 0) evens8++;
+      let max8 = data8[0];
+      for (const n of data8) if (n > max8) max8 = n;
+      let text8 = "";
+      for (const n of data8) text8 += n + " ";
+      write("out8", [
+        "sum   : " + sum8,
+        "evens : " + evens8,
+        "max   : " + max8,
+        "text  : " + text8.trim(),
+      ]);
+
+      // 9. forEach
+      const l9 = [];
+      const items9 = ["pen", "book", "bag"];
+      items9.forEach((item, i) => l9.push(i + ": " + item));
+      write("out9", l9);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

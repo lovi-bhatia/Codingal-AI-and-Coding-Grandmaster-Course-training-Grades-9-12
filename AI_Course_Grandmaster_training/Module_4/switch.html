@@ -1,0 +1,661 @@
+<!--
+=======================================================
+  JAVASCRIPT SWITCH STATEMENT
+=======================================================
+
+WHAT IS A SWITCH?
+A switch compares one value against many possible cases
+and runs the block that matches. It's a cleaner alternative
+to a long if / else if / else chain.
+
+-------------------------------------------------------
+1. BASIC SYNTAX
+-------------------------------------------------------
+  switch (expression) {
+    case value1:
+      // runs if expression === value1
+      break;
+    case value2:
+      // runs if expression === value2
+      break;
+    default:
+      // runs if nothing matched
+  }
+
+RULES:
+  - The switch uses STRICT comparison (===) to match cases.
+    So "2" (string) does NOT match case 2 (number).
+  - Each case must end with break (or return / throw),
+    otherwise execution falls through to the next case.
+  - default is optional. Put it anywhere, but usually last.
+
+-------------------------------------------------------
+2. THE break STATEMENT
+-------------------------------------------------------
+break exits the switch immediately.
+Without break, code continues running into the next case.
+This is called FALL-THROUGH, and it is usually a bug.
+
+  switch (x) {
+    case 1:
+      console.log("one");
+      // no break!
+    case 2:
+      console.log("two");   // also runs when x === 1
+      break;
+  }
+  // x = 1  → prints "one" AND "two"
+
+-------------------------------------------------------
+3. THE default CASE
+-------------------------------------------------------
+Runs when no case matches. Like the final `else`.
+
+  default:
+    console.log("unknown");
+    break;
+
+-------------------------------------------------------
+4. GROUPED CASES (intentional fall-through)
+-------------------------------------------------------
+When several values should do the same thing, stack the cases:
+
+  case "a":
+  case "e":
+  case "i":
+  case "o":
+  case "u":
+    console.log("vowel");
+    break;
+
+This is the ONE case where fall-through is on purpose.
+
+-------------------------------------------------------
+5. BLOCK SCOPE INSIDE A SWITCH
+-------------------------------------------------------
+The whole switch body is ONE block.
+Declaring let / const in a case can cause errors later.
+Wrap a case in { } to give it its own scope:
+
+  case 1: {
+    const msg = "hello";
+    console.log(msg);
+    break;
+  }
+
+-------------------------------------------------------
+6. switch vs if / else
+-------------------------------------------------------
+USE switch when:
+  - Comparing ONE value against many fixed options
+  - Options are constants (strings, numbers, enums)
+  - You want clean, readable, side-by-side cases
+
+USE if / else when:
+  - Comparing RANGES (age > 18, score >= 90)
+  - Conditions use different variables
+  - Logic uses && , || , or complex truthiness
+
+-------------------------------------------------------
+7. RETURNS INSTEAD OF BREAKS
+-------------------------------------------------------
+Inside a function, `return` ends both the case and the function:
+
+  function nameOf(code) {
+    switch (code) {
+      case 200: return "OK";
+      case 404: return "Not Found";
+      default:  return "Unknown";
+    }
+  }
+
+Cleaner than stacking break before every return.
+
+Memory Trick:
+  switch = multi-way if / else for ONE value.
+  case = one possible match, uses ===.
+  break = stop, otherwise fall-through.
+  default = the "else" of switch.
+  Grouped cases = intentional fall-through.
+  Ranges and multiple variables → use if / else instead.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Switch Statement</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Switch Statement</h1>
+
+      <!-- 1. BASIC SWITCH -->
+      <div class="section">
+        <h2>1. Basic switch</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const day = 3;
+
+switch (day) {
+  case 1:
+    console.log("Monday");
+    break;
+  case 2:
+    console.log("Tuesday");
+    break;
+  case 3:
+    console.log("Wednesday");
+    break;
+  case 4:
+    console.log("Thursday");
+    break;
+  default:
+    console.log("Another day");
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. STRICT COMPARISON -->
+      <div class="section">
+        <h2>2. Matching Uses === (strict)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const value = "2";
+
+switch (value) {
+  case 2:
+    console.log("number 2");
+    break;
+  case "2":
+    console.log("string '2'");
+    break;
+  default:
+    console.log("nothing matched");
+}
+
+// Rule: case must match VALUE and TYPE
+// "2" (string) ≠ 2 (number)</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. FALL-THROUGH BUG -->
+      <div class="section">
+        <h2>3. Fall-Through Without break</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const x = 1;
+
+switch (x) {
+  case 1:
+    console.log("one");
+    // missing break!
+  case 2:
+    console.log("two");
+    break;
+  case 3:
+    console.log("three");
+    break;
+}
+
+// When x = 1 it prints "one" AND "two"
+// because there is no break after case 1.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. GROUPED CASES -->
+      <div class="section">
+        <h2>4. Grouped Cases (intentional fall-through)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const letter = "e";
+
+switch (letter) {
+  case "a":
+  case "e":
+  case "i":
+  case "o":
+  case "u":
+    console.log("vowel");
+    break;
+  default:
+    console.log("consonant");
+}
+
+// Several cases share one block.
+// Here, fall-through is on purpose.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. BLOCK SCOPE -->
+      <div class="section">
+        <h2>5. Block Scope Inside a switch</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const code = 2;
+
+switch (code) {
+  case 1: {
+    const msg = "start";   // safe inside { }
+    console.log(msg);
+    break;
+  }
+  case 2: {
+    const msg = "stop";    // no clash, own scope
+    console.log(msg);
+    break;
+  }
+  default:
+    console.log("unknown");
+}
+
+// Same variable name reused inside each case
+// is only possible with { } blocks.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. SWITCH INSIDE A FUNCTION -->
+      <div class="section">
+        <h2>6. return Instead of break</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function statusText(code) {
+  switch (code) {
+    case 200: return "OK";
+    case 301: return "Moved";
+    case 404: return "Not Found";
+    case 500: return "Server Error";
+    default:  return "Unknown code";
+  }
+}
+
+console.log(statusText(200));
+console.log(statusText(404));
+console.log(statusText(999));
+
+// return exits the function,
+// so no break is needed.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. RANGE CHECK — SWITCH CANNOT DO THIS -->
+      <div class="section">
+        <h2>7. Ranges — Use if / else Instead</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const marks = 72;
+
+// Ranges cannot use switch
+// switch (true) { case marks >= 90: ... }  works but should be avoided
+
+if (marks >= 90) {
+  console.log("Grade A");
+} else if (marks >= 60) {
+  console.log("Grade B");
+} else {
+  console.log("Grade C");
+}
+
+// Rule:
+// switch → exact value match
+// if / else → ranges and complex conditions</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. SWITCH VS OBJECT LOOKUP -->
+      <div class="section">
+        <h2>8. switch vs Object Lookup</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const fruit = "mango";
+
+// Switch version
+switch (fruit) {
+  case "apple":  console.log("Red fruit"); break;
+  case "mango":  console.log("Yellow fruit"); break;
+  case "kiwi":   console.log("Green fruit"); break;
+  default:       console.log("Unknown fruit");
+}
+
+// Object-lookup version (shorter)
+const colors = {
+  apple: "Red fruit",
+  mango: "Yellow fruit",
+  kiwi:  "Green fruit"
+};
+console.log(colors[fruit] ?? "Unknown fruit");
+
+// Both are fine. Use switch for logic,
+// object lookup for simple value → value maps.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. QUICK REFERENCE -->
+      <div class="section">
+        <h2>9. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Concept</th>
+                <th>Syntax</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Switch opening</td>
+                <td><code>switch (value) {</code></td>
+                <td>Takes one expression</td>
+              </tr>
+              <tr>
+                <td>Case match</td>
+                <td><code>case x:</code></td>
+                <td>Uses <code>===</code> strict equality</td>
+              </tr>
+              <tr>
+                <td>End a case</td>
+                <td><code>break;</code></td>
+                <td>Otherwise falls through</td>
+              </tr>
+              <tr>
+                <td>Fallback</td>
+                <td><code>default:</code></td>
+                <td>Runs if nothing matches</td>
+              </tr>
+              <tr>
+                <td>Grouped cases</td>
+                <td>multiple <code>case</code> stacked</td>
+                <td>Intentional fall-through</td>
+              </tr>
+              <tr>
+                <td>Own scope per case</td>
+                <td><code>case 1: { ... }</code></td>
+                <td>For <code>let</code> / <code>const</code></td>
+              </tr>
+              <tr>
+                <td>Exit early</td>
+                <td><code>return</code> inside function</td>
+                <td>No <code>break</code> needed</td>
+              </tr>
+              <tr>
+                <td>Range check</td>
+                <td>Not possible with switch</td>
+                <td>Use <code>if / else</code></td>
+              </tr>
+              <tr>
+                <td>Value → value map</td>
+                <td>Object lookup</td>
+                <td>Shorter than long switch</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Basic switch
+      (() => {
+        const day = 3;
+        let result = "";
+        switch (day) {
+          case 1:
+            result = "Monday";
+            break;
+          case 2:
+            result = "Tuesday";
+            break;
+          case 3:
+            result = "Wednesday";
+            break;
+          case 4:
+            result = "Thursday";
+            break;
+          default:
+            result = "Another day";
+        }
+        write("out1", [result]);
+      })();
+
+      // 2. Strict comparison
+      (() => {
+        const value = "2";
+        let result = "";
+        switch (value) {
+          case 2:
+            result = "number 2";
+            break;
+          case "2":
+            result = "string '2'";
+            break;
+          default:
+            result = "nothing matched";
+        }
+        write("out2", [result]);
+      })();
+
+      // 3. Fall-through
+      (() => {
+        const x = 1;
+        const lines = [];
+        switch (x) {
+          case 1:
+            lines.push("one");
+          // no break
+          case 2:
+            lines.push("two");
+            break;
+          case 3:
+            lines.push("three");
+            break;
+        }
+        lines.push("(x = 1 → both 'one' and 'two' printed)");
+        write("out3", lines);
+      })();
+
+      // 4. Grouped cases
+      (() => {
+        const letter = "e";
+        let result = "";
+        switch (letter) {
+          case "a":
+          case "e":
+          case "i":
+          case "o":
+          case "u":
+            result = "vowel";
+            break;
+          default:
+            result = "consonant";
+        }
+        write("out4", [result]);
+      })();
+
+      // 5. Block scope
+      (() => {
+        const code = 2;
+        let result = "";
+        switch (code) {
+          case 1: {
+            const msg = "start";
+            result = msg;
+            break;
+          }
+          case 2: {
+            const msg = "stop";
+            result = msg;
+            break;
+          }
+          default:
+            result = "unknown";
+        }
+        write("out5", [result]);
+      })();
+
+      // 6. Return instead of break
+      (() => {
+        function statusText(code) {
+          switch (code) {
+            case 200:
+              return "OK";
+            case 301:
+              return "Moved";
+            case 404:
+              return "Not Found";
+            case 500:
+              return "Server Error";
+            default:
+              return "Unknown code";
+          }
+        }
+        write("out6", [
+          "200 → " + statusText(200),
+          "404 → " + statusText(404),
+          "999 → " + statusText(999),
+        ]);
+      })();
+
+      // 7. Range check
+      (() => {
+        const marks = 72;
+        let grade = "";
+        if (marks >= 90) grade = "Grade A";
+        else if (marks >= 60) grade = "Grade B";
+        else grade = "Grade C";
+        write("out7", [grade]);
+      })();
+
+      // 8. switch vs object lookup
+      (() => {
+        const fruit = "mango";
+        let switchResult = "";
+        switch (fruit) {
+          case "apple":
+            switchResult = "Red fruit";
+            break;
+          case "mango":
+            switchResult = "Yellow fruit";
+            break;
+          case "kiwi":
+            switchResult = "Green fruit";
+            break;
+          default:
+            switchResult = "Unknown fruit";
+        }
+        const colors = {
+          apple: "Red fruit",
+          mango: "Yellow fruit",
+          kiwi: "Green fruit",
+        };
+        const lookupResult = colors[fruit] ?? "Unknown fruit";
+        write("out8", [
+          "switch result : " + switchResult,
+          "object result : " + lookupResult,
+        ]);
+      })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

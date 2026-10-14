@@ -1,0 +1,744 @@
+<!--
+=======================================================
+  JAVASCRIPT FUNCTIONS
+=======================================================
+
+WHAT IS A FUNCTION?
+A reusable block of code that runs only when called.
+
+-------------------------------------------------------
+1. FUNCTION BASICS
+-------------------------------------------------------
+DECLARATION:
+  function greet(name) {
+    return "Hi " + name;
+  }
+  greet("Alex");   // call it
+
+  - Hoisted: can be called before it's defined in the file.
+  - Always name them with a verb (greet, calculateTotal).
+
+ANATOMY:
+  function   name   ( parameters )   { body }
+     ↑         ↑         ↑              ↑
+   keyword   label    inputs       runs when called
+
+-------------------------------------------------------
+2. PARAMETERS vs ARGUMENTS
+-------------------------------------------------------
+  function add(a, b) { ... }   // a, b  → PARAMETERS
+  add(2, 3);                    // 2, 3  → ARGUMENTS
+
+Parameters  = placeholders in the definition.
+Arguments   = real values passed in the call.
+
+RULES:
+  - Too few args → missing ones become undefined
+  - Too many args → extra ones are ignored (but see rest params)
+
+-------------------------------------------------------
+3. OPTIONAL / DEFAULT PARAMETERS
+-------------------------------------------------------
+Give a parameter a default value with = in the signature:
+
+  function greet(name = "Guest") { ... }
+  greet();          // "Hi Guest"
+  greet("Sam");     // "Hi Sam"
+
+Default fires only when argument is undefined — not when it's
+null, 0, or "".
+
+REST PARAMETERS (unlimited extra arguments):
+  function sum(...nums) { }        // nums is an array
+  sum(1, 2, 3, 4);                 // [1,2,3,4]
+
+Rules: rest must be LAST. Only one per function.
+
+-------------------------------------------------------
+4. RETURN
+-------------------------------------------------------
+  - return ends the function immediately.
+  - return value; sends a value back to the caller.
+  - No return → function returns undefined.
+
+-------------------------------------------------------
+5. SCOPE OF VARIABLES IN FUNCTIONS
+-------------------------------------------------------
+Three nesting levels:
+
+  GLOBAL  → declared outside any function, visible everywhere
+  LOCAL   → declared inside a function, dies when the function ends
+  BLOCK   → declared inside { } with let/const (if, for, plain block)
+
+KEY RULES:
+  - A function can read global variables.
+  - A global CANNOT read variables declared inside the function.
+  - Nested functions can see parent variables (closure).
+  - Shadowing: a local variable with the same name as a global
+    hides the global inside that function only.
+
+  var is function-scoped → leaks out of blocks { }.
+  let / const are block-scoped → stay inside the block.
+
+-------------------------------------------------------
+6. FUNCTION EXPRESSIONS
+-------------------------------------------------------
+Store a function in a variable:
+
+  const add = function(a, b) { return a + b; };
+
+  - NOT hoisted (can't be called before the line runs).
+  - Assign to const so it can't be overwritten.
+
+NAMED vs ANONYMOUS:
+  const f = function () {};          // anonymous
+  const g = function myFunc() {};    // named (name only visible inside)
+
+USED AS VALUES:
+  Functions can be passed to other functions (callbacks),
+  returned from functions, stored in arrays/objects.
+
+-------------------------------------------------------
+7. ARROW FUNCTIONS (a shorthand expression)
+-------------------------------------------------------
+  const add  = (a, b) => a + b;         // one expression, implicit return
+  const sq   = n => n * n;              // single param, no parens
+  const log  = () => console.log("hi"); // no params
+  const big  = (a, b) => {              // multi-line needs { return }
+    const r = a + b;
+    return r * 2;
+  };
+
+DIFFERENCES FROM NORMAL FUNCTIONS:
+  - No own `this` (inherits from surrounding scope)
+  - Cannot be used with `new`
+  - No `arguments` object (use rest ...args)
+  - Not hoisted
+
+-------------------------------------------------------
+8. DECLARATION vs EXPRESSION vs ARROW
+-------------------------------------------------------
+  Declaration    function f() {}        Hoisted     Named
+  Expression     const f = function(){} Not hoisted  Named / anon
+  Arrow          const f = () => {}     Not hoisted  Always anon
+
+Memory Trick:
+  Function = recipe, parameters = ingredients listed,
+  arguments = ingredients actually used.
+  Default = "use this if nothing is passed".
+  Rest = "put all the extras in an array".
+  Local dies with the function, global lives forever.
+  Arrow = short syntax, inherits `this`, no hoisting.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Functions Guide</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Functions</h1>
+
+      <!-- 1. BASICS -->
+      <div class="section">
+        <h2>1. Function Declaration</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function greet(name) {
+  return "Hi " + name;
+}
+
+// Call the function
+const msg = greet("Alex");
+
+// Hoisting works — call before definition
+console.log(sayBye("Sam"));
+
+function sayBye(name) {
+  return "Bye " + name;
+}
+
+console.log(msg);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. PARAMETERS vs ARGUMENTS -->
+      <div class="section">
+        <h2>2. Parameters vs Arguments</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// a, b are PARAMETERS
+function add(a, b) {
+  return a + b;
+}
+
+// 2, 3 are ARGUMENTS
+console.log(add(2, 3));
+
+// Too few → missing becomes undefined
+console.log(add(5));        // NaN
+
+// Too many → extras ignored
+console.log(add(1, 2, 3));  // 3</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. DEFAULT (OPTIONAL) PARAMETERS -->
+      <div class="section">
+        <h2>3. Optional / Default Parameters</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Default fires only if arg is undefined
+function greet(name = "Guest", role = "user") {
+  return `${name} (${role})`;
+}
+
+console.log(greet());
+console.log(greet("Sam"));
+console.log(greet("Sam", "admin"));
+
+// null does NOT trigger the default
+console.log(greet(null));
+
+// Default based on earlier param
+function area(w, h = w) {
+  return w * h;
+}
+console.log(area(5));     // 5 * 5</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. REST PARAMETERS -->
+      <div class="section">
+        <h2>4. Rest Parameters (...args)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Collect any number of extra arguments
+function sum(...nums) {
+  return nums.reduce((total, n) => total + n, 0);
+}
+
+console.log(sum(1, 2));         // 3
+console.log(sum(1, 2, 3, 4));   // 10
+console.log(sum());             // 0
+
+// Can mix with normal params (rest must be last)
+function tag(label, ...items) {
+  return label + ": " + items.join(", ");
+}
+console.log(tag("Fruits", "apple", "mango"));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. RETURN -->
+      <div class="section">
+        <h2>5. Return Values</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function check(n) {
+  if (n < 0) return "negative";  // exits here
+  return "positive";             // exits here
+  console.log("never runs");     // unreachable
+}
+
+console.log(check(-5));
+console.log(check(5));
+
+// No return → undefined
+function log(msg) {
+  console.log(msg);
+}
+console.log(log("hi"));   // logs "hi" then undefined</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. SCOPE -->
+      <div class="section">
+        <h2>6. Scope of Variables in Functions</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const globalVar = "I am global";
+
+function outer() {
+  const outerVar = "I am outer";
+
+  function inner() {
+    const innerVar = "I am inner";
+    // Can read parent + global
+    return [globalVar, outerVar, innerVar].join(" | ");
+  }
+
+  // innerVar NOT visible here
+  return inner();
+}
+
+console.log(outer());
+// console.log(outerVar);   // Error: not defined</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. SHADOWING AND BLOCK SCOPE -->
+      <div class="section">
+        <h2>7. Shadowing and Block Scope</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>let color = "red";
+
+function paint() {
+  // Shadows the outer 'color'
+  let color = "blue";
+  return color;
+}
+
+console.log(paint());   // blue
+console.log(color);     // red (unchanged)
+
+// let / const stay inside { }
+{
+  let blockOnly = "inside";
+}
+// console.log(blockOnly);  // Error
+
+// var leaks out of blocks (avoid!)
+{
+  var leaks = "outside block";
+}
+console.log(leaks);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. NESTED FUNCTIONS / CLOSURE -->
+      <div class="section">
+        <h2>8. Nested Functions (Closure Preview)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function outerFunction(a) {
+  let count = 0;              // lives inside outerFunction
+
+  function innerFunction() {
+    count++;                  // inner can modify outer var
+    return `${a} called ${count} times`;
+  }
+
+  return innerFunction;       // return the inner function
+}
+
+const counterA = outerFunction("A");
+const counterB = outerFunction("B");
+
+console.log(counterA());
+console.log(counterA());
+console.log(counterB());  // own copy of count</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. FUNCTION EXPRESSIONS -->
+      <div class="section">
+        <h2>9. Function Expressions</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Anonymous expression
+const add = function (a, b) {
+  return a + b;
+};
+
+// Named expression (name is internal only)
+const double = function doubler(n) {
+  return n * 2;
+};
+
+console.log(add(3, 4));
+console.log(double(5));
+
+// NOT hoisted — this would throw:
+// console.log(subtract(5, 2));
+const subtract = function (a, b) { return a - b; };
+
+console.log(subtract(5, 2));
+
+// Expressions can be passed around (callbacks)
+const run = function (fn, value) {
+  return fn(value);
+};
+console.log(run(double, 10));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out9" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. ARROW FUNCTIONS -->
+      <div class="section">
+        <h2>10. Arrow Functions</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Full form
+const add = (a, b) => {
+  return a + b;
+};
+
+// Implicit return (single expression, no braces)
+const square = n => n * n;
+
+// No parameters
+const sayHi = () => "Hi!";
+
+// Returning an object needs ( )
+const makeUser = (name) => ({ user: name });
+
+console.log(add(2, 3));
+console.log(square(4));
+console.log(sayHi());
+console.log(makeUser("Sam"));
+
+// Arrow as callback
+[1, 2, 3].forEach(n => console.log(n * 10));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out10" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. QUICK REFERENCE -->
+      <div class="section">
+        <h2>11. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Concept</th>
+                <th>Syntax</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Declaration</td>
+                <td><code>function f(a) { return a; }</code></td>
+                <td>Hoisted</td>
+              </tr>
+              <tr>
+                <td>Expression</td>
+                <td><code>const f = function(a) { return a; };</code></td>
+                <td>Not hoisted</td>
+              </tr>
+              <tr>
+                <td>Arrow</td>
+                <td><code>const f = a =&gt; a;</code></td>
+                <td>Short, no own <code>this</code></td>
+              </tr>
+              <tr>
+                <td>Parameter</td>
+                <td><code>function f(a, b)</code></td>
+                <td>Placeholder in definition</td>
+              </tr>
+              <tr>
+                <td>Argument</td>
+                <td><code>f(1, 2)</code></td>
+                <td>Real value passed in call</td>
+              </tr>
+              <tr>
+                <td>Default parameter</td>
+                <td><code>function f(a = 5)</code></td>
+                <td>Used when arg is <code>undefined</code></td>
+              </tr>
+              <tr>
+                <td>Rest parameter</td>
+                <td><code>function f(...args)</code></td>
+                <td>Collects extras into an array</td>
+              </tr>
+              <tr>
+                <td>Return</td>
+                <td><code>return value;</code></td>
+                <td>Ends function and sends value back</td>
+              </tr>
+              <tr>
+                <td>No return</td>
+                <td><code>function f() {}</code></td>
+                <td>Returns <code>undefined</code></td>
+              </tr>
+              <tr>
+                <td>Global scope</td>
+                <td><code>const x = 1;</code> outside fn</td>
+                <td>Visible everywhere</td>
+              </tr>
+              <tr>
+                <td>Local scope</td>
+                <td>inside function</td>
+                <td>Dies when function ends</td>
+              </tr>
+              <tr>
+                <td>Block scope</td>
+                <td><code>{ let y = 1; }</code></td>
+                <td>Stays inside <code>{ }</code></td>
+              </tr>
+              <tr>
+                <td>Shadowing</td>
+                <td>same name inside fn</td>
+                <td>Hides outer variable locally</td>
+              </tr>
+              <tr>
+                <td>Closure</td>
+                <td>nested function + outer var</td>
+                <td>Inner keeps access to outer scope</td>
+              </tr>
+              <tr>
+                <td>Callback</td>
+                <td><code>run(fn, 5)</code></td>
+                <td>Function passed as a value</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Basics + hoisting
+      function greet(name) {
+        return "Hi " + name;
+      }
+      const msg = greet("Alex");
+      write("out1", ["Hoisted: " + sayBye("Sam"), msg]);
+      function sayBye(name) {
+        return "Bye " + name;
+      }
+
+      // 2. Parameters vs arguments
+      function add(a, b) {
+        return a + b;
+      }
+      write("out2", [
+        "add(2,3)     = " + add(2, 3),
+        "add(5)       = " + add(5),
+        "add(1,2,3)   = " + add(1, 2, 3),
+      ]);
+
+      // 3. Defaults
+      function greetD(name = "Guest", role = "user") {
+        return `${name} (${role})`;
+      }
+      write("out3", [
+        greetD(),
+        greetD("Sam"),
+        greetD("Sam", "admin"),
+        greetD(null),
+        "area(5) = " +
+          (function area(w, h = w) {
+            return w * h;
+          })(5),
+      ]);
+
+      // 4. Rest
+      function sum(...nums) {
+        return nums.reduce((t, n) => t + n, 0);
+      }
+      function tag(label, ...items) {
+        return label + ": " + items.join(", ");
+      }
+      write("out4", [
+        sum(1, 2),
+        sum(1, 2, 3, 4),
+        sum(),
+        tag("Fruits", "apple", "mango"),
+      ]);
+
+      // 5. Return
+      function check(n) {
+        if (n < 0) return "negative";
+        return "positive";
+      }
+      function log(msg) {
+        console.log(msg);
+      }
+      write("out5", [check(-5), check(5), "log('hi') → " + log("hi")]);
+
+      // 6. Scope
+      const globalVar = "I am global";
+      function outer() {
+        const outerVar = "I am outer";
+        function inner() {
+          const innerVar = "I am inner";
+          return [globalVar, outerVar, innerVar].join(" | ");
+        }
+        return inner();
+      }
+      write("out6", [outer()]);
+
+      // 7. Shadowing + block scope
+      let color = "red";
+      function paint() {
+        let color = "blue";
+        return color;
+      }
+      let out7 = [paint(), color];
+      {
+        let blockOnly = "inside block";
+        out7.push(blockOnly);
+      }
+      {
+        var leaks = "outside block";
+      }
+      out7.push(leaks);
+      write("out7", out7);
+
+      // 8. Closure
+      function outerFunction(a) {
+        let count = 0;
+        function innerFunction() {
+          count++;
+          return `${a} called ${count} times`;
+        }
+        return innerFunction;
+      }
+      const counterA = outerFunction("A");
+      const counterB = outerFunction("B");
+      write("out8", [counterA(), counterA(), counterB()]);
+
+      // 9. Expressions
+      const addE = function (a, b) {
+        return a + b;
+      };
+      const doubleE = function doubler(n) {
+        return n * 2;
+      };
+      const subtractE = function (a, b) {
+        return a - b;
+      };
+      function run(fn, value) {
+        return fn(value);
+      }
+      write("out9", [
+        addE(3, 4),
+        doubleE(5),
+        subtractE(5, 2),
+        "callback → " + run(doubleE, 10),
+      ]);
+
+      // 10. Arrows
+      const addA = (a, b) => {
+        return a + b;
+      };
+      const squareA = (n) => n * n;
+      const sayHiA = () => "Hi!";
+      const makeUserA = (name) => ({ user: name });
+      const arrowLines = [];
+      arrowLines.push(addA(2, 3));
+      arrowLines.push(squareA(4));
+      arrowLines.push(sayHiA());
+      arrowLines.push(JSON.stringify(makeUserA("Sam")));
+      [1, 2, 3].forEach((n) => arrowLines.push(n * 10));
+      write("out10", arrowLines);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

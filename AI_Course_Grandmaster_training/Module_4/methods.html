@@ -1,0 +1,751 @@
+<!--
+=======================================================
+  JAVASCRIPT METHODS AND TEST METHODS
+=======================================================
+
+-------------------------------------------------------
+1. WHAT IS A METHOD?
+-------------------------------------------------------
+A method is a function that belongs to an object.
+You call it using dot notation:  object.method()
+
+  "hello".toUpperCase()   // string method
+  [1,2,3].push(4)         // array method
+  Math.max(1, 5)          // Math method
+  JSON.stringify({})      // JSON method
+
+Every value in JavaScript has a type, and each type brings
+its own set of built-in methods. The value on the LEFT of
+the dot is called the receiver.
+
+-------------------------------------------------------
+2. STRING METHODS (most used)
+-------------------------------------------------------
+  .length          s.length               → number of chars
+  .toUpperCase()   s.toUpperCase()        → "HELLO"
+  .toLowerCase()   s.toLowerCase()        → "hello"
+  .trim()          "  hi  ".trim()        → "hi"
+  .slice(a, b)     "Hello".slice(1, 3)    → "el"
+  .substring(a,b)  similar to slice
+  .charAt(i)       "Hi".charAt(0)         → "H"
+  .includes(str)   "Hello".includes("ll") → true
+  .indexOf(str)    "Hello".indexOf("l")   → 2
+  .replace(a, b)   "cats".replace("c","b")→ "bats"
+  .split(sep)      "a,b".split(",")       → ["a","b"]
+  .repeat(n)       "ab".repeat(2)         → "abab"
+  .padStart(n,ch)  "5".padStart(3,"0")    → "005"
+
+-------------------------------------------------------
+3. NUMBER METHODS
+-------------------------------------------------------
+  .toFixed(n)      (3.14159).toFixed(2)   → "3.14" (string!)
+  .toString(base)  (255).toString(16)     → "ff"
+  Number("42")                            → 42
+  parseInt("42px")                        → 42
+  parseFloat("3.14abc")                   → 3.14
+  Math.round / floor / ceil / abs / max / min / random
+
+-------------------------------------------------------
+4. ARRAY METHODS - MUTATING (change the array)
+-------------------------------------------------------
+  .push(x)      add to end
+  .pop()        remove from end
+  .unshift(x)   add to start
+  .shift()      remove from start
+  .splice(i,n)  remove/replace at index
+  .sort()       sort in place
+  .reverse()    reverse in place
+
+-------------------------------------------------------
+5. ARRAY METHODS - NON-MUTATING (return new value)
+-------------------------------------------------------
+  .length              count
+  .slice(a,b)          copy part
+  .concat(arr2)        merge
+  .join(sep)           array → string
+  .indexOf(x)          first index of x
+  .includes(x)         true / false
+  .map(fn)             transform each item
+  .filter(fn)          keep items that pass
+  .find(fn)            first matching item
+  .findIndex(fn)       index of first match
+  .reduce(fn, start)   collapse to one value
+  .forEach(fn)         loop (no return)
+  .some(fn)            at least one passes
+  .every(fn)           all pass
+
+-------------------------------------------------------
+6. OBJECT METHODS
+-------------------------------------------------------
+  Object.keys(obj)      → array of keys
+  Object.values(obj)    → array of values
+  Object.entries(obj)   → array of [key, value] pairs
+  Object.assign(a,b)    → merge (shallow)
+  Object.freeze(obj)    → make immutable
+  obj.hasOwnProperty("k") → true / false
+  "k" in obj            → true / false
+
+-------------------------------------------------------
+7. TEST METHODS - RETURN true / false
+-------------------------------------------------------
+"Test methods" are methods (and operators) that ask a question
+and give back a boolean. You'll use them constantly in if-statements.
+
+A. TYPE CHECKS
+   typeof value           → "string" | "number" | "boolean" |
+                            "undefined" | "object" | "function"
+                            (typeof null → "object" — known bug)
+   Array.isArray(v)       → true if v is an array
+   value instanceof Class → true if v was made by Class
+
+B. NUMBER CHECKS
+   isNaN(v)               → true if v is NaN OR not convertible to number
+   Number.isNaN(v)        → true ONLY if v is literally NaN
+   Number.isInteger(v)    → true if v is a whole number
+   Number.isFinite(v)     → true if v is a real finite number
+
+C. STRING CHECKS
+   str.includes(x)        → contains substring
+   str.startsWith(x)      → begins with x
+   str.endsWith(x)        → ends with x
+   str.match(regex)       → array of matches or null
+   str.search(regex)      → index of first match or -1
+
+D. ARRAY CHECKS
+   arr.includes(x)        → contains x
+   arr.some(fn)           → at least one passes
+   arr.every(fn)          → all pass
+   arr.findIndex(fn)      → index or -1
+
+E. OBJECT CHECKS
+   obj.hasOwnProperty(k)  → own property?
+   "k" in obj             → own or inherited
+
+F. REGEX .test() — the classic "test method"
+   /pattern/.test(string) → true / false
+
+   /\d+/.test("abc123")            → true
+   /^[a-z]+$/.test("hello")        → true
+   /^\S+@\S+\.\S+$/.test("a@b.c")  → true
+
+Memory Trick:
+  Method = function attached to a value  (value.method()).
+  Mutating array methods: push, pop, shift, unshift, splice, sort, reverse.
+  Non-mutating: map, filter, slice, concat, join, some, every.
+  Test methods always return true or false.
+  isNaN tries to convert, Number.isNaN does not.
+  typeof is an operator, .test() is a method.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Methods and Test Methods</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Methods and Test Methods</h1>
+
+      <!-- 1. WHAT IS A METHOD -->
+      <div class="section">
+        <h2>1. What Is a Method?</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const text = "hello";
+
+// A method is a function attached to a value
+console.log(text.toUpperCase());
+
+// The value on the left of the dot
+// is called the receiver
+console.log([1, 2, 3].includes(2));
+console.log(Math.max(1, 5, 3));
+console.log((42).toString());</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. STRING METHODS -->
+      <div class="section">
+        <h2>2. Common String Methods</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const s = "Hello World";
+
+console.log(s.length);
+console.log(s.toUpperCase());
+console.log(s.toLowerCase());
+console.log(s.slice(0, 5));
+console.log(s.includes("World"));
+console.log(s.indexOf("o"));
+console.log(s.replace("World", "JS"));
+console.log("  hi  ".trim());
+console.log("a,b,c".split(","));
+console.log("ab".repeat(3));
+console.log("5".padStart(3, "0"));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. NUMBER METHODS -->
+      <div class="section">
+        <h2>3. Number Methods</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const n = 3.14159;
+
+console.log(n.toFixed(2));
+console.log((255).toString(16));
+console.log(Number("42"));
+console.log(parseInt("42px"));
+console.log(parseFloat("3.14abc"));
+console.log(Math.round(4.6));
+console.log(Math.floor(4.9));
+console.log(Math.ceil(4.1));
+console.log(Math.abs(-7));
+console.log(Math.max(3, 9, 1));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. MUTATING ARRAY METHODS -->
+      <div class="section">
+        <h2>4. Array Methods That Change the Array</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const arr = [1, 2, 3];
+
+arr.push(4);      // add to end
+arr.pop();        // remove from end
+arr.unshift(0);   // add to start
+arr.shift();      // remove from start
+
+console.log(arr);
+
+const arr2 = [10, 20, 30];
+arr2.splice(1, 1);
+console.log(arr2);
+
+const arr3 = [3, 1, 2];
+arr3.sort();
+console.log(arr3);
+arr3.reverse();
+console.log(arr3);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. NON-MUTATING ARRAY METHODS -->
+      <div class="section">
+        <h2>5. Array Methods That Return New Values</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const nums = [1, 2, 3, 4, 5];
+
+console.log(nums.map(n => n * 2));
+console.log(nums.filter(n => n % 2 === 0));
+console.log(nums.find(n => n > 3));
+console.log(nums.findIndex(n => n > 3));
+console.log(nums.reduce((sum, n) => sum + n, 0));
+console.log(nums.some(n => n > 4));
+console.log(nums.every(n => n > 0));
+console.log(nums.includes(3));
+console.log(nums.indexOf(3));
+console.log(nums.slice(1, 3));
+console.log(nums.join("-"));
+
+nums.forEach(n => console.log("item: " + n));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. OBJECT METHODS -->
+      <div class="section">
+        <h2>6. Object Methods</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const user = { name: "Alex", age: 20 };
+
+console.log(Object.keys(user));
+console.log(Object.values(user));
+console.log(Object.entries(user));
+
+console.log(user.hasOwnProperty("name"));
+console.log("age" in user);
+
+const merged = Object.assign({}, user, { city: "Delhi" });
+console.log(merged);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. TEST METHODS - TYPE CHECKS -->
+      <div class="section">
+        <h2>7. Test Methods: Type Checks</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// typeof (operator, not a method)
+console.log(typeof 42);
+console.log(typeof "hi");
+console.log(typeof true);
+console.log(typeof undefined);
+console.log(typeof null);      // "object" (known bug)
+console.log(typeof []);
+console.log(typeof function () {});
+
+// Class checks
+console.log(Array.isArray([]));
+console.log(Array.isArray("hi"));
+console.log([] instanceof Array);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. TEST METHODS - NUMBER CHECKS -->
+      <div class="section">
+        <h2>8. Test Methods: Number Checks</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// isNaN converts then checks
+console.log(isNaN("abc"));
+console.log(isNaN("42"));
+
+// Number.isNaN does NOT convert
+console.log(Number.isNaN(NaN));
+console.log(Number.isNaN("42"));
+
+// Integer / finite checks
+console.log(Number.isInteger(5));
+console.log(Number.isInteger(5.5));
+console.log(Number.isFinite(10));
+console.log(Number.isFinite(Infinity));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. TEST METHODS - STRING / ARRAY / OBJECT -->
+      <div class="section">
+        <h2>9. Test Methods: String, Array, Object</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const s = "hello world";
+console.log(s.includes("world"));
+console.log(s.startsWith("hello"));
+console.log(s.endsWith("world"));
+console.log(s.search(/ell/));
+console.log(s.match(/l/g));
+
+const arr = [1, 2, 3];
+console.log(arr.includes(2));
+console.log(arr.some(n => n > 2));
+console.log(arr.every(n => n > 0));
+
+const obj = { a: 1 };
+console.log(obj.hasOwnProperty("a"));
+console.log("a" in obj);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out9" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. REGEX .test() -->
+      <div class="section">
+        <h2>10. Regex .test() — The Classic Test Method</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// /pattern/.test(string) → true / false
+
+console.log(/\d+/.test("abc123"));
+console.log(/\d+/.test("hello"));
+console.log(/^[a-z]+$/.test("hello"));
+console.log(/^[a-z]+$/.test("hello123"));
+console.log(/^\S+@\S+\.\S+$/.test("user@site.com"));
+console.log(/cat/i.test("The CAT sat"));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out10" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. QUICK REFERENCE -->
+      <div class="section">
+        <h2>11. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Category</th>
+                <th>Method</th>
+                <th>Returns</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>String</td>
+                <td><code>s.toUpperCase()</code></td>
+                <td>new string</td>
+              </tr>
+              <tr>
+                <td>String</td>
+                <td><code>s.includes("x")</code></td>
+                <td>true / false</td>
+              </tr>
+              <tr>
+                <td>String</td>
+                <td><code>s.split(",")</code></td>
+                <td>array</td>
+              </tr>
+              <tr>
+                <td>Number</td>
+                <td><code>n.toFixed(2)</code></td>
+                <td>string</td>
+              </tr>
+              <tr>
+                <td>Number</td>
+                <td><code>parseInt("42px")</code></td>
+                <td>number</td>
+              </tr>
+              <tr>
+                <td>Array (mutating)</td>
+                <td><code>arr.push(x)</code></td>
+                <td>new length</td>
+              </tr>
+              <tr>
+                <td>Array (mutating)</td>
+                <td><code>arr.pop()</code></td>
+                <td>removed item</td>
+              </tr>
+              <tr>
+                <td>Array (mutating)</td>
+                <td><code>arr.splice(i, n)</code></td>
+                <td>removed items</td>
+              </tr>
+              <tr>
+                <td>Array (new value)</td>
+                <td><code>arr.map(fn)</code></td>
+                <td>new array</td>
+              </tr>
+              <tr>
+                <td>Array (new value)</td>
+                <td><code>arr.filter(fn)</code></td>
+                <td>new array</td>
+              </tr>
+              <tr>
+                <td>Array (new value)</td>
+                <td><code>arr.reduce(fn, 0)</code></td>
+                <td>single value</td>
+              </tr>
+              <tr>
+                <td>Object</td>
+                <td><code>Object.keys(obj)</code></td>
+                <td>array of keys</td>
+              </tr>
+              <tr>
+                <td>Object</td>
+                <td><code>Object.values(obj)</code></td>
+                <td>array of values</td>
+              </tr>
+              <tr>
+                <td>Object</td>
+                <td><code>obj.hasOwnProperty("k")</code></td>
+                <td>true / false</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td><code>typeof x</code></td>
+                <td>type name as string</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td><code>Array.isArray(x)</code></td>
+                <td>true / false</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td><code>Number.isInteger(x)</code></td>
+                <td>true / false</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td><code>Number.isNaN(x)</code></td>
+                <td>true / false (no conversion)</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td><code>isNaN(x)</code></td>
+                <td>true / false (converts first)</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td><code>arr.some(fn)</code></td>
+                <td>true if any pass</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td><code>arr.every(fn)</code></td>
+                <td>true if all pass</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td><code>regex.test(str)</code></td>
+                <td>true / false</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. What is a method
+      write("out1", [
+        "hello".toUpperCase(),
+        [1, 2, 3].includes(2),
+        Math.max(1, 5, 3),
+        (42).toString(),
+      ]);
+
+      // 2. String methods
+      const s2 = "Hello World";
+      write("out2", [
+        s2.length,
+        s2.toUpperCase(),
+        s2.toLowerCase(),
+        s2.slice(0, 5),
+        s2.includes("World"),
+        s2.indexOf("o"),
+        s2.replace("World", "JS"),
+        "  hi  ".trim(),
+        "a,b,c".split(",").join(" | "),
+        "ab".repeat(3),
+        "5".padStart(3, "0"),
+      ]);
+
+      // 3. Number methods
+      const n3 = 3.14159;
+      write("out3", [
+        n3.toFixed(2),
+        (255).toString(16),
+        Number("42"),
+        parseInt("42px"),
+        parseFloat("3.14abc"),
+        Math.round(4.6),
+        Math.floor(4.9),
+        Math.ceil(4.1),
+        Math.abs(-7),
+        Math.max(3, 9, 1),
+      ]);
+
+      // 4. Mutating arrays
+      const arrM = [1, 2, 3];
+      arrM.push(4);
+      arrM.pop();
+      arrM.unshift(0);
+      arrM.shift();
+
+      const arr2 = [10, 20, 30];
+      arr2.splice(1, 1);
+
+      const arr3 = [3, 1, 2];
+      arr3.sort();
+      const sorted = arr3.join(",");
+      arr3.reverse();
+
+      write("out4", [
+        "arr     = [" + arrM.join(", ") + "]",
+        "arr2    = [" + arr2.join(", ") + "]",
+        "sorted  = [" + sorted + "]",
+        "reversed= [" + arr3.join(", ") + "]",
+      ]);
+
+      // 5. Non-mutating arrays
+      const nums = [1, 2, 3, 4, 5];
+      const lines5 = [];
+      lines5.push("map        → [" + nums.map((n) => n * 2).join(", ") + "]");
+      lines5.push(
+        "filter     → [" + nums.filter((n) => n % 2 === 0).join(", ") + "]",
+      );
+      lines5.push("find       → " + nums.find((n) => n > 3));
+      lines5.push("findIndex  → " + nums.findIndex((n) => n > 3));
+      lines5.push("reduce     → " + nums.reduce((a, b) => a + b, 0));
+      lines5.push("some       → " + nums.some((n) => n > 4));
+      lines5.push("every      → " + nums.every((n) => n > 0));
+      lines5.push("includes   → " + nums.includes(3));
+      lines5.push("indexOf    → " + nums.indexOf(3));
+      lines5.push("slice(1,3) → [" + nums.slice(1, 3).join(", ") + "]");
+      lines5.push("join('-')  → " + nums.join("-"));
+      const collected = [];
+      nums.slice(0, 3).forEach((n) => collected.push("item: " + n));
+      lines5.push(...collected);
+      write("out5", lines5);
+
+      // 6. Object methods
+      const user6 = { name: "Alex", age: 20 };
+      const merged = Object.assign({}, user6, { city: "Delhi" });
+      write("out6", [
+        "keys    → [" + Object.keys(user6).join(", ") + "]",
+        "values  → [" + Object.values(user6).join(", ") + "]",
+        "entries → " + JSON.stringify(Object.entries(user6)),
+        "hasOwn  → " + user6.hasOwnProperty("name"),
+        '"age" in user → ' + ("age" in user6),
+        "merged  → " + JSON.stringify(merged),
+      ]);
+
+      // 7. Type checks
+      write("out7", [
+        "typeof 42         → " + typeof 42,
+        'typeof "hi"       → ' + typeof "hi",
+        "typeof true       → " + typeof true,
+        "typeof undefined  → " + typeof undefined,
+        "typeof null       → " + typeof null,
+        "typeof []         → " + typeof [],
+        "typeof function(){} → " + typeof function () {},
+        "Array.isArray([]) → " + Array.isArray([]),
+        'Array.isArray("hi") → ' + Array.isArray("hi"),
+        "[] instanceof Array → " + ([] instanceof Array),
+      ]);
+
+      // 8. Number checks
+      write("out8", [
+        'isNaN("abc")              → ' + isNaN("abc"),
+        'isNaN("42")               → ' + isNaN("42"),
+        "Number.isNaN(NaN)         → " + Number.isNaN(NaN),
+        'Number.isNaN("42")        → ' + Number.isNaN("42"),
+        "Number.isInteger(5)       → " + Number.isInteger(5),
+        "Number.isInteger(5.5)     → " + Number.isInteger(5.5),
+        "Number.isFinite(10)       → " + Number.isFinite(10),
+        "Number.isFinite(Infinity) → " + Number.isFinite(Infinity),
+      ]);
+
+      // 9. String / array / object tests
+      const s9 = "hello world";
+      const a9 = [1, 2, 3];
+      const o9 = { a: 1 };
+      write("out9", [
+        's.includes("world")       → ' + s9.includes("world"),
+        's.startsWith("hello")     → ' + s9.startsWith("hello"),
+        's.endsWith("world")       → ' + s9.endsWith("world"),
+        "s.search(/ell/)           → " + s9.search(/ell/),
+        "s.match(/l/g)             → " + JSON.stringify(s9.match(/l/g)),
+        "arr.includes(2)           → " + a9.includes(2),
+        "arr.some(n => n > 2)      → " + a9.some((n) => n > 2),
+        "arr.every(n => n > 0)     → " + a9.every((n) => n > 0),
+        'obj.hasOwnProperty("a")   → ' + o9.hasOwnProperty("a"),
+        '"a" in obj                → ' + ("a" in o9),
+      ]);
+
+      // 10. Regex test
+      write("out10", [
+        '/\\d+/.test("abc123")              → ' + /\d+/.test("abc123"),
+        '/\\d+/.test("hello")               → ' + /\d+/.test("hello"),
+        '/^[a-z]+$/.test("hello")           → ' + /^[a-z]+$/.test("hello"),
+        '/^[a-z]+$/.test("hello123")        → ' + /^[a-z]+$/.test("hello123"),
+        '/^\\S+@\\S+\\.\\S+$/.test("a@b.c") → ' +
+          /^\S+@\S+\.\S+$/.test("user@site.com"),
+        '/cat/i.test("The CAT sat")         → ' + /cat/i.test("The CAT sat"),
+      ]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

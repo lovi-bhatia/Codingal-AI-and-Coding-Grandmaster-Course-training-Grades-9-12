@@ -1,0 +1,1109 @@
+<!--
+=======================================================
+  JAVASCRIPT ARRAYS AND ARRAY METHODS - GUIDE
+=======================================================
+
+WHAT IS AN ARRAY?
+An ordered, indexed list of values stored under one variable.
+Arrays hold any type: numbers, strings, objects, even other arrays.
+
+  const fruits = ["apple", "mango", "kiwi"];
+
+-------------------------------------------------------
+1. CREATING ARRAYS
+-------------------------------------------------------
+  const arr = [1, 2, 3];              // literal (preferred)
+  const empty = [];                   // empty
+  const mixed = [1, "hi", true, null];
+  const nested = [[1, 2], [3, 4]];
+  const fromStr = Array.from("abc");  // ["a","b","c"]
+  const ofNums = Array.of(5, 10, 15);
+
+  const likeArray = new Array(3);     // [empty x 3] — avoid
+  const oneItem  = new Array(7);      // [7] — misleading!
+
+Rule: always use [ ] unless you have a specific reason.
+
+-------------------------------------------------------
+2. INDEXING AND LENGTH
+-------------------------------------------------------
+  arr[0]        first item      (indexes start at 0)
+  arr[arr.length - 1]  last item
+  arr.at(-1)    last item      (modern)
+  arr.at(-2)    second-last
+  arr.length    number of items
+  arr[100]      undefined      (out-of-range)
+
+Arrays are ZERO-INDEXED:  first = 0, last = length - 1.
+
+-------------------------------------------------------
+3. MUTATING METHODS (change the original array)
+-------------------------------------------------------
+  push(x)         add to end             → returns new length
+  pop()           remove from end        → returns removed item
+  unshift(x)      add to start           → returns new length
+  shift()         remove from start      → returns removed item
+  splice(i, n)    remove n items at i    → returns removed items
+  splice(i, n, x) replace with x
+  sort(fn)        sort in place          → default sorts as strings
+  reverse()       reverse in place
+  fill(v)         fill with v
+  copyWithin()    copy a slice onto itself
+
+-------------------------------------------------------
+4. NON-MUTATING METHODS (return new values)
+-------------------------------------------------------
+  slice(a, b)     copy items from a to b (b excluded)
+  concat(arr2)    merge arrays
+  join(sep)       array → string
+  indexOf(x)      first index of x, or -1
+  lastIndexOf(x)  last index of x, or -1
+  includes(x)     true / false
+  flat(depth)     flatten nested arrays
+  flatMap(fn)     map then flatten one level
+
+-------------------------------------------------------
+5. ITERATION METHODS (loop with style)
+-------------------------------------------------------
+  forEach(fn)      run fn for each item       → returns undefined
+  map(fn)          transform each item        → new array, same length
+  filter(fn)       keep items passing fn      → shorter array
+  find(fn)         first matching item        → item or undefined
+  findIndex(fn)    index of first match       → index or -1
+  some(fn)         at least one passes        → true / false
+  every(fn)        all pass                   → true / false
+  reduce(fn, init) collapse to a single value
+  reduceRight(fn)  same, from the right
+
+CALLBACK SIGNATURE:
+  (item, index, array) — most methods pass all three.
+  filter skips; map keeps length;
+  find stops at first match (efficient).
+
+-------------------------------------------------------
+6. ARRAY.isArray AND TYPE CHECKS
+-------------------------------------------------------
+  Array.isArray(x)      → true only for arrays
+  typeof []             → "object" (not helpful)
+  arr instanceof Array  → true, but fails across iframes
+
+RULE: always use Array.isArray(x).
+
+-------------------------------------------------------
+7. SPREAD AND DESTRUCTURING
+-------------------------------------------------------
+  const copy = [...arr];                  // shallow copy
+  const merged = [...a, ...b];            // merge
+  const max = Math.max(...arr);           // pass as separate args
+
+  const [first, second, ...rest] = [1, 2, 3, 4];
+  // first=1, second=2, rest=[3,4]
+
+  const [, second] = arr;                 // skip first
+
+-------------------------------------------------------
+8. COMMON PATTERNS
+-------------------------------------------------------
+   SUM          arr.reduce((s, n) => s + n, 0)
+   AVERAGE      sum / arr.length
+   MAX          Math.max(...arr)
+   UNIQUE       [...new Set(arr)]
+   SORT NUMBERS arr.sort((a, b) => a - b)
+   SORT STRINGS arr.sort()
+   REVERSE      arr.slice().reverse()   // keeps original
+   EMPTY CHECK  arr.length === 0
+
+-------------------------------------------------------
+9. MUTATING vs NON-MUTATING — WHY IT MATTERS
+-------------------------------------------------------
+  const a = [3, 1, 2];
+  const b = a.sort();   // b and a are the SAME array!
+  // sort, reverse, push, pop, splice, fill → all touch the original
+
+  To keep the original safe:
+  const sorted = [...a].sort();
+
+Rule: methods that "return new array" are safer. Methods that
+"return new length" or the removed item modify the original.
+
+Memory Trick:
+  push/pop  → end.
+  unshift/shift → start.
+  slice copy, splice destroy.
+  map transforms, filter selects, find picks one, reduce sums.
+  some = any, every = all.
+  Spread [...] to copy or merge without side effects.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Arrays and Array Methods</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Arrays and Array Methods</h1>
+
+      <!-- 1. CREATING ARRAYS -->
+      <div class="section">
+        <h2>1. Creating Arrays</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const nums = [10, 20, 30];
+const mixed = [1, "hi", true, null];
+const nested = [[1, 2], [3, 4]];
+const empty = [];
+
+// Array.from — convert iterable / string
+const fromStr = Array.from("abc");
+
+// Array.of — build from args
+const fromArgs = Array.of(5, 10, 15);
+
+console.log(nums);
+console.log(mixed);
+console.log(nested);
+console.log(fromStr);
+console.log(fromArgs);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. INDEXING AND LENGTH -->
+      <div class="section">
+        <h2>2. Index, Length, at()</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const fruits = ["apple", "mango", "kiwi", "pear"];
+
+console.log(fruits[0]);                  // first
+console.log(fruits[2]);                  // third
+console.log(fruits[fruits.length - 1]);  // last
+console.log(fruits.at(-1));              // last (modern)
+console.log(fruits.at(-2));              // second last
+console.log(fruits.length);
+console.log(fruits[99]);                 // undefined
+
+// Modify by index
+fruits[1] = "orange";
+console.log(fruits);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. PUSH POP SHIFT UNSHIFT -->
+      <div class="section">
+        <h2>3. Adding and Removing — End and Start</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const arr = [1, 2, 3];
+
+arr.push(4);        // add to end
+console.log(arr)    // [1,2,3,4]
+
+arr.pop();          // remove from end
+console.log(arr)    // [1,2,3]
+
+arr.unshift(0);     // add to start
+console.log(arr)    // [0,1,2,3]
+
+arr.shift();        // remove from start
+console.log(arr)    // [1,2,3]
+
+// Return values
+console.log(arr.push(9));   // new length
+console.log(arr.pop());     // removed item
+
+// These all MUTATE the original array.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. SPLICE -->
+      <div class="section">
+        <h2>4. splice vs slice</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// SPLICE — mutates
+const a = ["a", "b", "c", "d", "e"];
+a.splice(2, 1);          // remove 1 at index 2
+console.log(a);          // [a,b,d,e]
+
+a.splice(1, 0, "x");     // insert "x" at 1
+console.log(a);          // [a,x,b,d,e]
+
+a.splice(2, 2, "y");     // replace 2 items
+console.log(a);          // [a,x,y,e]
+
+// SLICE — does not mutate
+const b = ["a", "b", "c", "d", "e"];
+const part = b.slice(1, 3);
+console.log(part);       // [b,c]
+console.log(b);          // full array unchanged
+
+console.log(b.slice(-2)); // last two</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. SORT AND REVERSE -->
+      <div class="section">
+        <h2>5. sort and reverse</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Strings sort naturally
+const names = ["Sam", "Alex", "Ravi"];
+names.sort();
+console.log(names);
+names.reverse();
+console.log(names);
+
+// Numbers need a compare function
+const nums = [40, 5, 100, 25];
+nums.sort();                       // wrong: sorts as text
+console.log(nums);
+
+// Correct numeric sort
+const nums2 = [40, 5, 100, 25];
+nums2.sort((a, b) => a - b);       // ascending
+console.log(nums2);
+nums2.sort((a, b) => b - a);       // descending
+console.log(nums2);
+
+// Keep original safe with spread
+const safe = [...nums2].sort((a, b) => a - b);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. SEARCH METHODS -->
+      <div class="section">
+        <h2>6. Searching — indexOf, includes, find, findIndex</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const items = ["pen", "book", "bag", "book"];
+
+console.log(items.indexOf("book"));
+console.log(items.lastIndexOf("book"));
+console.log(items.indexOf("lamp"));   // -1
+console.log(items.includes("bag"));
+console.log(items.includes("lamp"));
+
+// Functional search
+const nums = [1, 3, 5, 8, 9, 12];
+console.log(nums.find(n => n > 6));
+console.log(nums.findIndex(n => n > 6));
+console.log(nums.find(n => n > 100));        // undefined
+console.log(nums.findIndex(n => n > 100));   // -1
+
+// Objects in array
+const users = [
+  { id: 1, name: "Alex" },
+  { id: 2, name: "Sam" }
+];
+console.log(users.find(u => u.id === 2));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. ITERATION - forEach -->
+      <div class="section">
+        <h2>7. forEach — Loop with Style</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const colors = ["red", "green", "blue"];
+
+colors.forEach(function (color, index) {
+  console.log(index + ": " + color);
+});
+
+// Arrow version
+colors.forEach((color, i) => console.log(i + " → " + color));
+
+// forEach always returns undefined
+const result = colors.forEach(c => c);
+console.log("returned:", result);
+
+// Cannot use break or continue inside forEach
+// Use for...of if you need to stop early.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. MAP AND FILTER -->
+      <div class="section">
+        <h2>8. map and filter</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const nums = [1, 2, 3, 4, 5];
+
+// MAP — same length, transformed
+const doubled = nums.map(n => n * 2);
+console.log(doubled);
+console.log(nums);              // original safe
+
+// Transform to strings
+const labels = nums.map(n => "item-" + n);
+console.log(labels);
+
+// FILTER — shorter array
+const evens = nums.filter(n => n % 2 === 0);
+console.log(evens);
+
+// Chain map and filter
+const result = nums
+  .filter(n => n > 2)
+  .map(n => n * 10);
+console.log(result);
+
+// Array of objects
+const users = [
+  { name: "Alex", age: 20 },
+  { name: "Sam",  age: 30 },
+  { name: "Ravi", age: 25 }
+];
+console.log(users.map(u => u.name));
+console.log(users.filter(u => u.age >= 25));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. REDUCE -->
+      <div class="section">
+        <h2>9. reduce — Collapse to a Single Value</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const nums = [1, 2, 3, 4, 5];
+
+// Sum
+const sum = nums.reduce((acc, n) => acc + n, 0);
+console.log("sum:", sum);
+
+// Product
+const product = nums.reduce((acc, n) => acc * n, 1);
+console.log("product:", product);
+
+// Max
+const max = nums.reduce((a, b) => a > b ? a : b);
+console.log("max:", max);
+
+// Count occurrences
+const words = ["a", "b", "a", "c", "a"];
+const counts = words.reduce((acc, w) => {
+  acc[w] = (acc[w] || 0) + 1;
+  return acc;
+}, {});
+console.log(counts);
+
+// ALWAYS pass an initial value (second arg).
+// Without it, reduce uses the first item as acc.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out9" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. SOME AND EVERY -->
+      <div class="section">
+        <h2>10. some and every</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const ages = [15, 22, 30, 18];
+
+// some — is at least one true?
+console.log(ages.some(a => a >= 21));
+console.log(ages.some(a => a > 100));
+
+// every — are all true?
+console.log(ages.every(a => a >= 18));
+console.log(ages.every(a => a > 10));
+
+// Real use: validate a form
+const inputs = ["Sam", "sam@site.com", ""];
+const hasEmpty = inputs.some(v => v.trim() === "");
+console.log("form has empty field:", hasEmpty);
+
+// some / every stop early once decided.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out10" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. JOIN CONCAT FLAT -->
+      <div class="section">
+        <h2>11. join, concat, flat, flatMap</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// join — array → string
+const parts = ["2025", "10", "28"];
+console.log(parts.join("-"));
+console.log(parts.join(""));
+console.log(["a", "b"].join(" / "));
+
+// concat — merge arrays
+const a = [1, 2];
+const b = [3, 4];
+console.log(a.concat(b));
+console.log([...a, ...b]);
+
+// flat — remove nesting
+const nested = [1, [2, [3, [4]]]];
+console.log(nested.flat());
+console.log(nested.flat(2));
+console.log(nested.flat(Infinity));
+
+// flatMap — map then flat one level
+const phrases = ["hi there", "good day"];
+console.log(phrases.flatMap(p => p.split(" ")));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out11" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. SPREAD AND DESTRUCTURING -->
+      <div class="section">
+        <h2>12. Spread (...) and Destructuring</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const original = [1, 2, 3];
+
+// Copy
+const copy = [...original];
+copy.push(99);
+console.log(copy);
+console.log(original);   // unchanged
+
+// Merge
+const merged = [...original, 4, 5];
+console.log(merged);
+
+// Spread into Math functions
+const nums = [12, 45, 7];
+console.log(Math.max(...nums));
+
+// Destructuring
+const [first, second, ...rest] = [10, 20, 30, 40];
+console.log(first, second, rest);
+
+// Skip an item with a comma
+const [a, , c] = ["x", "y", "z"];
+console.log(a, c);
+
+// Default values
+const [p = "empty"] = [];
+console.log(p);
+
+// Swap without a temp
+let x = 1, y = 2;
+[x, y] = [y, x];
+console.log(x, y);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out12" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. COMMON PATTERNS -->
+      <div class="section">
+        <h2>13. Common Patterns</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const data = [4, 8, 15, 16, 23, 42];
+
+// SUM
+console.log(data.reduce((s, n) => s + n, 0));
+
+// AVERAGE
+const avg = data.reduce((s, n) => s + n, 0) / data.length;
+console.log(avg.toFixed(2));
+
+// MAX
+console.log(Math.max(...data));
+
+// UNIQUE
+const dupes = [1, 2, 2, 3, 3, 3];
+console.log([...new Set(dupes)]);
+
+// NUMERIC SORT
+console.log([...data].sort((a, b) => a - b));
+
+// REVERSE without touching original
+console.log([...data].reverse());
+
+// CHECK EMPTY
+console.log(data.length === 0);
+
+// ARRAY OF OBJECTS — get a column
+const users = [
+  { name: "Alex", score: 90 },
+  { name: "Sam",  score: 75 },
+  { name: "Ravi", score: 88 }
+];
+console.log(users.map(u => u.name));
+console.log(users.filter(u => u.score > 80).map(u => u.name));
+console.log(users.sort((a, b) => b.score - a.score)[0].name);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out13" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14. TYPE CHECKS -->
+      <div class="section">
+        <h2>14. Checking for Arrays</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>console.log(Array.isArray([]));           // true
+console.log(Array.isArray("hi"));          // false
+console.log(Array.isArray({ length: 2 })); // false
+console.log(Array.isArray(new Array()));   // true
+
+// typeof is not helpful for arrays
+console.log(typeof []);         // "object"
+
+// Only use Array.isArray — it is reliable
+// across different windows / iframes,
+// whereas instanceof can fail.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out14" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15. QUICK REFERENCE -->
+      <div class="section">
+        <h2>15. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Method</th>
+                <th>Does</th>
+                <th>Mutates?</th>
+                <th>Returns</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>push(x)</code></td>
+                <td>Add to end</td>
+                <td>Yes</td>
+                <td>New length</td>
+              </tr>
+              <tr>
+                <td><code>pop()</code></td>
+                <td>Remove from end</td>
+                <td>Yes</td>
+                <td>Removed item</td>
+              </tr>
+              <tr>
+                <td><code>unshift(x)</code></td>
+                <td>Add to start</td>
+                <td>Yes</td>
+                <td>New length</td>
+              </tr>
+              <tr>
+                <td><code>shift()</code></td>
+                <td>Remove from start</td>
+                <td>Yes</td>
+                <td>Removed item</td>
+              </tr>
+              <tr>
+                <td><code>splice(i, n)</code></td>
+                <td>Remove / insert</td>
+                <td>Yes</td>
+                <td>Removed items</td>
+              </tr>
+              <tr>
+                <td><code>sort(fn)</code></td>
+                <td>Sort in place</td>
+                <td>Yes</td>
+                <td>Same array</td>
+              </tr>
+              <tr>
+                <td><code>reverse()</code></td>
+                <td>Reverse in place</td>
+                <td>Yes</td>
+                <td>Same array</td>
+              </tr>
+              <tr>
+                <td><code>fill(v)</code></td>
+                <td>Fill with value</td>
+                <td>Yes</td>
+                <td>Same array</td>
+              </tr>
+              <tr>
+                <td><code>slice(a, b)</code></td>
+                <td>Copy a range</td>
+                <td>No</td>
+                <td>New array</td>
+              </tr>
+              <tr>
+                <td><code>concat(arr)</code></td>
+                <td>Merge arrays</td>
+                <td>No</td>
+                <td>New array</td>
+              </tr>
+              <tr>
+                <td><code>join(sep)</code></td>
+                <td>Array → string</td>
+                <td>No</td>
+                <td>String</td>
+              </tr>
+              <tr>
+                <td><code>indexOf(x)</code></td>
+                <td>First index of x</td>
+                <td>No</td>
+                <td>Index or -1</td>
+              </tr>
+              <tr>
+                <td><code>includes(x)</code></td>
+                <td>Contains x</td>
+                <td>No</td>
+                <td>true / false</td>
+              </tr>
+              <tr>
+                <td><code>forEach(fn)</code></td>
+                <td>Loop each item</td>
+                <td>No</td>
+                <td>undefined</td>
+              </tr>
+              <tr>
+                <td><code>map(fn)</code></td>
+                <td>Transform items</td>
+                <td>No</td>
+                <td>New array</td>
+              </tr>
+              <tr>
+                <td><code>filter(fn)</code></td>
+                <td>Keep matching</td>
+                <td>No</td>
+                <td>New array</td>
+              </tr>
+              <tr>
+                <td><code>find(fn)</code></td>
+                <td>First match</td>
+                <td>No</td>
+                <td>Item or undefined</td>
+              </tr>
+              <tr>
+                <td><code>findIndex(fn)</code></td>
+                <td>Index of first match</td>
+                <td>No</td>
+                <td>Index or -1</td>
+              </tr>
+              <tr>
+                <td><code>reduce(fn, init)</code></td>
+                <td>Collapse to one value</td>
+                <td>No</td>
+                <td>Accumulated value</td>
+              </tr>
+              <tr>
+                <td><code>some(fn)</code></td>
+                <td>Any pass</td>
+                <td>No</td>
+                <td>true / false</td>
+              </tr>
+              <tr>
+                <td><code>every(fn)</code></td>
+                <td>All pass</td>
+                <td>No</td>
+                <td>true / false</td>
+              </tr>
+              <tr>
+                <td><code>flat(depth)</code></td>
+                <td>Flatten nesting</td>
+                <td>No</td>
+                <td>New array</td>
+              </tr>
+              <tr>
+                <td><code>flatMap(fn)</code></td>
+                <td>Map then flat 1</td>
+                <td>No</td>
+                <td>New array</td>
+              </tr>
+              <tr>
+                <td><code>Array.isArray(x)</code></td>
+                <td>Is it an array?</td>
+                <td>No</td>
+                <td>true / false</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+      const J = (v) =>
+        Array.isArray(v)
+          ? "[" +
+            v
+              .map((x) => (typeof x === "object" ? JSON.stringify(x) : x))
+              .join(", ") +
+            "]"
+          : JSON.stringify(v);
+
+      // 1. Create
+      write("out1", [
+        "nums     : [" + [10, 20, 30].join(", ") + "]",
+        'mixed    : [1, "hi", true, null]',
+        "nested   : [[1,2],[3,4]]",
+        "fromStr  : [" + Array.from("abc").join(", ") + "]",
+        "fromArgs : [" + Array.of(5, 10, 15).join(", ") + "]",
+      ]);
+
+      // 2. Index and length
+      const fruits2 = ["apple", "mango", "kiwi", "pear"];
+      const l2 = [];
+      l2.push("fruits[0]              → " + fruits2[0]);
+      l2.push("fruits[2]              → " + fruits2[2]);
+      l2.push("fruits[length - 1]     → " + fruits2[fruits2.length - 1]);
+      l2.push("fruits.at(-1)          → " + fruits2.at(-1));
+      l2.push("fruits.at(-2)          → " + fruits2.at(-2));
+      l2.push("fruits.length          → " + fruits2.length);
+      l2.push("fruits[99]             → " + fruits2[99]);
+      fruits2[1] = "orange";
+      l2.push("after fruits[1]=orange → " + fruits2.join(", "));
+      write("out2", l2);
+
+      // 3. push pop shift unshift
+      const a3 = [1, 2, 3];
+      const l3 = [];
+      a3.push(4);
+      l3.push("after push(4)     → [" + a3.join(", ") + "]");
+      a3.pop();
+      l3.push("after pop()       → [" + a3.join(", ") + "]");
+      a3.unshift(0);
+      l3.push("after unshift(0)  → [" + a3.join(", ") + "]");
+      a3.shift();
+      l3.push("after shift()     → [" + a3.join(", ") + "]");
+      l3.push("push returns new length → " + a3.push(9));
+      l3.push("pop returns removed     → " + a3.pop());
+      write("out3", l3);
+
+      // 4. splice vs slice
+      const a4 = ["a", "b", "c", "d", "e"];
+      const l4 = [];
+      a4.splice(2, 1);
+      l4.push("splice(2,1)       → [" + a4.join(", ") + "]");
+      a4.splice(1, 0, "x");
+      l4.push("splice(1,0,'x')   → [" + a4.join(", ") + "]");
+      a4.splice(2, 2, "y");
+      l4.push("splice(2,2,'y')   → [" + a4.join(", ") + "]");
+      const b4 = ["a", "b", "c", "d", "e"];
+      l4.push(
+        "slice(1,3)        → [" +
+          b4.slice(1, 3).join(", ") +
+          "]  (original: " +
+          b4.join(", ") +
+          ")",
+      );
+      l4.push("slice(-2)         → [" + b4.slice(-2).join(", ") + "]");
+      write("out4", l4);
+
+      // 5. sort and reverse
+      const names5 = ["Sam", "Alex", "Ravi"];
+      names5.sort();
+      const rev5 = [...names5].reverse();
+      const numeric5 = [40, 5, 100, 25].sort();
+      const numAsc = [40, 5, 100, 25].sort((a, b) => a - b);
+      const numDesc = [40, 5, 100, 25].sort((a, b) => b - a);
+      write("out5", [
+        "names.sort()          → [" + names5.join(", ") + "]",
+        "names reversed        → [" + rev5.join(", ") + "]",
+        "numbers .sort()       → [" +
+          numeric5.join(", ") +
+          "]   (string sort — wrong)",
+        "numbers .sort(a-b)    → [" + numAsc.join(", ") + "]",
+        "numbers .sort(b-a)    → [" + numDesc.join(", ") + "]",
+      ]);
+
+      // 6. Search
+      const items6 = ["pen", "book", "bag", "book"];
+      const nums6 = [1, 3, 5, 8, 9, 12];
+      const users6 = [
+        { id: 1, name: "Alex" },
+        { id: 2, name: "Sam" },
+      ];
+      write("out6", [
+        'items.indexOf("book")     → ' + items6.indexOf("book"),
+        'items.lastIndexOf("book") → ' + items6.lastIndexOf("book"),
+        'items.indexOf("lamp")     → ' + items6.indexOf("lamp"),
+        'items.includes("bag")     → ' + items6.includes("bag"),
+        "nums.find(n > 6)          → " + nums6.find((n) => n > 6),
+        "nums.findIndex(n > 6)     → " + nums6.findIndex((n) => n > 6),
+        "nums.find(n > 100)        → " + nums6.find((n) => n > 100),
+        "nums.findIndex(n > 100)   → " + nums6.findIndex((n) => n > 100),
+        "users.find(id === 2)      → " +
+          JSON.stringify(users6.find((u) => u.id === 2)),
+      ]);
+
+      // 7. forEach
+      const colors7 = ["red", "green", "blue"];
+      const l7 = [];
+      colors7.forEach((c, i) => l7.push(i + ": " + c));
+      const ret = colors7.forEach((c) => c);
+      l7.push("forEach returned → " + ret);
+      write("out7", l7);
+
+      // 8. map and filter
+      const nums8 = [1, 2, 3, 4, 5];
+      const users8 = [
+        { name: "Alex", age: 20 },
+        { name: "Sam", age: 30 },
+        { name: "Ravi", age: 25 },
+      ];
+      write("out8", [
+        "map(n * 2)                → [" +
+          nums8.map((n) => n * 2).join(", ") +
+          "]",
+        "original                  → [" + nums8.join(", ") + "]",
+        "filter(even)              → [" +
+          nums8.filter((n) => n % 2 === 0).join(", ") +
+          "]",
+        "filter(>2).map(*10)       → [" +
+          nums8
+            .filter((n) => n > 2)
+            .map((n) => n * 10)
+            .join(", ") +
+          "]",
+        "users.map(name)           → [" +
+          users8.map((u) => u.name).join(", ") +
+          "]",
+        "users.filter(age >= 25)   → [" +
+          users8
+            .filter((u) => u.age >= 25)
+            .map((u) => u.name)
+            .join(", ") +
+          "]",
+      ]);
+
+      // 9. reduce
+      const nums9 = [1, 2, 3, 4, 5];
+      const words9 = ["a", "b", "a", "c", "a"];
+      const counts9 = words9.reduce((acc, w) => {
+        acc[w] = (acc[w] || 0) + 1;
+        return acc;
+      }, {});
+      write("out9", [
+        "sum       → " + nums9.reduce((a, b) => a + b, 0),
+        "product   → " + nums9.reduce((a, b) => a * b, 1),
+        "max       → " + nums9.reduce((a, b) => (a > b ? a : b)),
+        "counts    → " + JSON.stringify(counts9),
+      ]);
+
+      // 10. some and every
+      const ages10 = [15, 22, 30, 18];
+      const inputs10 = ["Sam", "sam@site.com", ""];
+      write("out10", [
+        "ages.some(a >= 21)   → " + ages10.some((a) => a >= 21),
+        "ages.some(a > 100)   → " + ages10.some((a) => a > 100),
+        "ages.every(a >= 18)  → " + ages10.every((a) => a >= 18),
+        "ages.every(a > 10)   → " + ages10.every((a) => a > 10),
+        "form has empty field → " + inputs10.some((v) => v.trim() === ""),
+      ]);
+
+      // 11. join concat flat flatMap
+      const nested11 = [1, [2, [3, [4]]]];
+      write("out11", [
+        '["2025","10","28"].join("-")   → ' + ["2025", "10", "28"].join("-"),
+        "[1,2].concat([3,4])            → [" +
+          [1, 2].concat([3, 4]).join(", ") +
+          "]",
+        "[1,2,3,4,5] via spread        → [" +
+          [...[1, 2], ...[3, 4]].join(", ") +
+          "]",
+        "nested.flat()                 → [" + nested11.flat().join(", ") + "]",
+        "nested.flat(2)                → [" + nested11.flat(2).join(", ") + "]",
+        "nested.flat(Infinity)         → [" +
+          nested11.flat(Infinity).join(", ") +
+          "]",
+        "flatMap(split ' ')            → [" +
+          ["hi there", "good day"].flatMap((p) => p.split(" ")).join(", ") +
+          "]",
+      ]);
+
+      // 12. spread and destructuring
+      const orig12 = [1, 2, 3];
+      const copy12 = [...orig12];
+      copy12.push(99);
+      const merged12 = [...orig12, 4, 5];
+      const [f12, s12, ...rest12] = [10, 20, 30, 40];
+      const [a12, , c12] = ["x", "y", "z"];
+      const [p12 = "empty"] = [];
+      let x12 = 1,
+        y12 = 2;
+      [x12, y12] = [y12, x12];
+      write("out12", [
+        "copy = [...original]; push(99)",
+        "copy          → [" + copy12.join(", ") + "]",
+        "original      → [" + orig12.join(", ") + "]  (unchanged)",
+        "merged        → [" + merged12.join(", ") + "]",
+        "Math.max(...) → " + Math.max(...orig12),
+        "[first, second, ...rest] → " +
+          f12 +
+          ", " +
+          s12 +
+          ", [" +
+          rest12.join(", ") +
+          "]",
+        "[a, , c]      → " + a12 + ", " + c12,
+        "[p = 'empty'] → " + p12,
+        "swap x,y      → x=" + x12 + ", y=" + y12,
+      ]);
+
+      // 13. Common patterns
+      const data13 = [4, 8, 15, 16, 23, 42];
+      const dupes13 = [1, 2, 2, 3, 3, 3];
+      const users13 = [
+        { name: "Alex", score: 90 },
+        { name: "Sam", score: 75 },
+        { name: "Ravi", score: 88 },
+      ];
+      write("out13", [
+        "sum                → " + data13.reduce((s, n) => s + n, 0),
+        "average            → " +
+          (data13.reduce((s, n) => s + n, 0) / data13.length).toFixed(2),
+        "max                → " + Math.max(...data13),
+        "unique             → [" + [...new Set(dupes13)].join(", ") + "]",
+        "numeric sort       → [" +
+          [...data13].sort((a, b) => a - b).join(", ") +
+          "]",
+        "reverse (copy)     → [" + [...data13].reverse().join(", ") + "]",
+        "empty check        → " + (data13.length === 0),
+        "users.map(name)    → [" + users13.map((u) => u.name).join(", ") + "]",
+        "score > 80 names   → [" +
+          users13
+            .filter((u) => u.score > 80)
+            .map((u) => u.name)
+            .join(", ") +
+          "]",
+        "top scorer         → " +
+          [...users13].sort((a, b) => b.score - a.score)[0].name,
+      ]);
+
+      // 14. Type check
+      write("out14", [
+        "Array.isArray([])           → " + Array.isArray([]),
+        'Array.isArray("hi")         → ' + Array.isArray("hi"),
+        "Array.isArray({length: 2})  → " + Array.isArray({ length: 2 }),
+        "typeof []                   → " + typeof [],
+      ]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

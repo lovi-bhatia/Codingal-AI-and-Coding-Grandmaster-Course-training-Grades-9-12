@@ -1,0 +1,1264 @@
+<!--
+=======================================================
+  HTML DOM AND DOM STRUCTURE
+=======================================================
+
+-------------------------------------------------------
+1. WHAT IS THE DOM?
+-------------------------------------------------------
+DOM = Document Object Model.
+
+When the browser loads an HTML file, it does NOT keep the text
+as-is. It parses the HTML and builds a tree of objects in memory
+called the DOM.
+
+  HTML text          →  parsed by the browser  →  DOM tree of nodes
+
+JavaScript cannot touch HTML files directly. It talks to the DOM.
+Change the DOM → the page on screen updates instantly.
+
+Key points:
+  - The DOM is a live object model, not the HTML file.
+  - Every tag, attribute, and piece of text becomes a node.
+  - The `document` object is the entry point to the whole tree.
+  - The DOM is language-agnostic (JS is just the usual way to use it).
+
+-------------------------------------------------------
+2. DOM STRUCTURE — THE TREE
+-------------------------------------------------------
+The DOM is a tree (hierarchical, not linear).
+
+  <html>
+    <head>
+      <title>My Page</title>
+    </head>
+    <body>
+      <h1>Hello</h1>
+      <ul>
+        <li>One</li>
+        <li>Two</li>
+      </ul>
+    </body>
+  </html>
+
+becomes:
+
+  document
+   └── html
+        ├── head
+        │    └── title
+        │         └── "My Page"   (text node)
+        └── body
+             ├── h1
+             │    └── "Hello"
+             └── ul
+                  ├── li ── "One"
+                  └── li ── "Two"
+
+VOCABULARY:
+  - Root       : document (and html as the root ELEMENT)
+  - Parent     : the node directly above
+  - Child      : the node directly below
+  - Sibling    : nodes sharing the same parent
+  - Leaf       : a node with no children (often a text node)
+  - Subtree    : any node plus everything under it
+
+-------------------------------------------------------
+3. NODE TYPES
+-------------------------------------------------------
+Every box in the tree is a node, and every node has a numeric type.
+
+  Node.ELEMENT_NODE       1   <div>, <p>, <ul> ...
+  Node.TEXT_NODE          3   the text inside an element
+  Node.DOCUMENT_NODE      9   the document itself
+
+ABOUT WHITESPACE:
+  Newlines and indentation between tags also become text nodes.
+  So a <ul> with two <li> children usually has FIVE childNodes
+  (text, li, text, li, text). That is why:
+    .children   → only ELEMENT children  (usually what you want)
+    .childNodes → ALL nodes (text + comments + elements)
+
+-------------------------------------------------------
+4. SELECTING ELEMENTS
+-------------------------------------------------------
+THE 5 MAIN METHODS:
+
+  document.getElementById("id")
+      → one element (fastest), IDs must be unique
+
+  document.getElementsByClassName("cls")
+      → LIVE HTMLCollection (updates automatically)
+
+  document.getElementsByTagName("p")
+      → LIVE HTMLCollection
+
+  document.querySelector("css selector")
+      → first matching element or null
+
+  document.querySelectorAll("css selector")
+      → STATIC NodeList (snapshot at the time of the call)
+
+CSS SELECTOR CHEAT SHEET:
+  "#id"              by id
+  ".class"           by class
+  "div"              by tag
+  "ul li"            descendant
+  "ul > li"          direct child
+  "input[type=text]" by attribute
+  ".a.b"             both classes
+  ".card p"          p inside .card
+
+RULE OF THUMB:
+  Single element → querySelector("#id") or getElementById
+  Many elements  → querySelectorAll
+
+-------------------------------------------------------
+5. READING AND CHANGING CONTENT
+-------------------------------------------------------
+  el.textContent        → plain text only (safe, fast)
+  el.innerText          → visible text (respects CSS)
+  el.innerHTML          → HTML string (parses tags — XSS risk)
+  el.outerHTML          → includes the element itself
+
+  el.value              → current value of an input
+  el.textContent = ""   → replace the text
+
+SECURITY: never put unescaped user input into innerHTML.
+
+-------------------------------------------------------
+6. ATTRIBUTES
+-------------------------------------------------------
+  el.getAttribute("href")          read any attribute
+  el.setAttribute("href", "/x")    write
+  el.removeAttribute("disabled")   delete
+  el.hasAttribute("href")          true / false
+
+  el.dataset.userId                → data-user-id (camelCase)
+
+  PROPERTY vs ATTRIBUTE:
+    el.id          → property (live, typed)
+    el.getAttribute("id") → attribute (as written in HTML)
+  For most cases properties work; use getAttribute for custom ones.
+
+-------------------------------------------------------
+7. CLASSES AND STYLES
+-------------------------------------------------------
+  el.classList.add("active")
+  el.classList.remove("active")
+  el.classList.toggle("active")
+  el.classList.contains("active")     true / false
+  el.className = "new-class"          replaces all classes
+
+  el.style.color = "red"              inline style
+  el.style.backgroundColor = "#eee"   camelCase for CSS kebab
+  el.style.cssText = "color:red"      multiple at once
+
+Style through CSS classes is cleaner than inline styles.
+
+-------------------------------------------------------
+8. TRAVERSING THE TREE
+-------------------------------------------------------
+  el.parentElement        immediate parent (element only)
+  el.parentNode           parent (any node)
+  el.children             child ELEMENTS (HTMLCollection)
+  el.childNodes           all child nodes
+  el.firstElementChild    first child element
+  el.lastElementChild     last child element
+  el.nextElementSibling   next sibling element
+  el.previousElementSibling  previous sibling element
+
+  el.closest(".card")     walk up to the nearest ancestor matching
+
+children / siblings with "Element" in the name skip text nodes.
+
+-------------------------------------------------------
+9. CREATING AND INSERTING
+-------------------------------------------------------
+  const el = document.createElement("li");
+  el.textContent = "New item";
+  el.classList.add("list-group-item");
+
+INSERT METHODS:
+  parent.appendChild(el)             add as last child
+  parent.prepend(el)                 add as first child
+  parent.insertBefore(el, ref)       before `ref`
+  ref.before(el) / ref.after(el)     relative to a sibling
+  el.replaceWith(other)              swap in place
+
+INSERTING MANY NODES:
+  Assemble a fragment and insert once — one reflow, not many:
+    const frag = document.createDocumentFragment();
+    items.forEach(t => { const li = document.createElement("li"); … frag.appendChild(li); });
+    list.appendChild(frag);
+
+innerHTML vs createElement:
+  innerHTML      → quick for static HTML, slower for repeated use
+  createElement  → safe with user input, better when you need references
+
+-------------------------------------------------------
+10. REMOVING AND REPLACING
+-------------------------------------------------------
+  el.remove()                        delete from the tree
+  parent.removeChild(el)             old way
+  oldEl.replaceWith(newEl)           replace
+  parent.innerHTML = ""              empty a container
+
+-------------------------------------------------------
+11. EVENTS — THE BASICS
+-------------------------------------------------------
+  el.addEventListener("click", function (event) {
+    // event.target   → what was clicked
+    // event.currentTarget → what the listener is attached to
+  });
+
+COMMON EVENTS:
+  click, dblclick
+  input, change, submit
+  keydown, keyup
+  mouseover, mouseout
+  focus, blur
+  load, DOMContentLoaded
+
+SCRIPT PLACEMENT:
+  - Put <script> at the end of <body>, OR
+  - Use defer / DOMContentLoaded, OR
+  - the elements won't exist yet.
+
+-------------------------------------------------------
+12. DOM PERFORMANCE
+-------------------------------------------------------
+  - Batch DOM writes (updates cause reflow + repaint).
+  - Read layout values (offsetHeight, getBoundingClientRect) BEFORE
+    writing, not in a loop.
+  - Use DocumentFragment for bulk inserts.
+  - Use event delegation: one listener on a parent instead of
+    one per child.
+  - Cache selectors in variables instead of re-querying in a loop.
+
+Memory Trick:
+  DOM = HTML turned into a tree of objects.
+  document is the root; every tag, attribute and text is a node.
+  Element vs Node: element = tag, node = tag + text + comment.
+  children = element children; childNodes = everything.
+  querySelector = first match, querySelectorAll = all matches.
+  textContent = safe; innerHTML = parses HTML.
+  createElement + appendChild = safe; innerHTML = quick and risky.
+  Add listener with addEventListener — no onclick in HTML.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML DOM and DOM Structure</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+      .demo-area {
+        background: #fff;
+        border: 1px dashed #0d6efd;
+        border-radius: 6px;
+        padding: 14px;
+      }
+      .tree-view {
+        font-family: monospace;
+        font-size: 12px;
+        line-height: 1.5;
+        background: #0d1117;
+        color: #c9d1d9;
+        padding: 14px;
+        border-radius: 8px;
+        white-space: pre;
+        overflow-x: auto;
+      }
+      .tree-view .tag {
+        color: #7ee787;
+      }
+      .tree-view .attr {
+        color: #79c0ff;
+      }
+      .tree-view .txt {
+        color: #ffa657;
+      }
+      .node-chip {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        background: #e7f1ff;
+        color: #0d6efd;
+        font-family: monospace;
+        font-size: 12px;
+        margin: 2px;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">HTML DOM and DOM Structure</h1>
+
+      <!-- 1. WHAT IS THE DOM -->
+      <div class="section">
+        <h2>1. What Is the DOM?</h2>
+        <p>
+          The DOM is the browser's in-memory tree of nodes built from your HTML.
+          JavaScript reads and edits this tree, and the screen updates
+          instantly.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// document is the root of the DOM
+console.log(document.title);
+console.log(document.doctype ? "has doctype" : "no doctype");
+console.log(document.documentElement.tagName);
+console.log(document.body.tagName);
+
+// The DOM has MORE nodes than you wrote
+// (whitespace text nodes, comments, etc.)
+console.log(document.body.childNodes.length);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. THE TREE STRUCTURE -->
+      <div class="section">
+        <h2>2. DOM Structure — The Tree</h2>
+        <div class="row g-3">
+          <div class="col-lg-7">
+            <span class="label">HTML source:</span>
+            <pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello&lt;/h1&gt;
+    &lt;ul&gt;
+      &lt;li&gt;One&lt;/li&gt;
+      &lt;li&gt;Two&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+          <div class="col-lg-5">
+            <span class="label">DOM tree it becomes:</span>
+            <div class="tree-view">
+              document └─ html ├─ head │ └─ title │ └─ "My Page" └─ body ├─ h1 │
+              └─ "Hello" └─ ul ├─ li ─ "One" └─ li ─ "Two"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. LIVE TREE OF THIS PAGE -->
+      <div class="section">
+        <h2>3. Live DOM Tree</h2>
+        <p>
+          The box below is an actual element on this page. Click to render its
+          real DOM tree.
+        </p>
+        <button id="treeBtn" class="btn btn-primary btn-sm mb-3">
+          Show DOM Tree
+        </button>
+
+        <div id="treeTarget" class="demo-area mb-3">
+          <h5>Sample Card</h5>
+          <!-- a comment node -->
+          <p class="text-muted">
+            This paragraph has <strong>bold</strong> text inside.
+          </p>
+          <ul id="treeList" class="mb-0">
+            <li>Alpha</li>
+            <li>Beta</li>
+          </ul>
+        </div>
+
+        <span class="label">Tree of the box above:</span>
+        <div id="treeOutput" class="tree-view">
+          Click the button to build the tree.
+        </div>
+      </div>
+
+      <!-- 4. NODE TYPES -->
+      <div class="section">
+        <h2>4. Node Types — Everything Is a Node</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const target = document.getElementById("nodeTarget");
+
+console.log("Element node :", target.nodeName,
+            "| type:", target.nodeType);
+
+console.log("Text node    :",
+            target.firstChild.nodeType);   // 3
+
+console.log("children (elements):",
+            target.children.length);
+
+console.log("childNodes (everything):",
+            target.childNodes.length);
+
+// 1 = Element, 3 = Text, 8 = Comment, 9 = Document
+for (const n of target.childNodes) {
+  console.log(n.nodeType, JSON.stringify(n.nodeName));
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+
+        <div id="nodeTarget" class="demo-area mt-3">
+          <p>First</p>
+          <!-- inline comment -->
+          <p>Second</p>
+        </div>
+      </div>
+
+      <!-- 5. SELECTING -->
+      <div class="section">
+        <h2>5. Selecting Elements</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// by id (fastest)
+const byId = document.getElementById("sel-personal");
+
+// by class (LIVE collection)
+const byClass = document.getElementsByClassName("sel-item");
+
+// by tag (LIVE collection)
+const byTag = document.getElementsByTagName("li");
+
+// CSS selector — first match or null
+const first = document.querySelector(".sel-item");
+
+// CSS selector — all matches, STATIC NodeList
+const all = document.querySelectorAll(".sel-item");
+
+// Compound selectors
+const special = document.querySelectorAll(
+  ".sel-item[data-active='true']"
+);
+
+console.log(byId.textContent.trim());
+console.log("class count:", byClass.length);
+console.log("tag count:", byTag.length);
+console.log("first match:", first.textContent);
+console.log("all count:", all.length);
+console.log("special count:", special.length);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+
+        <div class="demo-area mt-3">
+          <p id="sel-personal" class="sel-item" data-active="true">
+            Item A (id = sel-personal)
+          </p>
+          <p class="sel-item" data-active="false">Item B</p>
+          <p class="sel-item" data-active="true">Item C</p>
+        </div>
+      </div>
+
+      <!-- 6. CONTENT -->
+      <div class="section">
+        <h2>6. Reading and Changing Content</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const box = document.getElementById("contentBox");
+
+console.log("textContent:", box.textContent.trim());
+console.log("innerHTML :", box.innerHTML.trim().slice(0, 40));
+
+// Change text (safe)
+box.textContent = "Text replaced with textContent";
+
+// Change HTML (parses tags — XSS risk with user data)
+setTimeout(() => {
+  box.innerHTML =
+    "Replaced with <strong>bold</strong> via innerHTML";
+}, 1200);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Live element (watch it change):</span>
+            <div id="contentBox" class="demo-area">
+              Original text with <em>emphasis</em> inside.
+            </div>
+            <span class="label mt-3">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. ATTRIBUTES -->
+      <div class="section">
+        <h2>7. Attributes vs Properties</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const link = document.getElementById("attrLink");
+
+console.log(link.getAttribute("href"));
+console.log(link.href);               // resolved absolute URL
+console.log(link.hasAttribute("target"));
+
+// data-*  →  dataset (camelCase)
+console.log(link.dataset.userId);
+
+// Set and remove
+link.setAttribute("title", "Visit example");
+link.dataset.role = "external";
+console.log(link.getAttribute("title"));
+console.log(link.dataset.role);
+
+// removeAttribute exists too
+// link.removeAttribute("title");
+
+// Inline styles vs classes
+link.style.fontWeight = "bold";
+link.classList.add("text-decoration-underline");</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+            <span class="label mt-3">Live element:</span>
+            <div class="demo-area">
+              <a id="attrLink" href="https://example.com/page" data-user-id="42"
+                >Example Link</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. TRAVERSING -->
+      <div class="section">
+        <h2>8. Traversing the Tree</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const list = document.getElementById("travList");
+const second = list.children[1];
+
+console.log("parent       :", list.parentElement.tagName);
+console.log("children     :", list.children.length);
+console.log("childNodes   :", list.childNodes.length);
+console.log("first child  :", list.firstElementChild.textContent);
+console.log("last child   :", list.lastElementChild.textContent);
+console.log("next sibling :", list.nextElementSibling.tagName);
+console.log("prev sibling :", list.previousElementSibling.tagName);
+console.log("second's next:", second.nextElementSibling.textContent);
+console.log("closest box  :", second.closest(".demo-area") ? "found" : "none");
+
+// Walk all descendants
+list.querySelectorAll("li").forEach(li => console.log("li:", li.textContent.trim()));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+
+        <div class="demo-area mt-3">
+          <p>Paragraph above</p>
+          <ul id="travList">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 9. CREATE / INSERT / REMOVE -->
+      <div class="section">
+        <h2>9. Creating, Inserting and Removing Nodes</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const list = document.getElementById("makeList");
+
+// 1. Create
+const li = document.createElement("li");
+li.textContent = "New item";
+li.classList.add("list-group-item");
+
+// 2. Insert
+list.appendChild(li);              // add at end
+
+const first = document.createElement("li");
+first.textContent = "Prepended item";
+first.className = "list-group-item";
+list.prepend(first);               // add at start
+
+// 3. Insert before / after a sibling
+const ref = list.children[1];
+const extra = document.createElement("li");
+extra.className = "list-group-item";
+extra.textContent = "Inserted before item 2";
+ref.before(extra);
+
+// 4. Remove
+list.lastElementChild.remove();
+
+// 5. Bulk insert with a DocumentFragment (one reflow)
+const frag = document.createDocumentFragment();
+["Batch 1", "Batch 2", "Batch 3"].forEach(t => {
+  const item = document.createElement("li");
+  item.className = "list-group-item";
+  item.textContent = t;
+  frag.appendChild(item);
+});
+list.appendChild(frag);
+
+// 6. Empty a container
+// list.innerHTML = "";</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Live element (final state):</span>
+            <ul id="makeList" class="list-group">
+              <li class="list-group-item">Item A</li>
+              <li class="list-group-item">Item B</li>
+              <li class="list-group-item">Item C</li>
+              <li class="list-group-item">Item D</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. CLASSES AND STYLES -->
+      <div class="section">
+        <h2>10. Classes and Styles</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const box = document.getElementById("styleBox");
+
+// Classes — the preferred way
+box.classList.add("bg-warning");
+box.classList.remove("bg-light");
+box.classList.toggle("text-dark");
+console.log("has bg-warning :", box.classList.contains("bg-warning"));
+
+// Inline styles (camelCase for CSS kebab-case)
+box.style.padding = "20px";
+box.style.borderRadius = "8px";
+box.style.letterSpacing = "0.5px";   // letter-spacing
+box.style.cssText = "padding: 18px; border-radius: 8px;";
+
+// Read computed style (final, after CSS is applied)
+const styles = getComputedStyle(box);
+console.log("background:", styles.backgroundColor);
+console.log("padding   :", styles.padding);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Live element:</span>
+            <div id="styleBox" class="demo-area bg-light">Style target</div>
+            <span class="label mt-3">Output:</span>
+            <div id="out10" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. EVENTS -->
+      <div class="section">
+        <h2>11. Events — Reacting to the DOM</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const btn = document.getElementById("eventBtn");
+const out = document.getElementById("eventOutput");
+
+// attach a listener (do NOT use onclick="" in HTML)
+btn.addEventListener("click", function (event) {
+  event.target.textContent = "Clicked!";
+  event.target.classList.add("btn-success");
+  console.log("button clicked");
+});
+
+// SINGLE ELEMENT events
+const input = document.getElementById("eventInput");
+input.addEventListener("input", (e) => {
+  document.getElementById("liveInput").textContent =
+    "You typed: " + e.target.value;
+});
+
+// EVENT DELEGATION — one listener for many children
+document.getElementById("delegateList")
+  .addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON") {
+      e.target.previousElementSibling.textContent =
+        "clicked: " + e.target.textContent;
+    }
+  });</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Live elements:</span>
+            <div class="demo-area mb-3">
+              <button id="eventBtn" class="btn btn-primary btn-sm">
+                Click me
+              </button>
+              <div class="mt-2">
+                <input
+                  id="eventInput"
+                  class="form-control form-control-sm"
+                  placeholder="Type here..."
+                />
+                <small id="liveInput" class="text-muted">You typed: </small>
+              </div>
+            </div>
+
+            <span class="label">Event delegation:</span>
+            <ul id="delegateList" class="list-group">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                <span>Row one</span
+                ><button class="btn btn-outline-primary btn-sm">Go</button>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                <span>Row two</span
+                ><button class="btn btn-outline-primary btn-sm">Go</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. QUICK REFERENCE -->
+      <div class="section">
+        <h2>12. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Task</th>
+                <th>Code</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Root object</td>
+                <td><code>document</code></td>
+                <td>Entry point to the tree</td>
+              </tr>
+              <tr>
+                <td>Root element</td>
+                <td><code>document.documentElement</code></td>
+                <td>The <code>&lt;html&gt;</code> node</td>
+              </tr>
+              <tr>
+                <td>Select by id</td>
+                <td><code>getElementById("a")</code></td>
+                <td>One element, fastest</td>
+              </tr>
+              <tr>
+                <td>Select by class</td>
+                <td><code>getElementsByClassName("a")</code></td>
+                <td>Live collection</td>
+              </tr>
+              <tr>
+                <td>Select by tag</td>
+                <td><code>getElementsByTagName("p")</code></td>
+                <td>Live collection</td>
+              </tr>
+              <tr>
+                <td>First CSS match</td>
+                <td><code>querySelector(".a")</code></td>
+                <td>Element or <code>null</code></td>
+              </tr>
+              <tr>
+                <td>All CSS matches</td>
+                <td><code>querySelectorAll(".a")</code></td>
+                <td>Static NodeList</td>
+              </tr>
+              <tr>
+                <td>Element children</td>
+                <td><code>el.children</code></td>
+                <td>Only tags</td>
+              </tr>
+              <tr>
+                <td>All child nodes</td>
+                <td><code>el.childNodes</code></td>
+                <td>Tags + text + comments</td>
+              </tr>
+              <tr>
+                <td>Parent</td>
+                <td><code>el.parentElement</code></td>
+                <td>Element parent</td>
+              </tr>
+              <tr>
+                <td>Siblings</td>
+                <td><code>el.nextElementSibling</code></td>
+                <td>Skips text nodes</td>
+              </tr>
+              <tr>
+                <td>Nearest ancestor</td>
+                <td><code>el.closest(".card")</code></td>
+                <td>Walks up the tree</td>
+              </tr>
+              <tr>
+                <td>Read text</td>
+                <td><code>el.textContent</code></td>
+                <td>Safe, no HTML parsing</td>
+              </tr>
+              <tr>
+                <td>Read HTML</td>
+                <td><code>el.innerHTML</code></td>
+                <td>Parses tags — XSS risk</td>
+              </tr>
+              <tr>
+                <td>Input value</td>
+                <td><code>input.value</code></td>
+                <td>Current typed text</td>
+              </tr>
+              <tr>
+                <td>Read attribute</td>
+                <td><code>el.getAttribute("href")</code></td>
+                <td>As written in HTML</td>
+              </tr>
+              <tr>
+                <td>Write attribute</td>
+                <td><code>el.setAttribute("href", "…")</code></td>
+                <td>Any attribute name</td>
+              </tr>
+              <tr>
+                <td>data-* values</td>
+                <td><code>el.dataset.userId</code></td>
+                <td>Maps <code>data-user-id</code></td>
+              </tr>
+              <tr>
+                <td>Add / remove class</td>
+                <td><code>el.classList.add("x")</code></td>
+                <td>
+                  <code>remove</code>, <code>toggle</code>,
+                  <code>contains</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Inline style</td>
+                <td><code>el.style.color = "red"</code></td>
+                <td>CamelCase property names</td>
+              </tr>
+              <tr>
+                <td>Computed style</td>
+                <td><code>getComputedStyle(el)</code></td>
+                <td>Final resolved styles</td>
+              </tr>
+              <tr>
+                <td>Create element</td>
+                <td><code>document.createElement("li")</code></td>
+                <td>Not in the tree yet</td>
+              </tr>
+              <tr>
+                <td>Add child</td>
+                <td><code>parent.appendChild(el)</code></td>
+                <td>Also <code>prepend</code></td>
+              </tr>
+              <tr>
+                <td>Insert relative</td>
+                <td><code>ref.before(el)</code></td>
+                <td>Also <code>after</code></td>
+              </tr>
+              <tr>
+                <td>Replace node</td>
+                <td><code>old.replaceWith(newEl)</code></td>
+                <td>Swap in place</td>
+              </tr>
+              <tr>
+                <td>Remove node</td>
+                <td><code>el.remove()</code></td>
+                <td>Detaches from the tree</td>
+              </tr>
+              <tr>
+                <td>Bulk insert</td>
+                <td><code>document.createDocumentFragment()</code></td>
+                <td>One reflow instead of many</td>
+              </tr>
+              <tr>
+                <td>Add listener</td>
+                <td><code>el.addEventListener("click", fn)</code></td>
+                <td>Not <code>onclick</code> in HTML</td>
+              </tr>
+              <tr>
+                <td>Event delegation</td>
+                <td>listener on parent + <code>event.target</code></td>
+                <td>One listener for many children</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. What is the DOM
+      write("out1", [
+        "document.title          → " + document.title,
+        "doctype present         → " + (document.doctype ? "yes" : "no"),
+        "documentElement.tagName → " + document.documentElement.tagName,
+        "document.body.tagName   → " + document.body.tagName,
+        "body.childNodes.length  → " +
+          document.body.childNodes.length +
+          "  (includes whitespace + comments)",
+      ]);
+
+      // 3. Live DOM tree builder
+      (() => {
+        const target = document.getElementById("treeTarget");
+        const out = document.getElementById("treeOutput");
+
+        function buildTree(node, prefix, isLast) {
+          let line = "";
+          let children;
+
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const attrs = Array.from(node.attributes)
+              .map((a) => ` ${a.name}="${a.value}"`)
+              .join("");
+            line =
+              prefix +
+              (isLast ? "└─ " : "├─ ") +
+              node.tagName.toLowerCase() +
+              attrs +
+              "\n";
+          } else if (node.nodeType === Node.TEXT_NODE) {
+            const txt = node.nodeValue.trim();
+            if (!txt) return "";
+            line =
+              prefix +
+              (isLast ? "└─ " : "├─ ") +
+              '"' +
+              txt.slice(0, 40) +
+              '"\n';
+          } else if (node.nodeType === Node.COMMENT_NODE) {
+            line =
+              prefix +
+              (isLast ? "└─ " : "├─ ") +
+              "<!-- " +
+              node.nodeValue.trim() +
+              " -->\n";
+          } else {
+            return "";
+          }
+
+          children = Array.from(node.childNodes).filter(
+            (n) => !(n.nodeType === Node.TEXT_NODE && !n.nodeValue.trim()),
+          );
+
+          const childPrefix = prefix + (isLast ? "    " : "│   ");
+          children.forEach((child, i) => {
+            line += buildTree(child, childPrefix, i === children.length - 1);
+          });
+
+          return line;
+        }
+
+        document.getElementById("treeBtn").addEventListener("click", () => {
+          const lines = ["document", " └─ <div#treeTarget>"];
+          const kids = Array.from(target.childNodes).filter(
+            (n) => !(n.nodeType === Node.TEXT_NODE && !n.nodeValue.trim()),
+          );
+          kids.forEach((child, i) => {
+            lines.push(
+              buildTree(child, "     ", i === kids.length - 1).replace(
+                /\n$/,
+                "",
+              ),
+            );
+          });
+          out.textContent = lines.join("\n");
+        });
+      })();
+
+      // 4. Node types
+      (() => {
+        const target = document.getElementById("nodeTarget");
+        const lines = [];
+        lines.push(
+          "element nodeName → " +
+            target.nodeName +
+            " | nodeType " +
+            target.nodeType,
+        );
+        lines.push(
+          "firstChild type  → " + target.firstChild.nodeType + " (3 = text)",
+        );
+        lines.push("children (tags)  → " + target.children.length);
+        lines.push("childNodes (all) → " + target.childNodes.length);
+        lines.push("");
+        lines.push("every child node:");
+        Array.from(target.childNodes).forEach((n) => {
+          lines.push(
+            "  nodeType " +
+              n.nodeType +
+              "  nodeName " +
+              JSON.stringify(n.nodeName),
+          );
+        });
+        write("out4", lines);
+      })();
+
+      // 5. Selecting
+      (() => {
+        const byId = document.getElementById("sel-personal");
+        const byClass = document.getElementsByClassName("sel-item");
+        const byTag = document.getElementsByTagName("li");
+        const first = document.querySelector(".sel-item");
+        const all = document.querySelectorAll(".sel-item");
+        const special = document.querySelectorAll(
+          ".sel-item[data-active='true']",
+        );
+
+        write("out5", [
+          "getElementById      → " + byId.textContent.trim(),
+          "getElementsByClassName(.sel-item) → " + byClass.length,
+          "getElementsByTagName(li)          → " + byTag.length,
+          "querySelector(.sel-item)          → " + first.textContent.trim(),
+          "querySelectorAll(.sel-item)       → " + all.length,
+          "querySelectorAll([data-active=true]) → " + special.length,
+        ]);
+      })();
+
+      // 6. Content
+      (() => {
+        const box = document.getElementById("contentBox");
+        const lines = [];
+        lines.push("textContent : " + box.textContent.trim());
+        lines.push("innerHTML   : " + box.innerHTML.trim().slice(0, 50));
+
+        setTimeout(() => {
+          box.textContent = "Text replaced with textContent";
+          setTimeout(() => {
+            box.innerHTML = "Replaced with <strong>bold</strong> via innerHTML";
+          }, 1200);
+        }, 1200);
+
+        write("out6", lines);
+      })();
+
+      // 7. Attributes
+      (() => {
+        const link = document.getElementById("attrLink");
+        const lines = [];
+        lines.push('getAttribute("href") → ' + link.getAttribute("href"));
+        lines.push("link.href (property) → " + link.href);
+        lines.push('hasAttribute("target") → ' + link.hasAttribute("target"));
+        lines.push("dataset.userId       → " + link.dataset.userId);
+
+        link.setAttribute("title", "Visit example");
+        link.dataset.role = "external";
+        link.style.fontWeight = "bold";
+        link.classList.add("text-decoration-underline");
+
+        lines.push(
+          'after setAttribute("title") → ' + link.getAttribute("title"),
+        );
+        lines.push("after dataset.role = 'external' → " + link.dataset.role);
+        lines.push(
+          "after style.fontWeight = 'bold' → " + link.style.fontWeight,
+        );
+        lines.push(
+          "classList contains underline → " +
+            link.classList.contains("text-decoration-underline"),
+        );
+
+        write("out7", lines);
+      })();
+
+      // 8. Traversing
+      (() => {
+        const list = document.getElementById("travList");
+        const second = list.children[1];
+        const lines = [];
+        lines.push("parentElement        → " + list.parentElement.tagName);
+        lines.push("children.length      → " + list.children.length);
+        lines.push(
+          "childNodes.length    → " +
+            list.childNodes.length +
+            "  (includes whitespace)",
+        );
+        lines.push(
+          "firstElementChild    → " + list.firstElementChild.textContent,
+        );
+        lines.push(
+          "lastElementChild     → " + list.lastElementChild.textContent,
+        );
+        lines.push(
+          "nextElementSibling   → " +
+            (list.nextElementSibling
+              ? list.nextElementSibling.tagName
+              : "none"),
+        );
+        lines.push(
+          "previousElementSibling → " +
+            (list.previousElementSibling
+              ? list.previousElementSibling.tagName
+              : "none"),
+        );
+        lines.push(
+          "second.nextElementSibling → " +
+            second.nextElementSibling.textContent,
+        );
+        lines.push(
+          "second.closest('.demo-area') → " +
+            (second.closest(".demo-area") ? "found" : "none"),
+        );
+        lines.push("");
+        list
+          .querySelectorAll("li")
+          .forEach((li) => lines.push("li → " + li.textContent.trim()));
+        write("out8", lines);
+      })();
+
+      // 9. Create / insert / remove
+      (() => {
+        const list = document.getElementById("makeList");
+
+        const li = document.createElement("li");
+        li.textContent = "New item (appendChild)";
+        li.classList.add("list-group-item");
+        list.appendChild(li);
+
+        const first = document.createElement("li");
+        first.textContent = "Prepended item (prepend)";
+        first.className = "list-group-item";
+        list.prepend(first);
+
+        const ref = list.children[1];
+        const extra = document.createElement("li");
+        extra.className = "list-group-item";
+        extra.textContent = "Inserted before item 2 (ref.before)";
+        ref.before(extra);
+
+        list.lastElementChild.remove();
+
+        const frag = document.createDocumentFragment();
+        [
+          "Batch 1 (fragment)",
+          "Batch 2 (fragment)",
+          "Batch 3 (fragment)",
+        ].forEach((t) => {
+          const item = document.createElement("li");
+          item.className = "list-group-item";
+          item.textContent = t;
+          frag.appendChild(item);
+        });
+        list.appendChild(frag);
+      })();
+
+      // 10. Classes and styles
+      (() => {
+        const box = document.getElementById("styleBox");
+        const lines = [];
+
+        box.classList.add("bg-warning");
+        box.classList.remove("bg-light");
+        box.classList.toggle("text-dark");
+        lines.push(
+          "classList.contains('bg-warning') → " +
+            box.classList.contains("bg-warning"),
+        );
+
+        box.style.padding = "20px";
+        box.style.borderRadius = "8px";
+        box.style.fontWeight = "600";
+        lines.push("el.style.padding        → " + box.style.padding);
+        lines.push("el.style.borderRadius   → " + box.style.borderRadius);
+
+        const computed = getComputedStyle(box);
+        lines.push("getComputedStyle → background " + computed.backgroundColor);
+        lines.push("getComputedStyle → padding    " + computed.padding);
+
+        write("out10", lines);
+      })();
+
+      // 11. Events
+      (() => {
+        const btn = document.getElementById("eventBtn");
+        btn.addEventListener("click", (event) => {
+          event.target.textContent = "Clicked";
+          event.target.classList.remove("btn-primary");
+          event.target.classList.add("btn-success");
+        });
+
+        const input = document.getElementById("eventInput");
+        input.addEventListener("input", (e) => {
+          document.getElementById("liveInput").textContent =
+            "You typed: " + e.target.value;
+        });
+
+        document
+          .getElementById("delegateList")
+          .addEventListener("click", (e) => {
+            if (e.target.tagName === "BUTTON") {
+              e.target.previousElementSibling.textContent =
+                "clicked: " + e.target.textContent;
+            }
+          });
+      })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,841 @@
+<!--
+=======================================================
+  JAVASCRIPT CALL STACK - GUIDE
+=======================================================
+
+WHAT IS THE CALL STACK?
+The JavaScript engine is single-threaded — it does ONE thing at a time.
+The call stack is the data structure that tracks "where we are"
+in the program: which function is currently running and which
+functions are waiting for it to finish.
+
+-------------------------------------------------------
+1. LIFO — LAST IN, FIRST OUT
+-------------------------------------------------------
+The stack works like a pile of plates:
+  - Newest item is added on TOP     → push
+  - Only the top item can be removed → pop
+
+So the LAST function called is the FIRST one to finish.
+
+-------------------------------------------------------
+2. STACK FRAMES
+-------------------------------------------------------
+Every function call creates a stack frame (a.k.a. activation record).
+A frame holds:
+  - the function name
+  - local variables
+  - the parameters
+  - the position to return to
+
+The frame lives on the stack from the moment the function is
+called to the moment it returns.
+
+-------------------------------------------------------
+3. PUSH / POP CYCLE
+-------------------------------------------------------
+  1. Engine encounters a function call → PUSH a new frame
+  2. Function body runs (may push more frames for nested calls)
+  3. Function hits `return` or reaches its end → POP the frame
+  4. Control returns to the frame underneath
+
+-------------------------------------------------------
+4. STACK TRACE
+-------------------------------------------------------
+When an error is thrown, the browser prints a "stack trace" —
+a list of every frame that was on the stack at that moment.
+
+  Uncaught Error: boom
+      at inner  (app.js:5)
+      at middle (app.js:9)
+      at outer  (app.js:13)
+      at <anonymous> (app.js:16)
+
+The top line is the crash site. Reading downward shows who
+called whom. This is your #1 debugging tool.
+
+-------------------------------------------------------
+5. STACK OVERFLOW
+-------------------------------------------------------
+The stack has a size limit (a few thousand frames, browser-dependent).
+
+If a function keeps calling itself without stopping, each call
+pushes a new frame until the limit is reached. The engine throws:
+
+  RangeError: Maximum call stack size exceeded
+
+Causes:
+  - Recursion with no base case
+  - Base case never reached
+  - Infinite mutual recursion (a calls b, b calls a)
+
+-------------------------------------------------------
+6. BLOCKING BEHAVIOUR
+-------------------------------------------------------
+Because there is only ONE stack, a long-running function blocks
+everything: clicks, typing, timers, rendering. The page freezes.
+
+The stack must be EMPTY before the browser can paint the screen
+or handle the next event.
+
+Long loops → move work to setTimeout, requestAnimationFrame,
+or a Web Worker.
+
+-------------------------------------------------------
+7. ASYNC AND THE STACK
+-------------------------------------------------------
+setTimeout, fetch, and promises do NOT run on the stack.
+
+  - setTimeout(fn, 0) → the callback is queued, the stack clears,
+    THEN the callback runs as a brand-new short stack.
+  - Promises resolve after the current stack unwinds.
+
+So the call stack is only one piece of the picture:
+  Call Stack → Web APIs → Task Queue → Event Loop → back to Stack.
+
+-------------------------------------------------------
+8. RECURSION VS ITERATION
+-------------------------------------------------------
+Recursion     → pushes one frame per call, uses the stack,
+                clean for trees and divide-and-conquer,
+                risks overflow on deep input.
+Iteration     → loop lives in ONE frame, no extra stack,
+                safer for very deep input,
+                less natural for tree structures.
+
+Memory Trick:
+  Stack = pile of plates, LIFO.
+  Every call = one frame pushed, every return = one pop.
+  Stack trace reads top-down: crash site → caller → caller's caller.
+  Too deep → RangeError: Maximum call stack size exceeded.
+  One stack, one thread — long work freezes the page.
+  Async callbacks start with a fresh, empty stack.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Call Stack</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+      .stack-box {
+        background: #0d1117;
+        padding: 14px;
+        border-radius: 8px;
+        min-height: 230px;
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 4px;
+      }
+      .frame {
+        background: #1f6feb;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 13px;
+        border-left: 4px solid #58a6ff;
+      }
+      .frame.returned {
+        background: #57606a;
+        border-left-color: #8b949e;
+        opacity: 0.7;
+      }
+      .stack-empty {
+        color: #8b949e;
+        font-family: monospace;
+        font-size: 13px;
+        text-align: center;
+        padding: 20px 0;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Call Stack</h1>
+
+      <!-- 1. LIFO -->
+      <div class="section">
+        <h2>1. LIFO — Last In, First Out</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Simple demo of push / pop order
+const stack = [];
+
+stack.push("first()");
+stack.push("second()");
+stack.push("third()");
+
+console.log("on the stack:", stack);
+
+console.log("popped:", stack.pop());  // third()
+console.log("popped:", stack.pop());  // second()
+console.log("popped:", stack.pop());  // first()
+
+// The last one in is the first one out.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. FRAMES AND ORDER OF RETURN -->
+      <div class="section">
+        <h2>2. Frames — Order of Calls and Returns</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function first() {
+  console.log("first: start");
+  second();                    // pushes second()
+  console.log("first: end");
+}
+
+function second() {
+  console.log("second: start");
+  third();                     // pushes third()
+  console.log("second: end");
+}
+
+function third() {
+  console.log("third: running");
+  // returns → pops third
+}
+
+console.log("before call");
+first();
+console.log("after call");</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Order of execution:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. VISUAL DEMO -->
+      <div class="section">
+        <h2>3. Live Stack Visual</h2>
+        <p>
+          Click <em>Run</em> to watch frames get pushed and popped one step at a
+          time.
+        </p>
+        <button id="runBtn" class="btn btn-primary btn-sm">Run</button>
+        <button id="resetBtn" class="btn btn-outline-secondary btn-sm">
+          Reset
+        </button>
+
+        <div class="row g-3 mt-2">
+          <div class="col-lg-6">
+            <span class="label">Stack (top of the pile is at the top):</span>
+            <div id="stackBox" class="stack-box">
+              <div class="stack-empty">stack is empty</div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Step log:</span>
+            <div id="out3" class="output" style="min-height: 230px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. STACK TRACE -->
+      <div class="section">
+        <h2>4. Stack Trace</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function outer() { middle(); }
+function middle() { inner(); }
+function inner() { throw new Error("boom"); }
+
+try {
+  outer();
+} catch (err) {
+  console.log("Message:", err.message);
+  console.log("--- stack trace ---");
+  console.log(err.stack);
+}
+
+// The trace shows the frame order:
+//   inner  ← crash site
+//   middle ← its caller
+//   outer  ← its caller
+// This is how you find where an error came from.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. STACK OVERFLOW -->
+      <div class="section">
+        <h2>5. Stack Overflow</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// No base case → every call pushes a new frame
+function recurse(n) {
+  return recurse(n + 1);
+}
+
+try {
+  recurse(0);
+} catch (err) {
+  console.log("Caught:", err.name);
+  console.log("Message:", err.message);
+}
+
+// Each call adds a frame.
+// When the limit is reached the engine throws:
+//   RangeError: Maximum call stack size exceeded
+
+// ---- Correct version with a base case ----
+function countdown(n) {
+  if (n === 0) return "done";       // base case stops the stack
+  return countdown(n - 1);
+}
+console.log(countdown(5));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. RECURSION TRACED -->
+      <div class="section">
+        <h2>6. Recursion Traced — factorial(4)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function factorial(n) {
+  console.log("push factorial(" + n + ")");
+  if (n <= 1) {
+    console.log("pop  factorial(1) = 1");
+    return 1;
+  }
+  const result = n * factorial(n - 1);
+  console.log("pop  factorial(" + n + ") = " + result);
+  return result;
+}
+
+console.log("result:", factorial(4));
+
+// Stack grows: 4 → 3 → 2 → 1
+// Then unwinds: 1 → 2 → 3 → 4
+// The multiplication happens on the way DOWN the stack.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. RECURSION VS ITERATION -->
+      <div class="section">
+        <h2>7. Recursion vs Iteration</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// RECURSION — one frame per call
+function sumR(n) {
+  if (n === 0) return 0;
+  return n + sumR(n - 1);
+}
+
+// ITERATION — one frame total
+function sumI(n) {
+  let total = 0;
+  for (let i = 1; i <= n; i++) total += i;
+  return total;
+}
+
+console.log(sumR(100));
+console.log(sumI(100));
+
+// Both give 5050.
+// sumR uses 101 frames, sumI uses 1.
+// sumR(100000) → RangeError
+// sumI(100000) → works fine.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. BLOCKING -->
+      <div class="section">
+        <h2>8. Blocking — One Stack, One Thread</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// This loop freezes the page for its duration.
+// Nothing else can run while the stack is busy.
+function block(ms) {
+  const end = Date.now() + ms;
+  while (Date.now() < end) { /* spin */ }
+}
+
+console.log("1. before block");
+block(1500);
+console.log("2. after block");
+
+// Because JS has ONE call stack, timers, clicks,
+// and rendering must wait until the stack is empty.
+
+// The safe alternative:
+setTimeout(() => {
+  console.log("3. runs later on a fresh stack");
+}, 0);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output (line 3 appears last):</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. ASYNC AND THE STACK -->
+      <div class="section">
+        <h2>9. Async — Callbacks Start on a Fresh Stack</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>console.log("A: sync start");
+
+setTimeout(() => {
+  console.log("C: timeout callback (new empty stack)");
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log("B: promise callback (after stack clears)");
+});
+
+console.log("D: sync end");
+
+// Order matters:
+// 1. Sync code runs first: A, D
+// 2. Microtasks (promises) run next: B
+// 3. Macrotasks (setTimeout) run last: C
+
+// The call stack DOES NOT grow across async calls —
+// each callback starts with an empty stack.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out9" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. QUICK REFERENCE -->
+      <div class="section">
+        <h2>10. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Concept</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Call stack</td>
+                <td>Data structure that tracks which function is running</td>
+              </tr>
+              <tr>
+                <td>LIFO</td>
+                <td>Last function called is the first to finish</td>
+              </tr>
+              <tr>
+                <td>Frame</td>
+                <td>
+                  One entry on the stack: name, locals, params, return position
+                </td>
+              </tr>
+              <tr>
+                <td>Push</td>
+                <td>Happens when a function is called</td>
+              </tr>
+              <tr>
+                <td>Pop</td>
+                <td>Happens when a function returns</td>
+              </tr>
+              <tr>
+                <td>Stack trace</td>
+                <td>List of frames at the moment of an error</td>
+              </tr>
+              <tr>
+                <td>RangeError</td>
+                <td>Thrown when the stack overflows</td>
+              </tr>
+              <tr>
+                <td>Base case</td>
+                <td>The condition that stops a recursive function</td>
+              </tr>
+              <tr>
+                <td>Recursion</td>
+                <td>One frame per call — can overflow on deep input</td>
+              </tr>
+              <tr>
+                <td>Iteration</td>
+                <td>One frame total — safer for large loops</td>
+              </tr>
+              <tr>
+                <td>Blocking</td>
+                <td>Stack is busy → page cannot respond</td>
+              </tr>
+              <tr>
+                <td>Async</td>
+                <td>Callbacks run later, each on a fresh empty stack</td>
+              </tr>
+              <tr>
+                <td>Single-threaded</td>
+                <td>Only one stack exists — one thing at a time</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. LIFO
+      (() => {
+        const stack = [];
+        stack.push("first()");
+        stack.push("second()");
+        stack.push("third()");
+        write("out1", [
+          "on the stack: [" + stack.join(", ") + "]",
+          "popped: " + stack.pop(),
+          "popped: " + stack.pop(),
+          "popped: " + stack.pop(),
+        ]);
+      })();
+
+      // 2. Order of calls / returns
+      (() => {
+        const lines2 = [];
+        function first() {
+          lines2.push("first: start");
+          second();
+          lines2.push("first: end");
+        }
+        function second() {
+          lines2.push("second: start");
+          third();
+          lines2.push("second: end");
+        }
+        function third() {
+          lines2.push("third: running");
+        }
+        lines2.push("before call");
+        first();
+        lines2.push("after call");
+        write("out2", lines2);
+      })();
+
+      // 3. Visual stack demo
+      const stackBox = document.getElementById("stackBox");
+      const stepLog = document.getElementById("out3");
+      let stepLines = [];
+      let running = false;
+
+      function renderStack(frames) {
+        stackBox.innerHTML = "";
+        if (frames.length === 0) {
+          stackBox.innerHTML = '<div class="stack-empty">stack is empty</div>';
+          return;
+        }
+        for (let i = frames.length - 1; i >= 0; i--) {
+          const f = frames[i];
+          const el = document.createElement("div");
+          el.className = "frame" + (f.returned ? " returned" : "");
+          el.textContent = f.label;
+          stackBox.appendChild(el);
+        }
+      }
+
+      function logStep(text) {
+        stepLines.push(text);
+        stepLog.textContent = stepLines.join("\n");
+      }
+
+      function runDemo() {
+        if (running) return;
+        running = true;
+        stepLines = [];
+        stepLog.textContent = "";
+        const frames = [];
+
+        const steps = [
+          () => {
+            frames.push({ label: "outer()  — line 5" });
+            renderStack(frames);
+            logStep("PUSH outer()");
+          },
+          () => {
+            frames.push({ label: "middle() — called from outer" });
+            renderStack(frames);
+            logStep("PUSH middle()");
+          },
+          () => {
+            frames.push({ label: "inner()  — called from middle" });
+            renderStack(frames);
+            logStep("PUSH inner()  ← top of stack");
+          },
+          () => {
+            logStep("inner() finishes its work");
+          },
+          () => {
+            frames[frames.length - 1].returned = true;
+            renderStack(frames);
+            logStep("POP  inner()");
+          },
+          () => {
+            frames.pop();
+            renderStack(frames);
+          },
+          () => {
+            frames[frames.length - 1].returned = true;
+            renderStack(frames);
+            logStep("POP  middle()");
+          },
+          () => {
+            frames.pop();
+            renderStack(frames);
+          },
+          () => {
+            frames[frames.length - 1].returned = true;
+            renderStack(frames);
+            logStep("POP  outer()");
+          },
+          () => {
+            frames.pop();
+            renderStack(frames);
+            logStep("Stack is empty — program continues.");
+          },
+        ];
+
+        let i = 0;
+        const timer = setInterval(() => {
+          steps[i]();
+          i++;
+          if (i >= steps.length) {
+            clearInterval(timer);
+            running = false;
+          }
+        }, 550);
+      }
+
+      document.getElementById("runBtn").addEventListener("click", runDemo);
+      document.getElementById("resetBtn").addEventListener("click", () => {
+        stepLines = [];
+        stepLog.textContent = "";
+        renderStack([]);
+        running = false;
+      });
+
+      // 4. Stack trace
+      (() => {
+        function outer() {
+          middle();
+        }
+        function middle() {
+          inner();
+        }
+        function inner() {
+          throw new Error("boom");
+        }
+
+        const lines = [];
+        try {
+          outer();
+        } catch (err) {
+          lines.push("Message: " + err.message);
+          lines.push("--- stack trace ---");
+          const trace = (err.stack || "").split("\n").slice(0, 6);
+          trace.forEach((t) => lines.push(t.trim()));
+        }
+        write("out4", lines);
+      })();
+
+      // 5. Stack overflow
+      (() => {
+        const lines = [];
+        let depth = 0;
+        function recurse() {
+          depth++;
+          return recurse();
+        }
+
+        try {
+          recurse();
+        } catch (err) {
+          lines.push("Caught: " + err.name);
+          lines.push("Message: " + err.message);
+          lines.push("Reached depth of about " + depth + " frames");
+        }
+
+        function countdown(n) {
+          if (n === 0) return "done";
+          return countdown(n - 1);
+        }
+        lines.push("--- with base case ---");
+        lines.push("countdown(5) → " + countdown(5));
+        write("out5", lines);
+      })();
+
+      // 6. Factorial traced
+      (() => {
+        const lines = [];
+        function factorial(n) {
+          lines.push("push factorial(" + n + ")");
+          if (n <= 1) {
+            lines.push("pop  factorial(1) = 1");
+            return 1;
+          }
+          const result = n * factorial(n - 1);
+          lines.push("pop  factorial(" + n + ") = " + result);
+          return result;
+        }
+        const result = factorial(4);
+        lines.push("result: " + result);
+        write("out6", lines);
+      })();
+
+      // 7. Recursion vs iteration
+      (() => {
+        const lines = [];
+        function sumR(n) {
+          if (n === 0) return 0;
+          return n + sumR(n - 1);
+        }
+        function sumI(n) {
+          let total = 0;
+          for (let i = 1; i <= n; i++) total += i;
+          return total;
+        }
+        lines.push("sumR(100) = " + sumR(100));
+        lines.push("sumI(100) = " + sumI(100));
+        lines.push("");
+
+        function sumRdeep(n) {
+          if (n === 0) return 0;
+          return n + sumRdeep(n - 1);
+        }
+        try {
+          sumRdeep(200000);
+        } catch (e) {
+          lines.push("sumR(200000) → " + e.name);
+          lines.push("  " + e.message);
+        }
+        lines.push("sumI(200000) = " + sumI(200000) + "  (iterative OK)");
+        write("out7", lines);
+      })();
+
+      // 8. Blocking (short block so the page stays responsive)
+      (() => {
+        const lines = [];
+        function block(ms) {
+          const end = Date.now() + ms;
+          while (Date.now() < end) {
+            /* spin */
+          }
+        }
+        lines.push("1. before block");
+        block(400);
+        lines.push("2. after block (page was frozen during this)");
+        write("out8", lines);
+
+        setTimeout(() => {
+          lines.push("3. timeout callback — stack was empty first");
+          write("out8", lines);
+        }, 0);
+      })();
+
+      // 9. Async order
+      (() => {
+        const lines = [];
+        lines.push("A: sync start");
+
+        Promise.resolve().then(() => {
+          lines.push("B: promise callback (microtask)");
+          write("out9", lines);
+        });
+
+        setTimeout(() => {
+          lines.push("C: setTimeout callback (macrotask)");
+          write("out9", lines);
+        }, 0);
+
+        lines.push("D: sync end");
+        write("out9", lines);
+      })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
