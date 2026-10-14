@@ -1,0 +1,1236 @@
+<!--
+=======================================================
+  CSS GRID FOR DESKTOP - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains CSS GRID (the native
+CSS Grid Layout, different from Bootstrap grid) using
+Internal CSS, focused on DESKTOP layouts.
+
+=======================================================
+  WHAT IS CSS GRID?
+=======================================================
+
+  CSS Grid = a NATIVE CSS layout system
+  (NOT Bootstrap - this is built into CSS itself)
+
+  CSS Grid lets you create ROWS and COLUMNS
+  and place elements EXACTLY where you want
+  in a TWO-DIMENSIONAL layout.
+
+  DIFFERENCE FROM BOOTSTRAP GRID:
+  Bootstrap Grid = uses pre-made CLASSES (col-6 etc)
+                   needs Bootstrap CSS file linked
+  CSS Grid       = uses actual CSS PROPERTIES
+                   (display: grid) built into browsers
+                   no external library needed
+
+  DIFFERENCE FROM FLEXBOX:
+  Flexbox  = ONE DIMENSIONAL (row OR column at a time)
+  CSS Grid = TWO DIMENSIONAL (rows AND columns together)
+             Best for full page desktop layouts
+
+  Memory Trick:
+  CSS Grid = like a chessboard or graph paper
+  You can place items in ANY row AND ANY column
+  at the same time
+
+=======================================================
+  BASIC GRID SETUP
+=======================================================
+
+  STEP 1 - Make the PARENT a grid:
+  .container {
+    display: grid;
+  }
+
+  STEP 2 - Define COLUMNS:
+  grid-template-columns: value value value;
+
+  STEP 3 - Define ROWS (optional):
+  grid-template-rows: value value;
+
+  Example:
+  .container {
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 100px 100px;
+  }
+  Creates a grid with 3 columns and 2 rows
+
+=======================================================
+  grid-template-columns PROPERTY
+=======================================================
+
+  Defines HOW MANY columns and HOW WIDE each one is
+
+  Using fixed pixels:
+  grid-template-columns: 200px 200px 200px;
+  Three columns each exactly 200px wide
+
+  Using fr unit (FRACTION):
+  grid-template-columns: 1fr 1fr 1fr;
+  Three EQUAL columns sharing available space
+  fr = fraction of remaining space
+
+  Mixed fr values:
+  grid-template-columns: 2fr 1fr 1fr;
+  First column gets DOUBLE the space of others
+  Good for main content + sidebar layouts
+
+  Using percentage:
+  grid-template-columns: 50% 25% 25%;
+
+  Using repeat() function:
+  grid-template-columns: repeat(3, 1fr);
+  Same as writing 1fr 1fr 1fr but shorter
+  repeat(4, 1fr) = four equal columns
+
+  Using minmax():
+  grid-template-columns: minmax(200px, 1fr) 300px;
+  First column is AT LEAST 200px but can grow
+  Second column is fixed at 300px
+
+  Memory Trick:
+  fr = fraction = share of the leftover space
+  Like sharing a pizza by fraction not by pixels
+
+=======================================================
+  grid-template-rows PROPERTY
+=======================================================
+
+  Same concept as columns but for ROW heights
+
+  grid-template-rows: 100px 200px 100px;
+  Three rows with those exact heights
+
+  grid-template-rows: 1fr 2fr 1fr;
+  Middle row gets double height of others
+
+  grid-template-rows: repeat(3, 150px);
+  Three rows each 150px tall
+
+=======================================================
+  gap PROPERTY (GUTTERS)
+=======================================================
+
+  gap = space between grid items (rows AND columns)
+
+  gap: 20px;
+  20px space between ALL rows and columns
+
+  Separate control:
+  row-gap: 20px;     space between rows only
+  column-gap: 30px;  space between columns only
+
+  Shorthand:
+  gap: 20px 30px;
+  First value = row-gap, Second value = column-gap
+
+  Memory Trick:
+  gap = gutter = the space between grid cells
+  Like the lines on graph paper
+
+=======================================================
+  grid-template-areas (NAMED LAYOUT)
+=======================================================
+
+  A VISUAL way to design layouts using NAMES
+  instead of numbers - great for desktop layouts!
+
+  STEP 1 - Name each grid item:
+  .header  { grid-area: header; }
+  .sidebar { grid-area: sidebar; }
+  .main    { grid-area: main; }
+  .footer  { grid-area: footer; }
+
+  STEP 2 - Draw the layout using those names:
+  .container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    grid-template-areas:
+      "header  header"
+      "sidebar main"
+      "footer  footer";
+  }
+
+  HOW TO READ THIS:
+  Each "quoted line" = one ROW
+  Each word in the line = one COLUMN in that row
+  Same word repeated = that area SPANS those cells
+
+  In the example above:
+  Row 1: header spans BOTH columns
+  Row 2: sidebar takes column 1, main takes column 2
+  Row 3: footer spans BOTH columns
+
+  This CREATES the classic desktop website layout:
+  ┌─────────────────────────┐
+  │         HEADER          │
+  ├───────────┬─────────────┤
+  │  SIDEBAR  │    MAIN     │
+  ├───────────┴─────────────┤
+  │         FOOTER          │
+  └─────────────────────────┘
+
+  Memory Trick:
+  grid-template-areas = drawing the layout with words
+  Like a map where each area has a name label
+
+=======================================================
+  PLACING ITEMS BY LINE NUMBERS
+=======================================================
+
+  Grid lines are numbered starting from 1
+  (not the cells - the LINES between and around cells)
+
+  For a 3 column grid there are 4 vertical lines:
+  Line 1 | Column 1 | Line 2 | Column 2 | Line 3 | Column 3 | Line 4
+
+  grid-column: start / end;
+  grid-row: start / end;
+
+  Example:
+  .item {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+  }
+  Item starts at column line 1, ends at line 3
+  This makes it SPAN across 2 columns
+
+  Using span keyword:
+  grid-column: span 2;
+  Item takes up 2 columns starting from current position
+
+  grid-row: span 3;
+  Item takes up 3 rows in height
+
+  Memory Trick:
+  Numbers = counting the LINES not the boxes
+  Like counting fence posts not the fence sections
+
+=======================================================
+  grid-column and grid-row SHORTHAND
+=======================================================
+
+  grid-column-start: 1;
+  grid-column-end: 3;
+  Shorthand: grid-column: 1 / 3;
+
+  grid-row-start: 2;
+  grid-row-end: 4;
+  Shorthand: grid-row: 2 / 4;
+
+  Full item placement shorthand:
+  grid-area: row-start / col-start / row-end / col-end;
+
+=======================================================
+  justify-items AND align-items
+=======================================================
+
+  Control alignment of ALL items INSIDE their cells
+
+  justify-items = HORIZONTAL alignment
+  start  = items align to LEFT of cell
+  center = items align to CENTER of cell
+  end    = items align to RIGHT of cell
+  stretch = items fill the full cell width (default)
+
+  align-items = VERTICAL alignment
+  start  = items align to TOP of cell
+  center = items align to MIDDLE of cell
+  end    = items align to BOTTOM of cell
+  stretch = items fill the full cell height (default)
+
+  Example:
+  .container {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+  }
+  All items are centered both ways in their cells
+
+=======================================================
+  justify-content AND align-content
+=======================================================
+
+  Control alignment of the WHOLE GRID
+  (only works if grid is SMALLER than container)
+
+  justify-content = horizontal alignment of entire grid
+  align-content   = vertical alignment of entire grid
+
+  Values: start, center, end, space-between,
+          space-around, space-evenly
+
+  Example:
+  .container {
+    justify-content: center;
+  }
+  The whole grid is centered horizontally in container
+
+=======================================================
+  RESPONSIVE GRID WITH auto-fit AND auto-fill
+=======================================================
+
+  Creates RESPONSIVE grids that automatically add
+  or remove columns based on available screen space
+  WITHOUT needing media queries!
+
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  HOW IT WORKS:
+  auto-fit = fit as many columns as possible
+  minmax(200px, 1fr) = each column is at least 200px
+                       but grows to fill space equally
+
+  On a WIDE desktop screen: fits many columns
+  On a NARROW screen: fewer columns automatically
+  This is PERFECT for desktop card galleries
+
+  Difference auto-fit vs auto-fill:
+  auto-fit  = empty columns COLLAPSE (items stretch)
+  auto-fill = empty columns STAY (items do not stretch)
+
+  Memory Trick:
+  auto-fit  = FITS exactly what is needed, no gaps
+  auto-fill = FILLS all possible slots, may leave empty
+
+=======================================================
+  WHY CSS GRID IS GREAT FOR DESKTOP LAYOUTS
+=======================================================
+
+  Desktop screens are WIDE so CSS Grid is perfect for:
+
+  1. Full page layouts (header sidebar main footer)
+  2. Image galleries with many columns
+  3. Dashboard layouts with multiple panels
+  4. Card layouts that need precise alignment
+  5. Magazine style layouts with varied column sizes
+  6. Complex layouts with overlapping items
+
+  CSS Grid vs Flexbox - WHEN TO USE WHICH:
+
+  Use CSS GRID for:
+  - Overall PAGE layout (header, sidebar, footer)
+  - When you need ROWS and COLUMNS together
+  - Desktop dashboard style designs
+
+  Use FLEXBOX for:
+  - Navigation bars (one row of items)
+  - Centering a single item
+  - Simple one-direction lists of items
+
+=======================================================
+  CSS PROPERTIES USED
+=======================================================
+
+  display: grid          → turns element into a grid
+  grid-template-columns  → defines columns
+  grid-template-rows     → defines rows
+  grid-template-areas    → named layout areas
+  grid-area              → assigns name to item
+  grid-column            → item column position/span
+  grid-row               → item row position/span
+  gap / row-gap / column-gap → spacing between cells
+  justify-items           → horizontal align in cells
+  align-items             → vertical align in cells
+  justify-content         → horizontal align whole grid
+  align-content           → vertical align whole grid
+  repeat()                → shorthand for repeated values
+  minmax()                → minimum and maximum size
+  fr unit                 → fraction of available space
+  auto-fit / auto-fill     → responsive column counts
+
+=======================================================
+  QUICK REFERENCE TABLE
+=======================================================
+
+  Property                Example Value
+  ---------------------   --------------------------
+  display                 grid
+  grid-template-columns   1fr 1fr 1fr OR repeat(3,1fr)
+  grid-template-rows      100px 200px
+  gap                     20px
+  grid-column             1 / 3  OR  span 2
+  grid-row                2 / 4  OR  span 3
+  justify-items           center
+  align-items             center
+  grid-template-areas     "header header" "side main"
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  CSS Grid = native two-dimensional layout system
+  display: grid = turns container into a grid
+  grid-template-columns/rows = define grid structure
+  fr unit = flexible fraction of space
+  gap = spacing between grid cells
+  grid-template-areas = named visual layout (best for
+  desktop page layouts like header/sidebar/footer)
+  grid-column / grid-row = place and span items
+  auto-fit + minmax = responsive grids without media queries
+
+  CSS Grid is the BEST tool for full desktop page
+  layouts because it handles rows and columns together
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>CSS Grid for Desktop</title>
+
+    <style>
+      /* Universal Selector */
+      * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f0f0f0;
+        color: #333;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #003366;
+        font-size: 36px;
+        text-align: center;
+        margin-bottom: 10px;
+        padding: 15px 0;
+      }
+
+      h2 {
+        color: #003366;
+        font-size: 22px;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+      }
+
+      /* Section box to group each topic */
+      .section {
+        background-color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 20px auto;
+        width: 90%;
+        border: 2px solid #ddd;
+      }
+
+      /* Demo box for each example */
+      .demo-box {
+        background-color: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      /* Label showing CSS code used */
+      .label {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 10px;
+        display: block;
+        white-space: pre-wrap;
+      }
+
+      /* Instruction text */
+      .instruction {
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      /* Generic grid item style */
+      .grid-item {
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .item-alt {
+        background-color: #32cd32;
+      }
+      .item-alt2 {
+        background-color: #ff6347;
+      }
+      .item-alt3 {
+        background-color: #9932cc;
+      }
+      .item-alt4 {
+        background-color: #ff8c00;
+      }
+      .item-alt5 {
+        background-color: #008080;
+      }
+
+      /* =============================================
+       1. BASIC GRID - FIXED COLUMNS
+    =============================================== */
+
+      .grid-basic {
+        display: grid;
+        grid-template-columns: 150px 150px 150px;
+        grid-template-rows: 100px 100px;
+        gap: 10px;
+      }
+
+      /* =============================================
+       2. FR UNIT - EQUAL COLUMNS
+    =============================================== */
+
+      .grid-fr-equal {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 15px;
+      }
+
+      .grid-fr-equal .grid-item {
+        height: 100px;
+      }
+
+      /* =============================================
+       3. FR UNIT - UNEQUAL COLUMNS
+    =============================================== */
+
+      .grid-fr-unequal {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 15px;
+      }
+
+      .grid-fr-unequal .grid-item {
+        height: 100px;
+      }
+
+      /* =============================================
+       4. REPEAT FUNCTION
+    =============================================== */
+
+      .grid-repeat {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .grid-repeat .grid-item {
+        height: 90px;
+        font-size: 13px;
+      }
+
+      /* =============================================
+       5. GAP VARIATIONS
+    =============================================== */
+
+      .grid-gap-small {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+      }
+
+      .grid-gap-large {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+      }
+
+      .grid-gap-rowcol {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 30px;
+        column-gap: 8px;
+      }
+
+      .grid-gap-small .grid-item,
+      .grid-gap-large .grid-item,
+      .grid-gap-rowcol .grid-item {
+        height: 70px;
+        font-size: 13px;
+      }
+
+      /* =============================================
+       6. GRID TEMPLATE AREAS - DESKTOP LAYOUT
+    =============================================== */
+
+      .grid-areas-demo {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        grid-template-rows: 80px 1fr 60px;
+        gap: 10px;
+        height: 400px;
+        grid-template-areas:
+          "header  header"
+          "sidebar main"
+          "footer  footer";
+      }
+
+      .area-header {
+        grid-area: header;
+        background-color: #003366;
+        color: white;
+      }
+
+      .area-sidebar {
+        grid-area: sidebar;
+        background-color: #9932cc;
+        color: white;
+      }
+
+      .area-main {
+        grid-area: main;
+        background-color: #1e90ff;
+        color: white;
+      }
+
+      .area-footer {
+        grid-area: footer;
+        background-color: #333;
+        color: white;
+      }
+
+      .area-box {
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      /* =============================================
+       7. GRID WITH HEADER SIDEBAR MAIN FOOTER
+       WITH RIGHT SIDEBAR TOO - FULL DESKTOP PAGE
+    =============================================== */
+
+      .full-page-grid {
+        display: grid;
+        grid-template-columns: 180px 1fr 180px;
+        grid-template-rows: 70px 1fr 50px;
+        gap: 10px;
+        height: 450px;
+        grid-template-areas:
+          "header  header header"
+          "sidebar main   aside"
+          "footer  footer footer";
+      }
+
+      .fp-header {
+        grid-area: header;
+        background-color: #003366;
+      }
+      .fp-sidebar {
+        grid-area: sidebar;
+        background-color: #32cd32;
+      }
+      .fp-main {
+        grid-area: main;
+        background-color: #1e90ff;
+      }
+      .fp-aside {
+        grid-area: aside;
+        background-color: #ff8c00;
+      }
+      .fp-footer {
+        grid-area: footer;
+        background-color: #333;
+      }
+
+      /* =============================================
+       8. SPANNING COLUMNS AND ROWS
+    =============================================== */
+
+      .grid-span {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 100px);
+        gap: 10px;
+      }
+
+      .span-col-2 {
+        grid-column: span 2;
+      }
+
+      .span-row-2 {
+        grid-row: span 2;
+      }
+
+      .span-col-3 {
+        grid-column: span 3;
+      }
+
+      /* =============================================
+       9. PLACING ITEMS BY LINE NUMBERS
+    =============================================== */
+
+      .grid-lines {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 90px);
+        gap: 10px;
+      }
+
+      .line-item-1 {
+        grid-column: 1 / 3;
+        grid-row: 1 / 2;
+      }
+
+      .line-item-2 {
+        grid-column: 3 / 5;
+        grid-row: 1 / 3;
+      }
+
+      .line-item-3 {
+        grid-column: 1 / 2;
+        grid-row: 2 / 4;
+      }
+
+      .line-item-4 {
+        grid-column: 2 / 4;
+        grid-row: 3 / 4;
+      }
+
+      .line-item-5 {
+        grid-column: 4 / 5;
+        grid-row: 3 / 4;
+      }
+
+      /* =============================================
+       10. JUSTIFY-ITEMS AND ALIGN-ITEMS
+    =============================================== */
+
+      .grid-align-demo {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        height: 400px;
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .align-start {
+        justify-items: start;
+        align-items: start;
+      }
+
+      .align-center {
+        justify-items: center;
+        align-items: center;
+      }
+
+      .align-end {
+        justify-items: end;
+        align-items: end;
+      }
+
+      .small-item {
+        width: 90px;
+        height: 60px;
+        font-size: 12px;
+      }
+
+      /* =============================================
+       11. RESPONSIVE GRID - AUTO-FIT
+    =============================================== */
+
+      .grid-autofit {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+      }
+
+      .grid-autofit .grid-item {
+        height: 90px;
+        font-size: 13px;
+      }
+
+      /* =============================================
+       12. REAL WORLD - DESKTOP DASHBOARD
+    =============================================== */
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 220px 1fr 1fr;
+        grid-template-rows: 70px 150px 150px 50px;
+        gap: 12px;
+        grid-template-areas:
+          "nav    topbar topbar"
+          "nav    card1  card2"
+          "nav    card3  card3"
+          "nav    foot   foot";
+        height: 500px;
+      }
+
+      .db-nav {
+        grid-area: nav;
+        background-color: #003366;
+      }
+      .db-topbar {
+        grid-area: topbar;
+        background-color: #1e90ff;
+      }
+      .db-card1 {
+        grid-area: card1;
+        background-color: #32cd32;
+      }
+      .db-card2 {
+        grid-area: card2;
+        background-color: #ff6347;
+      }
+      .db-card3 {
+        grid-area: card3;
+        background-color: #9932cc;
+      }
+      .db-foot {
+        grid-area: foot;
+        background-color: #333;
+      }
+
+      .db-box {
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      /* =============================================
+       13. REAL WORLD - CARD GALLERY
+    =============================================== */
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .gallery-card {
+        background-color: white;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .gallery-icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+      }
+
+      .gallery-title {
+        font-weight: bold;
+        color: #003366;
+        margin-bottom: 8px;
+        font-size: 16px;
+      }
+
+      .gallery-text {
+        font-size: 13px;
+        color: #666;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>CSS Grid for Desktop</h1>
+
+    <!-- ============================================
+       1. BASIC GRID
+  =============================================== -->
+    <div class="section">
+      <h2>1. Basic Grid - Fixed Columns</h2>
+      <p>
+        display: grid turns element into a grid container grid-template-columns
+        defines column widths
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >display: grid; grid-template-columns: 150px 150px 150px;
+          grid-template-rows: 100px 100px; gap: 10px;</span
+        >
+
+        <div class="grid-basic">
+          <div class="grid-item">1</div>
+          <div class="grid-item item-alt">2</div>
+          <div class="grid-item item-alt2">3</div>
+          <div class="grid-item item-alt3">4</div>
+          <div class="grid-item item-alt4">5</div>
+          <div class="grid-item item-alt5">6</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       2. FR UNIT EQUAL COLUMNS
+  =============================================== -->
+    <div class="section">
+      <h2>2. fr Unit - Equal Columns</h2>
+      <p>fr = fraction of available space - very flexible</p>
+
+      <div class="demo-box">
+        <span class="label">grid-template-columns: 1fr 1fr 1fr;</span>
+        <span class="instruction">All three columns share space EQUALLY</span>
+
+        <div class="grid-fr-equal">
+          <div class="grid-item">1fr</div>
+          <div class="grid-item item-alt">1fr</div>
+          <div class="grid-item item-alt2">1fr</div>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">grid-template-columns: 2fr 1fr 1fr;</span>
+        <span class="instruction"
+          >First column gets DOUBLE the space (good for sidebar layouts)</span
+        >
+
+        <div class="grid-fr-unequal">
+          <div class="grid-item">2fr (double width)</div>
+          <div class="grid-item item-alt">1fr</div>
+          <div class="grid-item item-alt2">1fr</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       3. REPEAT FUNCTION
+  =============================================== -->
+    <div class="section">
+      <h2>3. repeat() Function</h2>
+      <p>Shorthand way to repeat the same column value multiple times</p>
+
+      <div class="demo-box">
+        <span class="label"
+          >grid-template-columns: repeat(4, 1fr); (Same as writing: 1fr 1fr 1fr
+          1fr)</span
+        >
+
+        <div class="grid-repeat">
+          <div class="grid-item">1</div>
+          <div class="grid-item item-alt">2</div>
+          <div class="grid-item item-alt2">3</div>
+          <div class="grid-item item-alt3">4</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       4. GAP VARIATIONS
+  =============================================== -->
+    <div class="section">
+      <h2>4. Gap Property Variations</h2>
+      <p>gap controls spacing between grid cells</p>
+
+      <div class="demo-box">
+        <span class="label">gap: 5px; (small gap)</span>
+        <div class="grid-gap-small">
+          <div class="grid-item">1</div>
+          <div class="grid-item item-alt">2</div>
+          <div class="grid-item item-alt2">3</div>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">gap: 25px; (large gap)</span>
+        <div class="grid-gap-large">
+          <div class="grid-item">1</div>
+          <div class="grid-item item-alt">2</div>
+          <div class="grid-item item-alt2">3</div>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <span class="label"
+          >row-gap: 30px; column-gap: 8px; (different row and column gaps)</span
+        >
+        <div class="grid-gap-rowcol">
+          <div class="grid-item">1</div>
+          <div class="grid-item item-alt">2</div>
+          <div class="grid-item item-alt2">3</div>
+          <div class="grid-item item-alt3">4</div>
+          <div class="grid-item item-alt4">5</div>
+          <div class="grid-item item-alt5">6</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       5. GRID TEMPLATE AREAS
+  =============================================== -->
+    <div class="section">
+      <h2>5. grid-template-areas - Named Desktop Layout</h2>
+      <p>Best way to create classic desktop page layouts using names</p>
+
+      <div class="demo-box">
+        <span class="label"
+          >grid-template-areas: "header header" "sidebar main" "footer
+          footer";</span
+        >
+        <span class="instruction"
+          >Classic header + sidebar + main + footer desktop layout</span
+        >
+
+        <div class="grid-areas-demo">
+          <div class="area-box area-header">HEADER</div>
+          <div class="area-box area-sidebar">SIDEBAR</div>
+          <div class="area-box area-main">MAIN CONTENT</div>
+          <div class="area-box area-footer">FOOTER</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       6. FULL DESKTOP PAGE - 3 COLUMNS
+  =============================================== -->
+    <div class="section">
+      <h2>6. Full Desktop Page Layout (with Right Sidebar)</h2>
+      <p>Header, left sidebar, main content, right aside, footer</p>
+
+      <div class="demo-box">
+        <span class="label"
+          >grid-template-areas: "header header header" "sidebar main aside"
+          "footer footer footer";</span
+        >
+
+        <div class="full-page-grid">
+          <div class="area-box fp-header" style="color: white">HEADER</div>
+          <div class="area-box fp-sidebar" style="color: white">SIDEBAR</div>
+          <div class="area-box fp-main" style="color: white">MAIN CONTENT</div>
+          <div class="area-box fp-aside" style="color: white">ASIDE</div>
+          <div class="area-box fp-footer" style="color: white">FOOTER</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       7. SPANNING COLUMNS AND ROWS
+  =============================================== -->
+    <div class="section">
+      <h2>7. Spanning Columns and Rows</h2>
+      <p>grid-column: span 2; makes item take up 2 columns</p>
+
+      <div class="demo-box">
+        <span class="label">
+          Box 1: grid-column: span 2; Box 4: grid-row: span 2; Box 6:
+          grid-column: span 3;
+        </span>
+
+        <div class="grid-span">
+          <div class="grid-item span-col-2">span 2 columns</div>
+          <div class="grid-item item-alt">normal</div>
+          <div class="grid-item item-alt2">normal</div>
+          <div class="grid-item item-alt3 span-row-2">span 2 rows</div>
+          <div class="grid-item item-alt4">normal</div>
+          <div class="grid-item item-alt5 span-col-3">span 3 columns</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       8. PLACING ITEMS BY LINE NUMBERS
+  =============================================== -->
+    <div class="section">
+      <h2>8. Placing Items with Line Numbers</h2>
+      <p>
+        Precisely position items using grid-column and grid-row line numbers
+      </p>
+
+      <div class="demo-box">
+        <span class="label">
+          grid-column: 1 / 3; grid-row: 1 / 2; (and other items with different
+          line numbers)
+        </span>
+        <span class="instruction"
+          >Creates an interesting puzzle-like desktop layout</span
+        >
+
+        <div class="grid-lines">
+          <div class="grid-item line-item-1">1/3, 1/2</div>
+          <div class="grid-item item-alt line-item-2">3/5, 1/3</div>
+          <div class="grid-item item-alt2 line-item-3">1/2, 2/4</div>
+          <div class="grid-item item-alt3 line-item-4">2/4, 3/4</div>
+          <div class="grid-item item-alt4 line-item-5">4/5, 3/4</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       9. JUSTIFY-ITEMS AND ALIGN-ITEMS
+  =============================================== -->
+    <div class="section">
+      <h2>9. justify-items and align-items</h2>
+      <p>Control alignment of items WITHIN their grid cells</p>
+
+      <div class="demo-box">
+        <span class="label">justify-items: start; align-items: start;</span>
+        <div class="grid-align-demo align-start">
+          <div class="grid-item small-item">start</div>
+          <div class="grid-item item-alt small-item">start</div>
+          <div class="grid-item item-alt2 small-item">start</div>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">justify-items: center; align-items: center;</span>
+        <div class="grid-align-demo align-center">
+          <div class="grid-item small-item">center</div>
+          <div class="grid-item item-alt small-item">center</div>
+          <div class="grid-item item-alt2 small-item">center</div>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <span class="label">justify-items: end; align-items: end;</span>
+        <div class="grid-align-demo align-end">
+          <div class="grid-item small-item">end</div>
+          <div class="grid-item item-alt small-item">end</div>
+          <div class="grid-item item-alt2 small-item">end</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       10. RESPONSIVE GRID - AUTO-FIT
+  =============================================== -->
+    <div class="section">
+      <h2>10. Responsive Grid with auto-fit</h2>
+      <p>
+        Automatically adds or removes columns based on screen width NO media
+        queries needed! Try resizing your browser window
+      </p>
+
+      <div class="demo-box">
+        <span class="label"
+          >grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));</span
+        >
+        <span class="instruction"
+          >Resize browser window to see columns adjust automatically</span
+        >
+
+        <div class="grid-autofit">
+          <div class="grid-item">Auto 1</div>
+          <div class="grid-item item-alt">Auto 2</div>
+          <div class="grid-item item-alt2">Auto 3</div>
+          <div class="grid-item item-alt3">Auto 4</div>
+          <div class="grid-item item-alt4">Auto 5</div>
+          <div class="grid-item item-alt5">Auto 6</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       11. REAL WORLD - DESKTOP DASHBOARD
+  =============================================== -->
+    <div class="section">
+      <h2>11. Real World Example - Desktop Dashboard</h2>
+      <p>A complete dashboard layout using grid-template-areas</p>
+
+      <div class="demo-box">
+        <span class="label">
+          grid-template-areas: "nav topbar topbar" "nav card1 card2" "nav card3
+          card3" "nav foot foot";
+        </span>
+
+        <div class="dashboard-grid">
+          <div class="db-box db-nav">
+            📊 NAVIGATION
+            <br />Dashboard<br />Reports<br />Settings
+          </div>
+          <div class="db-box db-topbar">TOP BAR - Welcome Back!</div>
+          <div class="db-box db-card1">Card 1<br />Total Sales</div>
+          <div class="db-box db-card2">Card 2<br />New Users</div>
+          <div class="db-box db-card3">Card 3 (wide) - Chart Area</div>
+          <div class="db-box db-foot">FOOTER</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+       12. REAL WORLD - CARD GALLERY
+  =============================================== -->
+    <div class="section">
+      <h2>12. Real World Example - Responsive Card Gallery</h2>
+      <p>Perfect for desktop image galleries or product listings</p>
+
+      <div class="demo-box">
+        <span class="label"
+          >grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:
+          20px;</span
+        >
+
+        <div class="gallery-grid">
+          <div class="gallery-card">
+            <div class="gallery-icon">🐱</div>
+            <div class="gallery-title">Doraemon</div>
+            <div class="gallery-text">
+              A robotic cat from the future with magical gadgets.
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-icon">👦</div>
+            <div class="gallery-title">Nobita</div>
+            <div class="gallery-text">
+              A lazy but kind hearted boy, Doraemon's best friend.
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-icon">👧</div>
+            <div class="gallery-title">Shizuka</div>
+            <div class="gallery-text">
+              The kindest and smartest character who plays violin.
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-icon">💪</div>
+            <div class="gallery-title">Gian</div>
+            <div class="gallery-text">
+              The tough bully with a big heart and loud singing voice.
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-icon">💰</div>
+            <div class="gallery-title">Suneo</div>
+            <div class="gallery-text">
+              The rich friend who loves showing off his toys.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

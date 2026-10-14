@@ -1,0 +1,731 @@
+<!--
+=======================================================
+  BOOTSTRAP CONTAINER-FLUID + COLOR + BORDER
+=======================================================
+
+You already know container-fluid gives you a 100%
+width block at every breakpoint. Now we decorate it
+with Bootstrap's COLOR and BORDER utility classes.
+
+Rule of thumb:
+  COLOR  → comes from the 8 "theme colors"
+  BORDER → built from 5 independent pieces
+
+-------------------------------------------------------
+THE 8 THEME COLORS (memorize these — everything uses them)
+-------------------------------------------------------
+  primary   (blue)      secondary (grey)
+  success   (green)     danger    (red)
+  warning   (yellow)    info      (cyan)
+  light     (near white) dark     (near black)
+
+Plus neutral extras:
+  white, black, body, muted, transparent
+
+Every color utility is just a prefix + theme name:
+  bg-warning        → background-color
+  text-danger       → color
+  border-success    → border-color
+  bg-danger-subtle  → pale background
+  border-info-subtle→ pale border
+
+-------------------------------------------------------
+⚠ CONTRAST GOTCHA (the #1 beginner mistake)
+-------------------------------------------------------
+  bg-warning and bg-info need text-dark
+  bg-light    needs text-dark
+  All the others work with text-white
+
+  Wrong: <div class="bg-warning text-white">   ← unreadable
+  Right: <div class="bg-warning text-dark">    ← readable
+
+-------------------------------------------------------
+BACKGROUND COLOR CLASSES
+-------------------------------------------------------
+  bg-primary bg-secondary bg-success bg-danger
+  bg-warning bg-info bg-light bg-dark
+  bg-white  bg-black  bg-body  bg-transparent
+
+  Opacity variants (make ANY bg see-through):
+  bg-primary bg-opacity-75
+  bg-dark bg-opacity-50
+  bg-success bg-opacity-25
+  → values: 10 25 50 75 100
+
+  "Subtle" variants (Bootstrap 5.3+, pre-blended pastels):
+  bg-primary-subtle  bg-danger-subtle  bg-success-subtle
+  → these ship with a matching PAIR, always use together:
+     bg-primary-subtle  +  text-primary-emphasis
+     bg-danger-subtle   +  text-danger-emphasis
+
+-------------------------------------------------------
+TEXT COLOR CLASSES
+-------------------------------------------------------
+  text-primary text-secondary text-success text-danger
+  text-warning text-info text-light text-dark
+  text-white  text-black   text-body  text-muted
+  text-white-50  text-black-50   (50 = half transparent)
+  text-primary-emphasis  ← darker, readable on subtle bg
+
+-------------------------------------------------------
+BORDER = 5 INDEPENDENT DECISIONS
+-------------------------------------------------------
+1. DOES IT EXIST?          border  /  border-0
+2. WHICH SIDES?            border-top  border-end
+                           border-bottom  border-start
+                           (add -0 to kill one side:
+                            border-top-0, border-end-0 ...)
+3. WHAT COLOR?             border-primary border-danger
+                           border-white border-dark
+                           border-black border-light
+                           border-primary-subtle etc.
+4. HOW THICK?              border-1  border-2  border-3
+                           border-4  border-5
+                           (1 = 1px default, 5 = 5px)
+5. HOW SEE-THROUGH?        border-opacity-10 / 25 / 50 / 75 / 100
+
+Rounded corners (separate family):
+  rounded       rounded-0    rounded-1 .. rounded-5
+  rounded-circle  rounded-pill
+  rounded-top  rounded-end  rounded-bottom  rounded-start
+
+Shadows (pairs with borders):
+  shadow-sm   shadow   shadow-lg   shadow-none
+
+⚠ BORDER COLOR ALONE DOES NOTHING
+  border-primary on a div with no border → invisible.
+  You must ALSO add `border` or a side class.
+  Right: class="border border-primary border-3"
+
+-------------------------------------------------------
+⚠ ROUNDED CORNERS ON A FULL-BLEED CONTAINER
+-------------------------------------------------------
+container-fluid touches the screen edges, so its
+rounded corners get visually clipped. Fix with:
+  container-fluid mx-3 rounded        (add side margin)
+  or
+  container-fluid  >  .container.rounded  (inner div)
+
+-------------------------------------------------------
+QUICK REFERENCE
+-------------------------------------------------------
+  Want a red banner?        container-fluid bg-danger text-white
+  Want an outline banner?   container-fluid border border-2 border-primary rounded
+  Want a soft notice?       container-fluid bg-warning-subtle text-warning-emphasis border border-warning-subtle
+  Want a thin divider?      container-fluid border-bottom border-2 border-dark
+
+Memory Trick:
+  bg-*     paints the whole block
+  text-*   paints the letters
+  border-* paints the outline — but only if `border` exists first
+  Always ask: "is my text readable on this background?"
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap Container-Fluid — Color &amp; Border</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .box {
+        background: #1e90ff;
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        text-align: center;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .label-light {
+        font-family: monospace;
+        font-size: 13px;
+        color: #ccc;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .swatch {
+        padding: 14px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 6px;
+      }
+      .bar {
+        padding: 16px;
+        font-weight: bold;
+      }
+      code {
+        background: #eef;
+        padding: 1px 5px;
+        border-radius: 4px;
+        color: #4338ca;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============================================================ -->
+    <!-- 1. BACKGROUND COLORS -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4 pt-4">1. Background colors on container-fluid</h2>
+      <p class="px-4">
+        Click edge to edge — resize your browser, these never move. Note
+        warning/light need <code>text-dark</code>.
+      </p>
+
+      <div class="container-fluid bg-primary text-white py-4">
+        <span class="label-light">container-fluid bg-primary text-white</span>
+        <h5 class="mb-0">Primary</h5>
+      </div>
+
+      <div class="container-fluid bg-secondary text-white py-4">
+        <span class="label-light">container-fluid bg-secondary text-white</span>
+        <h5 class="mb-0">Secondary</h5>
+      </div>
+
+      <div class="container-fluid bg-success text-white py-4">
+        <span class="label-light">container-fluid bg-success text-white</span>
+        <h5 class="mb-0">Success</h5>
+      </div>
+
+      <div class="container-fluid bg-danger text-white py-4">
+        <span class="label-light">container-fluid bg-danger text-white</span>
+        <h5 class="mb-0">Danger</h5>
+      </div>
+
+      <div class="container-fluid bg-warning text-dark py-4">
+        <span class="label"
+          >container-fluid bg-warning text-dark ← needs dark text</span
+        >
+        <h5 class="mb-0">Warning</h5>
+      </div>
+
+      <div class="container-fluid bg-info text-dark py-4">
+        <span class="label"
+          >container-fluid bg-info text-dark ← needs dark text</span
+        >
+        <h5 class="mb-0">Info</h5>
+      </div>
+
+      <div class="container-fluid bg-light text-dark py-4">
+        <span class="label">container-fluid bg-light text-dark</span>
+        <h5 class="mb-0">Light</h5>
+      </div>
+
+      <div class="container-fluid bg-dark text-white py-4">
+        <span class="label-light">container-fluid bg-dark text-white</span>
+        <h5 class="mb-0">Dark</h5>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 2. TEXT COLORS -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">2. Text colors</h2>
+      <p class="px-4">
+        Same theme names, different prefix — <code>text-*</code> instead of
+        <code>bg-*</code>.
+      </p>
+
+      <div class="container-fluid bg-white py-4">
+        <span class="label"
+          >container-fluid bg-white — colored headings inside</span
+        >
+        <h4 class="text-primary">text-primary heading</h4>
+        <h4 class="text-success">text-success heading</h4>
+        <h4 class="text-danger">text-danger heading</h4>
+        <h4 class="text-warning">
+          text-warning heading (low contrast on white — careful)
+        </h4>
+        <h4 class="text-info">text-info heading (low contrast — careful)</h4>
+        <h4 class="text-muted">text-muted heading</h4>
+        <h4 class="text-body">text-body heading</h4>
+        <h4 class="mb-0">default heading</h4>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 3. BG-OPACITY -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">3. bg-opacity-* (see-through backgrounds)</h2>
+      <div class="container-fluid bg-dark text-white py-4">
+        <span class="label-light"
+          >Parent: container-fluid bg-dark — the bars below let dark show
+          through</span
+        >
+        <div class="row g-2">
+          <div class="col-6 col-md-3">
+            <div class="swatch bg-primary bg-opacity-100 text-white">
+              bg-opacity-100
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="swatch bg-primary bg-opacity-75 text-white">
+              bg-opacity-75
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="swatch bg-primary bg-opacity-50 text-white">
+              bg-opacity-50
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="swatch bg-primary bg-opacity-25 text-white">
+              bg-opacity-25
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 4. SUBTLE BACKGROUNDS -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">
+        4. Subtle backgrounds (bg-*-subtle + text-*-emphasis)
+      </h2>
+      <p class="px-4">
+        Pre-blended soft colors. Always pair them with the matching
+        <code>text-*-emphasis</code> class.
+      </p>
+
+      <div
+        class="container-fluid bg-primary-subtle text-primary-emphasis py-3 border-bottom border-primary-subtle"
+      >
+        <span class="label"
+          >container-fluid bg-primary-subtle text-primary-emphasis</span
+        >
+        <strong>Info notice — soft blue, easy on the eyes.</strong>
+      </div>
+
+      <div
+        class="container-fluid bg-success-subtle text-success-emphasis py-3 border-bottom border-success-subtle"
+      >
+        <span class="label"
+          >container-fluid bg-success-subtle text-success-emphasis</span
+        >
+        <strong>Success notice — soft green.</strong>
+      </div>
+
+      <div
+        class="container-fluid bg-danger-subtle text-danger-emphasis py-3 border-bottom border-danger-subtle"
+      >
+        <span class="label"
+          >container-fluid bg-danger-subtle text-danger-emphasis</span
+        >
+        <strong>Danger notice — soft red.</strong>
+      </div>
+
+      <div class="container-fluid bg-warning-subtle text-warning-emphasis py-3">
+        <span class="label"
+          >container-fluid bg-warning-subtle text-warning-emphasis</span
+        >
+        <strong>Warning notice — soft yellow.</strong>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 5. BORDERS: BASIC + SIDES -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">5. Borders — does it exist, and which sides?</h2>
+
+      <div class="container-fluid border py-3 bg-white">
+        <span class="label">container-fluid border</span>
+        <strong>Full border on all 4 sides</strong>
+      </div>
+
+      <div class="container-fluid border-top border-3 py-3 bg-white">
+        <span class="label">container-fluid border-top border-3</span>
+        <strong>Only a top border</strong>
+      </div>
+
+      <div class="container-fluid border-bottom border-3 py-3 bg-white">
+        <span class="label">container-fluid border-bottom border-3</span>
+        <strong>Only a bottom border — the classic section divider</strong>
+      </div>
+
+      <div class="container-fluid border-start border-5 py-3 bg-white">
+        <span class="label">container-fluid border-start border-5</span>
+        <strong>Thick left edge — great for "blockquote" style callouts</strong>
+      </div>
+
+      <div class="container-fluid border-end border-5 py-3 bg-white">
+        <span class="label">container-fluid border-end border-5</span>
+        <strong>Thick right edge</strong>
+      </div>
+
+      <div
+        class="container-fluid border border-top-0 border-bottom-0 py-3 bg-white"
+      >
+        <span class="label"
+          >container-fluid border border-top-0 border-bottom-0</span
+        >
+        <strong>Only left + right borders remain</strong>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 6. BORDER COLORS  (⚠ needs border first!) -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">
+        6. Border colors — remember: <code>border</code> must exist first
+      </h2>
+
+      <div class="container-fluid border border-3 border-primary py-2 bg-white">
+        <span class="label">border border-3 border-primary</span>
+        <strong>Primary border</strong>
+      </div>
+      <div class="container-fluid border border-3 border-success py-2 bg-white">
+        <span class="label">border border-3 border-success</span>
+        <strong>Success border</strong>
+      </div>
+      <div class="container-fluid border border-3 border-danger py-2 bg-white">
+        <span class="label">border border-3 border-danger</span>
+        <strong>Danger border</strong>
+      </div>
+      <div class="container-fluid border border-3 border-warning py-2 bg-white">
+        <span class="label">border border-3 border-warning</span>
+        <strong>Warning border</strong>
+      </div>
+      <div class="container-fluid border border-3 border-info py-2 bg-white">
+        <span class="label">border border-3 border-info</span>
+        <strong>Info border</strong>
+      </div>
+      <div class="container-fluid border border-3 border-dark py-2 bg-white">
+        <span class="label">border border-3 border-dark</span>
+        <strong>Dark border</strong>
+      </div>
+
+      <div class="container-fluid bg-dark py-3 mt-3">
+        <span class="label-light">inside container-fluid bg-dark</span>
+        <div class="border border-3 border-white text-white p-3">
+          border border-3 border-white — white border only shows on dark bg
+        </div>
+      </div>
+
+      <div class="container-fluid bg-white py-3">
+        <div class="border border-3 border-primary p-3 text-muted">
+          <span class="label">⚠ ANTI-EXAMPLE below</span>
+          <div class="border-primary p-2">
+            This div has <code>border-primary</code> but NO
+            <code>border</code> class → nothing shows.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 7. BORDER WIDTHS -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">7. Border widths — border-1 to border-5</h2>
+      <div class="container-fluid bg-white py-3">
+        <div class="border border-primary border-1 py-2 text-center mb-2">
+          border-1 (1px — default)
+        </div>
+        <div class="border border-primary border-2 py-2 text-center mb-2">
+          border-2 (2px)
+        </div>
+        <div class="border border-primary border-3 py-2 text-center mb-2">
+          border-3 (3px)
+        </div>
+        <div class="border border-primary border-4 py-2 text-center mb-2">
+          border-4 (4px)
+        </div>
+        <div class="border border-primary border-5 py-2 text-center">
+          border-5 (5px)
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 8. BORDER OPACITY -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">8. Border opacity — border-opacity-*</h2>
+      <div class="container-fluid bg-white py-3">
+        <div class="border border-3 border-dark border-opacity-100 p-2 mb-2">
+          border-opacity-100
+        </div>
+        <div class="border border-3 border-dark border-opacity-75 p-2 mb-2">
+          border-opacity-75
+        </div>
+        <div class="border border-3 border-dark border-opacity-50 p-2 mb-2">
+          border-opacity-50
+        </div>
+        <div class="border border-3 border-dark border-opacity-25 p-2 mb-2">
+          border-opacity-25
+        </div>
+        <div class="border border-3 border-dark border-opacity-10 p-2">
+          border-opacity-10
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 9. ROUNDED CORNERS -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">9. Rounded corners — ⚠ needs margin to be visible</h2>
+      <p class="px-4">
+        A full-bleed container-fluid clips its corners at the screen edge. Add
+        <code>mx-3</code> (or my-2) so you can actually see them.
+      </p>
+
+      <div class="container-fluid bg-primary text-white py-3 mb-2">
+        <span class="label-light"
+          >container-fluid bg-primary ← no rounding, no margin</span
+        >
+        Corners touch the screen edge — rounding would be invisible here
+      </div>
+
+      <div class="container-fluid bg-primary text-white py-3 mx-3 my-2 rounded">
+        <span class="label-light">container-fluid mx-3 rounded</span>
+        rounded (≈0.375rem)
+      </div>
+
+      <div
+        class="container-fluid bg-primary text-white py-3 mx-3 my-2 rounded-0"
+      >
+        <span class="label-light">container-fluid mx-3 rounded-0</span>
+        rounded-0 (square — the default)
+      </div>
+
+      <div
+        class="container-fluid bg-primary text-white py-3 mx-3 my-2 rounded-3"
+      >
+        <span class="label-light">container-fluid mx-3 rounded-3</span>
+        rounded-3 (bigger radius)
+      </div>
+
+      <div
+        class="container-fluid bg-primary text-white py-3 mx-3 my-2 rounded-pill"
+      >
+        <span class="label-light">container-fluid mx-3 rounded-pill</span>
+        rounded-pill (fully rounded ends)
+      </div>
+
+      <div
+        class="container-fluid bg-primary text-white py-3 mx-3 my-2 rounded-top"
+      >
+        <span class="label-light">container-fluid mx-3 rounded-top</span>
+        rounded-top (only the top corners)
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 10. ROUNDED + SHADOW -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">10. Borders + radius + shadow together</h2>
+      <div
+        class="container-fluid bg-white border border-2 border-primary rounded-4 shadow-sm mx-3 my-2 py-3"
+      >
+        <span class="label"
+          >border border-2 border-primary rounded-4 shadow-sm</span
+        >
+        <strong>Small, soft, subtle shadow</strong>
+      </div>
+      <div
+        class="container-fluid bg-white border border-2 border-success rounded-4 shadow mx-3 my-2 py-3"
+      >
+        <span class="label"
+          >border border-2 border-success rounded-4 shadow</span
+        >
+        <strong>Normal shadow</strong>
+      </div>
+      <div
+        class="container-fluid bg-white border border-2 border-danger rounded-4 shadow-lg mx-3 my-2 py-3"
+      >
+        <span class="label"
+          >border border-2 border-danger rounded-4 shadow-lg</span
+        >
+        <strong>Large, lifted shadow</strong>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 11. REAL WORLD USE -->
+    <!-- ============================================================ -->
+    <div class="section">
+      <h2 class="px-4">11. Real World Use</h2>
+
+      <!-- Alert banner with colored left edge -->
+      <div
+        class="container-fluid bg-warning-subtle text-warning-emphasis border-start border-5 border-warning py-3"
+      >
+        <span class="label"
+          >Alert banner: bg-warning-subtle + border-start border-5
+          border-warning</span
+        >
+        <strong>⚠ Heads up!</strong> Your subscription expires in 3 days.
+      </div>
+
+      <!-- Navbar with a bottom border -->
+      <nav
+        class="container-fluid bg-white border-bottom border-2 border-dark py-3"
+      >
+        <span class="label"
+          >Navbar: container-fluid bg-white border-bottom border-2
+          border-dark</span
+        >
+        <div class="d-flex align-items-center">
+          <span class="fw-bold text-primary">🌐 MySite</span>
+          <div class="ms-auto">
+            <a href="#" class="text-decoration-none text-dark me-3">Home</a>
+            <a href="#" class="text-decoration-none text-dark">About</a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Full-width status strip -->
+      <div class="container-fluid bg-success text-white text-center py-2">
+        <span class="label-light"
+          >Status strip: container-fluid bg-success text-white</span
+        >
+        <small>✓ All systems operational</small>
+      </div>
+
+      <!-- Hero: full-width bg, centered content, bottom border as separator -->
+      <div
+        class="container-fluid bg-primary text-white text-center py-5 border-bottom border-5 border-warning"
+      >
+        <span class="label-light"
+          >Hero + border-bottom border-5 border-warning as a divider</span
+        >
+        <h2 class="mb-3">Build faster with Bootstrap</h2>
+        <p class="mb-4">
+          Full-width hero banner with a thick yellow underline.
+        </p>
+        <a href="#" class="btn btn-light btn-lg rounded-pill">Get Started</a>
+      </div>
+
+      <!-- Content: centered container with a bordered, rounded card -->
+      <div class="container py-5">
+        <div
+          class="bg-white border border-2 border-secondary-subtle rounded-4 shadow-sm p-4"
+        >
+          <span class="label"
+            >Inside .container: bg-white border rounded-4 shadow-sm</span
+          >
+          <h4>Centered content block</h4>
+          <p class="mb-0 text-muted">
+            The section above is full-bleed. This one is a regular
+            <code>.container</code>
+            with a border, rounded corners, and a shadow — the classic "card"
+            look.
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer with top border -->
+      <footer
+        class="container-fluid bg-dark text-white-50 text-center py-3 border-top border-3 border-primary"
+      >
+        <span class="label-light"
+          >Footer: container-fluid bg-dark border-top border-3
+          border-primary</span
+        >
+        <small class="d-block"
+          >© 2025 MySite — built with container-fluid</small
+        >
+      </footer>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 12. CHEAT SHEET -->
+    <!-- ============================================================ -->
+    <div class="section px-4 pb-5">
+      <h2 class="mb-3">12. Cheat Sheet</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle bg-white">
+          <thead class="table-dark">
+            <tr>
+              <th>What you want</th>
+              <th>Classes to write</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Red full-width banner</td>
+              <td><code>container-fluid bg-danger text-white py-4</code></td>
+            </tr>
+            <tr>
+              <td>Yellow banner (readable)</td>
+              <td><code>container-fluid bg-warning text-dark py-4</code></td>
+            </tr>
+            <tr>
+              <td>Thin grey section divider</td>
+              <td><code>border-bottom</code></td>
+            </tr>
+            <tr>
+              <td>Thick colored divider</td>
+              <td><code>border-bottom border-4 border-primary</code></td>
+            </tr>
+            <tr>
+              <td>Left-edge callout</td>
+              <td>
+                <code
+                  >bg-warning-subtle border-start border-5 border-warning</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Soft notice box</td>
+              <td>
+                <code
+                  >bg-info-subtle text-info-emphasis border
+                  border-info-subtle</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Outlined box</td>
+              <td><code>border border-2 border-success rounded-3</code></td>
+            </tr>
+            <tr>
+              <td>Floating card look</td>
+              <td><code>bg-white border rounded-4 shadow</code></td>
+            </tr>
+            <tr>
+              <td>Rounded pill bar</td>
+              <td><code>mx-3 rounded-pill</code></td>
+            </tr>
+            <tr>
+              <td>Faded border</td>
+              <td>
+                <code>border border-3 border-dark border-opacity-25</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

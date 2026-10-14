@@ -1,0 +1,3545 @@
+<!--
+=======================================================
+  BOOTSTRAP CAROUSEL AND HORIZONTAL SCROLLSPY
+  — CLASS WORKSHEET —
+=======================================================
+
+This worksheet has TWO mini-topics:
+
+  TOPIC 1 — CAROUSEL
+      A slideshow that cycles through slides.
+
+  TOPIC 2 — HORIZONTAL SCROLLSPY
+      A horizontal nav that highlights the section you
+      are currently reading as you scroll down.
+
+LEARNING OBJECTIVES
+-------------------------------------------------------
+By the end of this lesson you will be able to:
+
+  CAROUSEL
+  1. Write the required carousel structure (wrapper,
+     inner, items, one .active item).
+  2. Add previous/next controls and slide indicators
+     with the correct data attributes.
+  3. Add captions and use the fade transition.
+  4. Control autoplay timing, pause behaviour and
+     looping with data attributes.
+  5. Drive a carousel from JavaScript (to, prev, next,
+     pause, cycle).
+  6. Explain the accessibility limits of a carousel.
+
+  HORIZONTAL SCROLLSPY
+  7. Explain what scrollspy does and when to use it.
+  8. Build a horizontal navbar or pill nav that tracks
+     the scroll position of the page.
+  9. Set up scrollspy inside a nested scrollable
+     container.
+ 10. Use rootMargin so a fixed header does not hide
+     the active section.
+ 11. Use a list-group as a scrollspy target.
+ 12. Explain the Bootstrap 4 to 5 migration changes.
+
+ESTIMATED TIME:  75 to 90 minutes
+DIFFICULTY:      Intermediate
+
+=======================================================
+  TOPIC 1 — CAROUSEL
+=======================================================
+
+WHAT IS A CAROUSEL?
+-------------------------------------------------------
+A carousel is a slideshow. It displays one slide at a
+time and cycles through them either automatically or
+when the user clicks an arrow or a dot.
+
+Common uses:
+  Homepage hero banners
+  Featured product sliders
+  Image galleries
+  Testimonial rotators
+  Onboarding walkthroughs
+
+A NOTE OF HONESTY
+-------------------------------------------------------
+The Bootstrap team themselves warn that carousels are
+often a poor design choice. Studies on real websites
+show that most visitors never see beyond the first
+slide, and every slide after the first is effectively
+invisible to a large part of your audience.
+
+Bootstrap also limits carousel accessibility support.
+Offscreen slides are hidden from screen readers and
+keyboard focus with aria-hidden and inert, which means
+content inside slide 2 or 3 is invisible to users of
+assistive technology until the slide becomes active.
+
+If your content is important, consider showing it in a
+static grid or a stacked list instead. Use the carousel
+when the slides are decorative or interchangeable.
+
+-------------------------------------------------------
+THE REQUIRED STRUCTURE (four levels deep)
+-------------------------------------------------------
+  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        Slide one
+      </div>
+      <div class="carousel-item">
+        Slide two
+      </div>
+      <div class="carousel-item">
+        Slide three
+      </div>
+    </div>
+  </div>
+
+Breaking it down:
+  .carousel        the wrapper. Needs an id so the
+                   controls can point at it.
+  .slide           the sliding animation (as opposed
+                   to .carousel-fade which fades).
+  data-bs-ride="carousel"
+                   tells Bootstrap to start playing
+                   automatically. Without this the
+                   carousel does not move at all.
+  .carousel-inner  the container that holds every slide.
+  .carousel-item   a single slide.
+  .active          marks the slide to show first.
+
+THE MOST COMMON MISTAKE: forgetting .active on the
+first slide. Result: you see an empty grey rectangle.
+
+Only ONE item should have .active at any time.
+Bootstrap moves the class as the carousel advances.
+
+-------------------------------------------------------
+PREVIOUS / NEXT CONTROLS
+-------------------------------------------------------
+  <button class="carousel-control-prev" type="button"
+          data-bs-target="#myCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+
+  <button class="carousel-control-next" type="button"
+          data-bs-target="#myCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+
+The two data attributes:
+  data-bs-target  must MATCH the wrapper's id, including
+                  the leading #. If they do not match,
+                  the arrow does nothing.
+  data-bs-slide   either "prev" or "next".
+
+The icon is aria-hidden, the button text is
+visually-hidden. Screen readers announce "Previous",
+not "left-pointing arrow character".
+
+-------------------------------------------------------
+INDICATORS (the dots at the bottom)
+-------------------------------------------------------
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#myCarousel"
+            data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+
+    <button type="button" data-bs-target="#myCarousel"
+            data-bs-slide-to="1" aria-label="Slide 2"></button>
+
+    <button type="button" data-bs-target="#myCarousel"
+            data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+
+Key points:
+  data-bs-slide-to  uses a ZERO-BASED index.
+                    Slide 1 = 0, Slide 2 = 1.
+  The first indicator needs class="active" plus
+  aria-current="true". The rest need neither.
+  Every indicator needs an aria-label.
+
+The indicators container goes OUTSIDE carousel-inner
+but INSIDE the carousel wrapper.
+
+-------------------------------------------------------
+CAPTIONS
+-------------------------------------------------------
+  <div class="carousel-item active">
+    <img src="photo.jpg" class="d-block w-100" alt="...">
+    <div class="carousel-caption d-none d-md-block">
+      <h5>Slide title</h5>
+      <p>A short description of this slide.</p>
+    </div>
+  </div>
+
+The caption is absolutely positioned at the bottom
+centre of the slide. `d-none d-md-block` hides the
+caption on phones where there is not enough room.
+
+Text inside a caption is white by default. On a light
+image, add `carousel-dark` to the wrapper to flip the
+controls, indicators and caption to dark.
+
+-------------------------------------------------------
+FADE TRANSITION
+-------------------------------------------------------
+Add `carousel-fade` to the wrapper:
+
+  <div id="myCarousel" class="carousel slide carousel-fade">
+
+Now the slides cross-fade instead of sliding left and
+right. Everything else stays identical.
+
+-------------------------------------------------------
+AUTOPLAY AND TIMING — DATA ATTRIBUTES
+-------------------------------------------------------
+Put these on the wrapper:
+
+  data-bs-ride="carousel"      start playing on load
+  data-bs-interval="3000"      delay per slide in
+                               milliseconds
+                               (default is 5000)
+  data-bs-wrap="false"         stop at the last slide
+                               instead of looping back
+  data-bs-pause="hover"        default — pauses while
+                               the mouse hovers
+  data-bs-pause="false"        never pause automatically
+  data-bs-touch="false"        disable swipe on mobile
+
+A single item can override the interval:
+
+  <div class="carousel-item" data-bs-interval="10000">
+
+Useful when one slide has a long message and the others
+are just images.
+
+-------------------------------------------------------
+DRIVING IT FROM JAVASCRIPT
+-------------------------------------------------------
+Get the instance and call methods:
+
+  var el   = document.getElementById('myCarousel');
+  var inst = bootstrap.Carousel.getOrCreateInstance(el);
+
+  inst.next();      // go to the next slide
+  inst.prev();      // go to the previous slide
+  inst.to(2);       // jump to slide index 2
+  inst.pause();     // stop autoplay
+  inst.cycle();     // restart autoplay
+  inst.dispose();   // destroy the instance
+
+`getOrCreateInstance` is safer than `new bootstrap.Carousel(el)`
+because it will not create a second instance if one
+already exists.
+
+Every data attribute you can set in HTML has a matching
+JavaScript option — ride, interval, wrap, touch, pause.
+
+-------------------------------------------------------
+ACCESSIBILITY LIMITS (know this)
+-------------------------------------------------------
+Bootstrap automatically adds these to inactive slides:
+  aria-hidden="true"   screen readers skip the slide
+  inert                keyboard focus is blocked inside
+
+And these to the active slide:
+  aria-hidden removed  the slide is announced
+
+What this means in practice:
+  Content in slide 2 is invisible to a screen reader
+  user until slide 2 becomes active. They cannot tab
+  to a link in slide 3 unless they wait for it.
+
+Recommended practices:
+  - Keep slide content short and non-essential.
+  - Do not put critical links or form fields inside
+    a carousel.
+  - Wrap the whole carousel in a labelled region:
+        <div id="heroCarousel" class="carousel slide"
+             aria-label="Featured products">
+  - Do not autoplay if the carousel contains text
+    people need to read carefully.
+
+-------------------------------------------------------
+BOOTSTRAP 4 TO 5 CAROUSEL MIGRATION
+-------------------------------------------------------
+BS4 (dead)                    BS5 (correct)
+--------------------------    --------------------------
+data-ride                 ->  data-bs-ride
+data-interval             ->  data-bs-interval
+data-pause                ->  data-bs-pause
+data-wrap                 ->  data-bs-wrap
+data-touch                ->  data-bs-touch
+data-slide                ->  data-bs-slide
+data-slide-to             ->  data-bs-slide-to
+data-target               ->  data-bs-target
+$('.carousel').carousel() ->  new bootstrap.Carousel(el)
+item-left / item-right    ->  carousel-item-start
+                              carousel-item-end
+                              (animation classes, rarely
+                               written by hand)
+.carousel-control-prev-icon
+    works the same but the default icons changed to SVG
+
+Memory Trick for carousels:
+  WRAPPER    .carousel and an id
+  INNER      .carousel-inner
+  SLIDE      .carousel-item  (first one also .active)
+  ARROWS     .carousel-control-prev / -next
+  DOTS       .carousel-indicators with data-bs-slide-to
+  AUTOPLAY   data-bs-ride="carousel"
+  FADE       add carousel-fade to the wrapper
+  JS         bootstrap.Carousel.getOrCreateInstance(el)
+  TARGET     data-bs-target must equal #wrapperId
+
+=======================================================
+  TOPIC 2 — HORIZONTAL SCROLLSPY
+=======================================================
+
+WHAT IS SCROLLSPY?
+-------------------------------------------------------
+Scrollspy watches where you are on a page and
+automatically adds the `.active` class to the matching
+nav link.
+
+Read down a long documentation page and the nav item
+for "Installation" lights up while you are reading the
+Installation section. Scroll further and "Configuration"
+lights up instead.
+
+The name comes from "spying" on the scroll position.
+
+-------------------------------------------------------
+WHY "HORIZONTAL"?
+-------------------------------------------------------
+Scrollspy works with any Bootstrap nav. Two common
+shapes:
+
+  HORIZONTAL — a pill nav or a navbar sitting across
+               the top of the page. The active pill
+               moves left to right as you scroll down.
+               This is the shape used on most
+               documentation sites and landing pages.
+
+  VERTICAL   — a sidebar nav on the left or right.
+               The active item moves top to bottom.
+               This is the shape used on API reference
+               pages.
+
+The markup is nearly identical. The only difference is
+the orientation of the nav component. This worksheet
+focuses on the horizontal shape and covers the
+vertical one for contrast.
+
+-------------------------------------------------------
+THE FOUR REQUIREMENTS
+-------------------------------------------------------
+For scrollspy to work you need all four of these:
+
+  1. A SCROLLABLE ELEMENT
+     Usually the <body>, but it can also be a nested
+     <div> with a fixed height and overflow-y: auto.
+
+  2. position: relative ON THAT SCROLLABLE ELEMENT
+     Bootstrap's scrollspy computes the root margin
+     relative to this box. Without it, positioning
+     is wrong. For <body> this is usually set already.
+     For a nested <div> you must add it yourself.
+
+  3. SECTIONS WITH IDs
+     Every section you want to track needs a unique id.
+     <section id="install"> ... </section>
+
+  4. A NAV WHOSE LINKS POINT AT THOSE IDs
+     <a class="nav-link" href="#install">Installation</a>
+
+If any of the four is missing, the nav will sit there
+and never highlight anything.
+
+-------------------------------------------------------
+THE MARKUP
+-------------------------------------------------------
+On the scrollable element:
+
+  <body data-bs-spy="scroll"
+        data-bs-target="#mainNav"
+        data-bs-root-margin="0px 0px -40%"
+        data-bs-smooth-scroll="true"
+        tabindex="0">
+
+  On the nav (its id matches data-bs-target):
+
+  <nav id="mainNav" class="nav nav-pills">
+    <a class="nav-link" href="#intro">Intro</a>
+    <a class="nav-link" href="#install">Install</a>
+    <a class="nav-link" href="#usage">Usage</a>
+  </nav>
+
+  In the page body:
+
+  <section id="intro"> ... </section>
+  <section id="install"> ... </section>
+  <section id="usage"> ... </section>
+
+Breaking down the attributes:
+
+  data-bs-spy="scroll"
+        Turns scrollspy on for this element.
+
+  data-bs-target="#mainNav"
+        A selector for the nav element whose links
+        should receive the .active class. Bootstrap
+        finds every [href] inside that nav and uses
+        the hash as the section id.
+
+  data-bs-root-margin="0px 0px -40%"
+        Effective only when the scrollable element is
+        not the document (i.e. a nested container) is
+        empty. It shifts where the "active" boundary
+        is. The value -40% makes the active state
+        switch 40% earlier, which feels more natural
+        with a fixed header at the top.
+
+  data-bs-smooth-scroll="true"
+        Clicking a nav link scrolls smoothly instead
+        of jumping instantly.
+
+  tabindex="0"
+        Required on the scrollable element so keyboards
+        can focus it. Without it, keyboard users cannot
+        use the arrow keys to scroll that region.
+
+-------------------------------------------------------
+NESTED SCROLLABLE CONTAINER
+-------------------------------------------------------
+When you want scrollspy inside a panel or a card
+rather than the whole page:
+
+  <div id="docScroll"
+       data-bs-spy="scroll"
+       data-bs-target="#docNav"
+       data-bs-root-margin="0px 0px -70%"
+       data-bs-smooth-scroll="true"
+       tabindex="0"
+       style="position: relative; height: 320px; overflow-y: auto;">
+    <h4 id="one">One</h4>
+    ...
+  </div>
+
+THREE extra things are needed here:
+  position: relative      on the scroll container
+  height: something fixed on the scroll container
+  overflow-y: auto or scroll
+                          so it actually scrolls
+  tabindex="0"            so keyboards can reach it
+
+Without a fixed height and overflow, the container just
+grows to fit the content and never scrolls — so
+scrollspy has nothing to spy on.
+
+-------------------------------------------------------
+FIXED HEADER AND THE ROOT MARGIN
+-------------------------------------------------------
+If your nav is fixed to the top of the screen, section
+titles slide underneath it. The active state would fire
+too late.
+
+Fix: use a negative bottom rootMargin.
+
+  data-bs-root-margin="0px 0px -40%"
+
+The exact value depends on your header height. A taller
+header needs a bigger negative value. The Bootstrap
+documentation uses -40% in the navbar example.
+
+In older Bootstrap 5.x releases this was also achievable
+with data-bs-offset. The offset option still works in
+5.3 but is deprecated — the docs recommend rootMargin
+now.
+
+-------------------------------------------------------
+USING A LIST GROUP AS THE TARGET
+-------------------------------------------------------
+Bootstrap 5.2 added support for targeting a
+`.list-group` instead of a nav. Every item must be an
+anchor pointing at a section id:
+
+  <div class="list-group" id="sideNav">
+    <a class="list-group-item list-group-item-action"
+       href="#one">One</a>
+    <a class="list-group-item list-group-item-action"
+       href="#two">Two</a>
+  </div>
+
+Bootstrap will add `.active` to the matching item.
+
+-------------------------------------------------------
+REFRESHING AFTER CONTENT CHANGES
+-------------------------------------------------------
+If sections are added, removed or resized after load —
+infinitely-scrolling feeds, tab panels, lazy-loaded
+images — call:
+
+  var spy = bootstrap.ScrollSpy.getInstance(el);
+  spy.refresh();
+
+Bootstrap 5.2 and up uses IntersectionObserver, which
+handles most size changes automatically, but calling
+refresh after a big DOM change is still safe.
+
+-------------------------------------------------------
+SCROLLSPY VS MANUAL SCROLL EVENTS
+-------------------------------------------------------
+You could write your own scroll listener. Scrollspy
+gives you:
+  - IntersectionObserver under the hood, which is
+    far more performant than a scroll event listener
+  - A standard API for adding and removing the class
+  - Correct handling of the class across multiple
+    nav links pointing at the same section
+  - ARIA considerations baked in
+
+Use scrollspy unless you have a specific reason not to.
+
+-------------------------------------------------------
+BOOTSTRAP 4 TO 5 SCROLLSPY MIGRATION
+-------------------------------------------------------
+BS4 (dead)                    BS5 (correct)
+--------------------------    --------------------------
+data-spy                  ->  data-bs-spy
+data-target               ->  data-bs-target
+data-offset               ->  data-bs-root-margin
+                              (data-bs-offset still works
+                               but is deprecated)
+.offset option (JS)       ->  rootMargin option
+(no equivalent)           ->  data-bs-smooth-scroll (5.2+)
+(no equivalent)           ->  list-group as a target (5.2+)
+jQuery                    ->  vanilla JS
+$('body').scrollspy()     ->  new bootstrap.ScrollSpy(el)
+
+Bootstrap 5.2 rewrote scrollspy to use
+IntersectionObserver instead of scroll events. The
+threshold and rootMargin options were removed from the
+JS options object; only rootMargin remains (via the
+data attribute).
+
+Memory Trick for scrollspy:
+  ON the scroller         data-bs-spy="scroll"
+                          + position: relative
+                          + tabindex="0"
+  TO the nav              data-bs-target="#navId"
+  IN each link            href="#sectionId"
+  SECTION                 <section id="sectionId">
+  FIXED HEADER            data-bs-root-margin="0px 0px -40%"
+  NESTED CONTAINER        height + overflow-y + position: relative
+  SMOOTH CLICK            data-bs-smooth-scroll="true"
+  EASY TO FORGET          the id on every section
+
+=======================================================
+  PART A — LIVE DEMOS  (study these first)
+  PART B — YOUR TURN: ACTIVITY TASKS
+  PART C — SELF-CHECK RUBRIC
+  PART D — CHEAT SHEET
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap Carousel and Horizontal Scrollspy</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .section {
+        margin-bottom: 42px;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .label-light {
+        font-family: monospace;
+        font-size: 13px;
+        color: #d1d5db;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .demo-panel {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 20px;
+      }
+      code {
+        background: #eef2ff;
+        padding: 1px 5px;
+        border-radius: 4px;
+        color: #4338ca;
+      }
+      .activity-card {
+        background: #fff;
+        border: 2px dashed #6366f1;
+        border-radius: 12px;
+        padding: 22px;
+        margin-bottom: 20px;
+      }
+      .task-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #6366f1;
+        color: #fff;
+        font-weight: bold;
+        font-size: 14px;
+        margin-right: 10px;
+      }
+      .points {
+        float: right;
+        background: #fef3c7;
+        color: #92400e;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 3px 10px;
+        border-radius: 20px;
+      }
+      .starter {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 12px 14px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 13px;
+        overflow-x: auto;
+        margin: 10px 0;
+      }
+      .starter .cm {
+        color: #94a3b8;
+      }
+      .empty-slot {
+        display: block;
+        border-bottom: 2px dotted #cbd5e1;
+        height: 44px;
+        margin: 12px 0;
+      }
+      details {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-top: 10px;
+      }
+      summary {
+        cursor: pointer;
+        font-weight: bold;
+        color: #4338ca;
+      }
+      .obj-box {
+        background: #eef2ff;
+        border-left: 5px solid #6366f1;
+        padding: 16px 20px;
+        border-radius: 8px;
+      }
+      .warn-box {
+        background: #fef2f2;
+        border-left: 5px solid #dc2626;
+        padding: 16px 20px;
+        border-radius: 8px;
+      }
+      .ok-box {
+        background: #f0fdf4;
+        border-left: 5px solid #16a34a;
+        padding: 16px 20px;
+        border-radius: 8px;
+      }
+      .topic-badge {
+        font-size: 12px;
+        letter-spacing: 0.5px;
+      }
+
+      /* Carousel slide backgrounds — stand in for real images */
+      .slide-a {
+        height: 300px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      }
+      .slide-b {
+        height: 300px;
+        background: linear-gradient(135deg, #0d9488, #14b8a6);
+      }
+      .slide-c {
+        height: 300px;
+        background: linear-gradient(135deg, #e11d48, #f43f5e);
+      }
+      .slide-d {
+        height: 300px;
+        background: linear-gradient(135deg, #d97706, #f59e0b);
+      }
+      .slide-a.short {
+        height: 220px;
+      }
+      .slide-b.short {
+        height: 220px;
+      }
+      .slide-c.short {
+        height: 220px;
+      }
+      .slide-d.short {
+        height: 220px;
+      }
+      .slide-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 3rem;
+      }
+
+      /* Scrollspy nested containers */
+      .spy-box {
+        position: relative;
+        height: 300px;
+        overflow-y: auto;
+        padding: 0 20px 20px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #fff;
+        scroll-behavior: smooth;
+      }
+      .spy-box h4 {
+        padding-top: 24px;
+      }
+      .spy-box p {
+        color: #64748b;
+      }
+
+      /* "Fake browser window" for the real-world demo */
+      .rw-window {
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .rw-chrome {
+        background: #f1f5f9;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .rw-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .rw-scroll {
+        position: relative;
+        height: 520px;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+      }
+      .rw-nav {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #0f172a;
+        display: flex;
+        gap: 6px;
+        padding: 12px 18px;
+        flex-wrap: wrap;
+      }
+      .rw-nav .nav-link {
+        color: #cbd5e1;
+        font-size: 14px;
+        padding: 5px 14px;
+        border-radius: 999px;
+        text-decoration: none;
+        transition:
+          background 0.15s ease,
+          color 0.15s ease;
+      }
+      .rw-nav .nav-link:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .rw-nav .nav-link.active {
+        background: #6366f1;
+        color: #fff;
+      }
+      .rw-section {
+        padding: 32px 24px;
+        min-height: 240px;
+      }
+      .rw-section h4 {
+        margin-bottom: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ========================================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================================= -->
+    <div class="container-fluid bg-dark text-white py-5">
+      <div class="container">
+        <h1 class="display-5 fw-bold">Carousel and Horizontal Scrollspy</h1>
+        <p class="fs-5 text-white-50 mb-4">
+          A slideshow component, and a nav that follows you down the page.
+        </p>
+        <div class="d-flex gap-3 flex-wrap">
+          <span class="badge text-bg-primary fs-6">Time: 75-90 minutes</span>
+          <span class="badge text-bg-success fs-6">Level: Intermediate</span>
+          <span class="badge text-bg-info fs-6">Mode: Individual work</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container py-4">
+      <!-- ======================================================= -->
+      <!-- OBJECTIVES -->
+      <!-- ======================================================= -->
+      <div class="obj-box mb-5">
+        <h4 class="mb-3">Learning Objectives</h4>
+
+        <p class="mb-1 fw-bold">Carousel</p>
+        <ol class="mb-3">
+          <li>
+            Write the required carousel structure — wrapper, inner, items, one
+            <code>.active</code> item.
+          </li>
+          <li>
+            Add previous/next controls and slide indicators with the correct
+            data attributes.
+          </li>
+          <li>Add captions and use the fade transition.</li>
+          <li>
+            Control autoplay timing, pause behaviour and looping with data
+            attributes.
+          </li>
+          <li>
+            Drive a carousel from JavaScript using <code>to</code>,
+            <code>prev</code>, <code>next</code>, <code>pause</code>,
+            <code>cycle</code>.
+          </li>
+          <li>Explain the accessibility limits of a carousel.</li>
+        </ol>
+
+        <p class="mb-1 fw-bold">Horizontal Scrollspy</p>
+        <ol class="mb-0" start="7">
+          <li>Explain what scrollspy does and when to use it.</li>
+          <li>
+            Build a horizontal navbar or pill nav that tracks the page scroll
+            position.
+          </li>
+          <li>Set up scrollspy inside a nested scrollable container.</li>
+          <li>
+            Use rootMargin so a fixed header does not hide the active section.
+          </li>
+          <li>Use a list-group as a scrollspy target.</li>
+          <li>Explain the Bootstrap 4 to 5 migration changes.</li>
+        </ol>
+      </div>
+
+      <!-- ======================================================= -->
+      <!-- PART A: DEMOS -->
+      <!-- ======================================================= -->
+      <h2 class="mb-4 border-bottom pb-2">Part A — Live Demos</h2>
+
+      <!-- ============================================================ -->
+      <!-- TOPIC 1: CAROUSEL -->
+      <!-- ============================================================ -->
+      <div class="container-fluid bg-primary text-white py-3 rounded-3 mb-4">
+        <div class="container px-0">
+          <span class="topic-badge">TOPIC 1</span>
+          <h2 class="mb-0 mt-1">Carousel</h2>
+        </div>
+      </div>
+
+      <!-- 1. MINIMAL STRUCTURE -->
+      <div class="section">
+        <h3>1. The minimal carousel</h3>
+        <p>
+          Four levels deep: wrapper, inner, items, and one active item. With
+          <code>data-bs-ride</code> it plays on its own.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >div#minCarousel.carousel.slide[data-bs-ride="carousel"] >
+            .carousel-inner</span
+          >
+
+          <div
+            id="minCarousel"
+            class="carousel slide mb-4"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="slide-a">
+                  <div class="slide-inner">Slide 1</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-b">
+                  <div class="slide-inner">Slide 2</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-c">
+                  <div class="slide-inner">Slide 3</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="starter">
+            &lt;div id="minCarousel" class="carousel slide"
+            data-bs-ride="carousel"&gt; &lt;div class="carousel-inner"&gt;
+            &lt;div class="carousel-item active"&gt; Slide 1 &lt;/div&gt;
+            &lt;div class="carousel-item"&gt; Slide 2 &lt;/div&gt; &lt;div
+            class="carousel-item"&gt; Slide 3 &lt;/div&gt; &lt;/div&gt;
+            &lt;/div&gt;
+          </div>
+
+          <div class="warn-box mb-0">
+            <strong>Two pieces to notice.</strong> The first item needs
+            <code>.active</code> — forget it and you see a blank box. And
+            <code>data-bs-ride="carousel"</code> is what starts the autoplay.
+            Without that attribute the carousel sits still until something
+            triggers it.
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. CONTROLS -->
+      <div class="section">
+        <h3>2. Previous and next controls</h3>
+        <p>
+          The arrows use <code>data-bs-target</code> to find the carousel. That
+          value must match the wrapper's id exactly.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >.carousel-control-prev / .carousel-control-next with data-bs-target
+            and data-bs-slide</span
+          >
+
+          <div
+            id="ctrlCarousel"
+            class="carousel slide mb-4"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="slide-b short">
+                  <div class="slide-inner">Slide 1</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-a short">
+                  <div class="slide-inner">Slide 2</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-d short">
+                  <div class="slide-inner">Slide 3</div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#ctrlCarousel"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#ctrlCarousel"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+          <div class="starter">
+            &lt;button class="carousel-control-prev" type="button"
+            data-bs-target="#ctrlCarousel" data-bs-slide="prev"&gt; &lt;span
+            class="carousel-control-prev-icon"
+            aria-hidden="true"&gt;&lt;/span&gt; &lt;span
+            class="visually-hidden"&gt;Previous&lt;/span&gt; &lt;/button&gt;
+            &lt;button class="carousel-control-next" type="button"
+            data-bs-target="#ctrlCarousel" data-bs-slide="next"&gt; &lt;span
+            class="carousel-control-next-icon"
+            aria-hidden="true"&gt;&lt;/span&gt; &lt;span
+            class="visually-hidden"&gt;Next&lt;/span&gt; &lt;/button&gt;
+          </div>
+
+          <div class="ok-box mb-0">
+            <strong>The single most common carousel bug:</strong>
+            <code>data-bs-target="#ctrlCarousel"</code> does not match the
+            wrapper's <code>id="ctrlCarousel"</code>. If the two strings differ
+            by even one character, the arrow silently does nothing.
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. INDICATORS -->
+      <div class="section">
+        <h3>3. Indicators (the dots)</h3>
+        <p>
+          The dots use a <code>data-bs-slide-to</code> attribute with a
+          <strong>zero-based</strong> index.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >.carousel-indicators with data-bs-slide-to="0", "1", "2"</span
+          >
+
+          <div
+            id="dotCarousel"
+            class="carousel slide mb-4"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-indicators">
+              <button
+                type="button"
+                data-bs-target="#dotCarousel"
+                data-bs-slide-to="0"
+                class="active"
+                aria-current="true"
+                aria-label="Slide 1"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#dotCarousel"
+                data-bs-slide-to="1"
+                aria-label="Slide 2"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#dotCarousel"
+                data-bs-slide-to="2"
+                aria-label="Slide 3"
+              ></button>
+            </div>
+
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="slide-c short">
+                  <div class="slide-inner">Slide 1</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-a short">
+                  <div class="slide-inner">Slide 2</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-b short">
+                  <div class="slide-inner">Slide 3</div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#dotCarousel"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#dotCarousel"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+          <div class="warn-box mb-0">
+            <strong>Three rules for indicators.</strong>
+            <ul class="mb-0 mt-1">
+              <li>
+                The index starts at <strong>0</strong>, not 1. The first dot is
+                <code>data-bs-slide-to="0"</code>.
+              </li>
+              <li>
+                The first dot needs <code>class="active"</code> and
+                <code>aria-current="true"</code>.
+              </li>
+              <li>
+                Every dot needs its own <code>aria-label</code> for screen
+                readers.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. CAPTIONS -->
+      <div class="section">
+        <h3>4. Captions</h3>
+        <p>
+          A caption is absolutely positioned at the bottom centre of the slide.
+          Hover the image to pause and read.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >.carousel-caption with d-none d-md-block so it hides on
+            phones</span
+          >
+
+          <div
+            id="capCarousel"
+            class="carousel slide mb-4"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-indicators">
+              <button
+                type="button"
+                data-bs-target="#capCarousel"
+                data-bs-slide-to="0"
+                class="active"
+                aria-current="true"
+                aria-label="Slide 1"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#capCarousel"
+                data-bs-slide-to="1"
+                aria-label="Slide 2"
+              ></button>
+            </div>
+
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="slide-a"><div class="slide-inner"></div></div>
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>First slide title</h5>
+                  <p>
+                    A short sentence that explains what this slide is about.
+                  </p>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-d"><div class="slide-inner"></div></div>
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>Second slide title</h5>
+                  <p>
+                    Captions are absolutely positioned at the bottom centre of
+                    the slide.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#capCarousel"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#capCarousel"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+          <div class="ok-box mb-0">
+            <strong>Why <code>d-none d-md-block</code>?</strong> On a phone the
+            caption takes up most of the slide and covers the image. Hiding it
+            below the md breakpoint keeps the slide readable on small screens.
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. FADE AND DARK -->
+      <div class="section">
+        <h3>5. Fade transition and the dark variant</h3>
+        <p>
+          <code>carousel-fade</code> replaces the slide motion with a
+          cross-fade. <code>carousel-dark</code> flips the controls, dots and
+          caption to dark for light backgrounds.
+        </p>
+
+        <div class="demo-panel">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <span class="label">.carousel-fade</span>
+              <div
+                id="fadeCarousel"
+                class="carousel slide carousel-fade"
+                data-bs-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div class="slide-a short">
+                      <div class="slide-inner">Fade 1</div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="slide-b short">
+                      <div class="slide-inner">Fade 2</div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="slide-c short">
+                      <div class="slide-inner">Fade 3</div>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#fadeCarousel"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#fadeCarousel"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <span class="label">.carousel-dark on a light background</span>
+              <div
+                id="darkCarousel"
+                class="carousel slide carousel-dark"
+                data-bs-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div style="height: 220px; background: #e2e8f0">
+                      <div class="slide-inner text-secondary">Light 1</div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div style="height: 220px; background: #f1f5f9">
+                      <div class="slide-inner text-secondary">Light 2</div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div style="height: 220px; background: #e2e8f0">
+                      <div class="slide-inner text-secondary">Light 3</div>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#darkCarousel"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#darkCarousel"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-3 mt-4">
+            <div class="col-md-6">
+              <div class="starter mb-0">
+                &lt;div class="carousel slide carousel-fade" ...&gt;
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="starter mb-0">
+                &lt;div class="carousel slide carousel-dark" ...&gt;
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. AUTOPLAY OPTIONS -->
+      <div class="section">
+        <h3>6. Autoplay options</h3>
+        <p>
+          Timing, looping and pause behaviour are all set with data attributes
+          on the wrapper.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >data-bs-interval="1500" and data-bs-pause="false" — very fast,
+            never pauses</span
+          >
+
+          <div
+            id="fastCarousel"
+            class="carousel slide mb-4"
+            data-bs-ride="carousel"
+            data-bs-interval="1500"
+            data-bs-pause="false"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="slide-a short">
+                  <div class="slide-inner">1500 ms</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-b short">
+                  <div class="slide-inner">1500 ms</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-c short">
+                  <div class="slide-inner">1500 ms</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <span class="label"
+            >data-bs-wrap="false" — stops at the last slide instead of
+            looping</span
+          >
+
+          <div
+            id="nowrapCarousel"
+            class="carousel slide mb-4"
+            data-bs-ride="carousel"
+            data-bs-interval="1200"
+            data-bs-wrap="false"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="slide-d short">
+                  <div class="slide-inner">1 of 3</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-a short">
+                  <div class="slide-inner">2 of 3</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-b short">
+                  <div class="slide-inner">3 of 3 (end)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle bg-white mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th>Attribute</th>
+                  <th>What it does</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>data-bs-ride="carousel"</code></td>
+                  <td>Start autoplay on load</td>
+                  <td>off</td>
+                </tr>
+                <tr>
+                  <td><code>data-bs-interval="3000"</code></td>
+                  <td>Delay per slide in milliseconds</td>
+                  <td>5000</td>
+                </tr>
+                <tr>
+                  <td><code>data-bs-wrap="false"</code></td>
+                  <td>Stop at the last slide</td>
+                  <td>true (loops)</td>
+                </tr>
+                <tr>
+                  <td><code>data-bs-pause="hover"</code></td>
+                  <td>Pause while the mouse hovers</td>
+                  <td>hover</td>
+                </tr>
+                <tr>
+                  <td><code>data-bs-pause="false"</code></td>
+                  <td>Never pause automatically</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><code>data-bs-touch="false"</code></td>
+                  <td>Disable swipe on touch devices</td>
+                  <td>true</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="warn-box mt-3 mb-0">
+            <strong>Accessibility warning.</strong> Setting
+            <code>data-bs-pause="false"</code> means the carousel will keep
+            moving even when a user tries to read or focus on a slide. For any
+            carousel with text, leave the default <code>hover</code> pause in
+            place, or provide a visible play/pause button.
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. JAVASCRIPT CONTROL -->
+      <div class="section">
+        <h3>7. Controlling the carousel from JavaScript</h3>
+        <p>
+          External buttons can drive a carousel with the
+          <code>bootstrap.Carousel</code> API.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >bootstrap.Carousel.getOrCreateInstance(el).prev() / .next() /
+            .to(n) / .pause() / .cycle()</span
+          >
+
+          <div
+            id="jsCarousel"
+            class="carousel slide mb-4"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="slide-a short">
+                  <div class="slide-inner">Index 0</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-b short">
+                  <div class="slide-inner">Index 1</div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="slide-c short">
+                  <div class="slide-inner">Index 2</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2">
+            <button
+              class="btn btn-sm btn-outline-primary"
+              onclick="jsCarouselAction('prev')"
+            >
+              prev()
+            </button>
+            <button
+              class="btn btn-sm btn-outline-primary"
+              onclick="jsCarouselAction('next')"
+            >
+              next()
+            </button>
+            <button
+              class="btn btn-sm btn-outline-primary"
+              onclick="jsCarouselAction('to0')"
+            >
+              to(0)
+            </button>
+            <button
+              class="btn btn-sm btn-outline-primary"
+              onclick="jsCarouselAction('to1')"
+            >
+              to(1)
+            </button>
+            <button
+              class="btn btn-sm btn-outline-primary"
+              onclick="jsCarouselAction('to2')"
+            >
+              to(2)
+            </button>
+            <button
+              class="btn btn-sm btn-outline-warning"
+              onclick="jsCarouselAction('pause')"
+            >
+              pause()
+            </button>
+            <button
+              class="btn btn-sm btn-outline-success"
+              onclick="jsCarouselAction('cycle')"
+            >
+              cycle()
+            </button>
+          </div>
+
+          <div class="starter mt-4 mb-0">
+            var el = document.getElementById('jsCarousel'); var inst =
+            bootstrap.Carousel.getOrCreateInstance(el); inst.prev(); // previous
+            slide inst.next(); // next slide inst.to(2); // jump to index 2
+            inst.pause(); // stop autoplay inst.cycle(); // restart autoplay
+          </div>
+
+          <div class="ok-box mt-3 mb-0">
+            <strong
+              >Why getOrCreateInstance and not
+              <code>new bootstrap.Carousel(el)</code>?</strong
+            >
+            Because the carousel already exists if it has
+            <code>data-bs-ride</code>. Creating a second instance would attach a
+            duplicate set of event listeners and cause double transitions.
+            <code>getOrCreateInstance</code>
+            reuses the existing one.
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. ACCESSIBILITY -->
+      <div class="section">
+        <h3>8. What Bootstrap does automatically for accessibility</h3>
+        <p>
+          Inspect the markup after the carousel starts playing and you will see
+          Bootstrap adding attributes.
+        </p>
+
+        <div class="demo-panel">
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle bg-white">
+              <thead class="table-dark">
+                <tr>
+                  <th>Attribute</th>
+                  <th>Added to</th>
+                  <th>Why</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>aria-hidden="true"</code></td>
+                  <td>Every inactive slide</td>
+                  <td>Screen readers skip slides that are not visible.</td>
+                </tr>
+                <tr>
+                  <td><code>inert</code></td>
+                  <td>Every inactive slide</td>
+                  <td>Keyboard focus is blocked inside offscreen slides.</td>
+                </tr>
+                <tr>
+                  <td>nothing</td>
+                  <td>Active slide</td>
+                  <td>
+                    The attributes are removed so it becomes available again.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="warn-box mb-0">
+            <strong>What this means in practice.</strong>
+            A link inside slide 3 is not reachable by keyboard or screen reader
+            until slide 3 becomes active. That is why the Bootstrap team
+            recommends keeping carousel content short and non-essential, and why
+            autoplaying carousels with critical text are best avoided.
+            <br /><br />
+            Add an <code>aria-label</code> to the wrapper so the whole region
+            has a name:
+            <div class="starter mt-2 mb-0">
+              &lt;div id="heroCarousel" class="carousel slide"
+              aria-label="Featured products"&gt;
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- TOPIC 2: SCROLLSPY -->
+      <!-- ============================================================ -->
+      <div
+        class="container-fluid bg-success text-white py-3 rounded-3 mb-4 mt-5"
+      >
+        <div class="container px-0">
+          <span class="topic-badge">TOPIC 2</span>
+          <h2 class="mb-0 mt-1">Horizontal Scrollspy</h2>
+        </div>
+      </div>
+
+      <!-- 9. BASIC HORIZONTAL SCROLLSPY -->
+      <div class="section">
+        <h3>9. A basic horizontal scrollspy</h3>
+        <p>
+          Scroll inside the box below and watch the pill nav at the top of the
+          box update. This is the core pattern.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >Nested scroller: data-bs-spy="scroll" + position: relative + height
+            + overflow-y + tabindex="0"</span
+          >
+
+          <!-- The nav sits above the scroll container so it stays visible -->
+          <nav id="pillNavDemo" class="nav nav-pills mb-3 gap-2">
+            <a class="nav-link" href="#sec-intro">Introduction</a>
+            <a class="nav-link" href="#sec-setup">Setup</a>
+            <a class="nav-link" href="#sec-usage">Usage</a>
+            <a class="nav-link" href="#sec-faq">FAQ</a>
+          </nav>
+
+          <!-- The nested scroll container is what gets spied on -->
+          <div
+            class="spy-box"
+            id="spyBoxBasic"
+            data-bs-spy="scroll"
+            data-bs-target="#pillNavDemo"
+            data-bs-root-margin="0px 0px -70%"
+            data-bs-smooth-scroll="true"
+            tabindex="0"
+          >
+            <h4 id="sec-intro">Introduction</h4>
+            <p>
+              This panel is a nested scroll container. It has a fixed height and
+              <code>overflow-y: auto</code>, so its content scrolls inside the
+              box instead of scrolling the whole page. Scrollspy watches this
+              box.
+            </p>
+            <p>
+              Watch the pill nav above. As each section comes into view,
+              Bootstrap moves the <code>.active</code> class to the matching
+              link.
+            </p>
+
+            <h4 id="sec-setup">Setup</h4>
+            <p>
+              Three things make this work. The scroll container has
+              <code>data-bs-spy="scroll"</code> and <code>tabindex="0"</code>.
+              It also has <code>position: relative</code>, a fixed height and
+              <code>overflow-y: auto</code> in its CSS.
+            </p>
+            <p>
+              The nav has an <code>id</code>, and every link inside it points at
+              a section <code>id</code> with a hash. The
+              <code>data-bs-target</code> on the scroller matches the nav's id.
+            </p>
+
+            <h4 id="sec-usage">Usage</h4>
+            <p>
+              Use scrollspy on long documentation pages, changelogs, terms of
+              service, API references, and any single-page layout with several
+              clearly separated sections.
+            </p>
+            <p>
+              Do not use it when sections are short or when the nav is very
+              long. The user will see the active pill jumping around faster than
+              they can read.
+            </p>
+
+            <h4 id="sec-faq">FAQ</h4>
+            <p>
+              <strong>What if nothing highlights?</strong> In almost every case
+              one of the four requirements is missing: no
+              <code>position: relative</code>, no <code>tabindex="0"</code>, a
+              section without an id, or a <code>data-bs-target</code> that does
+              not match the nav's id.
+            </p>
+            <p>
+              <strong>Does it work with a navbar instead of pills?</strong> Yes.
+              Scrollspy finds any element with an <code>href</code> inside the
+              target nav. Pills, tabs, navbars and list groups all work.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. HORIZONTAL NAVBAR SCROLLSPY -->
+      <div class="section">
+        <h3>10. Horizontal navbar scrollspy</h3>
+        <p>
+          The same pattern with a full navbar. This is the shape used on most
+          documentation sites.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >navbar with .nav-link inside + a sticky nav bar at the top of the
+            scroller</span
+          >
+
+          <div class="border rounded-3 overflow-hidden">
+            <div
+              id="navScrollArea"
+              data-bs-spy="scroll"
+              data-bs-target="#navScrollNav"
+              data-bs-root-margin="0px 0px -70%"
+              data-bs-smooth-scroll="true"
+              tabindex="0"
+              style="
+                position: relative;
+                height: 340px;
+                overflow-y: auto;
+                scroll-behavior: smooth;
+              "
+            >
+              <!-- Sticky navbar stays visible while the content scrolls -->
+              <nav
+                id="navScrollNav"
+                class="navbar navbar-dark bg-dark px-3 sticky-top"
+              >
+                <ul class="navbar-nav flex-row gap-3">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#nav-overview">Overview</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#nav-install">Install</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#nav-config">Config</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#nav-deploy">Deploy</a>
+                  </li>
+                </ul>
+              </nav>
+
+              <div class="p-4">
+                <h4 id="nav-overview">Overview</h4>
+                <p>
+                  The navbar is <code>position: sticky</code> inside the scroll
+                  container. It stays at the top of the visible area while the
+                  section content scrolls behind it.
+                </p>
+
+                <h4 id="nav-install" class="pt-4">Install</h4>
+                <p>
+                  Because the navbar is sticky and covers the top of the
+                  container, a section title can be hidden underneath it. The
+                  <code>data-bs-root-margin="0px 0px -70%"</code> attribute
+                  moves the active boundary up so it fires before the title
+                  disappears.
+                </p>
+
+                <h4 id="nav-config" class="pt-4">Configuration</h4>
+                <p>
+                  Every link inside the target nav needs an
+                  <code>href</code> that matches a section id with a hash. Links
+                  that do not match any section are simply ignored.
+                </p>
+
+                <h4 id="nav-deploy" class="pt-4">Deploy</h4>
+                <p>
+                  With smooth scroll enabled, clicking a nav link scrolls
+                  smoothly instead of jumping. Bootstrap handles the animation;
+                  no custom JavaScript is needed.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="ok-box mt-4 mb-0">
+            <strong>Why <code>-70%</code> here?</strong> The root margin decides
+            where the "active" trigger sits vertically. A larger negative value
+            pushes the trigger higher up, which is what you want when a sticky
+            or fixed header is covering the top of the area.
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. VERTICAL SIDEBAR SCROLLSPY -->
+      <div class="section">
+        <h3>11. Vertical sidebar scrollspy (for contrast)</h3>
+        <p>
+          The markup is the same. The only difference is that the nav is stacked
+          vertically instead of arranged in a row.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >Same data attributes — only the visual column changes</span
+          >
+
+          <div class="border rounded-3 overflow-hidden">
+            <div class="row g-0">
+              <!-- Vertical nav column -->
+              <div
+                class="col-md-3 bg-light p-3 border-end"
+                style="min-height: 320px"
+              >
+                <nav id="sideNavDemo" class="nav flex-column nav-pills">
+                  <a class="nav-link mb-1" href="#side-one">Getting started</a>
+                  <a class="nav-link mb-1" href="#side-two">Components</a>
+                  <a class="nav-link mb-1" href="#side-three">Utilities</a>
+                  <a class="nav-link mb-1" href="#side-four">Migration</a>
+                </nav>
+              </div>
+
+              <!-- Scroller column -->
+              <div class="col-md-9">
+                <div
+                  id="sideScrollBox"
+                  data-bs-spy="scroll"
+                  data-bs-target="#sideNavDemo"
+                  data-bs-root-margin="0px 0px -70%"
+                  data-bs-smooth-scroll="true"
+                  tabindex="0"
+                  style="
+                    position: relative;
+                    height: 320px;
+                    overflow-y: auto;
+                    padding: 0 20px;
+                    scroll-behavior: smooth;
+                  "
+                >
+                  <h4 id="side-one" class="pt-4">Getting started</h4>
+                  <p>
+                    Scroll this panel and the sidebar on the left updates. The
+                    structure of the markup is identical to the horizontal case.
+                  </p>
+
+                  <h4 id="side-two" class="pt-4">Components</h4>
+                  <p>
+                    Same <code>data-bs-spy</code>, same
+                    <code>data-bs-target</code>, same
+                    <code>tabindex="0"</code> on the scroller.
+                  </p>
+
+                  <h4 id="side-three" class="pt-4">Utilities</h4>
+                  <p>
+                    The nav uses <code>nav flex-column</code> instead of a row.
+                    That is the entire difference between the vertical and
+                    horizontal versions.
+                  </p>
+
+                  <h4 id="side-four" class="pt-4">Migration</h4>
+                  <p>
+                    Choose whichever shape fits the page. Horizontal fits a wide
+                    layout with a top header. Vertical fits a documentation
+                    layout with a persistent left column.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ok-box mt-4 mb-0">
+            <strong>Choose based on layout, not on behaviour.</strong> Scrollspy
+            does not care whether the nav is horizontal or vertical. It only
+            cares that every link has an <code>href</code> that matches a
+            section id.
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. LIST GROUP TARGET -->
+      <div class="section">
+        <h3>12. Using a list group as the target</h3>
+        <p>
+          Bootstrap 5.2 added support for a <code>.list-group</code> target, not
+          just <code>.nav</code>.
+        </p>
+
+        <div class="demo-panel">
+          <span class="label"
+            >list-group with list-group-item-action anchors</span
+          >
+
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="list-group" id="lgNavDemo">
+                <a class="list-group-item list-group-item-action" href="#lg-one"
+                  >Account</a
+                >
+                <a class="list-group-item list-group-item-action" href="#lg-two"
+                  >Security</a
+                >
+                <a
+                  class="list-group-item list-group-item-action"
+                  href="#lg-three"
+                  >Notifications</a
+                >
+                <a
+                  class="list-group-item list-group-item-action"
+                  href="#lg-four"
+                  >Billing</a
+                >
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              <div
+                id="lgScrollBox"
+                data-bs-spy="scroll"
+                data-bs-target="#lgNavDemo"
+                data-bs-root-margin="0px 0px -70%"
+                data-bs-smooth-scroll="true"
+                tabindex="0"
+                style="
+                  position: relative;
+                  height: 260px;
+                  overflow-y: auto;
+                  padding: 0 20px;
+                  scroll-behavior: smooth;
+                  border: 1px solid #e5e7eb;
+                  border-radius: 8px;
+                "
+              >
+                <h5 id="lg-one" class="pt-4">Account</h5>
+                <p>Update your name, email address and profile photo here.</p>
+
+                <h5 id="lg-two" class="pt-4">Security</h5>
+                <p>
+                  Change your password and manage two-factor authentication.
+                </p>
+
+                <h5 id="lg-three" class="pt-4">Notifications</h5>
+                <p>Choose which emails and push alerts you receive.</p>
+
+                <h5 id="lg-four" class="pt-4">Billing</h5>
+                <p>View invoices and change your subscription plan.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="starter mt-4 mb-0">
+            &lt;div class="list-group" id="lgNavDemo"&gt; &lt;a
+            class="list-group-item list-group-item-action"
+            href="#lg-one"&gt;Account&lt;/a&gt; &lt;a class="list-group-item
+            list-group-item-action" href="#lg-two"&gt;Security&lt;/a&gt;
+            &lt;/div&gt; &lt;div data-bs-spy="scroll"
+            data-bs-target="#lgNavDemo" tabindex="0" style="position: relative;
+            height: 260px; overflow-y: auto;"&gt; &lt;h5
+            id="lg-one"&gt;Account&lt;/h5&gt; &lt;h5
+            id="lg-two"&gt;Security&lt;/h5&gt; &lt;/div&gt;
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. COMMON MISTAKES -->
+      <div class="section">
+        <h3>13. Common mistakes</h3>
+
+        <div class="demo-panel">
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle bg-white mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th style="width: 45%">Mistake</th>
+                  <th>Symptom</th>
+                  <th style="width: 30%">Fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <code>position: relative</code> missing from the scroller
+                  </td>
+                  <td>Nothing highlights, or it fires at wrong offsets</td>
+                  <td>
+                    Add <code>position: relative</code> to the scroll container
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>tabindex="0"</code> missing</td>
+                  <td>Keyboard users cannot scroll the region</td>
+                  <td>Add <code>tabindex="0"</code> to the scroller</td>
+                </tr>
+                <tr>
+                  <td>Section has no <code>id</code></td>
+                  <td>That section never activates</td>
+                  <td>Give every tracked section a unique id</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>data-bs-target</code> does not match the nav's id
+                  </td>
+                  <td>Nothing ever highlights</td>
+                  <td>
+                    Make the two strings identical, including the <code>#</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Link <code>href</code> uses <code>#sectionId</code> but the
+                    section uses a different case
+                  </td>
+                  <td>That link never activates</td>
+                  <td>Match case exactly — HTML ids are case sensitive</td>
+                </tr>
+                <tr>
+                  <td>Nested container has no height or overflow</td>
+                  <td>The container just grows; there is nothing to scroll</td>
+                  <td>
+                    Add a fixed <code>height</code> and
+                    <code>overflow-y: auto</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Fixed header hides the section title</td>
+                  <td>Active state fires too late</td>
+                  <td>Add <code>data-bs-root-margin="0px 0px -40%"</code></td>
+                </tr>
+                <tr>
+                  <td>Scrollspy element is the nav, not the scroller</td>
+                  <td>Nothing works</td>
+                  <td>
+                    <code>data-bs-spy</code> goes on the SCROLLING element,
+                    <code>data-bs-target</code> points at the NAV
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="warn-box mt-3 mb-0">
+            <strong>Remember the direction.</strong>
+            <code>data-bs-spy="scroll"</code> sits on the element that scrolls.
+            <code>data-bs-target="#navId"</code> points at the element that
+            receives the <code>.active</code> class. They are two different
+            elements and it is easy to swap them by accident.
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- REAL WORLD USE -->
+      <!-- ============================================================ -->
+      <h2 class="mb-4 border-bottom pb-2 mt-5">Real World Use</h2>
+
+      <!-- 14. LANDING PAGE -->
+      <div class="section">
+        <h3>14. A landing page that uses both components</h3>
+        <p>
+          This is a single self-contained page. The navbar uses scrollspy. The
+          hero uses a carousel. Everything scrolls inside the fake browser
+          window.
+        </p>
+
+        <div class="rw-window">
+          <!-- Fake browser chrome -->
+          <div class="rw-chrome">
+            <span class="rw-dot" style="background: #ef4444"></span>
+            <span class="rw-dot" style="background: #f59e0b"></span>
+            <span class="rw-dot" style="background: #10b981"></span>
+            <span class="ms-3 text-muted small">example.com</span>
+          </div>
+
+          <!-- The scrollable "page" -->
+          <div
+            class="rw-scroll"
+            id="rwPage"
+            data-bs-spy="scroll"
+            data-bs-target="#rwNav"
+            data-bs-root-margin="0px 0px -70%"
+            data-bs-smooth-scroll="true"
+            tabindex="0"
+          >
+            <!-- Sticky navbar with scrollspy -->
+            <nav id="rwNav" class="rw-nav">
+              <a class="nav-link" href="#rw-home">Home</a>
+              <a class="nav-link" href="#rw-features">Features</a>
+              <a class="nav-link" href="#rw-pricing">Pricing</a>
+              <a class="nav-link" href="#rw-contact">Contact</a>
+            </nav>
+
+            <!-- Home section: carousel -->
+            <section
+              id="rw-home"
+              class="rw-section p-0"
+              style="min-height: 320px"
+            >
+              <div
+                id="rwHero"
+                class="carousel slide"
+                data-bs-ride="carousel"
+                aria-label="Featured slides"
+              >
+                <div class="carousel-indicators">
+                  <button
+                    type="button"
+                    data-bs-target="#rwHero"
+                    data-bs-slide-to="0"
+                    class="active"
+                    aria-current="true"
+                    aria-label="Slide 1"
+                  ></button>
+                  <button
+                    type="button"
+                    data-bs-target="#rwHero"
+                    data-bs-slide-to="1"
+                    aria-label="Slide 2"
+                  ></button>
+                  <button
+                    type="button"
+                    data-bs-target="#rwHero"
+                    data-bs-slide-to="2"
+                    aria-label="Slide 3"
+                  ></button>
+                </div>
+
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div class="slide-a"><div class="slide-inner"></div></div>
+                    <div
+                      class="carousel-caption text-start d-none d-md-block"
+                      style="bottom: 2rem"
+                    >
+                      <h3 class="fw-bold">Ship faster with Bootstrap</h3>
+                      <p>
+                        Components that already handle responsive and
+                        accessibility.
+                      </p>
+                      <a href="#rw-features" class="btn btn-light btn-sm"
+                        >Explore features</a
+                      >
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="slide-b"><div class="slide-inner"></div></div>
+                    <div
+                      class="carousel-caption text-start d-none d-md-block"
+                      style="bottom: 2rem"
+                    >
+                      <h3 class="fw-bold">Built for every screen size</h3>
+                      <p>One markup, five breakpoints, zero media queries.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="slide-d"><div class="slide-inner"></div></div>
+                    <div
+                      class="carousel-caption text-start d-none d-md-block"
+                      style="bottom: 2rem"
+                    >
+                      <h3 class="fw-bold">Ready on day one</h3>
+                      <p>Drop in the CDN link and start writing HTML.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#rwHero"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#rwHero"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- Features -->
+            <section id="rw-features" class="rw-section bg-white">
+              <h4>Features</h4>
+              <p class="text-muted mb-4">
+                Scroll down and watch the navbar at the top update. That is
+                scrollspy working on the same scroll container that this section
+                lives in.
+              </p>
+
+              <div class="row row-cols-1 row-cols-md-3 g-3">
+                <div class="col">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <i class="bi bi-grid-3x3-gap text-primary fs-3"></i>
+                      <h6 class="card-title mt-2">Grid system</h6>
+                      <p class="card-text small text-muted mb-0">
+                        Twelve columns, six breakpoints, flexbox under the hood.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <i class="bi bi-universal-access text-success fs-3"></i>
+                      <h6 class="card-title mt-2">Accessibility</h6>
+                      <p class="card-text small text-muted mb-0">
+                        ARIA attributes and keyboard support baked into every
+                        component.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <i class="bi bi-palette text-danger fs-3"></i>
+                      <h6 class="card-title mt-2">Theming</h6>
+                      <p class="card-text small text-muted mb-0">
+                        Override any component with a CSS variable, no new
+                        classes.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Pricing -->
+            <section id="rw-pricing" class="rw-section bg-light">
+              <h4>Pricing</h4>
+              <p class="text-muted mb-4">Three plans, one component library.</p>
+
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h6 class="card-title">Starter</h6>
+                      <div class="fs-4 fw-bold mb-2">
+                        $0<span class="fs-6 text-muted fw-normal">/mo</span>
+                      </div>
+                      <p class="small text-muted mb-0">Personal projects.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card h-100 border-primary border-2">
+                    <div class="card-body">
+                      <h6 class="card-title text-primary">Pro</h6>
+                      <div class="fs-4 fw-bold mb-2">
+                        $29<span class="fs-6 text-muted fw-normal">/mo</span>
+                      </div>
+                      <p class="small text-muted mb-0">Growing teams.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h6 class="card-title">Enterprise</h6>
+                      <div class="fs-4 fw-bold mb-2">
+                        $99<span class="fs-6 text-muted fw-normal">/mo</span>
+                      </div>
+                      <p class="small text-muted mb-0">Large organizations.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="rw-contact" class="rw-section bg-white">
+              <h4>Contact</h4>
+              <p class="text-muted">
+                This is the last tracked section. When the navbar pill for
+                Contact becomes active, you have reached the end of the page.
+              </p>
+              <form class="row g-3" onsubmit="return false;">
+                <div class="col-md-6">
+                  <label class="form-label">Name</label>
+                  <input type="text" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Message</label>
+                  <textarea class="form-control" rows="3"></textarea>
+                </div>
+                <div class="col-12">
+                  <button class="btn btn-primary">Send</button>
+                </div>
+              </form>
+            </section>
+          </div>
+        </div>
+
+        <p class="text-muted small mt-3 mb-0">
+          Scroll inside the window. The dark navbar at the top updates as each
+          section comes into view. The hero carousel plays on its own and also
+          responds to the arrow buttons and dots.
+        </p>
+      </div>
+
+      <!-- 15. DOCS PAGE -->
+      <div class="section">
+        <h3>
+          15. Documentation page with a nested scrollspy and a table of contents
+        </h3>
+
+        <div class="row g-4">
+          <div class="col-lg-3">
+            <div class="card">
+              <div class="card-header bg-white fw-medium">On this page</div>
+              <div class="card-body p-0">
+                <div class="list-group list-group-flush" id="docsToc">
+                  <a
+                    class="list-group-item list-group-item-action"
+                    href="#doc-overview"
+                    >Overview</a
+                  >
+                  <a
+                    class="list-group-item list-group-item-action"
+                    href="#doc-install"
+                    >Installation</a
+                  >
+                  <a
+                    class="list-group-item list-group-item-action"
+                    href="#doc-config"
+                    >Configuration</a
+                  >
+                  <a
+                    class="list-group-item list-group-item-action"
+                    href="#doc-api"
+                    >API reference</a
+                  >
+                  <a
+                    class="list-group-item list-group-item-action"
+                    href="#doc-changelog"
+                    >Changelog</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-9">
+            <div
+              id="docsScroll"
+              data-bs-spy="scroll"
+              data-bs-target="#docsToc"
+              data-bs-root-margin="0px 0px -70%"
+              data-bs-smooth-scroll="true"
+              tabindex="0"
+              style="
+                position: relative;
+                height: 360px;
+                overflow-y: auto;
+                padding: 0 24px;
+                border: 1px solid #e5e7eb;
+                border-radius: 10px;
+                background: #fff;
+                scroll-behavior: smooth;
+              "
+            >
+              <h4 id="doc-overview" class="pt-4">Overview</h4>
+              <p>
+                The table of contents on the left is a
+                <code>.list-group</code> rather than a <code>.nav</code>.
+                Bootstrap 5.2 and up support both.
+              </p>
+
+              <h4 id="doc-install" class="pt-4">Installation</h4>
+              <p>
+                Add the CDN link in the head of your document, then start
+                writing markup. No build step is required for a simple page.
+              </p>
+
+              <h4 id="doc-config" class="pt-4">Configuration</h4>
+              <p>
+                Scrollspy accepts four options: <code>target</code>,
+                <code>rootMargin</code>, <code>smoothScroll</code> and
+                <code>threshold</code>.
+              </p>
+
+              <h4 id="doc-api" class="pt-4">API reference</h4>
+              <p>
+                Public methods on a ScrollSpy instance are
+                <code>refresh()</code>, <code>dispose()</code>,
+                <code>getInstance()</code> and
+                <code>getOrCreateInstance()</code>.
+              </p>
+
+              <h4 id="doc-changelog" class="pt-4">Changelog</h4>
+              <p>
+                Version 5.2 replaced the internal scroll event listener with an
+                IntersectionObserver, which uses dramatically less CPU on long
+                pages.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================= -->
+      <!-- PART B: ACTIVITY TASKS -->
+      <!-- ======================================================= -->
+      <h2 class="mb-2 border-bottom pb-2 mt-5">
+        Part B — Your Turn: Activity Tasks
+      </h2>
+      <p class="text-muted mb-4">
+        Create a <strong>new HTML file</strong> called
+        <code>carousel-scrollspy-activity.html</code>. Link the Bootstrap 5.3
+        CSS and JS CDNs plus the Bootstrap Icons CDN at the top. Complete each
+        task in order. Each task has a blank space below — write the code that
+        produces it. Total: <strong>100 points</strong>.
+      </p>
+
+      <!-- TASK 1 -->
+      <div class="activity-card">
+        <span class="points">5 pts</span>
+        <h4><span class="task-num">1</span>Your First Carousel</h4>
+        <p>
+          <strong>Goal:</strong> Build a carousel with the id
+          <code>myFirstCarousel</code> containing <strong>three</strong> slides.
+          Only the first slide should be visible on load. The carousel should
+          start playing automatically.
+        </p>
+        <p class="text-muted small mb-1">Starter code:</p>
+        <div class="starter">
+          &lt;div id="<span class="cm">...</span>" class="<span class="cm"
+            >...</span
+          >" <span class="cm">...</span>&gt; &lt;div class="<span class="cm"
+            >...</span
+          >"&gt; &lt;div class="<span class="cm">...</span>"&gt;Slide
+          1&lt;/div&gt; &lt;div class="<span class="cm">...</span>"&gt;Slide
+          2&lt;/div&gt; &lt;div class="<span class="cm">...</span>"&gt;Slide
+          3&lt;/div&gt; &lt;/div&gt; &lt;/div&gt;
+        </div>
+        <p class="mb-1"><strong>Your code:</strong></p>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+          <div class="starter">
+            &lt;div id="myFirstCarousel" class="carousel slide"
+            data-bs-ride="carousel"&gt; &lt;div class="carousel-inner"&gt;
+            &lt;div class="carousel-item active"&gt;Slide 1&lt;/div&gt; &lt;div
+            class="carousel-item"&gt;Slide 2&lt;/div&gt; &lt;div
+            class="carousel-item"&gt;Slide 3&lt;/div&gt; &lt;/div&gt;
+            &lt;/div&gt;
+          </div>
+          <p class="small text-muted mb-0">
+            Three things matter: the <code>id</code>,
+            <code>class="carousel slide"</code>, and <code>active</code> on
+            exactly one item.
+          </p>
+        </details>
+      </div>
+
+      <!-- TASK 2 -->
+      <div class="activity-card">
+        <span class="points">10 pts</span>
+        <h4><span class="task-num">2</span>Add Controls and Indicators</h4>
+        <p><strong>Goal:</strong> Take the carousel from Task 1 and add:</p>
+        <ul class="small">
+          <li>Previous and next arrow buttons</li>
+          <li>Three dots at the bottom</li>
+          <li>Every arrow and dot must be accessible to screen readers</li>
+        </ul>
+        <p class="text-muted small mb-1">
+          Hint: every control's <code>data-bs-target</code> must match the
+          wrapper's id exactly. Dots use zero-based indices.
+        </p>
+        <p class="mb-1"><strong>Your code:</strong></p>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+          <div class="starter">
+            &lt;div id="myFirstCarousel" class="carousel slide"
+            data-bs-ride="carousel"&gt; &lt;div class="carousel-indicators"&gt;
+            &lt;button type="button" data-bs-target="#myFirstCarousel"
+            data-bs-slide-to="0" class="active" aria-current="true"
+            aria-label="Slide 1"&gt;&lt;/button&gt; &lt;button type="button"
+            data-bs-target="#myFirstCarousel" data-bs-slide-to="1"
+            aria-label="Slide 2"&gt;&lt;/button&gt; &lt;button type="button"
+            data-bs-target="#myFirstCarousel" data-bs-slide-to="2"
+            aria-label="Slide 3"&gt;&lt;/button&gt; &lt;/div&gt; &lt;div
+            class="carousel-inner"&gt; &lt;div class="carousel-item
+            active"&gt;Slide 1&lt;/div&gt; &lt;div
+            class="carousel-item"&gt;Slide 2&lt;/div&gt; &lt;div
+            class="carousel-item"&gt;Slide 3&lt;/div&gt; &lt;/div&gt; &lt;button
+            class="carousel-control-prev" type="button"
+            data-bs-target="#myFirstCarousel" data-bs-slide="prev"&gt; &lt;span
+            class="carousel-control-prev-icon"
+            aria-hidden="true"&gt;&lt;/span&gt; &lt;span
+            class="visually-hidden"&gt;Previous&lt;/span&gt; &lt;/button&gt;
+            &lt;button class="carousel-control-next" type="button"
+            data-bs-target="#myFirstCarousel" data-bs-slide="next"&gt; &lt;span
+            class="carousel-control-next-icon"
+            aria-hidden="true"&gt;&lt;/span&gt; &lt;span
+            class="visually-hidden"&gt;Next&lt;/span&gt; &lt;/button&gt;
+            &lt;/div&gt;
+          </div>
+        </details>
+      </div>
+
+      <!-- TASK 3 -->
+      <div class="activity-card">
+        <span class="points">10 pts</span>
+        <h4><span class="task-num">3</span>Carousel with Captions</h4>
+        <p>
+          <strong>Goal:</strong> Build a carousel with
+          <strong>two</strong> slides. Each slide has a caption with a title and
+          one line of description.
+        </p>
+        <p class="text-muted small mb-1">Requirements:</p>
+        <ul class="small">
+          <li>Captions must be hidden on phones (below the md breakpoint)</li>
+          <li>
+            Captions must be hidden from screen readers as decoration? No —
+            captions are content, so they stay visible to screen readers.
+          </li>
+          <li>Use the fade transition instead of sliding</li>
+          <li>Carousel must not autoplay</li>
+        </ul>
+        <p class="mb-1"><strong>Your code:</strong></p>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+          <div class="starter">
+            &lt;div id="capDemo" class="carousel slide carousel-fade"&gt;
+            &lt;div class="carousel-inner"&gt; &lt;div class="carousel-item
+            active"&gt; &lt;img src="photo1.jpg" class="d-block w-100"
+            alt="Mountain view"&gt; &lt;div class="carousel-caption d-none
+            d-md-block"&gt; &lt;h5&gt;First slide title&lt;/h5&gt; &lt;p&gt;One
+            line describing this slide.&lt;/p&gt; &lt;/div&gt; &lt;/div&gt;
+            &lt;div class="carousel-item"&gt; &lt;img src="photo2.jpg"
+            class="d-block w-100" alt="Ocean view"&gt; &lt;div
+            class="carousel-caption d-none d-md-block"&gt; &lt;h5&gt;Second
+            slide title&lt;/h5&gt; &lt;p&gt;One line describing this
+            slide.&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt;
+          </div>
+          <p class="small text-muted mb-0">
+            No <code>data-bs-ride</code> means the carousel is static until the
+            user interacts with it. Every slide image needs its own
+            <code>alt</code>.
+          </p>
+        </details>
+      </div>
+
+      <!-- TASK 4 -->
+      <div class="activity-card">
+        <span class="points">10 pts</span>
+        <h4><span class="task-num">4</span>Custom Timing and Behaviour</h4>
+        <p>
+          <strong>Goal:</strong> Build a carousel with these exact settings:
+        </p>
+        <ul class="small">
+          <li>Autoplays on load</li>
+          <li>Changes slide every <strong>2500 milliseconds</strong></li>
+          <li>Stops at the last slide instead of looping</li>
+          <li>Never pauses automatically, even when the mouse is over it</li>
+        </ul>
+        <p class="text-muted small mb-1">
+          Hint: all four settings are data attributes on the wrapper.
+        </p>
+        <p class="mb-1"><strong>Your code:</strong></p>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+          <div class="starter">
+            &lt;div id="timedCarousel" class="carousel slide"
+            data-bs-ride="carousel" data-bs-interval="2500" data-bs-wrap="false"
+            data-bs-pause="false"&gt; &lt;div class="carousel-inner"&gt; &lt;div
+            class="carousel-item active"&gt;One&lt;/div&gt; &lt;div
+            class="carousel-item"&gt;Two&lt;/div&gt; &lt;div
+            class="carousel-item"&gt;Three&lt;/div&gt; &lt;/div&gt; &lt;/div&gt;
+          </div>
+          <p class="small text-muted mb-0">
+            In a real project, think twice before setting
+            <code>data-bs-pause="false"</code> on a carousel with text. It never
+            gives the reader a chance to stop the motion.
+          </p>
+        </details>
+      </div>
+
+      <!-- TASK 5 -->
+      <div class="activity-card">
+        <span class="points">15 pts</span>
+        <h4><span class="task-num">5</span>External JavaScript Controls</h4>
+        <p>
+          <strong>Goal:</strong> Build a carousel with the id
+          <code>jsCarousel</code> and <strong>three</strong> slides. Below the
+          carousel, add three plain buttons labelled <strong>First</strong>,
+          <strong>Second</strong>, and <strong>Third</strong>. Clicking each
+          button should jump to the matching slide.
+        </p>
+        <p class="text-muted small mb-1">Requirements:</p>
+        <ul class="small">
+          <li>Do not use <code>data-bs-slide-to</code> — use JavaScript</li>
+          <li>
+            Use <code>bootstrap.Carousel.getOrCreateInstance</code> rather than
+            <code>new bootstrap.Carousel</code>
+          </li>
+          <li>
+            The buttons must call the <code>to()</code> method with the correct
+            index
+          </li>
+        </ul>
+        <p class="mb-1"><strong>Your HTML:</strong></p>
+        <span class="empty-slot"></span>
+        <p class="mb-1"><strong>Your JavaScript:</strong></p>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+          <div class="starter">
+            &lt;div id="jsCarousel" class="carousel slide"&gt; &lt;div
+            class="carousel-inner"&gt; &lt;div class="carousel-item
+            active"&gt;Slide 0&lt;/div&gt; &lt;div
+            class="carousel-item"&gt;Slide 1&lt;/div&gt; &lt;div
+            class="carousel-item"&gt;Slide 2&lt;/div&gt; &lt;/div&gt;
+            &lt;/div&gt; &lt;div class="d-flex gap-2 mt-3"&gt; &lt;button
+            class="btn btn-primary" onclick="goTo(0)"&gt;First&lt;/button&gt;
+            &lt;button class="btn btn-primary"
+            onclick="goTo(1)"&gt;Second&lt;/button&gt; &lt;button class="btn
+            btn-primary" onclick="goTo(2)"&gt;Third&lt;/button&gt; &lt;/div&gt;
+            &lt;script&gt; function goTo(index) { var el =
+            document.getElementById('jsCarousel'); var inst =
+            bootstrap.Carousel.getOrCreateInstance(el); inst.to(index); }
+            &lt;/script&gt;
+          </div>
+          <p class="small text-muted mb-0">
+            <code>getOrCreateInstance</code> reuses the existing carousel
+            instance instead of creating a second one. Creating two instances
+            attaches two sets of listeners and causes double transitions.
+          </p>
+        </details>
+      </div>
+
+      <!-- TASK 6 -->
+      <div class="activity-card">
+        <span class="points">15 pts</span>
+        <h4><span class="task-num">6</span>A Basic Horizontal Scrollspy</h4>
+        <p>
+          <strong>Goal:</strong> Build a self-contained scrollspy demo with a
+          horizontal pill nav and a nested scroll container.
+        </p>
+        <p class="text-muted small mb-1">Requirements:</p>
+        <ul class="small">
+          <li>
+            A pill nav with the id <code>taskNav</code> containing three links:
+            <strong>Alpha</strong>, <strong>Beta</strong>,
+            <strong>Gamma</strong>
+          </li>
+          <li>
+            A scroll container with a fixed height of 250px,
+            <code>overflow-y: auto</code>, and <code>position: relative</code>
+          </li>
+          <li>
+            Three sections with ids matching the links, each with a heading and
+            enough text to make the container scroll
+          </li>
+          <li>
+            The scroller must have <code>data-bs-spy="scroll"</code>,
+            <code>data-bs-target="#taskNav"</code> and <code>tabindex="0"</code>
+          </li>
+        </ul>
+        <p class="mb-1"><strong>Your code:</strong></p>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+          <div class="starter">
+            &lt;nav id="taskNav" class="nav nav-pills mb-3"&gt; &lt;a
+            class="nav-link" href="#alpha"&gt;Alpha&lt;/a&gt; &lt;a
+            class="nav-link" href="#beta"&gt;Beta&lt;/a&gt; &lt;a
+            class="nav-link" href="#gamma"&gt;Gamma&lt;/a&gt; &lt;/nav&gt;
+            &lt;div data-bs-spy="scroll" data-bs-target="#taskNav"
+            data-bs-root-margin="0px 0px -70%" data-bs-smooth-scroll="true"
+            tabindex="0" style="position: relative; height: 250px; overflow-y:
+            auto; padding: 0 20px; border: 1px solid #e5e7eb; border-radius:
+            8px;"&gt; &lt;h4 id="alpha" class="pt-4"&gt;Alpha&lt;/h4&gt;
+            &lt;p&gt;Alpha section content so the container scrolls.&lt;/p&gt;
+            &lt;p&gt;A little more text to take up vertical space.&lt;/p&gt;
+            &lt;h4 id="beta" class="pt-4"&gt;Beta&lt;/h4&gt; &lt;p&gt;Beta
+            section content so the container scrolls.&lt;/p&gt; &lt;p&gt;A
+            little more text to take up vertical space.&lt;/p&gt; &lt;h4
+            id="gamma" class="pt-4"&gt;Gamma&lt;/h4&gt; &lt;p&gt;Gamma section
+            content so the container scrolls.&lt;/p&gt; &lt;p&gt;A little more
+            text to take up vertical space.&lt;/p&gt; &lt;/div&gt;
+          </div>
+          <p class="small text-muted mb-0">
+            Every one of the four requirements is present: scrollable element,
+            <code>position: relative</code>, sections with ids, and links
+            pointing at those ids.
+          </p>
+        </details>
+      </div>
+
+      <!-- TASK 7 -->
+      <div class="activity-card">
+        <span class="points">10 pts</span>
+        <h4><span class="task-num">7</span>Scrollspy with a Sticky Header</h4>
+        <p>
+          <strong>Goal:</strong> Take the demo from Task 6 and add a sticky dark
+          navbar inside the scroll container so that section titles slide
+          underneath it. Then adjust the rootMargin so the active pill still
+          fires at the right time.
+        </p>
+        <p class="text-muted small mb-1">Hints:</p>
+        <ul class="small">
+          <li>
+            The navbar needs <code>sticky-top</code> and a dark background
+          </li>
+          <li>
+            Without a root margin adjustment, the active state fires too late
+          </li>
+          <li>
+            The value used in the Bootstrap docs is
+            <code>0px 0px -40%</code> for a full-page navbar. Inside a 250px
+            container, you may need a larger negative value
+          </li>
+        </ul>
+        <p class="mb-1"><strong>Your code (the changed parts only):</strong></p>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+          <div class="starter">
+            &lt;div data-bs-spy="scroll" data-bs-target="#taskNav"
+            data-bs-root-margin="0px 0px -70%" data-bs-smooth-scroll="true"
+            tabindex="0" style="position: relative; height: 250px; overflow-y:
+            auto;"&gt; &lt;nav class="navbar navbar-dark bg-dark sticky-top"&gt;
+            &lt;ul class="navbar-nav flex-row gap-3"&gt; &lt;li
+            class="nav-item"&gt;&lt;a class="nav-link"
+            href="#alpha"&gt;Alpha&lt;/a&gt;&lt;/li&gt; &lt;li
+            class="nav-item"&gt;&lt;a class="nav-link"
+            href="#beta"&gt;Beta&lt;/a&gt;&lt;/li&gt; &lt;li
+            class="nav-item"&gt;&lt;a class="nav-link"
+            href="#gamma"&gt;Gamma&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt; &lt;/nav&gt;
+            &lt;h4 id="alpha" class="pt-4"&gt;Alpha&lt;/h4&gt; ... &lt;/div&gt;
+          </div>
+          <p class="small text-muted mb-0">
+            When the navbar sits inside the scroller, the same nav is both the
+            target AND the sticky element. The <code>data-bs-target</code> still
+            points at the nav's id, which is fine.
+          </p>
+        </details>
+      </div>
+
+      <!-- TASK 8 -->
+      <div class="activity-card">
+        <span class="points">15 pts</span>
+        <h4>
+          <span class="task-num">8</span>Combined Page — Carousel plus Scrollspy
+          <span class="badge text-bg-warning">Challenge</span>
+        </h4>
+        <p>
+          <strong>Goal:</strong> Build a single self-contained "mini site" with
+          both components working together.
+        </p>
+        <p class="text-muted small mb-1">Requirements:</p>
+        <ul class="small">
+          <li>
+            A scroll container with a fixed height (at least 400px) and
+            <code>overflow-y: auto</code>
+          </li>
+          <li>
+            Inside the scroller, a sticky dark navbar that acts as the scrollspy
+            target
+          </li>
+          <li>
+            Four sections with ids: <code>home</code>, <code>gallery</code>,
+            <code>about</code>, <code>contact</code>
+          </li>
+          <li>
+            The <strong>home</strong> section contains a carousel with 3 slides,
+            arrows, dots, and a caption on the first slide
+          </li>
+          <li>
+            The other three sections contain enough text to make the container
+            scroll
+          </li>
+          <li>Clicking a navbar link should smooth-scroll to that section</li>
+        </ul>
+        <p class="mb-1"><strong>Your code:</strong></p>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+          <div class="starter">
+            &lt;div id="miniSite" data-bs-spy="scroll" data-bs-target="#miniNav"
+            data-bs-root-margin="0px 0px -70%" data-bs-smooth-scroll="true"
+            tabindex="0" style="position: relative; height: 460px; overflow-y:
+            auto; border: 1px solid #cbd5e1; border-radius: 10px;
+            scroll-behavior: smooth;"&gt; &lt;nav id="miniNav" class="navbar
+            navbar-dark bg-dark sticky-top px-3"&gt; &lt;ul class="navbar-nav
+            flex-row gap-3"&gt; &lt;li class="nav-item"&gt;&lt;a
+            class="nav-link" href="#home"&gt;Home&lt;/a&gt;&lt;/li&gt; &lt;li
+            class="nav-item"&gt;&lt;a class="nav-link"
+            href="#gallery"&gt;Gallery&lt;/a&gt;&lt;/li&gt; &lt;li
+            class="nav-item"&gt;&lt;a class="nav-link"
+            href="#about"&gt;About&lt;/a&gt;&lt;/li&gt; &lt;li
+            class="nav-item"&gt;&lt;a class="nav-link"
+            href="#contact"&gt;Contact&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt;
+            &lt;/nav&gt; &lt;section id="home" style="min-height: 300px;"&gt;
+            &lt;div id="miniHero" class="carousel slide"
+            data-bs-ride="carousel"&gt; &lt;div class="carousel-indicators"&gt;
+            &lt;button type="button" data-bs-target="#miniHero"
+            data-bs-slide-to="0" class="active" aria-current="true"
+            aria-label="Slide 1"&gt;&lt;/button&gt; &lt;button type="button"
+            data-bs-target="#miniHero" data-bs-slide-to="1" aria-label="Slide
+            2"&gt;&lt;/button&gt; &lt;button type="button"
+            data-bs-target="#miniHero" data-bs-slide-to="2" aria-label="Slide
+            3"&gt;&lt;/button&gt; &lt;/div&gt; &lt;div
+            class="carousel-inner"&gt; &lt;div class="carousel-item active"&gt;
+            &lt;img src="hero1.jpg" class="d-block w-100" alt="First hero
+            image"&gt; &lt;div class="carousel-caption d-none d-md-block"&gt;
+            &lt;h5&gt;Welcome&lt;/h5&gt; &lt;p&gt;The first slide
+            caption.&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;div
+            class="carousel-item"&gt; &lt;img src="hero2.jpg" class="d-block
+            w-100" alt="Second hero image"&gt; &lt;/div&gt; &lt;div
+            class="carousel-item"&gt; &lt;img src="hero3.jpg" class="d-block
+            w-100" alt="Third hero image"&gt; &lt;/div&gt; &lt;/div&gt;
+            &lt;button class="carousel-control-prev" type="button"
+            data-bs-target="#miniHero" data-bs-slide="prev"&gt; &lt;span
+            class="carousel-control-prev-icon"
+            aria-hidden="true"&gt;&lt;/span&gt; &lt;span
+            class="visually-hidden"&gt;Previous&lt;/span&gt; &lt;/button&gt;
+            &lt;button class="carousel-control-next" type="button"
+            data-bs-target="#miniHero" data-bs-slide="next"&gt; &lt;span
+            class="carousel-control-next-icon"
+            aria-hidden="true"&gt;&lt;/span&gt; &lt;span
+            class="visually-hidden"&gt;Next&lt;/span&gt; &lt;/button&gt;
+            &lt;/div&gt; &lt;/section&gt; &lt;section id="gallery" class="p-4"
+            style="min-height: 260px;"&gt; &lt;h4&gt;Gallery&lt;/h4&gt;
+            &lt;p&gt;Enough text to make the container tall enough to
+            scroll.&lt;/p&gt; &lt;/section&gt; &lt;section id="about"
+            class="p-4" style="min-height: 260px;"&gt;
+            &lt;h4&gt;About&lt;/h4&gt; &lt;p&gt;Enough text to make the
+            container tall enough to scroll.&lt;/p&gt; &lt;/section&gt;
+            &lt;section id="contact" class="p-4" style="min-height: 260px;"&gt;
+            &lt;h4&gt;Contact&lt;/h4&gt; &lt;p&gt;Enough text to make the
+            container tall enough to scroll.&lt;/p&gt; &lt;/section&gt;
+            &lt;/div&gt;
+          </div>
+          <p class="small text-muted mb-0">
+            Everything works because the four scrollspy requirements are met at
+            the top level, and the carousel is just content inside one of the
+            sections.
+          </p>
+        </details>
+      </div>
+
+      <!-- TASK 9 -->
+      <div class="activity-card">
+        <span class="points">10 pts</span>
+        <h4><span class="task-num">9</span>Debugging Task</h4>
+        <p>
+          <strong>Goal:</strong> The scrollspy markup below is broken in
+          <strong>four</strong> different ways. List each bug and write the
+          corrected markup.
+        </p>
+
+        <div class="starter">
+          &lt;nav id="brokenNav" class="nav nav-pills"&gt; &lt;a
+          class="nav-link" href="section-one"&gt;One&lt;/a&gt; &lt;a
+          class="nav-link" href="#section-two"&gt;Two&lt;/a&gt; &lt;a
+          class="nav-link" href="#section-three"&gt;Three&lt;/a&gt; &lt;/nav&gt;
+          &lt;div data-bs-spy="scroll" data-bs-target="brokenNav" style="height:
+          250px; overflow-y: auto;"&gt; &lt;h4 id="section-one"&gt;Section
+          One&lt;/h4&gt; &lt;p&gt;Text&lt;/p&gt; &lt;h4&gt;Section
+          Two&lt;/h4&gt; &lt;p&gt;Text&lt;/p&gt; &lt;h4
+          id="section-three"&gt;Section Three&lt;/h4&gt; &lt;p&gt;Text&lt;/p&gt;
+          &lt;/div&gt;
+        </div>
+
+        <p class="mb-1"><strong>Bugs you found:</strong></p>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+          <ol class="small mb-0">
+            <li>
+              <strong>Bug 1 — the hash is missing from the first link.</strong>
+              <code>href="section-one"</code> must be
+              <code>href="#section-one"</code>. Without the hash, Bootstrap does
+              not treat it as a same-page anchor.
+            </li>
+            <li>
+              <strong
+                >Bug 2 — the scroll container is missing
+                <code>position: relative</code>.</strong
+              >
+              Bootstrap computes the root margin relative to this box. Add
+              <code>position: relative</code> to the inline style.
+            </li>
+            <li>
+              <strong
+                >Bug 3 — the scroll container is missing
+                <code>tabindex="0"</code>.</strong
+              >
+              Without it, keyboard users cannot focus and scroll the region.
+            </li>
+            <li>
+              <strong>Bug 4 — Section Two has no <code>id</code>.</strong>
+              <code>&lt;h4&gt;Section Two&lt;/h4&gt;</code> needs
+              <code>id="section-two"</code> so the middle link has something to
+              activate.
+            </li>
+          </ol>
+          <p class="small text-muted mt-3 mb-0">
+            (Also worth noting: <code>data-bs-target="brokenNav"</code> would
+            need a <code>#</code> if it were not already fixed above. Because
+            <code>brokenNav</code> is not a valid CSS selector, it would match
+            nothing.)
+          </p>
+          <div class="starter">
+            CORRECTED: &lt;nav id="brokenNav" class="nav nav-pills"&gt; &lt;a
+            class="nav-link" href="#section-one"&gt;One&lt;/a&gt; &lt;a
+            class="nav-link" href="#section-two"&gt;Two&lt;/a&gt; &lt;a
+            class="nav-link" href="#section-three"&gt;Three&lt;/a&gt;
+            &lt;/nav&gt; &lt;div data-bs-spy="scroll"
+            data-bs-target="#brokenNav" data-bs-smooth-scroll="true"
+            tabindex="0" style="position: relative; height: 250px; overflow-y:
+            auto;"&gt; &lt;h4 id="section-one"&gt;Section One&lt;/h4&gt; &lt;h4
+            id="section-two"&gt;Section Two&lt;/h4&gt; &lt;h4
+            id="section-three"&gt;Section Three&lt;/h4&gt; &lt;/div&gt;
+          </div>
+        </details>
+      </div>
+
+      <!-- BONUS -->
+      <div class="activity-card" style="border-color: #f59e0b">
+        <span class="points" style="background: #fef3c7; color: #92400e"
+          >+10 BONUS</span
+        >
+        <h4>
+          <span class="task-num" style="background: #f59e0b">B</span
+          >Accessibility Audit
+        </h4>
+        <p>
+          <strong>Goal:</strong> Two snippets below have accessibility problems.
+          Write one sentence for each explaining what a screen reader or
+          keyboard user would experience, then fix it.
+        </p>
+
+        <p class="small fw-bold mt-4 mb-1">
+          Snippet A — a carousel with a link in slide 2
+        </p>
+        <div class="starter">
+          &lt;div id="heroC" class="carousel slide" data-bs-ride="carousel"&gt;
+          &lt;div class="carousel-inner"&gt; &lt;div class="carousel-item
+          active"&gt; &lt;img src="a.jpg" alt="First slide"&gt; &lt;/div&gt;
+          &lt;div class="carousel-item"&gt; &lt;img src="b.jpg" alt="Second
+          slide"&gt; &lt;a href="/pricing"&gt;See our pricing →&lt;/a&gt;
+          &lt;/div&gt; &lt;/div&gt; &lt;/div&gt;
+        </div>
+
+        <p class="small fw-bold mt-4 mb-1">Snippet B — a scrollspy</p>
+        <div class="starter">
+          &lt;nav id="docNav"&gt; &lt;a href="#intro"&gt;Intro&lt;/a&gt; &lt;a
+          href="#setup"&gt;Setup&lt;/a&gt; &lt;/nav&gt; &lt;div
+          data-bs-spy="scroll" data-bs-target="#docNav"
+          data-bs-smooth-scroll="true" style="position: relative; height: 300px;
+          overflow-y: auto;"&gt; &lt;h4 id="intro"&gt;Intro&lt;/h4&gt; &lt;h4
+          id="setup"&gt;Setup&lt;/h4&gt; &lt;/div&gt;
+        </div>
+
+        <p class="mb-1"><strong>Your analysis and fixes:</strong></p>
+        <span class="empty-slot"></span>
+        <span class="empty-slot"></span>
+        <details>
+          <summary>Show solution</summary>
+
+          <p class="small fw-bold mb-1">Snippet A</p>
+          <ul class="small mb-4">
+            <li>
+              <strong>Problem:</strong> the link <code>See our pricing</code> is
+              inside slide 2. Bootstrap adds <code>aria-hidden="true"</code> and
+              <code>inert</code> to inactive slides, so this link is invisible
+              to screen readers and unreachable by keyboard until slide 2
+              becomes active. A user who cannot see the page will never know the
+              link exists.
+            </li>
+            <li>
+              <strong>Fix options:</strong> move the link outside the carousel,
+              or add a play/pause control and captions that make the carousel
+              navigable, or replace the carousel with a static layout if the
+              link is important. At minimum, add an <code>aria-label</code> to
+              the wrapper so the region is announced.
+            </li>
+          </ul>
+          <div class="starter">
+            &lt;div id="heroC" class="carousel slide" data-bs-ride="carousel"
+            aria-label="Featured content"&gt; ... &lt;/div&gt; &lt;!-- And move
+            the pricing link OUT of the carousel so it is always reachable by
+            keyboard and screen reader users. --&gt; &lt;p&gt;&lt;a
+            href="/pricing"&gt;See our pricing&lt;/a&gt;&lt;/p&gt;
+          </div>
+
+          <p class="small fw-bold mb-1">Snippet B</p>
+          <ul class="small mb-4">
+            <li>
+              <strong>Problem:</strong> the scroll container is missing
+              <code>tabindex="0"</code>. Keyboard users cannot focus the panel
+              to scroll it with the arrow keys. When a scrollable region is not
+              focusable, keyboard users are effectively stuck — they cannot read
+              past the visible content.
+            </li>
+            <li>
+              <strong>Also worth noting:</strong> the nav has no
+              <code>aria-label</code>. Screen reader users have no way to tell
+              this navigation apart from the site's main nav in a landmark list.
+            </li>
+          </ul>
+          <div class="starter">
+            &lt;nav id="docNav" aria-label="On this page"&gt; &lt;a
+            href="#intro"&gt;Intro&lt;/a&gt; &lt;a
+            href="#setup"&gt;Setup&lt;/a&gt; &lt;/nav&gt; &lt;div
+            data-bs-spy="scroll" data-bs-target="#docNav"
+            data-bs-smooth-scroll="true" tabindex="0" style="position: relative;
+            height: 300px; overflow-y: auto;"&gt; &lt;h4
+            id="intro"&gt;Intro&lt;/h4&gt; &lt;h4 id="setup"&gt;Setup&lt;/h4&gt;
+            &lt;/div&gt;
+          </div>
+          <p class="small text-muted mb-0">
+            Any element with <code>overflow: auto</code> that is not a native
+            scrollable element should be given <code>tabindex="0"</code> so it
+            can be reached by keyboard.
+          </p>
+        </details>
+      </div>
+
+      <!-- ======================================================= -->
+      <!-- PART C: SELF-CHECK -->
+      <!-- ======================================================= -->
+      <h2 class="mb-3 border-bottom pb-2 mt-5">Part C — Self-Check Rubric</h2>
+      <p>
+        Before submitting, tick every box. If you cannot tick one, go back and
+        fix it.
+      </p>
+
+      <div class="table-responsive mb-5">
+        <table class="table table-bordered align-middle bg-white">
+          <thead class="table-dark">
+            <tr>
+              <th style="width: 60px">Done</th>
+              <th>Checkpoint</th>
+              <th style="width: 120px">Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td>
+                Every carousel wrapper has an <code>id</code> and
+                <code>class="carousel slide"</code>
+              </td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Exactly one <code>.carousel-item</code> has
+                <code>.active</code> in every carousel
+              </td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Every control's <code>data-bs-target</code> matches the
+                wrapper's id exactly
+              </td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Indicator dots use zero-based <code>data-bs-slide-to</code> and
+                have <code>aria-label</code>
+              </td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Control icons have <code>aria-hidden="true"</code> and the
+                buttons have <code>visually-hidden</code> text
+              </td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Captions use <code>d-none d-md-block</code> so they hide on
+                small screens
+              </td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Carousel slides use default autoplay unless there is a reason to
+                change it
+              </td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                JavaScript carousel code uses <code>getOrCreateInstance</code>,
+                not <code>new bootstrap.Carousel</code>
+              </td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Every scrollspy has <code>data-bs-spy="scroll"</code> on the
+                SCROLLING element
+              </td>
+              <td>8</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Every scrollspy has <code>data-bs-target</code> pointing at the
+                NAV's id
+              </td>
+              <td>8</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                The nested scroll container has <code>position: relative</code>,
+                a fixed <code>height</code>, <code>overflow-y: auto</code> and
+                <code>tabindex="0"</code>
+              </td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Every tracked section has a unique <code>id</code> and every
+                link uses <code>href="#thatId"</code> with the hash
+              </td>
+              <td>8</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Sticky headers are paired with <code>data-bs-root-margin</code>
+              </td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>The HTML is valid (tags closed, attributes quoted)</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                Both components render and function correctly in a browser
+              </td>
+              <td>13</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- REFLECTION -->
+      <div class="obj-box mb-5">
+        <h4 class="mb-3">Reflection — answer in 2-3 sentences each</h4>
+        <ol class="mb-0">
+          <li>
+            The Bootstrap team warns that carousels are often a poor design
+            choice. Based on what you have built in this worksheet, explain one
+            concrete problem a carousel creates for users. What would you use
+            instead in that situation?
+          </li>
+          <li>
+            A carousel has four nested levels: wrapper, inner, items, controls.
+            Describe what would break if you removed each level individually.
+            Which levels are truly required and which are optional?
+          </li>
+          <li>
+            Scrollspy has four requirements: a scrollable element, a
+            <code>position: relative</code> scroller, sections with ids, and a
+            nav whose links point at those ids. Explain in your own words why
+            the <code>position: relative</code> is required. What would go wrong
+            without it?
+          </li>
+          <li>
+            <code>data-bs-spy</code> goes on the element that scrolls.
+            <code>data-bs-target</code> points at the element that receives the
+            highlight. Why are these two different? What would happen if you
+            accidentally put <code>data-bs-spy</code> on the nav instead of the
+            scroller?
+          </li>
+          <li>
+            Bootstrap 5.2 replaced scrollspy's scroll event listener with an
+            IntersectionObserver. Based on what you know about how often scroll
+            events fire versus how often an intersection callback fires, explain
+            why this is a significant performance improvement on long pages.
+          </li>
+        </ol>
+      </div>
+
+      <!-- ======================================================= -->
+      <!-- PART D: CHEAT SHEET -->
+      <!-- ======================================================= -->
+      <h2 class="mb-3 border-bottom pb-2">Part D — Cheat Sheet</h2>
+
+      <h5 class="mt-4">Carousel</h5>
+      <div class="table-responsive mb-5">
+        <table class="table table-bordered align-middle bg-white">
+          <thead class="table-dark">
+            <tr>
+              <th style="width: 42%">I want to...</th>
+              <th>Write this</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>A basic carousel</td>
+              <td>
+                <code>div.carousel.slide</code> with an id, containing
+                <code>div.carousel-inner</code> and
+                <code>div.carousel-item</code>s
+              </td>
+            </tr>
+            <tr>
+              <td>Which item shows first?</td>
+              <td>The one with <code>.active</code> — exactly one</td>
+            </tr>
+            <tr>
+              <td>Autoplay on load</td>
+              <td><code>data-bs-ride="carousel"</code> on the wrapper</td>
+            </tr>
+            <tr>
+              <td>Change autoplay speed</td>
+              <td><code>data-bs-interval="3000"</code> on the wrapper</td>
+            </tr>
+            <tr>
+              <td>Stop at the last slide</td>
+              <td><code>data-bs-wrap="false"</code></td>
+            </tr>
+            <tr>
+              <td>Never pause on hover</td>
+              <td><code>data-bs-pause="false"</code> (use sparingly)</td>
+            </tr>
+            <tr>
+              <td>Disable swipe on mobile</td>
+              <td><code>data-bs-touch="false"</code></td>
+            </tr>
+            <tr>
+              <td>Add previous/next arrows</td>
+              <td>
+                <code>carousel-control-prev</code> and
+                <code>carousel-control-next</code> with matching
+                <code>data-bs-target</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Add dot indicators</td>
+              <td>
+                <code>carousel-indicators</code> with buttons using
+                <code>data-bs-slide-to="0,1,2"</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Add captions</td>
+              <td>
+                <code>carousel-caption d-none d-md-block</code> inside the item
+              </td>
+            </tr>
+            <tr>
+              <td>Fade instead of slide</td>
+              <td>Add <code>carousel-fade</code> to the wrapper</td>
+            </tr>
+            <tr>
+              <td>Dark controls on a light image</td>
+              <td>Add <code>carousel-dark</code> to the wrapper</td>
+            </tr>
+            <tr>
+              <td>Control from JavaScript</td>
+              <td>
+                <code>bootstrap.Carousel.getOrCreateInstance(el).to(n)</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Which methods exist?</td>
+              <td>
+                <code>to(n)</code>, <code>next()</code>, <code>prev()</code>,
+                <code>pause()</code>, <code>cycle()</code>,
+                <code>dispose()</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Give the carousel a screen-reader name</td>
+              <td><code>aria-label="..."</code> on the wrapper</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h5>Horizontal Scrollspy</h5>
+      <div class="table-responsive mb-5">
+        <table class="table table-bordered align-middle bg-white">
+          <thead class="table-dark">
+            <tr>
+              <th style="width: 42%">I want to...</th>
+              <th>Write this</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Turn scrollspy on</td>
+              <td>
+                <code>data-bs-spy="scroll"</code> on the SCROLLING element
+              </td>
+            </tr>
+            <tr>
+              <td>Point scrollspy at a nav</td>
+              <td><code>data-bs-target="#navId"</code> on the scroller</td>
+            </tr>
+            <tr>
+              <td>Build a horizontal pill nav</td>
+              <td>
+                <code>ul.nav.nav-pills</code> or
+                <code>nav.nav.nav-pills</code> with links using
+                <code>href="#sectionId"</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Build a horizontal navbar</td>
+              <td>
+                <code>nav.navbar</code> containing <code>a.nav-link</code> for
+                each section
+              </td>
+            </tr>
+            <tr>
+              <td>Use a list-group instead</td>
+              <td>
+                <code>div.list-group</code> with
+                <code>a.list-group-item-action</code> links (5.2+)
+              </td>
+            </tr>
+            <tr>
+              <td>Give every section an id</td>
+              <td>
+                <code>&lt;section id="setup"&gt;</code> — the id must match the
+                link's hash
+              </td>
+            </tr>
+            <tr>
+              <td>Nested scroll container</td>
+              <td>
+                <code
+                  >position: relative; height: 300px; overflow-y: auto;</code
+                >
+                plus <code>tabindex="0"</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Handle a fixed header</td>
+              <td><code>data-bs-root-margin="0px 0px -40%"</code></td>
+            </tr>
+            <tr>
+              <td>Smooth scrolling on click</td>
+              <td><code>data-bs-smooth-scroll="true"</code> on the scroller</td>
+            </tr>
+            <tr>
+              <td>Refresh after DOM changes</td>
+              <td>
+                <code>bootstrap.ScrollSpy.getInstance(el).refresh()</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Give the nav a screen-reader name</td>
+              <td>
+                <code>aria-label="On this page"</code> on the
+                <code>&lt;nav&gt;</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FINAL SUMMARY -->
+      <div class="card border-0 bg-dark text-white mb-5">
+        <div class="card-body p-4">
+          <h4 class="mb-3">The Big Ideas</h4>
+
+          <p class="fw-bold mb-1">Carousel</p>
+          <ol class="mb-4">
+            <li class="mb-1">
+              <strong>Four levels are required.</strong> Wrapper with an id,
+              <code>.carousel-inner</code>, <code>.carousel-item</code>s, and
+              exactly one with <code>.active</code>.
+            </li>
+            <li class="mb-1">
+              <strong>Controls find the carousel by id.</strong> If
+              <code>data-bs-target</code> and the wrapper's <code>id</code> do
+              not match, the arrow silently does nothing.
+            </li>
+            <li class="mb-1">
+              <strong>Carousels are a weak accessibility choice.</strong>
+              Offscreen slides are hidden from screen readers and keyboard
+              focus. Keep slide content short and non-essential.
+            </li>
+            <li class="mb-0">
+              <strong
+                >Use <code>getOrCreateInstance</code>, not
+                <code>new</code>.</strong
+              >
+              The carousel already exists if it has <code>data-bs-ride</code>.
+              Creating a second instance duplicates listeners.
+            </li>
+          </ol>
+
+          <p class="fw-bold mb-1">Horizontal Scrollspy</p>
+          <ol class="mb-4" start="5">
+            <li class="mb-1">
+              <strong
+                ><code>data-bs-spy</code> goes on the scroll container,
+                <code>data-bs-target</code> points at the nav.</strong
+              >
+              Two different elements. Do not swap them.
+            </li>
+            <li class="mb-1">
+              <strong>Nested containers need four things.</strong>
+              <code>position: relative</code>, a fixed <code>height</code>,
+              <code>overflow-y: auto</code>, and <code>tabindex="0"</code>.
+            </li>
+            <li class="mb-1">
+              <strong
+                >Every section needs an id, and every link needs the matching
+                hash.</strong
+              >
+              A missing hash or a case mismatch means that link never activates.
+            </li>
+            <li class="mb-0">
+              <strong>A fixed header needs a rootMargin.</strong> Otherwise the
+              section title slides under the header and the active state fires
+              too late.
+            </li>
+          </ol>
+
+          <p class="fw-bold mb-1">Shared idea</p>
+          <ol class="mb-0" start="9">
+            <li class="mb-0">
+              <strong
+                >Both components are just markup plus data attributes.</strong
+              >
+              The JavaScript reads the attributes and manages the classes. Once
+              you understand which attribute controls what, you can build any
+              variation without touching a single line of JavaScript.
+            </li>
+          </ol>
+
+          <div class="mt-3">
+            <span class="badge text-bg-light">End of activity</span>
+            <span class="badge text-bg-primary">Out of 100 points</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /container -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Demo 7: drive a carousel from external buttons.
+      function jsCarouselAction(action) {
+        var el = document.getElementById("jsCarousel");
+        var inst = bootstrap.Carousel.getOrCreateInstance(el);
+
+        if (action === "prev") inst.prev();
+        if (action === "next") inst.next();
+        if (action === "to0") inst.to(0);
+        if (action === "to1") inst.to(1);
+        if (action === "to2") inst.to(2);
+        if (action === "pause") inst.pause();
+        if (action === "cycle") inst.cycle();
+      }
+    </script>
+  </body>
+</html>

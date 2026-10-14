@@ -1,0 +1,1067 @@
+<!--
+=======================================================
+  MY FIRST GRID - USING BOOTSTRAP - EXPLANATION
+=======================================================
+
+WHAT THIS CODE DOES:
+This webpage shows and explains the Bootstrap Grid
+System using Bootstrap CSS framework with simple
+and clear examples.
+
+=======================================================
+  WHAT IS BOOTSTRAP?
+=======================================================
+
+  Bootstrap = a FREE CSS FRAMEWORK that gives you
+  ready-made CSS classes to build webpages quickly
+  without writing CSS from scratch.
+
+  Instead of writing your own CSS for layouts
+  buttons cards forms etc, Bootstrap already has
+  classes ready for you to use.
+
+  HOW TO USE BOOTSTRAP:
+  Add this link in your <head> section:
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  This CDN link downloads Bootstrap CSS from the
+  internet so you can use Bootstrap classes right away.
+
+  Memory Trick:
+  Bootstrap = a toolbox full of ready-made CSS tools
+  You just pick the tool (class) you need
+
+=======================================================
+  WHAT IS THE BOOTSTRAP GRID SYSTEM?
+=======================================================
+
+  Grid System = a way to divide the page into
+  ROWS and COLUMNS to arrange content neatly.
+
+  Bootstrap Grid is based on 12 COLUMNS
+  Every row is divided into 12 equal parts
+
+  You can combine these 12 parts in any way:
+  12 = one full width column
+  6 + 6 = two equal columns
+  4 + 4 + 4 = three equal columns
+  3 + 3 + 3 + 3 = four equal columns
+  8 + 4 = one wide column one narrow column
+
+  Memory Trick:
+  Think of a PIZZA cut into 12 slices
+  You can give 12 slices to 1 person
+  or 6 slices each to 2 people
+  or 4 slices each to 3 people
+  Total slices must always add up to 12
+
+=======================================================
+  THE 3 MAIN PARTS OF BOOTSTRAP GRID
+=======================================================
+
+  1. CONTAINER
+  -------------------------------------------------------
+  The outermost wrapper that holds everything
+  Adds proper margin and padding from screen edges
+
+  Two types:
+  .container       = fixed width, centered, with margins
+  .container-fluid = full width, uses 100% of screen
+
+  Example:
+  <div class="container">
+    content goes here
+  </div>
+
+  2. ROW
+  -------------------------------------------------------
+  Goes INSIDE a container
+  Creates a horizontal group to hold columns
+  Must contain only COLUMNS directly inside it
+
+  Example:
+  <div class="container">
+    <div class="row">
+      columns go here
+    </div>
+  </div>
+
+  3. COLUMN
+  -------------------------------------------------------
+  Goes INSIDE a row
+  This is where your actual CONTENT goes
+  Width is based on the 12 column system
+
+  Example:
+  <div class="row">
+    <div class="col-6">Half width column</div>
+    <div class="col-6">Half width column</div>
+  </div>
+
+  Memory Trick:
+  Container = the plate
+  Row       = the pizza
+  Column    = the slices of pizza
+
+=======================================================
+  COLUMN CLASS NAMING SYSTEM
+=======================================================
+
+  Basic Syntax:
+  col-[breakpoint]-[number]
+
+  NUMBER (1 to 12):
+  How many of the 12 columns this element takes
+
+  col-1  = takes 1 out of 12 parts (very narrow)
+  col-2  = takes 2 out of 12 parts
+  col-3  = takes 3 out of 12 parts (quarter width)
+  col-4  = takes 4 out of 12 parts (one third)
+  col-6  = takes 6 out of 12 parts (half width)
+  col-8  = takes 8 out of 12 parts
+  col-12 = takes 12 out of 12 parts (full width)
+
+  Example combinations that total 12:
+  col-6 + col-6             = 2 equal columns
+  col-4 + col-4 + col-4     = 3 equal columns
+  col-3 + col-3 + col-3 + col-3 = 4 equal columns
+  col-8 + col-4             = wide + narrow columns
+  col-9 + col-3             = wide + narrow columns
+
+  Memory Trick:
+  The number = how many SLICES of the 12 pizza slices
+  Bigger number = bigger column width
+
+=======================================================
+  RESPONSIVE BREAKPOINTS
+=======================================================
+
+  Breakpoints = different screen sizes
+  Bootstrap lets you set DIFFERENT column widths
+  for DIFFERENT screen sizes (responsive design)
+
+  Breakpoint   Screen Size        Class Prefix
+  ----------   ---------------    -------------
+  (none)       All sizes          col-
+  sm           ≥576px (mobile)    col-sm-
+  md           ≥768px (tablet)    col-md-
+  lg           ≥992px (laptop)    col-lg-
+  xl           ≥1200px (desktop)  col-xl-
+  xxl          ≥1400px (large)    col-xxl-
+
+  Example:
+  <div class="col-12 col-md-6 col-lg-4">
+    content
+  </div>
+
+  This means:
+  On SMALL screens (phones)  = col-12 (full width)
+  On MEDIUM screens (tablet) = col-md-6 (half width)
+  On LARGE screens (laptop)  = col-lg-4 (one third)
+
+  WHY USE BREAKPOINTS:
+  Mobile phones have small screens - need full width
+  Laptops have big screens - can fit more columns
+  This makes your website RESPONSIVE automatically
+
+  Memory Trick:
+  No prefix = works on ALL screen sizes
+  sm md lg xl xxl = only apply from THAT size upward
+  Mobile First = start with no prefix then add bigger
+
+=======================================================
+  AUTO LAYOUT COLUMNS
+=======================================================
+
+  col (without a number)
+  -------------------------------------------------------
+  Automatically shares EQUAL space among all columns
+  Bootstrap calculates the width automatically
+
+  Example:
+  <div class="row">
+    <div class="col">Equal 1</div>
+    <div class="col">Equal 2</div>
+    <div class="col">Equal 3</div>
+  </div>
+  All 3 columns get exactly 4 each (12 ÷ 3 = 4)
+
+  If you add 4 columns with just "col"
+  Each gets 3 (12 ÷ 4 = 3) automatically
+
+  Memory Trick:
+  col without number = Bootstrap does the maths for you
+  Automatically divides equally
+
+=======================================================
+  COLUMN OFFSET
+=======================================================
+
+  offset-[number] = adds empty space BEFORE a column
+  Pushes the column to the right
+
+  Example:
+  <div class="col-4 offset-4">
+    This column is pushed 4 columns to the right
+  </div>
+  Total used = 4 (offset) + 4 (column) = 8 out of 12
+  Remaining 4 columns are empty space
+
+  Common use: centering a column
+  col-6 offset-3 = column takes 6, has 3 empty on
+  each side, which centers it perfectly
+  (3 + 6 + 3 = 12)
+
+  Memory Trick:
+  offset = push away = empty space before the column
+
+=======================================================
+  GUTTERS (SPACING BETWEEN COLUMNS)
+=======================================================
+
+  Gutters = the space between columns
+  Bootstrap adds gutters automatically by default
+
+  g-0  = no gutter (columns touch each other)
+  g-1  = small gutter
+  g-3  = medium gutter (default-like)
+  g-5  = large gutter
+
+  Example:
+  <div class="row g-3">
+    columns with medium spacing
+  </div>
+
+  You can also set horizontal and vertical separately:
+  gx-3 = horizontal gutter only
+  gy-3 = vertical gutter only
+
+  Memory Trick:
+  Gutter = gap = space between the pizza slices
+
+=======================================================
+  VERTICAL ALIGNMENT IN ROWS
+=======================================================
+
+  align-items-start   = columns align to TOP
+  align-items-center  = columns align to MIDDLE
+  align-items-end     = columns align to BOTTOM
+
+  Example:
+  <div class="row align-items-center">
+    columns are vertically centered
+  </div>
+
+  Memory Trick:
+  align-items = vertical alignment of columns in a row
+
+=======================================================
+  HORIZONTAL ALIGNMENT IN ROWS
+=======================================================
+
+  justify-content-start   = columns align LEFT
+  justify-content-center  = columns align CENTER
+  justify-content-end     = columns align RIGHT
+  justify-content-around  = equal space around columns
+  justify-content-between = space between columns only
+
+  Example:
+  <div class="row justify-content-center">
+    columns are horizontally centered
+  </div>
+
+  Memory Trick:
+  justify-content = horizontal alignment of columns
+
+=======================================================
+  BOOTSTRAP SPACING UTILITY CLASSES
+=======================================================
+
+  Bootstrap also has quick classes for margin and padding
+
+  m = margin      p = padding
+  t = top         b = bottom
+  s = start(left) e = end(right)
+  x = left+right  y = top+bottom
+
+  Numbers 0 to 5 = size (0=none, 5=largest)
+
+  Examples:
+  mt-3  = margin-top medium
+  mb-4  = margin-bottom large
+  p-3   = padding all sides medium
+  px-2  = padding left and right small
+  py-5  = padding top and bottom large
+
+=======================================================
+  BOOTSTRAP COLOUR AND TEXT UTILITIES
+=======================================================
+
+  Background colours:
+  bg-primary   = blue
+  bg-secondary = gray
+  bg-success   = green
+  bg-danger    = red
+  bg-warning   = yellow
+  bg-info      = light blue
+  bg-light     = very light gray
+  bg-dark      = black
+
+  Text colours:
+  text-primary, text-success, text-danger etc
+
+  Text alignment:
+  text-start  = left align
+  text-center = center align
+  text-end    = right align
+
+=======================================================
+  CSS CLASSES QUICK REFERENCE TABLE
+=======================================================
+
+  Class              What it does
+  ---------------    ------------------------------
+  container          Fixed width centered wrapper
+  container-fluid    Full width wrapper
+  row                Horizontal group for columns
+  col-[1 to 12]      Column taking that many parts
+  col                Auto equal width column
+  col-md-[1 to 12]   Column width from medium screens
+  offset-[1 to 12]   Empty space before column
+  g-0 to g-5         Gutter spacing between columns
+  align-items-*      Vertical alignment in row
+  justify-content-*  Horizontal alignment in row
+
+=======================================================
+  SUMMARY
+=======================================================
+
+  Bootstrap = CSS framework with ready-made classes
+  Grid System = based on 12 columns per row
+
+  container = outer wrapper
+  row       = horizontal group
+  col       = actual content holder
+
+  col-6 + col-6 = two equal halves
+  col-4 x 3     = three equal thirds
+  col-3 x 4     = four equal quarters
+
+  Breakpoints (sm md lg xl xxl) make grid RESPONSIVE
+  offset pushes columns to create empty space
+  Always columns in a row should add up to 12
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My First Grid - Bootstrap</title>
+
+    <!-- BOOTSTRAP CSS CDN LINK - this gives us all Bootstrap classes -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Custom styling on top of Bootstrap */
+      body {
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+        padding-bottom: 50px;
+      }
+
+      h1 {
+        color: #003366;
+        text-align: center;
+        padding: 30px 0 10px 0;
+      }
+
+      h2 {
+        color: #003366;
+        border-bottom: 2px solid #003366;
+        padding-bottom: 8px;
+        margin-bottom: 20px;
+        margin-top: 40px;
+      }
+
+      .section-box {
+        background-color: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border: 2px solid #ddd;
+      }
+
+      .label-text {
+        font-size: 13px;
+        color: #888;
+        font-family:
+          Courier New,
+          monospace;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .instruction-text {
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      /* Demo column boxes - just for visibility */
+      .demo-col {
+        background-color: #1e90ff;
+        color: white;
+        font-weight: bold;
+        padding: 20px 10px;
+        text-align: center;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+
+      .demo-col-alt {
+        background-color: #32cd32;
+      }
+
+      .demo-col-alt2 {
+        background-color: #ff6347;
+      }
+
+      .demo-col-alt3 {
+        background-color: #9932cc;
+      }
+
+      .demo-col-alt4 {
+        background-color: #ff8c00;
+      }
+
+      .demo-row-bg {
+        background-color: #ffe4b5;
+        border: 2px dashed #ff8c00;
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+
+      .tall-col {
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .short-col {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>My First Bootstrap Grid</h1>
+      <p class="text-center text-muted">
+        Learning the Bootstrap 12 Column Grid System
+      </p>
+
+      <!-- ============================================
+         SECTION 1 - BASIC 12 COLUMN SYSTEM
+    =============================================== -->
+      <div class="section-box">
+        <h2>1. Basic 12 Column System</h2>
+        <p>
+          Every row has 12 columns total. col-12 takes all 12 columns (full
+          width)
+        </p>
+
+        <div class="demo-row-bg">
+          <span class="label-text">&lt;div class="col-12"&gt;</span>
+          <div class="row">
+            <div class="col-12">
+              <div class="demo-col">
+                col-12 (Full Width - takes all 12 columns)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 2 - TWO EQUAL COLUMNS
+    =============================================== -->
+      <div class="section-box">
+        <h2>2. Two Equal Columns (col-6 + col-6)</h2>
+        <p>6 + 6 = 12. Two columns splitting the row equally in half</p>
+
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="col-6"&gt; + &lt;div class="col-6"&gt;</span
+          >
+          <div class="row">
+            <div class="col-6">
+              <div class="demo-col">col-6</div>
+            </div>
+            <div class="col-6">
+              <div class="demo-col demo-col-alt">col-6</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 3 - THREE EQUAL COLUMNS
+    =============================================== -->
+      <div class="section-box">
+        <h2>3. Three Equal Columns (col-4 x 3)</h2>
+        <p>4 + 4 + 4 = 12. Three equal columns dividing row into thirds</p>
+
+        <div class="demo-row-bg">
+          <span class="label-text">&lt;div class="col-4"&gt; x 3</span>
+          <div class="row">
+            <div class="col-4">
+              <div class="demo-col">col-4</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt">col-4</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt2">col-4</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 4 - FOUR EQUAL COLUMNS
+    =============================================== -->
+      <div class="section-box">
+        <h2>4. Four Equal Columns (col-3 x 4)</h2>
+        <p>3 + 3 + 3 + 3 = 12. Four equal columns dividing row into quarters</p>
+
+        <div class="demo-row-bg">
+          <span class="label-text">&lt;div class="col-3"&gt; x 4</span>
+          <div class="row">
+            <div class="col-3">
+              <div class="demo-col">col-3</div>
+            </div>
+            <div class="col-3">
+              <div class="demo-col demo-col-alt">col-3</div>
+            </div>
+            <div class="col-3">
+              <div class="demo-col demo-col-alt2">col-3</div>
+            </div>
+            <div class="col-3">
+              <div class="demo-col demo-col-alt3">col-3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 5 - UNEQUAL COLUMNS
+    =============================================== -->
+      <div class="section-box">
+        <h2>5. Unequal Columns (Mix and Match)</h2>
+        <p>Columns do not have to be equal - just must add up to 12</p>
+
+        <!-- 8 + 4 -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="col-8"&gt; + &lt;div class="col-4"&gt;
+            (8+4=12)</span
+          >
+          <div class="row">
+            <div class="col-8">
+              <div class="demo-col">col-8 (wide column)</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt">col-4 (narrow)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9 + 3 -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="col-9"&gt; + &lt;div class="col-3"&gt;
+            (9+3=12)</span
+          >
+          <div class="row">
+            <div class="col-9">
+              <div class="demo-col">col-9 (very wide)</div>
+            </div>
+            <div class="col-3">
+              <div class="demo-col demo-col-alt2">col-3</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 + 7 + 3 -->
+        <div class="demo-row-bg">
+          <span class="label-text">col-2 + col-7 + col-3 (2+7+3=12)</span>
+          <div class="row">
+            <div class="col-2">
+              <div class="demo-col">col-2</div>
+            </div>
+            <div class="col-7">
+              <div class="demo-col demo-col-alt">col-7</div>
+            </div>
+            <div class="col-3">
+              <div class="demo-col demo-col-alt3">col-3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 6 - AUTO LAYOUT COLUMNS
+    =============================================== -->
+      <div class="section-box">
+        <h2>6. Auto Layout Columns (col without number)</h2>
+        <p>Just use "col" - Bootstrap automatically divides equally</p>
+
+        <!-- 3 auto columns -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="col"&gt; x 3 (Bootstrap auto calculates 4
+            each)</span
+          >
+          <div class="row">
+            <div class="col">
+              <div class="demo-col">col (auto)</div>
+            </div>
+            <div class="col">
+              <div class="demo-col demo-col-alt">col (auto)</div>
+            </div>
+            <div class="col">
+              <div class="demo-col demo-col-alt2">col (auto)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 auto columns -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="col"&gt; x 5 (Bootstrap auto calculates
+            equally)</span
+          >
+          <div class="row">
+            <div class="col"><div class="demo-col">col</div></div>
+            <div class="col"><div class="demo-col demo-col-alt">col</div></div>
+            <div class="col"><div class="demo-col demo-col-alt2">col</div></div>
+            <div class="col"><div class="demo-col demo-col-alt3">col</div></div>
+            <div class="col"><div class="demo-col demo-col-alt4">col</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 7 - RESPONSIVE BREAKPOINTS
+    =============================================== -->
+      <div class="section-box">
+        <h2>7. Responsive Breakpoints</h2>
+        <p>
+          Resize your browser window to see columns change! Full width on
+          mobile, splits on bigger screens
+        </p>
+
+        <div class="demo-row-bg">
+          <span class="label-text">
+            &lt;div class="col-12 col-md-6 col-lg-3"&gt; x 4
+          </span>
+          <span class="instruction-text">
+            Mobile (small): full width (col-12) Tablet (medium): half width
+            (col-md-6) Laptop (large): quarter width (col-lg-3) Try resizing
+            your browser window to see the change!
+          </span>
+          <div class="row">
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="demo-col">Responsive Box 1</div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="demo-col demo-col-alt">Responsive Box 2</div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="demo-col demo-col-alt2">Responsive Box 3</div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="demo-col demo-col-alt3">Responsive Box 4</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 8 - COLUMN OFFSET
+    =============================================== -->
+      <div class="section-box">
+        <h2>8. Column Offset (Push Columns)</h2>
+        <p>offset-[number] adds empty space BEFORE a column</p>
+
+        <!-- offset example -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="col-4 offset-4"&gt; (4 empty + 4 column + 4
+            empty)</span
+          >
+          <span class="instruction-text"
+            >Column is pushed to center using offset</span
+          >
+          <div class="row">
+            <div class="col-4 offset-4">
+              <div class="demo-col">col-4 offset-4 (centered)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- offset example 2 -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="col-6 offset-3"&gt; (3 empty + 6 column + 3
+            empty)</span
+          >
+          <span class="instruction-text">Another way to center a column</span>
+          <div class="row">
+            <div class="col-6 offset-3">
+              <div class="demo-col demo-col-alt">col-6 offset-3 (centered)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 9 - GUTTERS (SPACING)
+    =============================================== -->
+      <div class="section-box">
+        <h2>9. Gutters - Spacing Between Columns</h2>
+        <p>g-0 to g-5 controls spacing between columns</p>
+
+        <!-- No gutter -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="row g-0"&gt; (no spacing - columns touch)</span
+          >
+          <div class="row g-0">
+            <div class="col-4">
+              <div class="demo-col">g-0</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt">g-0</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt2">g-0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Medium gutter -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="row g-3"&gt; (medium spacing)</span
+          >
+          <div class="row g-3">
+            <div class="col-4">
+              <div class="demo-col">g-3</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt">g-3</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt2">g-3</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Large gutter -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="row g-5"&gt; (large spacing)</span
+          >
+          <div class="row g-5">
+            <div class="col-4">
+              <div class="demo-col">g-5</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt">g-5</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt2">g-5</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 10 - VERTICAL ALIGNMENT
+    =============================================== -->
+      <div class="section-box">
+        <h2>10. Vertical Alignment of Columns</h2>
+        <p>align-items-start, align-items-center, align-items-end</p>
+
+        <!-- align-items-start -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="row align-items-start"&gt;</span
+          >
+          <div class="row align-items-start" style="min-height: 150px">
+            <div class="col-4">
+              <div class="demo-col tall-col">Tall Box</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt short-col">
+                Short - Top aligned
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt2 short-col">
+                Short - Top aligned
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- align-items-center -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="row align-items-center"&gt;</span
+          >
+          <div class="row align-items-center" style="min-height: 150px">
+            <div class="col-4">
+              <div class="demo-col tall-col">Tall Box</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt short-col">
+                Short - Center aligned
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt2 short-col">
+                Short - Center aligned
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- align-items-end -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="row align-items-end"&gt;</span
+          >
+          <div class="row align-items-end" style="min-height: 150px">
+            <div class="col-4">
+              <div class="demo-col tall-col">Tall Box</div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt short-col">
+                Short - Bottom aligned
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="demo-col demo-col-alt2 short-col">
+                Short - Bottom aligned
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 11 - HORIZONTAL ALIGNMENT
+    =============================================== -->
+      <div class="section-box">
+        <h2>11. Horizontal Alignment of Columns</h2>
+        <p>
+          justify-content-center, justify-content-between,
+          justify-content-around
+        </p>
+
+        <!-- justify-content-center -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="row justify-content-center"&gt;</span
+          >
+          <div class="row justify-content-center">
+            <div class="col-3">
+              <div class="demo-col">Centered</div>
+            </div>
+            <div class="col-3">
+              <div class="demo-col demo-col-alt">Centered</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- justify-content-between -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="row justify-content-between"&gt;</span
+          >
+          <div class="row justify-content-between">
+            <div class="col-3">
+              <div class="demo-col">Left</div>
+            </div>
+            <div class="col-3">
+              <div class="demo-col demo-col-alt">Right</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- justify-content-around -->
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >&lt;div class="row justify-content-around"&gt;</span
+          >
+          <div class="row justify-content-around">
+            <div class="col-3">
+              <div class="demo-col">Around</div>
+            </div>
+            <div class="col-3">
+              <div class="demo-col demo-col-alt">Around</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 12 - NESTED GRID
+    =============================================== -->
+      <div class="section-box">
+        <h2>12. Nested Grid (Row inside a Column)</h2>
+        <p>You can put a new row with columns INSIDE a column</p>
+
+        <div class="demo-row-bg">
+          <span class="label-text"
+            >A row inside col-8, split into 2 smaller columns</span
+          >
+          <div class="row">
+            <div class="col-8">
+              <div class="demo-col" style="margin-bottom: 10px">
+                col-8 (parent column)
+              </div>
+
+              <!-- Nested row inside this column -->
+              <div class="row">
+                <div class="col-6">
+                  <div class="demo-col demo-col-alt2">Nested col-6</div>
+                </div>
+                <div class="col-6">
+                  <div class="demo-col demo-col-alt3">Nested col-6</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-4">
+              <div class="demo-col demo-col-alt">col-4 (sibling column)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 13 - REAL WORLD EXAMPLE
+    =============================================== -->
+      <div class="section-box">
+        <h2>13. Real World Example - Card Layout</h2>
+        <p>A practical example using the grid to build a 3 card layout</p>
+
+        <div class="row g-3">
+          <!-- Card 1 -->
+          <div class="col-12 col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">🐱 Doraemon</h5>
+                <p class="card-text">
+                  A robotic cat from the future with a magic pocket full of
+                  gadgets.
+                </p>
+                <button class="btn btn-primary">Learn More</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="col-12 col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">👦 Nobita</h5>
+                <p class="card-text">
+                  A lazy but kind hearted boy who is best friends with Doraemon.
+                </p>
+                <button class="btn btn-success">Learn More</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="col-12 col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">👧 Shizuka</h5>
+                <p class="card-text">
+                  The kindest and most intelligent character who plays the
+                  violin.
+                </p>
+                <button class="btn btn-danger">Learn More</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================
+         SECTION 14 - REAL WORLD LAYOUT
+    =============================================== -->
+      <div class="section-box">
+        <h2>14. Real World Example - Page Layout</h2>
+        <p>Common webpage layout: Header, Sidebar + Content, Footer</p>
+
+        <!-- Header full width -->
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="demo-col" style="background-color: #003366">
+              HEADER - col-12 (full width)
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar + Main content -->
+        <div class="row g-3 mt-1">
+          <div class="col-12 col-md-3">
+            <div class="demo-col demo-col-alt3" style="height: 150px">
+              SIDEBAR
+              <br />col-md-3
+            </div>
+          </div>
+          <div class="col-12 col-md-9">
+            <div class="demo-col demo-col-alt" style="height: 150px">
+              MAIN CONTENT
+              <br />col-md-9
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer full width -->
+        <div class="row g-3 mt-1">
+          <div class="col-12">
+            <div class="demo-col" style="background-color: #333">
+              FOOTER - col-12 (full width)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOTSTRAP JS BUNDLE (needed for interactive components) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,374 @@
+<!--
+=======================================================
+  BOOTSTRAP 5 BADGES - THEORY AND PRACTICE
+=======================================================
+
+WHAT IS A BADGE?
+A badge is a small inline utility component used to display
+counts, status indicators, labels, or categories.
+Badges automatically resize to fit the font size of their
+parent container.
+
+SYNTAX FORMULA:
+  <span class="badge bg-primary">Text</span>
+
+CLASSES BREAKDOWN:
+  1. Base class:     .badge (required - provides padding and typography)
+  2. Background:     .bg-{color} (sets background color)
+  3. Shape:          .rounded-pill (optional - creates oval ends)
+  4. Text color:     .text-dark (required on light backgrounds for contrast)
+
+BOOTSTRAP 4 vs BOOTSTRAP 5:
+  Bootstrap 4: <span class="badge badge-primary">   (Depreciated)
+  Bootstrap 5: <span class="badge bg-primary">      (Current standard)
+
+COLOR CONTRAST RULE:
+  Light backgrounds (bg-warning, bg-info, bg-light) require .text-dark
+  to meet WCAG accessibility contrast standards.
+
+POSITIONING OVERLAYS:
+  To place a badge on the corner of an element (like a notification counter):
+  - Add class "position-relative" to the parent element.
+  - Add classes "position-absolute top-0 start-100 translate-middle" to the badge.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap Badges Practice</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .exercise-box {
+        border: 2px dashed #0d6efd;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 6px;
+        margin-bottom: 30px;
+      }
+      .section {
+        margin-bottom: 35px;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-2">Bootstrap 5 Badges</h1>
+      <p class="text-muted mb-4">
+        Topic: Inline indicators, contextual colors, pill shapes, and absolute
+        positioning.
+      </p>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 1: LESSON EXAMPLES                                   -->
+      <!-- ============================================================ -->
+
+      <h2 class="border-bottom pb-2 mb-4">1. Code Examples</h2>
+
+      <!-- Contextual Colors -->
+      <div class="section">
+        <h3>Contextual Background Colors</h3>
+        <p>
+          Badges use standard background utility classes
+          <code>.bg-{color}</code>.
+        </p>
+        <div class="p-3 bg-light border rounded">
+          <span class="label">Solid Backgrounds:</span>
+          <span class="badge bg-primary">Primary</span>
+          <span class="badge bg-secondary">Secondary</span>
+          <span class="badge bg-success">Success</span>
+          <span class="badge bg-danger">Danger</span>
+          <span class="badge bg-warning text-dark">Warning</span>
+          <span class="badge bg-info text-dark">Info</span>
+          <span class="badge bg-light text-dark border">Light</span>
+          <span class="badge bg-dark">Dark</span>
+        </div>
+      </div>
+
+      <!-- Pill Shapes -->
+      <div class="section">
+        <h3>Pill Badges</h3>
+        <p>Use <code>.rounded-pill</code> for rounded oval borders.</p>
+        <div class="p-3 bg-light border rounded">
+          <span class="label">Pill Variants (.rounded-pill):</span>
+          <span class="badge rounded-pill bg-primary">Primary</span>
+          <span class="badge rounded-pill bg-success">Active</span>
+          <span class="badge rounded-pill bg-danger">99+</span>
+          <span class="badge rounded-pill bg-warning text-dark">Pending</span>
+        </div>
+      </div>
+
+      <!-- Soft/Subtle Badges -->
+      <div class="section">
+        <h3>Subtle Badges</h3>
+        <p>
+          Combine <code>.bg-*-subtle</code> with
+          <code>.text-*-emphasis</code> for low-contrast labels.
+        </p>
+        <div class="p-3 bg-light border rounded">
+          <span class="label">Subtle Colors:</span>
+          <span
+            class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle"
+            >Primary</span
+          >
+          <span
+            class="badge bg-success-subtle text-success-emphasis border border-success-subtle"
+            >Completed</span
+          >
+          <span
+            class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle"
+            >Failed</span
+          >
+          <span
+            class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle"
+            >In Progress</span
+          >
+        </div>
+      </div>
+
+      <!-- Relative Sizing -->
+      <div class="section">
+        <h3>Automatic Heading Sizing</h3>
+        <p>
+          Badges automatically scale relative to the font-size of the parent
+          element.
+        </p>
+        <div class="p-3 bg-light border rounded">
+          <h1>Heading 1 <span class="badge bg-secondary">New</span></h1>
+          <h3>Heading 3 <span class="badge bg-secondary">New</span></h3>
+          <h6>Heading 6 <span class="badge bg-secondary">New</span></h6>
+        </div>
+      </div>
+
+      <!-- Button Integration & Overlays -->
+      <div class="section">
+        <h3>Button Integration and Positioned Overlays</h3>
+        <div
+          class="p-3 bg-light border rounded d-flex flex-wrap gap-4 align-items-center"
+        >
+          <div>
+            <span class="label">Standard Button Badge:</span>
+            <button type="button" class="btn btn-primary">
+              Messages <span class="badge bg-white text-primary ms-1">4</span>
+            </button>
+          </div>
+
+          <div>
+            <span class="label">Positioned Counter Overlay:</span>
+            <button type="button" class="btn btn-secondary position-relative">
+              Inbox
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              >
+                12
+              </span>
+            </button>
+          </div>
+
+          <div>
+            <span class="label">Positioned Status Dot:</span>
+            <button type="button" class="btn btn-dark position-relative">
+              Notifications
+              <span
+                class="position-absolute top-0 start-100 translate-middle p-2 bg-success border border-light rounded-circle"
+              >
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 2: PRACTICE EXERCISES                                -->
+      <!-- ============================================================ -->
+
+      <h2 class="border-bottom pb-2 my-4">2. Practice Exercises</h2>
+
+      <!-- EXERCISE 1 -->
+      <div class="exercise-box">
+        <h4>Exercise 1: Fix Syntax and Contrast Errors</h4>
+        <p class="text-muted mb-3">
+          Instructions: Update the code inside the box below:
+          <br />1. Replace outdated Bootstrap 4 classes
+          (<code>badge-danger</code>, <code>badge-success</code>) with Bootstrap
+          5 classes. <br />2. Add contrast utilities (<code>text-dark</code>)
+          where text color is unreadable.
+        </p>
+
+        <div class="p-3 bg-light border rounded">
+          <!-- EDIT BELOW THIS LINE -->
+          <span class="badge bg-primary">Correct Badge</span>
+          <span class="badge badge-danger">Incorrect Syntax</span>
+          <span class="badge badge-success">Incorrect Syntax</span>
+          <span class="badge bg-warning">Low Contrast</span>
+          <span class="badge bg-info">Low Contrast</span>
+          <!-- EDIT ABOVE THIS LINE -->
+        </div>
+      </div>
+
+      <!-- EXERCISE 2 -->
+      <div class="exercise-box">
+        <h4>Exercise 2: Status Indicator List</h4>
+        <p class="text-muted mb-3">
+          Instructions: Convert the text spans in the list below into pill
+          badges (<code>.rounded-pill</code>) with appropriate contextual
+          colors:
+          <br />- "System Online" -> Success color <br />- "High CPU Load" ->
+          Warning color (with text-dark) <br />- "Database Offline" -> Danger
+          color
+        </p>
+
+        <div class="p-3 bg-light border rounded">
+          <ul class="list-group">
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              Server 1
+              <!-- ADD BADGE HERE -->
+              <span>System Online</span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              Server 2
+              <!-- ADD BADGE HERE -->
+              <span>High CPU Load</span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              Server 3
+              <!-- ADD BADGE HERE -->
+              <span>Database Offline</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- EXERCISE 3 -->
+      <div class="exercise-box">
+        <h4>Exercise 3: Positioned Notification Button</h4>
+        <p class="text-muted mb-3">
+          Instructions: Create a button labeled "Shopping Cart" with a red,
+          pill-shaped badge displaying the number "5" positioned over the
+          top-right corner of the button.
+        </p>
+
+        <div class="p-3 bg-light border rounded">
+          <!-- WRITE CODE BELOW -->
+
+          <!-- WRITE CODE ABOVE -->
+        </div>
+      </div>
+
+      <!-- EXERCISE 4 -->
+      <div class="exercise-box">
+        <h4>Exercise 4: Component Integration</h4>
+        <p class="text-muted mb-3">
+          Instructions: Add badges to the card component below based on the
+          following requirements:
+          <br />1. Add a red "SALE" pill badge positioned at the top-right
+          corner of the card. <br />2. Add a green "In Stock" badge inside the
+          card body beside the product title.
+        </p>
+
+        <div class="p-3 bg-light border rounded">
+          <div class="row">
+            <div class="col-md-6 col-lg-4">
+              <!-- CARD CONTAINER -->
+              <div class="card position-relative">
+                <!-- ADD TOP-RIGHT SALE BADGE HERE -->
+
+                <div class="card-body">
+                  <h5
+                    class="card-title d-flex justify-content-between align-items-center"
+                  >
+                    Product Name
+                    <!-- ADD IN STOCK BADGE HERE -->
+                  </h5>
+                  <p class="card-text text-muted">
+                    Item description content goes here.
+                  </p>
+                  <button class="btn btn-primary btn-sm">Buy Now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 3: QUICK REFERENCE TABLE                            -->
+      <!-- ============================================================ -->
+
+      <h2 class="border-bottom pb-2 my-4">3. Quick Reference</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered bg-white">
+          <thead class="table-dark">
+            <tr>
+              <th>Pattern</th>
+              <th>Required Classes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Standard Badge</td>
+              <td><code>class="badge bg-primary"</code></td>
+            </tr>
+            <tr>
+              <td>Pill Badge</td>
+              <td><code>class="badge rounded-pill bg-success"</code></td>
+            </tr>
+            <tr>
+              <td>Light Color Contrast</td>
+              <td><code>class="badge bg-warning text-dark"</code></td>
+            </tr>
+            <tr>
+              <td>Subtle Badge</td>
+              <td>
+                <code>class="badge bg-info-subtle text-info-emphasis"</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Parent Container (for overlays)</td>
+              <td><code>class="position-relative"</code></td>
+            </tr>
+            <tr>
+              <td>Overlay Badge Position</td>
+              <td>
+                <code
+                  >class="position-absolute top-0 start-100
+                  translate-middle"</code
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

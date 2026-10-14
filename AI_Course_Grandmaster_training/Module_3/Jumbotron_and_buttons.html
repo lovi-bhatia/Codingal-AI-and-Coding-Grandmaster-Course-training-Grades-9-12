@@ -1,0 +1,527 @@
+<!--
+=======================================================
+  BOOTSTRAP JUMBOTRON & BUTTONS - DEEP DIVE
+=======================================================
+
+-------------------------------------------------------
+1. THE BIG BS5 WARNING: JUMBOTRON DOES NOT EXIST!
+-------------------------------------------------------
+In Bootstrap 3 and 4, there was a dedicated class: `.jumbotron`.
+IN BOOTSTRAP 5, `.jumbotron` WAS REMOVED ENTIRELY!
+
+Why? Because a Jumbotron was just a background with padding and 
+rounded corners. Instead of a dedicated class, BS5 lets you build 
+your own customizable hero banners using basic utilities!
+
+THE BOOTSTRAP 5 "JUMBOTRON FORMULA":
+  <div class="p-5 mb-4 bg-body-tertiary rounded-3">
+    <div class="container-fluid py-5">
+      <h1 class="display-5 fw-bold">Custom Jumbotron</h1>
+      <p class="col-md-8 fs-4">Lead description text goes here...</p>
+      <button class="btn btn-primary btn-lg">Call to Action</button>
+    </div>
+  </div>
+
+  Key pieces used in the formula:
+  - p-5 / py-5   → Padding (gives it height/space)
+  - mb-4         → Margin-bottom (pushes content below away)
+  - bg-light or bg-body-tertiary / bg-dark → Background color
+  - rounded-3    → Soft rounded corners (or rounded-0 for full bleed)
+  - display-1..6 → Extra-large typography for headers
+  - col-md-8     → Limits text width for better readability
+
+-------------------------------------------------------
+2. BUTTONS (.btn)
+-------------------------------------------------------
+Buttons in Bootstrap are built using a base class `.btn` 
+plus modifier classes for color, size, and style.
+
+REQUIRED RULE:
+  You MUST always include `.btn` first, then add color/style modifiers!
+  WRONG: <button class="btn-primary">
+  RIGHT: <button class="btn btn-primary">
+
+A. SOLID BUTTON VARIANTS (.btn-{color}):
+   .btn-primary    .btn-secondary  .btn-success   .btn-danger
+   .btn-warning    .btn-info       .btn-light     .btn-dark
+   .btn-link (looks like a hyperlink, behaves like a button)
+
+B. OUTLINE BUTTON VARIANTS (.btn-outline-{color}):
+   Background is transparent until you HOVER over it.
+   .btn-outline-primary   .btn-outline-secondary
+   .btn-outline-success   .btn-outline-danger
+   .btn-outline-warning   .btn-outline-info
+   .btn-outline-light     .btn-outline-dark
+
+C. BUTTON SIZES:
+   .btn-sm   → Small button
+   Default   → Normal size (no size class needed)
+   .btn-lg   → Large button
+
+D. FULL-WIDTH / BLOCK BUTTONS (BS5 WAY):
+   In BS4, we used `.btn-block`. In BS5, `.btn-block` WAS REMOVED!
+   To make a full-width button in BS5, wrap it in a `d-grid`:
+   
+   <div class="d-grid gap-2">
+     <button class="btn btn-primary">Full Width Button</button>
+   </div>
+
+E. BUTTON STATES & TAGS:
+   - Elements: Works on <button>, <a>, and <input>
+   - Disabled: Add `disabled` attribute to <button> or `.disabled` class to <a>
+   - Active: Add `.active` class to force pressed state
+
+F. BUTTON GROUPS:
+   Wrap buttons in `<div class="btn-group">` to stick them together.
+
+-------------------------------------------------------
+MEMORY TRICKS:
+-------------------------------------------------------
+- Jumbotron in BS5 = Just padding + background + text!
+- Button Formula  = .btn + .btn-{style} + .btn-{size}
+- Full-Width Button in BS5 = d-grid (NOT btn-block!)
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap Jumbotron &amp; Buttons</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .label-light {
+        font-family: monospace;
+        font-size: 13px;
+        color: #ccc;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 40px;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #4338ca;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container py-4">
+      <h1 class="mb-4">Bootstrap 5 Jumbotron &amp; Buttons</h1>
+
+      <!-- ============================================================ -->
+      <!-- 1. MODERN JUMBOTRONS (BS5 UTILITY-BASED) -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>1. Jumbotron in Bootstrap 5 (Built with Utilities)</h2>
+        <p>
+          Since <code>.jumbotron</code> was removed in BS5, we combine
+          <code>p-5</code>, background colors, and <code>rounded-3</code>.
+        </p>
+
+        <!-- Light Jumbotron -->
+        <span class="label"
+          >Light Jumbotron: p-5 mb-4 bg-body-tertiary rounded-3</span
+        >
+        <div class="p-5 mb-4 bg-body-tertiary rounded-3 border">
+          <div class="container-fluid py-2">
+            <h1 class="display-5 fw-bold">Hello, world!</h1>
+            <p class="col-md-8 fs-4">
+              This is a simple hero unit, a simple jumbotron-style component for
+              calling extra attention to featured content or information.
+            </p>
+            <hr class="my-4" />
+            <p>
+              It uses utility classes for typography and spacing to space
+              content out within the larger container.
+            </p>
+            <button class="btn btn-primary btn-lg" type="button">
+              Learn more
+            </button>
+          </div>
+        </div>
+
+        <!-- Dark Jumbotron -->
+        <span class="label"
+          >Dark Jumbotron: p-5 mb-4 bg-dark text-white rounded-3</span
+        >
+        <div class="p-5 mb-4 bg-dark text-white rounded-3 shadow">
+          <div class="container-fluid py-2">
+            <h1 class="display-5 fw-bold">Dark Theme Hero Banner</h1>
+            <p class="col-md-8 fs-4">
+              Swap background utilities like <code>bg-dark</code> and text
+              utilities like <code>text-white</code> to quickly customize your
+              jumbotron.
+            </p>
+
+            <!-- Buttons inside Jumbotron -->
+            <div class="mt-4">
+              <button class="btn btn-outline-light btn-lg me-2" type="button">
+                Primary Action
+              </button>
+              <button class="btn btn-warning btn-lg" type="button">
+                Secondary Action
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 2. SOLID BUTTON VARIANTS -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>2. Solid Button Colors (.btn + .btn-{color})</h2>
+        <p>
+          Must ALWAYS combine the base <code>.btn</code> class with a modifier
+          like <code>.btn-primary</code>.
+        </p>
+
+        <div class="bg-white p-4 rounded border shadow-sm">
+          <span class="label">Solid Variants:</span>
+          <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-primary">Primary</button>
+            <button type="button" class="btn btn-secondary">Secondary</button>
+            <button type="button" class="btn btn-success">Success</button>
+            <button type="button" class="btn btn-danger">Danger</button>
+            <button type="button" class="btn btn-warning">Warning</button>
+            <button type="button" class="btn btn-info">Info</button>
+            <button type="button" class="btn btn-light">Light</button>
+            <button type="button" class="btn btn-dark">Dark</button>
+            <button type="button" class="btn btn-link">Link Button</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 3. OUTLINE BUTTON VARIANTS -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>3. Outline Buttons (.btn-outline-{color})</h2>
+        <p>Transparent backgrounds that fill with color on mouse hover.</p>
+
+        <div class="bg-white p-4 rounded border shadow-sm mb-3">
+          <span class="label">Outline Variants on Light BG:</span>
+          <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-outline-primary">
+              Primary
+            </button>
+            <button type="button" class="btn btn-outline-secondary">
+              Secondary
+            </button>
+            <button type="button" class="btn btn-outline-success">
+              Success
+            </button>
+            <button type="button" class="btn btn-outline-danger">Danger</button>
+            <button type="button" class="btn btn-outline-warning">
+              Warning
+            </button>
+            <button type="button" class="btn btn-outline-info">Info</button>
+            <button type="button" class="btn btn-outline-dark">Dark</button>
+          </div>
+        </div>
+
+        <div class="bg-dark p-4 rounded shadow-sm">
+          <span class="label-light">Outline Light on Dark BG:</span>
+          <button type="button" class="btn btn-outline-light">
+            Outline Light
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 4. BUTTON SIZES -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>4. Button Sizes (.btn-sm, Default, .btn-lg)</h2>
+
+        <div class="bg-white p-4 rounded border shadow-sm">
+          <div class="d-flex align-items-center flex-wrap gap-3">
+            <div>
+              <span class="label">.btn-sm</span>
+              <button class="btn btn-primary btn-sm">Small Button</button>
+            </div>
+            <div>
+              <span class="label">Default (no size class)</span>
+              <button class="btn btn-primary">Standard Button</button>
+            </div>
+            <div>
+              <span class="label">.btn-lg</span>
+              <button class="btn btn-primary btn-lg">Large Button</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 5. FULL WIDTH / BLOCK BUTTONS (BS5 WAY) -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>5. Full-Width Buttons (The BS5 Way: <code>d-grid</code>)</h2>
+        <p>
+          <code>.btn-block</code> was removed in BS5. Wrap your buttons in
+          <code>d-grid</code> with optional <code>gap-2</code>.
+        </p>
+
+        <div class="bg-white p-4 rounded border shadow-sm">
+          <span class="label">d-grid gap-2</span>
+          <div class="d-grid gap-2 mb-3">
+            <button class="btn btn-primary" type="button">
+              Full Width Button 1
+            </button>
+            <button class="btn btn-outline-secondary" type="button">
+              Full Width Button 2
+            </button>
+          </div>
+
+          <span class="label"
+            >Responsive Full Width (Full width on mobile, normal on md+
+            screens):</span
+          >
+          <div class="d-grid gap-2 d-md-block">
+            <button class="btn btn-success me-md-2" type="button">
+              Responsive Button 1
+            </button>
+            <button class="btn btn-danger" type="button">
+              Responsive Button 2
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 6. BUTTON STATES AND HTML TAGS -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>6. Button States &amp; Tags</h2>
+
+        <div class="bg-white p-4 rounded border shadow-sm">
+          <!-- Tags -->
+          <span class="label"
+            >Different HTML Elements formatted as Buttons:</span
+          >
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <a class="btn btn-primary" href="#" role="button"
+              >Link (&lt;a&gt;)</a
+            >
+            <button class="btn btn-success" type="submit">
+              Button (&lt;button&gt;)
+            </button>
+            <input
+              class="btn btn-info"
+              type="button"
+              value="Input (&lt;input&gt;)"
+            />
+          </div>
+
+          <!-- Active & Disabled States -->
+          <span class="label">States (Active / Disabled):</span>
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-primary active">
+              Active State (.active)
+            </button>
+            <button class="btn btn-primary" disabled>
+              Disabled (&lt;button disabled&gt;)
+            </button>
+            <a
+              class="btn btn-secondary disabled"
+              role="button"
+              aria-disabled="true"
+              >Disabled Link (.disabled)</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 7. BUTTON GROUPS -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>7. Button Groups (.btn-group)</h2>
+        <p>Join multiple buttons together on a single line.</p>
+
+        <div class="bg-white p-4 rounded border shadow-sm">
+          <!-- Basic Group -->
+          <span class="label">Basic Button Group (.btn-group):</span>
+          <div class="btn-group mb-4" role="group">
+            <button type="button" class="btn btn-primary">Left</button>
+            <button type="button" class="btn btn-primary">Middle</button>
+            <button type="button" class="btn btn-primary">Right</button>
+          </div>
+
+          <br />
+
+          <!-- Outlined Group -->
+          <span class="label">Outlined Button Group:</span>
+          <div class="btn-group mb-4" role="group">
+            <button type="button" class="btn btn-outline-danger">
+              Option A
+            </button>
+            <button type="button" class="btn btn-outline-danger">
+              Option B
+            </button>
+            <button type="button" class="btn btn-outline-danger">
+              Option C
+            </button>
+          </div>
+
+          <br />
+
+          <!-- Checkbox / Radio Button Group -->
+          <span class="label">Checkbox/Radio Toggle Button Group:</span>
+          <div class="btn-group" role="group">
+            <input
+              type="checkbox"
+              class="btn-check"
+              id="btncheck1"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-primary" for="btncheck1"
+              >Toggle 1</label
+            >
+
+            <input
+              type="checkbox"
+              class="btn-check"
+              id="btncheck2"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-primary" for="btncheck2"
+              >Toggle 2</label
+            >
+
+            <input
+              type="checkbox"
+              class="btn-check"
+              id="btncheck3"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-primary" for="btncheck3"
+              >Toggle 3</label
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 8. REAL WORLD USE CASE -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>8. Real World Use Case: Landing Page Hero</h2>
+
+        <!-- High Impact Hero Jumbotron -->
+        <div
+          class="p-5 mb-4 rounded-4 bg-primary text-white shadow-lg position-relative overflow-hidden"
+        >
+          <div class="container-fluid py-4 position-relative z-1">
+            <span
+              class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill fs-6 fw-bold"
+              >🚀 Version 2.0 Released</span
+            >
+            <h1 class="display-3 fw-bold">Supercharge Your Workflow</h1>
+            <p class="col-lg-8 fs-4 text-white-50">
+              Build beautiful, responsive web applications in record time. Our
+              platform provides all the tools you need to grow your business
+              effortlessly.
+            </p>
+            <div class="d-flex flex-column flex-sm-row gap-3 mt-4">
+              <button
+                class="btn btn-warning btn-lg px-4 fw-bold shadow-sm"
+                type="button"
+              >
+                Start Free Trial
+              </button>
+              <button class="btn btn-outline-light btn-lg px-4" type="button">
+                Watch Demo Video
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 9. CHEAT SHEET TABLE -->
+      <!-- ============================================================ -->
+      <div class="section pb-5">
+        <h2 class="mb-3">9. Quick Cheat Sheet</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle bg-white">
+            <thead class="table-dark">
+              <tr>
+                <th>Component / Feature</th>
+                <th>How to do it in BS5</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Jumbotron</strong></td>
+                <td>
+                  <code
+                    >&lt;div class="p-5 mb-4 bg-body-tertiary
+                    rounded-3"&gt;</code
+                  >
+                  (No <code>.jumbotron</code> class!)
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Standard Button</strong></td>
+                <td><code>&lt;button class="btn btn-primary"&gt;</code></td>
+              </tr>
+              <tr>
+                <td><strong>Outline Button</strong></td>
+                <td>
+                  <code>&lt;button class="btn btn-outline-success"&gt;</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Large / Small Button</strong></td>
+                <td><code>btn-lg</code> or <code>btn-sm</code></td>
+              </tr>
+              <tr>
+                <td><strong>Full-Width Button</strong></td>
+                <td>
+                  Wrap button in <code>&lt;div class="d-grid"&gt;</code> (No
+                  <code>.btn-block</code>!)
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Button Group</strong></td>
+                <td>
+                  <code>&lt;div class="btn-group"&gt;...&lt;/div&gt;</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Disabled Button</strong></td>
+                <td>
+                  Add <code>disabled</code> attribute to
+                  <code>&lt;button&gt;</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- /container -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

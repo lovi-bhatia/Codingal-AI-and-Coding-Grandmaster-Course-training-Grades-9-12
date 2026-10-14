@@ -1,0 +1,306 @@
+<!--
+=======================================================
+  BOOTSTRAP CONTAINER-FLUID - EXPLANATION
+=======================================================
+
+WHAT IS .container-fluid?
+The "always full width" container. It spans 100% of
+the viewport at EVERY screen size — no max-width,
+no auto margins, no breakpoint behavior.
+
+It's just:
+  width: 100%;
+  padding-right: var(--bs-gutter-x) * .5;
+  padding-left:  var(--bs-gutter-x) * .5;
+  margin-right: auto;
+  margin-left:  auto;
+
+That's it. Simple, predictable, always edge-to-edge.
+
+-------------------------------------------------------
+.container vs .container-fluid — QUICK COMPARISON
+-------------------------------------------------------
+Feature            .container       .container-fluid
+-----------------  ---------------  -----------------
+Width              fixed/responsive 100% always
+Max-width          yes (540..1320)  none
+Auto margins       yes (centered)   yes (but 0 side)
+Breakpoints        changes width    ignores them
+Side gutters       yes              yes (padding)
+Best for           page content     banners, navbars,
+                                    full-bleed
+                                    sections
+
+Note: BOTH have left/right PADDING (gutter, 12px each
+side). So the content inside doesn't literally touch
+the edge — the .container-fluid BOX touches the edge.
+Remove padding with p-0 / px-0 if you want true bleed.
+
+-------------------------------------------------------
+WHY THE PADDING MATTERS
+-------------------------------------------------------
+Bootstrap uses a gutter system. The container provides
+the OUTER gutter, the row provides NEGATIVE gutter,
+and columns provide INNER gutter. So container-fluid
++ row + col "just works" — content is inset 12px
+from the screen edge by default.
+
+If you set px-0 on container-fluid, the row's negative
+margin will push the columns OUT past the edge and you
+get a horizontal scrollbar. Fix: also add g-0 to the row,
+or keep the padding.
+
+-------------------------------------------------------
+BREAKPOINT BEHAVIOUR (for context)
+-------------------------------------------------------
+  <576px    .container = 100%      .container-fluid = 100%
+  ≥576px    .container = 540px     .container-fluid = 100%
+  ≥768px    .container = 720px     .container-fluid = 100%
+  ≥992px    .container = 960px     .container-fluid = 100%
+  ≥1200px   .container = 1140px    .container-fluid = 100%
+  ≥1400px   .container = 1320px    .container-fluid = 100%
+
+container-fluid NEVER changes. That's the whole point.
+
+-------------------------------------------------------
+COMMON MODIFIERS YOU'LL USE WITH IT
+-------------------------------------------------------
+  container-fluid p-0        → kill all padding
+  container-fluid px-0       → kill only left/right padding
+  container-fluid py-5       → big vertical padding
+  container-fluid bg-dark    → full-width colored band
+  container-fluid text-white → contrast for dark bg
+  container-fluid border-bottom → section separator
+
+-------------------------------------------------------
+FULL-BLEED TRICK
+-------------------------------------------------------
+To make a full-width colored section INSIDE a centered
+page container, break out of it:
+
+  <div class="container">
+    <p>normal centered content</p>
+  </div>
+  <div class="container-fluid bg-dark text-white py-5">
+    <div class="container">
+      <p>full-width bg, still centered text</p>
+    </div>
+  </div>
+
+Nested .container inside .container-fluid = full-width
+background with properly-centered, padded content.
+This is THE most common real-world pattern.
+
+Memory Trick:
+container-fluid = full width, always, every screen.
+It's for BANNERS and BARS, not for paragraphs.
+Wrap a .container inside it when you need both.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap Container-Fluid</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .box {
+        background: #1e90ff;
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        text-align: center;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 30px;
+      }
+      .demo-col {
+        background: #ff6b6b;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        border-radius: 6px;
+        font-weight: bold;
+      }
+      .container-fluid.boxed {
+        border: 2px dashed #1e90ff;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <h1 class="mb-4">Bootstrap container-fluid</h1>
+
+    <!-- 1. Basic -->
+    <div class="section">
+      <h2>1. Basic container-fluid (always 100%)</h2>
+      <div class="container-fluid">
+        <span class="label">&lt;div class="container-fluid"&gt;</span>
+        <div class="box">
+          Full Width — resize the browser, this NEVER changes
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Side by side comparison -->
+    <div class="section">
+      <h2>2. Side-by-side: .container vs .container-fluid</h2>
+
+      <div class="container-fluid bg-warning p-3 mb-3">
+        <span class="label"
+          >&lt;div class="container-fluid bg-warning"&gt;</span
+        >
+        <div class="box bg-warning text-dark border border-dark">
+          container-fluid → I always touch the edges
+        </div>
+      </div>
+
+      <div class="container bg-success p-3">
+        <span class="label">&lt;div class="container bg-success"&gt;</span>
+        <div class="box bg-success border border-dark">
+          container → I have margins and change width by breakpoint
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Removing padding -->
+    <div class="section">
+      <h2>3. Killing the padding (p-0 / px-0)</h2>
+      <p>
+        By default container-fluid has 12px padding left & right. Here's the
+        difference:
+      </p>
+
+      <span class="label">Default padding (content inset 12px):</span>
+      <div class="container-fluid mb-3">
+        <div class="box">Normal container-fluid</div>
+      </div>
+
+      <span class="label"
+        >With class="container-fluid px-0" (truly edge-to-edge):</span
+      >
+      <div class="container-fluid px-0">
+        <div class="box">px-0 → no side padding, box bleeds to the edge</div>
+      </div>
+    </div>
+
+    <!-- 4. With gutter grid -->
+    <div class="section">
+      <h2>4. container-fluid + row + columns</h2>
+      <p>
+        Notice the row's negative margin is cancelled by the container padding —
+        columns line up correctly.
+      </p>
+      <div class="container-fluid">
+        <span class="label"
+          >&lt;div class="container-fluid"&gt; &lt;div class="row g-3"&gt;
+          ...</span
+        >
+        <div class="row g-3">
+          <div class="col-md-4"><div class="demo-col">Column 1</div></div>
+          <div class="col-md-4"><div class="demo-col">Column 2</div></div>
+          <div class="col-md-4"><div class="demo-col">Column 3</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Full-width colored bands -->
+    <div class="section">
+      <h2>5. Full-width sections (colored bands)</h2>
+
+      <div class="container-fluid bg-dark text-white py-5 text-center">
+        <h3 class="mb-2">Dark Banner Section</h3>
+        <p class="mb-0">container-fluid bg-dark text-white py-5</p>
+      </div>
+
+      <div class="container-fluid bg-light py-5 text-center">
+        <h3 class="mb-2">Light Section</h3>
+        <p class="mb-0">The background stretches the entire screen width</p>
+      </div>
+
+      <div class="container-fluid bg-primary text-white py-5 text-center">
+        <h3 class="mb-2">Primary Section</h3>
+        <p class="mb-0">Each band is a separate container-fluid</p>
+      </div>
+    </div>
+
+    <!-- 6. Full-bleed trick -->
+    <div class="section">
+      <h2>6. The Full-Bleed Trick (container inside container-fluid)</h2>
+      <p>
+        Full-width background, but the content stays centered and readable. This
+        is the classic pattern.
+      </p>
+
+      <div class="container-fluid bg-dark text-white py-4">
+        <div class="container">
+          <span class="label text-white-50"
+            >&lt;div class="container-fluid bg-dark"&gt; &lt;div
+            class="container"&gt; ...</span
+          >
+          <h4>Section Title</h4>
+          <p class="mb-0">
+            The outer fluid div paints the background edge-to-edge. The inner
+            container keeps this text aligned with the rest of the page.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Real world use -->
+    <div class="section">
+      <h2>7. Real World Use</h2>
+      <p>
+        Navbar + Hero (both full width) + page content (centered) + footer (full
+        width)
+      </p>
+
+      <!-- Navbar: full width -->
+      <nav class="container-fluid bg-dark py-3">
+        <div class="d-flex align-items-center text-white">
+          <span class="fw-bold">🌐 MySite</span>
+          <div class="ms-auto">
+            <a href="#" class="text-white text-decoration-none me-3">Home</a>
+            <a href="#" class="text-white text-decoration-none">About</a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Hero: full width background -->
+      <div class="container-fluid bg-primary text-white text-center py-5">
+        <h2 class="mb-3">Welcome to the Hero Banner</h2>
+        <p class="mb-4">This stretches the whole screen — container-fluid.</p>
+        <a href="#" class="btn btn-light">Get Started</a>
+      </div>
+
+      <!-- Page content: centered inside a regular container -->
+      <div class="container py-5">
+        <h3>Regular content section</h3>
+        <p class="mb-0">
+          This uses a regular <code>.container</code>, so it's narrower and
+          centered — easier to read.
+        </p>
+      </div>
+
+      <!-- Footer: full width -->
+      <div class="container-fluid bg-dark text-white-50 text-center py-3">
+        <small>© 2025 MySite — built with container-fluid footer</small>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

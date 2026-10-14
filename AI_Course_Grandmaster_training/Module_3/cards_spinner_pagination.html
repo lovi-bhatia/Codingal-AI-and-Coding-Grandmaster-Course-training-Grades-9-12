@@ -1,0 +1,511 @@
+<!--
+=======================================================
+  BOOTSTRAP 5 CARDS, SPINNERS, AND PAGINATION
+=======================================================
+
+-------------------------------------------------------
+1. CARDS (.card)
+-------------------------------------------------------
+Cards provide a flexible, extensible content container with 
+multiple options for headers, footers, content, and imagery.
+
+STRUCTURE FORMULA:
+  <div class="card">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-header">Header Content</div>
+    <div class="card-body">
+      <h5 class="card-title">Card Title</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Subtitle</h6>
+      <p class="card-text">Main text content goes here.</p>
+      <a href="#" class="btn btn-primary">Action Link</a>
+    </div>
+    <div class="card-footer">Footer Content</div>
+  </div>
+
+KEY CARD VARIANTS:
+  - Header & Footer:   .card-header and .card-footer
+  - Image Overlays:    Replace .card-body with .card-img-overlay on container
+  - Navigation Cards:  Place .nav-tabs or .nav-pills inside .card-header
+
+-------------------------------------------------------
+2. SPINNERS (.spinner-border / .spinner-grow)
+-------------------------------------------------------
+Spinners indicate the loading state of a component or page.
+They are built entirely with CSS (no JavaScript required).
+
+TYPES:
+  1. Border Spinner:   .spinner-border (Rotating circular outline)
+  2. Growing Spinner:  .spinner-grow   (Pulsing scaling circle)
+
+SIZING & COLORS:
+  - Colors: Use standard text utilities: .text-primary, .text-success, etc.
+  - Small Size: .spinner-border-sm or .spinner-grow-sm
+  - Custom Size: Apply style="width: 3rem; height: 3rem;"
+
+ACCESSIBILITY RULE:
+  Always include a visually hidden text element inside the spinner for screen readers:
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+
+-------------------------------------------------------
+3. PAGINATION (.pagination)
+-------------------------------------------------------
+Pagination controls allow users to navigate across multi-page content.
+
+STRUCTURE FORMULA:
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+      <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+  </nav>
+
+MODIFIERS:
+  - States:    .disabled (non-clickable), .active (current page)
+  - Sizing:    .pagination-lg, .pagination-sm (added to the <ul> element)
+  - Alignment: Flex utilities on <ul> (.justify-content-center, .justify-content-end)
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap Cards, Spinners, and Pagination</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .exercise-box {
+        border: 2px dashed #0d6efd;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 6px;
+        margin-bottom: 30px;
+      }
+      .section {
+        margin-bottom: 35px;
+      }
+      .img-placeholder {
+        background-color: #6c757d;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 160px;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-2">Bootstrap 5 Cards, Spinners, and Pagination</h1>
+      <p class="text-muted mb-4">
+        Topic: Content containers, loading indicators, and multi-page navigation
+        controls.
+      </p>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 1: LESSON EXAMPLES                                   -->
+      <!-- ============================================================ -->
+
+      <h2 class="border-bottom pb-2 mb-4">1. Code Examples</h2>
+
+      <!-- 1. CARDS EXAMPLES -->
+      <div class="section">
+        <h3>Cards</h3>
+        <p>
+          Flexible content containers featuring optional headers, footers,
+          images, and text bodies.
+        </p>
+        <div class="p-3 bg-light border rounded">
+          <div class="row g-4">
+            <!-- Basic Card with Image -->
+            <div class="col-md-4">
+              <span class="label">Standard Card:</span>
+              <div class="card">
+                <div class="img-placeholder card-img-top">
+                  Image Placeholder
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">Card Title</h5>
+                  <p class="card-text">
+                    Some quick example text to build on the card title and make
+                    up the bulk of the card's content.
+                  </p>
+                  <a href="#" class="btn btn-primary btn-sm">Go somewhere</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Header and Footer Card -->
+            <div class="col-md-4">
+              <span class="label">Header &amp; Footer Card:</span>
+              <div class="card h-100">
+                <div class="card-header fw-bold">Featured Header</div>
+                <div class="card-body">
+                  <h5 class="card-title">Special Title</h5>
+                  <p class="card-text">
+                    With supporting text below as a natural lead-in to
+                    additional content.
+                  </p>
+                </div>
+                <div class="card-footer text-muted small">
+                  Updated 2 mins ago
+                </div>
+              </div>
+            </div>
+
+            <!-- Image Overlay Card -->
+            <div class="col-md-4">
+              <span class="label">Image Overlay Card:</span>
+              <div class="card text-bg-dark">
+                <div
+                  class="img-placeholder bg-secondary card-img"
+                  style="height: 220px"
+                >
+                  Dark Image Background
+                </div>
+                <div
+                  class="card-img-overlay d-flex flex-column justify-content-end"
+                >
+                  <h5 class="card-title">Overlay Title</h5>
+                  <p class="card-text small mb-0">
+                    Text sits on top of the image overlay container.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SPINNERS EXAMPLES -->
+      <div class="section">
+        <h3>Spinners</h3>
+        <p>
+          Visual loading indicators with customizable colors, shapes, and sizes.
+        </p>
+        <div class="p-3 bg-light border rounded d-flex flex-column gap-3">
+          <!-- Border & Growing Types -->
+          <div>
+            <span class="label">Border and Growing Spinners with Colors:</span>
+            <div class="d-flex align-items-center gap-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow text-danger" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sizes -->
+          <div>
+            <span class="label"
+              >Small (.spinner-border-sm) and Custom Sizing:</span
+            >
+            <div class="d-flex align-items-center gap-3">
+              <div
+                class="spinner-border spinner-border-sm text-dark"
+                role="status"
+              >
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow spinner-grow-sm text-dark" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div
+                class="spinner-border text-primary"
+                style="width: 2.5rem; height: 2.5rem"
+                role="status"
+              >
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons with Spinners -->
+          <div>
+            <span class="label">Buttons with Loading States:</span>
+            <div class="d-flex gap-2">
+              <button class="btn btn-primary" type="button" disabled>
+                <span
+                  class="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                ></span>
+                <span role="status">Loading...</span>
+              </button>
+              <button class="btn btn-secondary" type="button" disabled>
+                <span
+                  class="spinner-grow spinner-grow-sm"
+                  aria-hidden="true"
+                ></span>
+                <span role="status">Processing...</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. PAGINATION EXAMPLES -->
+      <div class="section">
+        <h3>Pagination</h3>
+        <p>
+          Multi-page navigation lists with support for states, sizes, and flex
+          alignments.
+        </p>
+        <div class="p-3 bg-light border rounded d-flex flex-column gap-3">
+          <!-- Basic with States -->
+          <div>
+            <span class="label"
+              >Basic Pagination with Disabled and Active States:</span
+            >
+            <nav aria-label="Page navigation example">
+              <ul class="pagination mb-0">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#">Previous</a>
+                </li>
+                <li class="page-item active" aria-current="page">
+                  <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">Next</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+          <!-- Sizing and Centered Alignment -->
+          <div>
+            <span class="label"
+              >Centered Small Pagination (.pagination-sm +
+              .justify-content-center):</span
+            >
+            <nav aria-label="Centered pagination">
+              <ul class="pagination pagination-sm justify-content-center mb-0">
+                <li class="page-item">
+                  <a class="page-link" href="#">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active">
+                  <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">Next</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 2: PRACTICE EXERCISES                                -->
+      <!-- ============================================================ -->
+
+      <h2 class="border-bottom pb-2 my-4">2. Practice Exercises</h2>
+
+      <!-- EXERCISE 1 -->
+      <div class="exercise-box">
+        <h4>Exercise 1: Fix Card Component Structure</h4>
+        <p class="text-muted mb-3">
+          Instructions: Fix the broken markup inside the box below:
+          <br />1. Add the missing <code>.card-body</code> container around the
+          card title and text content. <br />2. Add the class
+          <code>card-title</code> to the <code>&lt;h5&gt;</code> element.
+          <br />3. Add the class <code>card-footer</code> to the bottom text
+          container.
+        </p>
+
+        <div class="p-3 bg-light border rounded">
+          <!-- EDIT BELOW THIS LINE -->
+          <div class="card col-md-6">
+            <div class="card-header">User Profile</div>
+
+            <h5>John Doe</h5>
+            <p class="card-text">Software developer based in New York.</p>
+
+            <div>Last active: 5 mins ago</div>
+          </div>
+          <!-- EDIT ABOVE THIS LINE -->
+        </div>
+      </div>
+
+      <!-- EXERCISE 2 -->
+      <div class="exercise-box">
+        <h4>Exercise 2: Create Loading State Controls</h4>
+        <p class="text-muted mb-3">
+          Instructions: Write markup for the following spinner components:
+          <br />1. A red growing spinner (<code>.spinner-grow</code> +
+          <code>.text-danger</code>). <br />2. A green button
+          (<code>.btn-success</code>) in a <code>disabled</code> state
+          containing a small white border spinner and text reading "Saving
+          Changes...".
+        </p>
+
+        <div class="p-3 bg-light border rounded d-flex flex-column gap-3">
+          <!-- WRITE CODE BELOW -->
+
+          <!-- WRITE CODE ABOVE -->
+        </div>
+      </div>
+
+      <!-- EXERCISE 3 -->
+      <div class="exercise-box">
+        <h4>Exercise 3: Centered Pagination Bar</h4>
+        <p class="text-muted mb-3">
+          Instructions: Create a large pagination bar
+          (<code>.pagination-lg</code>) centered horizontally
+          (<code>.justify-content-center</code>) containing 4 items:
+          <br />- Item 1: "Previous" (Set to <code>disabled</code> state)
+          <br />- Item 2: "1" <br />- Item 3: "2" (Set to
+          <code>active</code> state) <br />- Item 4: "Next"
+        </p>
+
+        <div class="p-3 bg-light border rounded">
+          <!-- WRITE CODE BELOW -->
+
+          <!-- WRITE CODE ABOVE -->
+        </div>
+      </div>
+
+      <!-- EXERCISE 4 -->
+      <div class="exercise-box">
+        <h4>Exercise 4: Complete Component Integration</h4>
+        <p class="text-muted mb-3">
+          Instructions: Create a card with a header reading "Data Processing".
+          The card body must contain a centered spinner with text reading
+          "Fetching records..." while data loads. The card footer must hold a
+          small right-aligned pagination bar (<code>.justify-content-end</code>)
+          with page numbers 1, 2, and 3.
+        </p>
+
+        <div class="p-3 bg-light border rounded">
+          <!-- WRITE CODE BELOW -->
+
+          <!-- WRITE CODE ABOVE -->
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 3: QUICK REFERENCE TABLE                            -->
+      <!-- ============================================================ -->
+
+      <h2 class="border-bottom pb-2 my-4">3. Quick Reference</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered bg-white">
+          <thead class="table-dark">
+            <tr>
+              <th>Component</th>
+              <th>Required Syntax / Classes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Card Outer Container</td>
+              <td><code>&lt;div class="card"&gt;</code></td>
+            </tr>
+            <tr>
+              <td>Card Body / Title / Text</td>
+              <td>
+                <code>.card-body</code>, <code>.card-title</code>,
+                <code>.card-text</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Card Header / Footer</td>
+              <td><code>.card-header</code>, <code>.card-footer</code></td>
+            </tr>
+            <tr>
+              <td>Border Spinner</td>
+              <td>
+                <code
+                  >&lt;div class="spinner-border text-primary"
+                  role="status"&gt;</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Growing Spinner</td>
+              <td>
+                <code
+                  >&lt;div class="spinner-grow text-success"
+                  role="status"&gt;</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Small Spinner</td>
+              <td>
+                <code>.spinner-border-sm</code> or <code>.spinner-grow-sm</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Pagination Wrapper</td>
+              <td>
+                <code>&lt;ul class="pagination"&gt;</code> inside
+                <code>&lt;nav&gt;</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Pagination Items</td>
+              <td>
+                <code
+                  >&lt;li class="page-item"&gt;&lt;a class="page-link"
+                  href="#"&gt;</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Pagination States</td>
+              <td>
+                <code>.page-item.active</code> and
+                <code>.page-item.disabled</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Pagination Alignment</td>
+              <td>
+                <code>.justify-content-center</code> or
+                <code>.justify-content-end</code> on <code>.pagination</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

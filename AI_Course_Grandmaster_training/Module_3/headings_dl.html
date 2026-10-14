@@ -1,0 +1,102 @@
+<!--
+=======================================================
+  HEADINGS, SMALL, DL - EXPLANATION
+=======================================================
+
+1. HEADINGS (h1 to h6)
+-------------------------------------------------------
+  6 levels of headings - h1 is BIGGEST, h6 is SMALLEST
+  h1 = main title (use only ONCE per page)
+  h2 = section titles
+  h3 to h6 = smaller sub-sections
+  Browser adds bold text and spacing automatically
+
+2. <small> TAG
+-------------------------------------------------------
+  Makes text SMALLER than surrounding text
+  Used for: fine print, disclaimers, copyright,
+  side comments, terms and conditions
+  Example: <small>Terms apply</small>
+
+3. <dl> DEFINITION LIST
+-------------------------------------------------------
+  dl = Definition List (the container)
+  dt = Definition Term (the word being defined)
+  dd = Definition Description (the meaning/explanation)
+
+  Used for: glossaries, FAQs, term-meaning pairs
+
+  <dl>
+    <dt>Term</dt>
+    <dd>Meaning of the term</dd>
+  </dl>
+
+  One dt can have MULTIPLE dd (several meanings)
+
+=======================================================
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>Headings, Small, DL</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+        color: #333;
+      }
+      .box {
+        background: #f0f8ff;
+        border: 2px solid #4682b4;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 15px 0;
+      }
+      dt {
+        font-weight: bold;
+        color: #003366;
+        margin-top: 10px;
+      }
+      dd {
+        margin-left: 20px;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>HTML Headings</h1>
+
+    <div class="box">
+      <h1>h1 - Main Heading</h1>
+      <h2>h2 - Section Heading</h2>
+      <h3>h3 - Sub Heading</h3>
+      <h4>h4 - Smaller Heading</h4>
+      <h5>h5 - Even Smaller</h5>
+      <h6>h6 - Smallest Heading</h6>
+    </div>
+
+    <h2>The &lt;small&gt; Tag</h2>
+
+    <div class="box">
+      <p>Buy now for just ₹999 <small>(taxes extra, terms apply)</small></p>
+      <p>© 2024 My Website <small>All rights reserved</small></p>
+    </div>
+
+    <h2>Definition List &lt;dl&gt;</h2>
+
+    <div class="box">
+      <dl>
+        <dt>HTML</dt>
+        <dd>HyperText Markup Language - used to create webpage structure</dd>
+
+        <dt>CSS</dt>
+        <dd>Cascading Style Sheets - used to style webpages</dd>
+
+        <dt>Doraemon</dt>
+        <dd>A robotic cat from the future</dd>
+        <dd>Best friend of Nobita</dd>
+      </dl>
+    </div>
+  </body>
+</html>

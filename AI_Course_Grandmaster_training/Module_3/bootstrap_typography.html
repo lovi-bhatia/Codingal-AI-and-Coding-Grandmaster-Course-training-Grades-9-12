@@ -1,0 +1,141 @@
+<!--
+=======================================================
+  BOOTSTRAP TYPOGRAPHY - EXPLANATION
+=======================================================
+
+WHAT IS BOOTSTRAP TYPOGRAPHY?
+Ready-made CSS classes from Bootstrap to style
+text WITHOUT writing your own CSS.
+
+KEY CLASSES:
+
+1. DISPLAY HEADINGS
+   .display-1 to .display-6
+   Bigger and more stylish than normal h1-h6
+   Used for hero sections / banners
+
+2. LEAD TEXT
+   .lead
+   Makes a paragraph stand out (bigger, lighter)
+   Used for intro paragraphs
+
+3. TEXT ALIGNMENT
+   .text-start / .text-center / .text-end
+
+4. TEXT COLOURS
+   .text-primary .text-success .text-danger
+   .text-warning .text-info .text-muted
+
+5. FONT WEIGHT
+   .fw-bold .fw-normal .fw-light
+
+6. FONT STYLE
+   .fst-italic .fst-normal
+
+7. TEXT DECORATION
+   .text-decoration-underline
+   .text-decoration-line-through
+   .text-decoration-none
+
+8. TEXT TRANSFORM
+   .text-uppercase .text-lowercase .text-capitalize
+
+9. BLOCKQUOTE
+   .blockquote for quotes
+   .blockquote-footer for the citation
+
+10. MARKED TEXT
+    <mark> tag = yellow highlight (built into HTML)
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap Typography</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="p-4">
+    <div class="container">
+      <h1 class="mb-4">Bootstrap Typography</h1>
+
+      <!-- Display Headings -->
+      <h2>1. Display Headings</h2>
+      <h1 class="display-1">Display 1</h1>
+      <h1 class="display-4">Display 4</h1>
+      <h1 class="display-6">Display 6</h1>
+      <hr />
+
+      <!-- Lead text -->
+      <h2>2. Lead Text</h2>
+      <p class="lead">
+        This is a lead paragraph - stands out from normal text.
+      </p>
+      <p>This is normal paragraph text for comparison.</p>
+      <hr />
+
+      <!-- Text alignment -->
+      <h2>3. Text Alignment</h2>
+      <p class="text-start">text-start (left)</p>
+      <p class="text-center">text-center (center)</p>
+      <p class="text-end">text-end (right)</p>
+      <hr />
+
+      <!-- Text colours -->
+      <h2>4. Text Colours</h2>
+      <p class="text-primary">text-primary</p>
+      <p class="text-success">text-success</p>
+      <p class="text-danger">text-danger</p>
+      <p class="text-warning">text-warning</p>
+      <p class="text-info">text-info</p>
+      <p class="text-muted">text-muted</p>
+      <hr />
+
+      <!-- Font weight and style -->
+      <h2>5. Font Weight and Style</h2>
+      <p class="fw-bold">fw-bold (bold text)</p>
+      <p class="fw-normal">fw-normal (normal text)</p>
+      <p class="fw-light">fw-light (light text)</p>
+      <p class="fst-italic">fst-italic (italic text)</p>
+      <hr />
+
+      <!-- Text decoration -->
+      <h2>6. Text Decoration</h2>
+      <p class="text-decoration-underline">text-decoration-underline</p>
+      <p class="text-decoration-line-through">text-decoration-line-through</p>
+      <a href="#" class="text-decoration-none"
+        >text-decoration-none (link no underline)</a
+      >
+      <hr />
+
+      <!-- Text transform -->
+      <h2>7. Text Transform</h2>
+      <p class="text-uppercase">text-uppercase makes this all caps</p>
+      <p class="text-lowercase">TEXT-LOWERCASE MAKES THIS SMALL</p>
+      <p class="text-capitalize">
+        text-capitalize makes first letter of each word capital
+      </p>
+      <hr />
+
+      <!-- Blockquote -->
+      <h2>8. Blockquote</h2>
+      <blockquote class="blockquote">
+        <p>Doraemon is a robotic cat with a magical pocket.</p>
+        <footer class="blockquote-footer">Fujiko F. Fujio</footer>
+      </blockquote>
+      <hr />
+
+      <!-- Marked text -->
+      <h2>9. Marked / Highlighted Text</h2>
+      <p>This is a <mark>highlighted</mark> word in a sentence.</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
