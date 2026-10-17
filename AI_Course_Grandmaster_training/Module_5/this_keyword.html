@@ -1,0 +1,420 @@
+<!--
+=======================================================
+  JAVASCRIPT THE 'this' KEYWORD
+=======================================================
+
+WHAT IS THE 'this' KEYWORD?
+In JavaScript, the `this` keyword refers to an object. 
+Which object it refers to depends on HOW and WHERE the 
+function or code is invoked (called).
+
+`this` IS NOT FIXED:
+Unlike regular variables, `this` is dynamically determined 
+at runtime based on the execution context.
+
+-------------------------------------------------------
+1. THE 6 CONTEXT RULES OF 'this'
+-------------------------------------------------------
+
+1. OBJECT METHOD (Implicit Binding):
+   When a function is called as a method of an object, 
+   `this` refers to the OWNER OBJECT.
+   
+   const obj = {
+     name: "Alex",
+     greet() { return this.name; } // 'this' === obj
+   };
+
+2. STANDALONE FUNCTION (Default Binding):
+   When a regular function is called by itself:
+   - In Non-Strict Mode : `this` refers to the global object (`window`).
+   - In Strict Mode     : `this` is `undefined`.
+
+3. ARROW FUNCTIONS (Lexical Binding):
+   Arrow functions DO NOT have their own `this`.
+   They inherit `this` from the enclosing (surrounding) scope where 
+   the arrow function was DEFINED.
+
+4. EXPLICIT BINDING (.call(), .apply(), .bind()):
+   You can explicitly set what `this` refers to using built-in methods:
+   - .call(obj, arg1, arg2)  : Invokes function immediately with 'this' = obj
+   - .apply(obj, [args])     : Same as call, but arguments passed as an array
+   - .bind(obj)              : Returns a NEW function with 'this' permanently bound
+
+5. CONSTRUCTOR FUNCTIONS & CLASSES (New Binding):
+   When a function is called with the `new` keyword, `this` refers 
+   to the newly created instance object.
+
+   function Person(name) {
+     this.name = name; // 'this' === newly created object
+   }
+
+6. DOM EVENT HANDLERS:
+   In an inline HTML event or addEventListener callback, `this` 
+   refers to the DOM element that received the event.
+
+-------------------------------------------------------
+2. COMMON PITFALLS
+-------------------------------------------------------
+- Losing `this` in Callbacks: Passing an object method into `setTimeout` 
+  or an array iterator detaches `this` from the owner object.
+  Fix: Use an arrow function or `.bind()`.
+
+Memory Trick:
+  Look to the LEFT of the dot at call time:
+  - `user.greet()`    → `this` is `user` (left of dot).
+  - `greet()`         → `this` is `window` or `undefined` (no dot).
+  - `() => {}`        → `this` is inherited from outside (arrow ignores dots).
+  - `new User()`      → `this` is the brand new object.
+  - `.call(obj)`      → `this` is explicitly `obj`.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript The 'this' Keyword</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript The <code>this</code> Keyword</h1>
+
+      <!-- 1. IMPLICIT BINDING (OBJECT METHODS) -->
+      <div class="section">
+        <h2>1. Object Methods (Implicit Binding)</h2>
+        <p>
+          Inside an object method, <code>this</code> points to the object to the
+          left of the dot.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const user = {
+  name: "Alex",
+  age: 25,
+  getDetails() {
+    return `${this.name} is ${this.age} years old`;
+  }
+};
+
+// user is to the left of the dot -> 'this' === user
+console.log(user.getDetails());</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ARROW FUNCTIONS VS REGULAR FUNCTIONS -->
+      <div class="section">
+        <h2>2. Arrow Functions vs Regular Functions</h2>
+        <p>
+          Arrow functions do not have their own <code>this</code>; they inherit
+          it from the surrounding scope.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const group = {
+  title: "Dev Team",
+  members: ["Sam", "Maya"],
+  
+  // Regular function method
+  showMembers() {
+    // Arrow function inherits 'this' from showMembers()
+    this.members.forEach(member => {
+      console.log(`${member} is in ${this.title}`);
+    });
+  }
+};
+
+group.showMembers();</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. EXPLICIT BINDING (.call, .apply, .bind) -->
+      <div class="section">
+        <h2>
+          3. Explicit Binding (<code>call</code>, <code>apply</code>,
+          <code>bind</code>)
+        </h2>
+        <p>
+          Manually forcing a function's <code>this</code> to point to a specific
+          object.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function introduce(city, country) {
+  return `I am ${this.name} from ${city}, ${country}`;
+}
+
+const person1 = { name: "Ravi" };
+const person2 = { name: "Sarah" };
+
+// .call() -> passes arguments individually
+const res1 = introduce.call(person1, "Delhi", "India");
+
+// .apply() -> passes arguments as an array
+const res2 = introduce.apply(person2, ["London", "UK"]);
+
+// .bind() -> returns a NEW function with 'this' locked
+const boundFunc = introduce.bind(person1, "Mumbai", "India");
+const res3 = boundFunc();
+
+console.log(res1);
+console.log(res2);
+console.log(res3);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. NEW BINDING (CONSTRUCTOR FUNCTIONS) -->
+      <div class="section">
+        <h2>
+          4. Constructor Functions &amp; Classes (<code>new</code> Binding)
+        </h2>
+        <p>
+          When invoked with <code>new</code>, <code>this</code> binds to the new
+          instance being created.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function Car(brand, model) {
+  // 'this' refers to the new blank object being created
+  this.brand = brand;
+  this.model = model;
+  
+  this.getInfo = function() {
+    return `${this.brand} ${this.model}`;
+  };
+}
+
+const car1 = new Car("Toyota", "Corolla");
+const car2 = new Car("Tesla", "Model 3");
+
+console.log(car1.getInfo());
+console.log(car2.getInfo());</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. DOM EVENT BINDING -->
+      <div class="section">
+        <h2>5. DOM Event Listener Binding</h2>
+        <p>
+          In standard event listener callbacks, <code>this</code> refers to the
+          target element.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const btn = document.getElementById("demo-btn");
+
+btn.addEventListener("click", function() {
+  // 'this' refers to the button DOM element
+  document.getElementById("out5").textContent = 
+    `Clicked Button ID: ${this.id} | Tag: ${this.tagName}`;
+});</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Live Test:</span>
+            <button id="demo-btn" class="btn btn-primary btn-sm mb-2">
+              Click to test 'this'
+            </button>
+            <span class="label">Output:</span>
+            <div id="out5" class="output">Click the button above...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. QUICK REFERENCE -->
+      <div class="section">
+        <h2>6. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Context / Invocation</th>
+                <th>What <code>this</code> Refers To</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Object Method</td>
+                <td>The owner object (left of dot)</td>
+                <td><code>obj.method()</code></td>
+              </tr>
+              <tr>
+                <td>Standalone Function</td>
+                <td>
+                  <code>window</code> (non-strict) or
+                  <code>undefined</code> (strict)
+                </td>
+                <td><code>fn()</code></td>
+              </tr>
+              <tr>
+                <td>Arrow Function</td>
+                <td>Lexical parent scope (inherited from where defined)</td>
+                <td><code>() =&gt; { console.log(this); }</code></td>
+              </tr>
+              <tr>
+                <td>Explicit (.call / .apply)</td>
+                <td>The object passed as the first argument</td>
+                <td><code>fn.call(myObj)</code></td>
+              </tr>
+              <tr>
+                <td>Explicit (.bind)</td>
+                <td>Returns a new function permanently bound to object</td>
+                <td><code>const bound = fn.bind(myObj)</code></td>
+              </tr>
+              <tr>
+                <td>Constructor (<code>new</code>)</td>
+                <td>The newly instantiated object instance</td>
+                <td><code>const x = new User()</code></td>
+              </tr>
+              <tr>
+                <td>DOM Event Handler</td>
+                <td>The DOM element receiving the event</td>
+                <td><code>elem.addEventListener('click', fn)</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Implicit Binding
+      const user = {
+        name: "Alex",
+        age: 25,
+        getDetails() {
+          return `${this.name} is ${this.age} years old`;
+        },
+      };
+      write("out1", [user.getDetails()]);
+
+      // 2. Arrow vs Regular Functions
+      const out2 = [];
+      const group = {
+        title: "Dev Team",
+        members: ["Sam", "Maya"],
+        showMembers() {
+          this.members.forEach((member) => {
+            out2.push(`${member} is in ${this.title}`);
+          });
+        },
+      };
+      group.showMembers();
+      write("out2", out2);
+
+      // 3. Explicit Binding
+      function introduce(city, country) {
+        return `I am ${this.name} from ${city}, ${country}`;
+      }
+      const person1 = { name: "Ravi" };
+      const person2 = { name: "Sarah" };
+
+      const res1 = introduce.call(person1, "Delhi", "India");
+      const res2 = introduce.apply(person2, ["London", "UK"]);
+      const boundFunc = introduce.bind(person1, "Mumbai", "India");
+      const res3 = boundFunc();
+
+      write("out3", [res1, res2, res3]);
+
+      // 4. New Binding
+      function Car(brand, model) {
+        this.brand = brand;
+        this.model = model;
+        this.getInfo = function () {
+          return `${this.brand} ${this.model}`;
+        };
+      }
+      const car1 = new Car("Toyota", "Corolla");
+      const car2 = new Car("Tesla", "Model 3");
+
+      write("out4", [
+        "car1.getInfo() -> " + car1.getInfo(),
+        "car2.getInfo() -> " + car2.getInfo(),
+      ]);
+
+      // 5. DOM Event Binding
+      const btn = document.getElementById("demo-btn");
+      btn.addEventListener("click", function () {
+        write("out5", [`Clicked Button ID: ${this.id} | Tag: ${this.tagName}`]);
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

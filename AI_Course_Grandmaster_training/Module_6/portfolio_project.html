@@ -1,0 +1,450 @@
+<!--
+=======================================================
+  PORTFOLIO PROJECT — NAVBAR + BANNER + ABOUT + PROJECTS + SOCIAL
+=======================================================
+
+WHAT IS BEING BUILT?
+A complete single-page portfolio website for a fictional
+designer ("Maya Chen"). Every section you asked for, plus a
+footer, all wired together and responsive.
+
+-------------------------------------------------------
+FILES IN THIS PROJECT
+-------------------------------------------------------
+  index.html    Structure (this file)
+  style.css     All visual design — colors, spacing, layout
+  script.js     Behaviour — scroll shadow, active links,
+                mobile menu close, fade-in on scroll
+
+  Put all three files in the SAME folder and open index.html.
+
+-------------------------------------------------------
+THE FIVE SECTIONS
+-------------------------------------------------------
+  1. NAVBAR       sticky, glass effect, gains a shadow on scroll
+  2. BANNER       hero with headline, subtext, two CTAs, visual
+  3. ABOUT        photo panel + bio + skill tags + stats
+  4. PROJECTS     grid of four project cards
+  5. SOCIAL       contact email + six social buttons + footer
+
+-------------------------------------------------------
+WHY THE PAGE FEELS COMPOSED (not stitched)
+-------------------------------------------------------
+Every section uses the SAME rhythm:
+
+    section-label      small, uppercase, accent-colored
+    section-heading    big, bold, tight line-height
+    section-lede       short intro paragraph
+    content grid       2 or 3 columns
+
+The hero is the only exception — its type is larger and its
+layout is a 2-column pairing (text + visual). That is what
+makes it feel like a "cover" rather than another section.
+
+-------------------------------------------------------
+BOOTSTRAP PIECES USED
+-------------------------------------------------------
+  Navbar        .navbar .navbar-expand-lg .navbar-nav
+  Grid          .container .row .col-lg-* .col-md-* .g-4
+  Buttons       .btn .btn-primary .btn-outline-secondary .btn-lg
+  Utility       .d-flex .gap-* .py-* .mb-* .text-muted .text-white
+  Icons         Bootstrap Icons via CDN
+
+  Bootstrap only handles STRUCTURE and BEHAVIOUR.
+  Every color, radius, shadow, and font in this project
+  lives in style.css — that is where the aesthetics are.
+
+-------------------------------------------------------
+THREE INDEPENDENT JS FEATURES
+-------------------------------------------------------
+  1. SCROLL SHADOW    navbar gains shadow past 10px of scroll
+  2. ACTIVE LINK      IntersectionObserver updates the
+                      matching nav-link as you scroll
+  3. FADE-IN          .reveal elements animate in when they
+                      enter the viewport
+
+Each is self-contained. Removing one leaves the page working.
+
+-------------------------------------------------------
+GRACEFUL DEGRADATION
+-------------------------------------------------------
+.reveal starts VISIBLE in CSS. script.js adds `.js-ready` to
+<body> first, which is what hides them initially. If JS fails
+to load, the content is fully readable with no animations.
+
+-------------------------------------------------------
+MEMORY TRICK
+-------------------------------------------------------
+  Navbar   = scaffold, changes with scroll
+  Hero     = first impression, one job: keep scrolling
+  About    = who, 2 columns (image + text)
+  Projects = what, card grid (image + title + tag)
+  Social   = contact, icon row
+  Rhythm   = same structure in every section
+  One      = accent color, font family, radius, shadow
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maya Chen — Designer &amp; Developer</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- ============================================================ -->
+    <!-- 1. NAVBAR                                                    -->
+    <!-- ============================================================ -->
+    <nav id="siteNav" class="site-nav navbar navbar-expand-lg py-2">
+      <div class="container">
+        <a class="brand" href="#home">
+          <span class="brand-dot"></span>
+          Maya Chen
+        </a>
+
+        <button
+          class="navbar-toggler border-0 shadow-none"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMenu"
+          aria-controls="navMenu"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav mx-auto gap-1 mt-3 mt-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#projects">Projects</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
+          </ul>
+
+          <a href="#contact" class="btn btn-primary px-4 py-2 mt-3 mt-lg-0">
+            Let's talk
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ============================================================ -->
+    <!-- 2. BANNER / HERO                                             -->
+    <!-- ============================================================ -->
+    <section id="home" class="hero">
+      <div class="container hero-content">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7">
+            <div class="hero-tag">
+              <span class="dot"></span>
+              Available for freelance work
+            </div>
+
+            <h1>
+              Designing digital products people actually want to <em>use</em>.
+            </h1>
+
+            <p class="hero-lede">
+              I'm Maya, a product designer and front-end developer based in
+              Singapore. For eight years I've helped teams ship interfaces that
+              feel calm, clear, and quietly delightful.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#projects" class="btn btn-primary btn-lg px-4 py-3">
+                View projects
+                <i class="bi bi-arrow-right ms-1"></i>
+              </a>
+              <a
+                href="#contact"
+                class="btn btn-outline-secondary btn-lg px-4 py-3"
+              >
+                Get in touch
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="hero-visual">
+              <div class="hero-visual-inner">
+                <div class="initial">MC</div>
+                <div class="role">Designer &amp; Developer</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 3. ABOUT                                                     -->
+    <!-- ============================================================ -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="row g-5 align-items-center">
+          <div class="col-lg-5 reveal">
+            <div class="about-photo">MC</div>
+          </div>
+
+          <div class="col-lg-7 reveal">
+            <span class="section-label">About</span>
+            <h2 class="section-heading">
+              A quiet obsession with the small stuff.
+            </h2>
+
+            <div class="about-body">
+              <p>
+                I started as a <strong>self-taught developer</strong> in 2017
+                after getting frustrated with a login form. Eight years later, I
+                still believe the best products come from teams who care about
+                the two-pixel gap between a label and its input.
+              </p>
+              <p>
+                Today I split my time between design systems for early-stage
+                startups and teaching a small front-end course in Singapore. I
+                write about interface craft on my newsletter, which has quietly
+                grown past <strong>12,000 subscribers</strong>.
+              </p>
+
+              <ul class="skills">
+                <li class="skill">Product design</li>
+                <li class="skill">Design systems</li>
+                <li class="skill">HTML &amp; CSS</li>
+                <li class="skill">JavaScript</li>
+                <li class="skill">Accessibility</li>
+                <li class="skill">Figma</li>
+              </ul>
+
+              <div class="about-stats">
+                <div>
+                  <div class="stat-num">8+</div>
+                  <div class="stat-label">Years</div>
+                </div>
+                <div>
+                  <div class="stat-num">40+</div>
+                  <div class="stat-label">Projects</div>
+                </div>
+                <div>
+                  <div class="stat-num">12k</div>
+                  <div class="stat-label">Readers</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 4. PROJECTS                                                  -->
+    <!-- ============================================================ -->
+    <section id="projects" class="section section-alt">
+      <div class="container">
+        <div class="row mb-2 reveal">
+          <div class="col-lg-8">
+            <span class="section-label">Projects</span>
+            <h2 class="section-heading">
+              Selected work from the last two years.
+            </h2>
+            <p class="section-lede">
+              A small window into the products I've designed and built. Each one
+              started with a real problem and a deadline.
+            </p>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- PROJECT 1 -->
+          <div class="col-md-6 reveal">
+            <article class="project">
+              <div class="project-thumb project-thumb-1">
+                <span class="project-emoji">📊</span>
+              </div>
+              <div class="project-body">
+                <h3 class="project-title">
+                  Ledger — Accounting for freelancers
+                </h3>
+                <p class="project-desc">
+                  A dead-simple bookkeeping app for independent workers.
+                  Designed the entire interface and shipped the design system
+                  used across web and mobile.
+                </p>
+                <div class="project-tags">
+                  <span class="project-tag">Product design</span>
+                  <span class="project-tag">SaaS</span>
+                </div>
+                <a href="#" class="project-link">
+                  Case study <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+            </article>
+          </div>
+
+          <!-- PROJECT 2 -->
+          <div class="col-md-6 reveal">
+            <article class="project">
+              <div class="project-thumb project-thumb-2">
+                <span class="project-emoji">🎧</span>
+              </div>
+              <div class="project-body">
+                <h3 class="project-title">
+                  Sonic — Podcast player for long drives
+                </h3>
+                <p class="project-desc">
+                  Redesigned playback and library navigation for a podcast app
+                  with 200,000 daily listeners. Reduced the average taps to play
+                  a new episode from four to one.
+                </p>
+                <div class="project-tags">
+                  <span class="project-tag">Mobile UX</span>
+                  <span class="project-tag">Research</span>
+                </div>
+                <a href="#" class="project-link">
+                  Case study <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+            </article>
+          </div>
+
+          <!-- PROJECT 3 -->
+          <div class="col-md-6 reveal">
+            <article class="project">
+              <div class="project-thumb project-thumb-3">
+                <span class="project-emoji">🌱</span>
+              </div>
+              <div class="project-body">
+                <h3 class="project-title">
+                  Grove — Habit tracker, done quietly
+                </h3>
+                <p class="project-desc">
+                  A habit app built for people who hate habit apps. No streaks
+                  to break, no guilt, no notifications. Just a small tree that
+                  grows a little every day.
+                </p>
+                <div class="project-tags">
+                  <span class="project-tag">Side project</span>
+                  <span class="project-tag">Front-end</span>
+                </div>
+                <a href="#" class="project-link">
+                  Case study <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+            </article>
+          </div>
+
+          <!-- PROJECT 4 -->
+          <div class="col-md-6 reveal">
+            <article class="project">
+              <div class="project-thumb project-thumb-4">
+                <span class="project-emoji">📚</span>
+              </div>
+              <div class="project-body">
+                <h3 class="project-title">Classroom — Design systems course</h3>
+                <p class="project-desc">
+                  A twelve-lesson course teaching design systems to junior
+                  developers. Built from scratch — video, workbook, and a Figma
+                  component library shipped together.
+                </p>
+                <div class="project-tags">
+                  <span class="project-tag">Education</span>
+                  <span class="project-tag">Teaching</span>
+                </div>
+                <a href="#" class="project-link">
+                  Course <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 5. SOCIAL / CONTACT                                          -->
+    <!-- ============================================================ -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <div class="row reveal">
+          <div class="col-lg-8">
+            <span class="section-label">Contact</span>
+            <h2 class="section-heading">
+              Have a project in mind? I'd love to hear about it.
+            </h2>
+            <p class="section-lede">
+              I take on two to three projects a quarter. The best way to reach
+              me is email — I answer every message within two working days.
+            </p>
+
+            <a href="mailto:hello@mayachen.design" class="contact-email">
+              <i class="bi bi-envelope-fill"></i>
+              hello@mayachen.design
+            </a>
+
+            <div>
+              <span class="socials-label">Elsewhere</span>
+              <div class="socials">
+                <a href="#" class="social-btn" aria-label="GitHub">
+                  <i class="bi bi-github"></i>
+                </a>
+                <a href="#" class="social-btn" aria-label="Twitter">
+                  <i class="bi bi-twitter-x"></i>
+                </a>
+                <a href="#" class="social-btn" aria-label="LinkedIn">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+                <a href="#" class="social-btn" aria-label="Dribbble">
+                  <i class="bi bi-dribbble"></i>
+                </a>
+                <a href="#" class="social-btn" aria-label="Instagram">
+                  <i class="bi bi-instagram"></i>
+                </a>
+                <a href="#" class="social-btn" aria-label="Newsletter">
+                  <i class="bi bi-rss"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER                                                       -->
+    <!-- ============================================================ -->
+    <footer class="footer">
+      <div class="container">
+        <div>© 2025 Maya Chen. Built with care and too much coffee.</div>
+        <div class="footer-links">
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,765 @@
+<!--
+=======================================================
+  FORM VALIDATION USING A CUSTOM VALIDATION API
+=======================================================
+
+-------------------------------------------------------
+FILES IN THIS SETUP
+-------------------------------------------------------
+  validator.js    The reusable validation API (module)
+  index.html      This file — includes validator.js and
+                  binds every form on the page
+
+  Both files must sit in the SAME folder.
+
+-------------------------------------------------------
+WHAT THE API GIVES YOU
+-------------------------------------------------------
+  FormValidator.bind(form)
+      - attaches blur / input listeners
+      - intercepts submit, runs the checks
+      - fires `validated` or `invalid` on the form
+
+  form.addEventListener("validated", e => e.detail)
+      - e.detail is a plain object of all field values
+      - ready to send to a server
+
+  data-rule="email"          custom rule from validator.rules
+  data-rule="min:5"          rule with an argument
+  data-match="#password"     cross-field equality
+  data-message="…"           message shown in .invalid-feedback
+
+-------------------------------------------------------
+HOW IT USES THE CONSTRAINT VALIDATION API
+-------------------------------------------------------
+Every field still goes through the browser's built-in
+checks first:
+
+  el.checkValidity()        → false when required / pattern /
+                              type / min / max fails
+  el.validationMessage      → native error text
+  el.setCustomValidity("x") → the module adds its OWN error,
+                              which makes checkValidity() false
+
+So HTML5 does the boring rules and the module does the rest.
+
+The form carries novalidate so the browser does not show
+its own bubble on top of the Bootstrap error UI.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Validation Using a Custom API</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+        max-height: 260px;
+        overflow-y: auto;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+      .note {
+        background: #fff8e6;
+        border-left: 4px solid #f0ad4e;
+        padding: 10px 14px;
+        border-radius: 4px;
+        margin-bottom: 14px;
+      }
+      .demo-form {
+        max-width: 520px;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-3">Form Validation Using a Custom API</h1>
+
+      <div class="note">
+        <strong>Two files:</strong> <code>validator.js</code> (the API) and this
+        HTML file. Open this page normally —
+        <code>&lt;script src="validator.js"&gt;</code> loads the module, and
+        every form below is bound in one line:
+        <code>FormValidator.bind(form)</code>.
+      </div>
+
+      <!-- ==================================================== -->
+      <!-- 1. LOGIN FORM                                          -->
+      <!-- ==================================================== -->
+      <div class="section">
+        <h2>1. Login Form (minimum rules)</h2>
+        <p>
+          Uses HTML5's <code>required</code> and <code>type="email"</code> plus
+          one custom rule (<code>data-rule="password"</code>) for minimum
+          password strength.
+        </p>
+
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <span class="label"
+              >Validator binding (the only JS this form needs):</span
+            >
+            <pre><code>const loginForm = document.getElementById("loginForm");
+
+FormValidator.bind(loginForm);
+
+loginForm.addEventListener("validated", (e) =&gt; {
+  // e.detail contains every field value
+  console.log("would sign in:", e.detail);
+});
+
+loginForm.addEventListener("invalid", () =&gt; {
+  console.log("check the highlighted fields");
+});</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Live form:</span>
+            <form id="loginForm" class="demo-form border rounded p-3 bg-light">
+              <div class="mb-3">
+                <label class="form-label small mb-1">Email</label>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  class="form-control form-control-sm"
+                  placeholder="you@example.com"
+                />
+                <div class="invalid-feedback">Please enter a valid email.</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small mb-1"
+                  >Password (min 8, letter and digit)</label
+                >
+                <input
+                  name="password"
+                  type="password"
+                  required
+                  class="form-control form-control-sm"
+                  data-rule="password"
+                  data-message="Min 8 chars, at least one letter and one digit."
+                  placeholder="secret123"
+                />
+                <div class="invalid-feedback"></div>
+              </div>
+              <button type="submit" class="btn btn-sm btn-primary">
+                Sign in
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================== -->
+      <!-- 2. REGISTER FORM                                       -->
+      <!-- ==================================================== -->
+      <div class="section">
+        <h2>2. Register Form (custom rules + cross-field match)</h2>
+        <p>
+          Adds <code>minlength</code>, a strong password rule, and
+          <code>data-match="#regPass"</code> so the confirm field must equal the
+          password field.
+        </p>
+
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <span class="label">The two interesting HTML attributes:</span>
+            <pre><code>&lt;!-- Password --&gt;
+&lt;input name="password"
+       type="password"
+       required
+       data-rule="password"
+       data-message="Min 8 characters, letter and digit."&gt;
+
+&lt;!-- Confirm — must equal #regPass --&gt;
+&lt;input name="confirm"
+       type="password"
+       required
+       data-match="#regPass"
+       data-message="Passwords do not match."&gt;
+
+&lt;!-- No extra JS needed — validator.js handles both --&gt;</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Live form:</span>
+            <form
+              id="registerForm"
+              class="demo-form border rounded p-3 bg-light"
+            >
+              <div class="mb-3">
+                <label class="form-label small mb-1"
+                  >Full name (2-40 chars)</label
+                >
+                <input
+                  name="name"
+                  type="text"
+                  required
+                  minlength="2"
+                  maxlength="40"
+                  class="form-control form-control-sm"
+                  placeholder="Alex"
+                />
+                <div class="invalid-feedback">
+                  Please enter 2-40 characters.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small mb-1">Email</label>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  class="form-control form-control-sm"
+                  placeholder="a@b.co"
+                />
+                <div class="invalid-feedback">Please enter a valid email.</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small mb-1">Password</label>
+                <input
+                  id="regPass"
+                  name="password"
+                  type="password"
+                  required
+                  class="form-control form-control-sm"
+                  data-rule="password"
+                  data-message="Min 8 chars, letter and digit."
+                  placeholder="secret123"
+                />
+                <div class="invalid-feedback"></div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small mb-1">Confirm password</label>
+                <input
+                  name="confirm"
+                  type="password"
+                  required
+                  class="form-control form-control-sm"
+                  data-match="#regPass"
+                  data-message="Passwords do not match."
+                  placeholder="secret123"
+                />
+                <div class="invalid-feedback"></div>
+              </div>
+              <button type="submit" class="btn btn-sm btn-primary">
+                Create account
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================== -->
+      <!-- 3. CONTACT FORM                                        -->
+      <!-- ==================================================== -->
+      <div class="section">
+        <h2>3. Contact Form (optional custom rules)</h2>
+        <p>
+          Optional fields still need rules — the phone rule only runs when the
+          field is non-empty. Optional fields also pass trivially when left
+          blank, which is the correct behaviour.
+        </p>
+
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <span class="label">Optional rules with custom message:</span>
+            <pre><code>&lt;input name="phone"
+       type="tel"
+       data-rule="phone"
+       data-message="Phone must be 10 digits (leave blank to skip)."&gt;
+
+&lt;textarea name="message"
+          required
+          minlength="20"
+          maxlength="500"
+          class="form-control"&gt;&lt;/textarea&gt;</code></pre>
+            <p class="small text-muted mt-2 mb-0">
+              HTML5's <code>minlength</code> on the textarea is checked on
+              submit — <code>validator.js</code> also re-checks on blur so the
+              user sees the feedback as soon as they leave the field.
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Live form:</span>
+            <form
+              id="contactForm"
+              class="demo-form border rounded p-3 bg-light"
+            >
+              <div class="mb-3">
+                <label class="form-label small mb-1">Name</label>
+                <input
+                  name="name"
+                  type="text"
+                  required
+                  minlength="2"
+                  class="form-control form-control-sm"
+                  placeholder="Alex"
+                />
+                <div class="invalid-feedback">Please enter your name.</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small mb-1">Email (optional)</label>
+                <input
+                  name="email"
+                  type="email"
+                  class="form-control form-control-sm"
+                  placeholder="a@b.co"
+                />
+                <div class="invalid-feedback">Please enter a valid email.</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small mb-1"
+                  >Phone (optional, 10 digits)</label
+                >
+                <input
+                  name="phone"
+                  type="tel"
+                  class="form-control form-control-sm"
+                  data-rule="phone"
+                  data-message="Phone must be 10 digits (leave blank to skip)."
+                  placeholder="9876543210"
+                />
+                <div class="invalid-feedback"></div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small mb-1"
+                  >Message (20-500 chars)</label
+                >
+                <textarea
+                  name="message"
+                  required
+                  minlength="20"
+                  maxlength="500"
+                  rows="3"
+                  class="form-control form-control-sm"
+                  placeholder="Type at least 20 characters..."
+                ></textarea>
+                <div class="invalid-feedback">
+                  Please write 20-500 characters.
+                </div>
+              </div>
+              <button type="submit" class="btn btn-sm btn-primary">Send</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================== -->
+      <!-- 4. LIVE API LOG                                        -->
+      <!-- ==================================================== -->
+      <div class="section">
+        <h2>4. Live API Activity Log</h2>
+        <p>
+          Every event the validator receives is written here in real time. Type,
+          blur, submit — the log shows what the API is actually doing.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Setup that feeds this log:</span>
+            <pre><code>["loginForm", "registerForm", "contactForm"]
+  .forEach(id =&gt; {
+    const form = document.getElementById(id);
+
+    // Bind the API
+    FormValidator.bind(form);
+
+    // Forward the API events into the log
+    form.addEventListener("input", e =&gt; {
+      if (e.target.matches("input, textarea, select")) {
+        log(id, "input", e.target.name);
+      }
+    }, true);
+
+    form.addEventListener("focusout", e =&gt; {
+      if (e.target.matches("input, textarea, select")) {
+        log(id, "blur", e.target.name);
+      }
+    }, true);
+
+    form.addEventListener("validated", e =&gt;
+      log(id, "validated", JSON.stringify(e.detail)));
+
+    form.addEventListener("invalid", () =&gt;
+      log(id, "invalid", "check highlighted fields"));
+  });</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Log:</span>
+            <div id="apiLog" class="output">waiting for interactions ...</div>
+            <button id="clearLog" class="btn btn-sm btn-outline-secondary mt-2">
+              Clear log
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================== -->
+      <!-- 5. REFERENCE                                           -->
+      <!-- ==================================================== -->
+      <div class="section">
+        <h2>5. Reference</h2>
+
+        <h3 class="h5 mt-4">What the module does on bind</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Step</th>
+                <th>What Happens</th>
+                <th>Constraint Validation API call</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Adds <code>novalidate</code></td>
+                <td>Suppresses the browser's own error bubbles</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Attaches <code>blur</code></td>
+                <td>Validates the field the user just left</td>
+                <td><code>el.checkValidity()</code></td>
+              </tr>
+              <tr>
+                <td>Attaches <code>input</code></td>
+                <td>Re-validates only fields already in an error state</td>
+                <td><code>el.checkValidity()</code></td>
+              </tr>
+              <tr>
+                <td>Attaches <code>submit</code></td>
+                <td>
+                  Calls <code>preventDefault</code>, runs
+                  <code>validateForm</code>
+                </td>
+                <td><code>form.checkValidity()</code></td>
+              </tr>
+              <tr>
+                <td>Dispatches <code>validated</code></td>
+                <td>Fires when every field passes</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Dispatches <code>invalid</code></td>
+                <td>Fires when at least one field fails</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="h5 mt-4">Rules bundled in <code>validator.js</code></h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Rule</th>
+                <th>Usage</th>
+                <th>Accepts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>required</code></td>
+                <td><code>data-rule="required"</code></td>
+                <td>non-empty after trim</td>
+              </tr>
+              <tr>
+                <td><code>email</code></td>
+                <td><code>data-rule="email"</code></td>
+                <td>basic email shape</td>
+              </tr>
+              <tr>
+                <td><code>phone</code></td>
+                <td><code>data-rule="phone"</code></td>
+                <td>10 digits, whitespace ignored</td>
+              </tr>
+              <tr>
+                <td><code>password</code></td>
+                <td><code>data-rule="password"</code></td>
+                <td>8+ characters, one letter + one digit</td>
+              </tr>
+              <tr>
+                <td><code>number</code></td>
+                <td><code>data-rule="number"</code></td>
+                <td>parseable Number</td>
+              </tr>
+              <tr>
+                <td><code>min</code></td>
+                <td><code>data-rule="min:5"</code></td>
+                <td>value ≥ arg</td>
+              </tr>
+              <tr>
+                <td><code>max</code></td>
+                <td><code>data-rule="max:100"</code></td>
+                <td>value ≤ arg</td>
+              </tr>
+              <tr>
+                <td><code>minlength</code></td>
+                <td><code>data-rule="minlength:3"</code></td>
+                <td>length ≥ arg</td>
+              </tr>
+              <tr>
+                <td><code>maxlength</code></td>
+                <td><code>data-rule="maxlength:40"</code></td>
+                <td>length ≤ arg</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="h5 mt-4">HTML5 attributes still work</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Attribute</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>required</code></td>
+                <td>Field must not be empty</td>
+              </tr>
+              <tr>
+                <td><code>type="email"</code></td>
+                <td>Must look like an email</td>
+              </tr>
+              <tr>
+                <td><code>type="url"</code></td>
+                <td>Must look like a URL</td>
+              </tr>
+              <tr>
+                <td><code>type="number"</code></td>
+                <td>Must be numeric</td>
+              </tr>
+              <tr>
+                <td><code>min</code> / <code>max</code></td>
+                <td>Numeric range</td>
+              </tr>
+              <tr>
+                <td><code>minlength</code> / <code>maxlength</code></td>
+                <td>Text length</td>
+              </tr>
+              <tr>
+                <td><code>pattern</code></td>
+                <td>Full regex match</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="h5 mt-4">Extending the API</h3>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Add a new rule:</span>
+            <pre><code>FormValidator.addRule("username", (v) =&gt; {
+  return v === "" || /^[A-Za-z0-9_]{3,16}$/.test(v);
+});
+
+// Now every form on the page can use it:
+//   &lt;input data-rule="username"
+//          data-message="3-16 letters, digits, underscores"&gt;</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Custom submit handler:</span>
+            <pre><code>const form = document.getElementById("myForm");
+
+FormValidator.bind(form);
+
+form.addEventListener("validated", async (e) =&gt; {
+  e.detail;                    // plain object of all values
+
+  // Example — send to a server
+  // await fetch("/api/save", {
+  //   method: "POST",
+  //   headers: { "Content-Type": "application/json" },
+  //   body: JSON.stringify(e.detail)
+  // });
+});</code></pre>
+          </div>
+        </div>
+
+        <h3 class="h5 mt-4">Rules to remember</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Rule</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Load <code>validator.js</code> BEFORE the inline script</td>
+                <td>Otherwise <code>FormValidator</code> is undefined</td>
+              </tr>
+              <tr>
+                <td>Both files in the same folder</td>
+                <td>Otherwise the browser 404s the script</td>
+              </tr>
+              <tr>
+                <td><code>FormValidator.bind(form)</code> per form</td>
+                <td>Each form gets its own listener set</td>
+              </tr>
+              <tr>
+                <td>
+                  Listen for <code>validated</code>, not <code>submit</code>
+                </td>
+                <td>
+                  <code>submit</code> fires whether valid or not;
+                  <code>validated</code> only on success
+                </td>
+              </tr>
+              <tr>
+                <td>Empty optional fields always pass</td>
+                <td>The rule is skipped, not failed</td>
+              </tr>
+              <tr>
+                <td>Client-side validation is UX</td>
+                <td>The server must re-check everything</td>
+              </tr>
+              <tr>
+                <td>Clear messages with <code>""</code></td>
+                <td>
+                  The module clears <code>setCustomValidity("")</code> before
+                  every check
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+       IMPORTANT: validator.js must be loaded BEFORE the code
+       below — otherwise `FormValidator` will not exist yet.
+       ============================================================ -->
+    <script src="validator.js"></script>
+
+    <script>
+      // ------------------------------------------------------------
+      // Logging helper — writes to the log panel (section 4)
+      // ------------------------------------------------------------
+      const logEl = document.getElementById("apiLog");
+      let logInitialized = false;
+
+      function log(formId, action, detail) {
+        if (!logInitialized) {
+          logEl.textContent = "";
+          logInitialized = true;
+        }
+        const time = new Date().toLocaleTimeString();
+        const line =
+          "[" +
+          time +
+          "] " +
+          formId.padEnd(14) +
+          action.padEnd(11) +
+          (detail || "");
+        logEl.textContent += (logEl.textContent ? "\n" : "") + line;
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      document.getElementById("clearLog").addEventListener("click", () => {
+        logEl.textContent = "log cleared.";
+        logInitialized = true;
+      });
+
+      // ------------------------------------------------------------
+      // Bind every form in one pass
+      // ------------------------------------------------------------
+      ["loginForm", "registerForm", "contactForm"].forEach((id) => {
+        const form = document.getElementById(id);
+
+        // 1. Bind the validation API
+        FormValidator.bind(form);
+        log(id, "bind", "attached");
+
+        // 2. Forward events into the log
+        form.addEventListener(
+          "input",
+          (e) => {
+            if (e.target.matches("input, textarea, select")) {
+              log(id, "input", e.target.name);
+            }
+          },
+          true,
+        );
+
+        form.addEventListener(
+          "focusout",
+          (e) => {
+            if (e.target.matches("input, textarea, select")) {
+              log(id, "blur", e.target.name);
+            }
+          },
+          true,
+        );
+
+        form.addEventListener("validated", (e) => {
+          log(id, "validated", JSON.stringify(e.detail));
+          // In real code this is where you would POST to the server:
+          // await fetch("/api/save", { method: "POST", body: ... });
+          alert(
+            id +
+              " is valid.\n" +
+              "Submitted data:\n" +
+              JSON.stringify(e.detail, null, 2),
+          );
+          form.reset();
+          form.querySelectorAll(".is-valid, .is-invalid").forEach((el) => {
+            el.classList.remove("is-valid", "is-invalid");
+          });
+        });
+
+        form.addEventListener("invalid", () => {
+          log(id, "invalid", "check highlighted fields");
+        });
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

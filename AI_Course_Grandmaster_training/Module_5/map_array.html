@@ -1,0 +1,313 @@
+<!--
+=======================================================
+  JAVASCRIPT: MAPPING AN ARRAY (.map())
+=======================================================
+
+WHAT IS Array.prototype.map()?
+The `.map()` method creates a BRAND NEW ARRAY populated with 
+the results of calling a provided function on EVERY element 
+in the calling array.
+
+KEY CHARACTERISTICS OF .map():
+  1. Non-Mutating: It NEVER modifies the original array.
+  2. 1-to-1 Mapping: The returned array ALWAYS has the EXACT SAME 
+     length as the original array.
+  3. Returns a New Array: You must store or return the result of `.map()`.
+
+SYNTAX:
+  const newArray = array.map((element, index, array) => {
+    // Return transformed value
+  });
+
+PARAMETERS OF CALLBACK FUNCTION:
+  - `element` (required) : Current item being processed.
+  - `index`   (optional) : Index position of current item.
+  - `array`   (optional) : The full original array.
+
+-------------------------------------------------------
+.map() VS .forEach():
+-------------------------------------------------------
+  - `.map()`   : Returns a NEW transformed array. Use when you want to 
+                 MODIFY data into a new format.
+  - `.forEach()`: Returns `undefined`. Used strictly to cause SIDE EFFECTS 
+                 (e.g., logging to console, updating DOM nodes).
+
+-------------------------------------------------------
+COMMON MAP USE CASES:
+-------------------------------------------------------
+  1. Transforming numbers (e.g. doubling, math operations).
+  2. Extracting a single property from an array of objects.
+  3. Formatting strings or data for display.
+  4. Transforming raw data arrays into HTML string templates.
+
+Memory Trick:
+  map = Transformation Machine.
+  Inputs 5 items → Outputs 5 NEW transformed items.
+  Never changes original array. Always returns a new array.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapping an Array (.map())</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">Mapping an Array (<code>.map()</code>)</h1>
+
+      <!-- 1. BASIC NUMBER TRANSFORMATION -->
+      <div class="section">
+        <h2>1. Basic Number Transformation</h2>
+        <p>Doubling numbers without changing the original array.</p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const numbers = [1, 2, 3, 4, 5];
+
+// Map creates a new array with doubled values
+const doubled = numbers.map(num => num * 2);
+
+console.log("Original Numbers:", numbers); // Unchanged!
+console.log("Doubled Array   :", doubled); // [2, 4, 6, 8, 10]</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. EXTRACTING PROPERTIES FROM OBJECT ARRAYS -->
+      <div class="section">
+        <h2>2. Extracting Properties from an Array of Objects</h2>
+        <p>
+          Mapping complex objects into a simple array of specific property
+          values.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const users = [
+  { id: 1, name: "Alex", role: "Admin" },
+  { id: 2, name: "Sam", role: "User" },
+  { id: 3, name: "Maya", role: "User" }
+];
+
+// Extract only the names into a simple string array
+const userNames = users.map(user => user.name);
+
+console.log("User Names:", userNames);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. USING INDEX PARAMETER IN MAP -->
+      <div class="section">
+        <h2>3. Using Index in <code>.map()</code> Callback</h2>
+        <p>Accessing the current element's index position during mapping.</p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const fruits = ["Apple", "Banana", "Cherry"];
+
+// Using second parameter (index)
+const formattedList = fruits.map((fruit, index) => {
+  return `${index + 1}. ${fruit}`;
+});
+
+console.log("Formatted List:", formattedList);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. REAL-WORLD: MAPPING DATA TO HTML STRINGS -->
+      <div class="section">
+        <h2>4. Real-World Use: Mapping Data to HTML Templates</h2>
+        <p>Converting raw JS objects into HTML list items dynamically.</p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const products = [
+  { name: "Laptop", price: 999 },
+  { name: "Phone", price: 699 }
+];
+
+// Map objects to HTML list item strings
+const htmlItems = products.map(p => 
+  `&lt;li class="list-group-item"&gt;${p.name} - $${p.price}&lt;/li&gt;`
+).join(""); // Join array into single HTML string
+
+console.log("HTML Output String:\n" + htmlItems);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Rendered HTML Output:</span>
+            <ul id="html-render-list" class="list-group mb-2"></ul>
+            <span class="label">Raw String Console Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. QUICK REFERENCE -->
+      <div class="section">
+        <h2>5. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Feature</th>
+                <th>Syntax / Pattern</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Basic Mapping</td>
+                <td><code>arr.map(x =&gt; x * 2)</code></td>
+                <td>Transforms each item, returns new array</td>
+              </tr>
+              <tr>
+                <td>Property Extraction</td>
+                <td><code>users.map(u =&gt; u.name)</code></td>
+                <td>Extracts a specific property from objects</td>
+              </tr>
+              <tr>
+                <td>Index Parameter</td>
+                <td><code>arr.map((item, idx) =&gt; ...)</code></td>
+                <td>Provides access to item index position</td>
+              </tr>
+              <tr>
+                <td>HTML Generation</td>
+                <td>
+                  <code
+                    >arr.map(x =&gt; `&lt;li&gt;${x}&lt;/li&gt;`).join("")</code
+                  >
+                </td>
+                <td>Creates HTML templates for DOM insertion</td>
+              </tr>
+              <tr>
+                <td>Mutates Original?</td>
+                <td>No</td>
+                <td>Original array remains untouched</td>
+              </tr>
+              <tr>
+                <td>Returned Length</td>
+                <td>Same length as input</td>
+                <td>Always returns 1 output item for 1 input item</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Basic Number Transformation
+      const numbers = [1, 2, 3, 4, 5];
+      const doubled = numbers.map((num) => num * 2);
+      write("out1", [
+        "Original Numbers: [" + numbers.join(", ") + "]",
+        "Doubled Array   : [" + doubled.join(", ") + "]",
+      ]);
+
+      // 2. Extracting Properties
+      const users = [
+        { id: 1, name: "Alex", role: "Admin" },
+        { id: 2, name: "Sam", role: "User" },
+        { id: 3, name: "Maya", role: "User" },
+      ];
+      const userNames = users.map((user) => user.name);
+      write("out2", [
+        "User Names: [" + userNames.map((n) => `"${n}"`).join(", ") + "]",
+      ]);
+
+      // 3. Index Parameter
+      const fruits = ["Apple", "Banana", "Cherry"];
+      const formattedList = fruits.map(
+        (fruit, index) => `${index + 1}. ${fruit}`,
+      );
+      write("out3", formattedList);
+
+      // 4. Mapping Data to HTML
+      const products = [
+        { name: "Laptop", price: 999 },
+        { name: "Phone", price: 699 },
+      ];
+      const htmlItems = products
+        .map(
+          (p) =>
+            `<li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>${p.name}</span>
+        <span class="badge bg-primary">$${p.price}</span>
+      </li>`,
+        )
+        .join("");
+
+      document.getElementById("html-render-list").innerHTML = htmlItems;
+      write("out4", [htmlItems]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

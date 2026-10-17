@@ -1,0 +1,1853 @@
+<!--
+=======================================================
+  JAVASCRIPT: ERROR HANDLING - GUIDE
+=======================================================
+
+WHAT IS AN ERROR?
+Anything that stops code from doing what it was supposed to.
+There are two kinds:
+
+  PARSE-TIME errors (SyntaxError)
+    The engine cannot even read your file.
+    Nothing runs at all.
+    You fix these with your editor, not with try/catch.
+
+  RUN-TIME errors (everything else)
+    The code was valid, but something went wrong while running.
+    These CAN be caught with try/catch.
+
+-------------------------------------------------------
+1. THE BUILT-IN ERROR TYPES
+-------------------------------------------------------
+  SyntaxError      invalid JavaScript syntax
+                   eval("const x = ;")
+                   JSON.parse("{bad}")
+
+  ReferenceError   variable does not exist (or used before decl)
+                   console.log(notDeclared)
+
+  TypeError        wrong type, or calling something that is not
+                   a function, or reading a property of null
+                   null.name
+                   undefined()
+                   (5)()
+
+  RangeError       a number is out of the allowed range
+                   new Array(-1)
+                   "abc".repeat(-1)
+                   recursion overflow → "Maximum call stack size"
+
+  URIError         malformed URI
+                   decodeURIComponent("%")
+
+  EvalError        almost never thrown in modern JS (historical)
+
+  AggregateError   multiple errors bundled (Promise.any, etc.)
+
+Every error type inherits from `Error`. You can also make
+your own classes that extend it.
+
+-------------------------------------------------------
+2. try / catch / finally
+-------------------------------------------------------
+  try {
+    // code that might throw
+  } catch (err) {
+    // runs only if something throws
+    // `err` is the thrown value
+  } finally {
+    // ALWAYS runs — with or without an error
+    // also runs if the try/catch returns or rethrows
+  }
+
+FLOW:
+  no error    → try runs, finally runs, catch skipped
+  error       → try stops at the line that threw, catch runs, finally runs
+  return      → finally still runs before the function actually returns
+  throw again → finally runs, then the error propagates
+
+Rules:
+  - A try must be followed by catch, or finally, or both.
+  - `err` is a normal binding — you can rename it.
+  - Optional catch binding (ES2019): `catch { }` when you don't
+    need the error object.
+
+-------------------------------------------------------
+3. THE Error OBJECT
+-------------------------------------------------------
+  err.name          "TypeError", "RangeError", "MyError", ...
+  err.message       human-readable description
+  err.stack         multi-line trace of where it was thrown
+  err.cause         what originally threw it (ES2022)
+  err instanceof Error          → usually true
+  err instanceof TypeError      → specific check
+
+Options when creating:
+  new Error("message")
+  new Error("message", { cause: originalError })
+  new TypeError("message")
+  new RangeError("message")
+
+-------------------------------------------------------
+4. throw — IMPORTANT RULES
+-------------------------------------------------------
+You can throw anything in JavaScript:
+
+  throw new Error("boom");        ← standard
+  throw "boom";                   ← legal but bad
+  throw 42;                       ← legal but bad
+  throw { code: 400 };            ← legal but bad
+
+WHY ALWAYS THROW Error (or a subclass):
+  - Errors carry .stack by default → you know the origin
+  - `instanceof Error` works
+  - Catch blocks can rely on `err.message` being a string
+  - Throwing a string does NOT add a stack trace
+
+INSIDE A catch, `throw` re-raises the same error.
+Distinguish from `throw err;` (explicit).
+
+-------------------------------------------------------
+5. CUSTOM ERROR CLASSES
+-------------------------------------------------------
+  class ValidationError extends Error {
+    constructor(field, message) {
+      super(message);
+      this.name = "ValidationError";
+      this.field = field;
+    }
+  }
+
+WHY:
+  - Give your errors a NAME and extra fields
+  - Let callers branch on `instanceof`
+  - Group all app errors under one base class
+
+IMPORTANT:
+  - Always call super(message) first — `this` does not exist before it
+  - Set `this.name` explicitly; otherwise it stays "Error"
+  - Subclass further if you want a hierarchy
+  - `instanceof Error` will be true for your subclass too
+
+-------------------------------------------------------
+6. CATCHING SPECIFIC TYPES
+-------------------------------------------------------
+  catch (err) {
+    if (err instanceof ValidationError) { /* handle */ }
+    else if (err instanceof TypeError)  { /* handle */ }
+    else { throw err; }               // unknown → rethrow
+  }
+
+BEST PRACTICE:
+  Catch ONLY what you can actually handle. Rethrow the rest.
+  Swallowing everything hides bugs.
+
+  ORDER MATTERS: check the MOST SPECIFIC class first.
+  A ValidationError is also an Error — but is NOT a TypeError.
+
+  DUCK-TYPING FALLBACK (for cross-frame errors):
+    if (err && err.name === "ValidationError")
+    Use only when `instanceof` breaks across realms.
+
+-------------------------------------------------------
+7. finally — CLEANUP
+-------------------------------------------------------
+Runs unconditionally:
+
+  try { open(); risky(); } catch (e) { log(e); } finally { close(); }
+
+USE CASES:
+  - restore UI state / hide spinners
+  - close files / sockets / cursors
+  - unlock a flag
+  - log "attempt finished"
+
+TRAP:
+  A `return` inside `finally` OVERRIDES the try/catch return.
+  Do NOT do that — it silently swallows errors.
+
+-------------------------------------------------------
+8. ASYNC ERRORS (PROMISES / awaIT)
+-------------------------------------------------------
+An error thrown inside an async function becomes a REJECTED
+PROMISE. It is not "thrown" synchronously.
+
+  async function load() {
+    try {
+      const res = await fetch("/data.json");
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return await res.json();
+    } catch (err) {
+      console.error("fetch failed:", err.message);
+      return null;                    // caller decides what to do
+    } finally {
+      spinner.hidden = true;          // always runs
+    }
+  }
+
+PROMISE CHAINS:
+  fetch(url)
+    .then(r => r.json())
+    .catch(err => console.error(err))
+    .finally(() => spinner.hidden = true);
+
+IMPORTANT:
+  - try/catch DOES catch `await` rejections.
+  - try/catch does NOT catch rejections from a bare
+    `somePromise()` without `await` — the rejection happens later.
+  - Always handle rejections: attach `.catch` or use `await`
+    inside try/catch.
+  - Unhandled rejections surface at the `unhandledrejection` event.
+
+ASYNC IIFE PATTERN:
+  (async () => { ... })();
+
+-------------------------------------------------------
+9. GLOBAL SAFETY NETS
+-------------------------------------------------------
+  window.addEventListener("error", (event) => {
+    // event.error    the Error object (may be null)
+    // event.message  the string message
+    // event.filename, lineno, colno
+  });
+
+  window.addEventListener("unhandledrejection", (event) => {
+    // event.reason   the rejection value
+    // event.promise  the promise that rejected
+    event.preventDefault();            // optionally suppress the log
+  });
+
+USE FOR: monitoring, reporting to a server, last-resort logging
+DO NOT use for: expected errors that should be caught where they happen.
+
+-------------------------------------------------------
+10. ERROR HANDLING PATTERNS
+-------------------------------------------------------
+A) GUARD CLAUSES — check first, throw early
+     function divide(a, b) {
+       if (typeof a !== "number") throw new TypeError("a must be a number");
+       if (b === 0) throw new RangeError("b cannot be zero");
+       return a / b;
+     }
+
+B) VALIDATE BEFORE ACTING
+     if (!Array.isArray(list)) throw new TypeError("list must be an array");
+
+C) TRY-CATCH AROUND A SPECIFIC OPERATION
+     try { JSON.parse(text); } catch { text = "{}"; }
+
+D) WRAP AND ADAPT — add context
+     try { save(); }
+     catch (err) { throw new Error("save failed", { cause: err }); }
+
+E) RESULT OBJECT — alternative to throwing
+     { ok: true, value }
+     { ok: false, error }
+
+F) LOG ONCE — where the error is HANDLED, not where it is thrown.
+
+-------------------------------------------------------
+11. WHAT NOT TO DO
+-------------------------------------------------------
+  // 1. Swallow everything
+  try { risky(); } catch (e) { }        ← always avoid
+
+  // 2. Catch and do nothing meaningful
+  try { risky(); } catch (e) { console.log("error"); }
+
+  // 3. Throw strings
+  throw "something failed";             ← no stack
+
+  // 4. Catch inside a loop that should stop
+  items.forEach(item => {
+    try { process(item); } catch (e) { /* hides each failure */ }
+  });
+
+  // 5. Return inside finally
+  function f() {
+    try { return 1; }
+    catch { return 2; }
+    finally { return 3; }               ← always returns 3, swallows
+  }
+
+  // 6. Rethrowing without checking (pointless try/catch)
+  try { ... } catch (e) { throw e; }    ← identical to no try
+
+  // 7. Using try/catch for normal control flow
+  //    → use if / typeof / includes instead
+
+-------------------------------------------------------
+12. DEBUGGING ERRORS
+-------------------------------------------------------
+  console.error(err);                   full object
+  console.error(err.message);           short line
+  console.error(err.stack);             origin
+  console.trace("here");                print stack without throwing
+  debugger;                             breakpoint (DevTools open)
+  throw err;                            surface in the console
+
+In DevTools:
+  - Network tab → check the request that failed
+  - Sources tab → click the line in the stack trace
+  - Preserve log → keeps errors across page reloads
+
+-------------------------------------------------------
+13. THE RESULT PATTERN (alternative)
+-------------------------------------------------------
+Instead of throwing, return an object:
+
+  { ok: true,  value }
+  { ok: false, error }
+
+  function parseNumber(str) {
+    const n = Number(str);
+    if (!Number.isFinite(n)) return { ok: false, error: "not a number" };
+    return { ok: true, value: n };
+  }
+
+  const outcome = parseNumber(input);
+  if (!outcome.ok) showError(outcome.error);
+  else use(outcome.value);
+
+USE WHEN:
+  - Errors are expected parts of the flow (parsing, validation)
+USE THROW WHEN:
+  - Something is genuinely wrong
+  - The caller probably cannot continue
+
+-------------------------------------------------------
+MEMORY TRICK
+-------------------------------------------------------
+  try      run anything that might throw
+  catch    handle, log, or throw again
+  finally  always runs, even on return
+  throw    throw new Error — never a string
+  Names    ReferenceError / TypeError / RangeError / SyntaxError
+  instanceof  branch on error type; check specific first
+  Rethrow  if you cannot handle it
+  Async    try/catch around `await`; .catch on the chain
+  Global   window.onerror + unhandledrejection for monitoring
+  Never    swallow silently, never return inside finally
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error Handling in JavaScript</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+      .note {
+        background: #fff8e6;
+        border-left: 4px solid #f0ad4e;
+        padding: 10px 14px;
+        border-radius: 4px;
+        margin-bottom: 14px;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">Error Handling in JavaScript</h1>
+
+      <div class="note">
+        <strong>Rule to memorise:</strong> <code>try</code> the risky operation,
+        <code>catch</code> only what you can handle, <code>finally</code> for
+        cleanup. Always throw <code>new Error(...)</code> — never a string.
+      </div>
+
+      <!-- 1. ERROR TYPES -->
+      <div class="section">
+        <h2>1. Built-in Error Types</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// ReferenceError — variable does not exist
+try {
+  console.log(nonExistent);
+} catch (e) {
+  console.log(e.name, "|", e.message);
+}
+
+// TypeError — wrong type / reading on null
+try {
+  null.name;
+} catch (e) {
+  console.log(e.name, "|", e.message);
+}
+
+// RangeError — out of range
+try {
+  new Array(-1);
+} catch (e) {
+  console.log(e.name, "|", e.message);
+}
+
+// SyntaxError — from eval or JSON.parse
+try {
+  JSON.parse("{bad}");
+} catch (e) {
+  console.log(e.name, "|", e.message);
+}
+
+// URIError
+try {
+  decodeURIComponent("%");
+} catch (e) {
+  console.log(e.name, "|", e.message);
+}
+
+// All inherit from Error
+console.log(e instanceof Error);   // true</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. try / catch -->
+      <div class="section">
+        <h2>2. Basic <code>try / catch</code></h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// No error → catch skipped
+try {
+  const x = 10 / 2;
+  console.log("result:", x);
+} catch (err) {
+  console.log("never runs");
+}
+
+// Error → catch runs, control jumps here
+try {
+  const user = null;
+  console.log(user.name);
+  console.log("this line is skipped");
+} catch (err) {
+  console.log("Caught:", err.name);
+  console.log("Message:", err.message);
+}
+
+// Execution continues after the try/catch
+console.log("program continues");</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. finally -->
+      <div class="section">
+        <h2>3. <code>finally</code> — Always Runs</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Runs after success
+try {
+  console.log("try succeeds");
+} finally {
+  console.log("finally runs (success)");
+}
+
+// Runs after a caught error
+try {
+  throw new Error("boom");
+} catch (e) {
+  console.log("caught:", e.message);
+} finally {
+  console.log("finally runs (error)");
+}
+
+// Runs even when the function returns
+function test() {
+  try {
+    return "from try";
+  } finally {
+    console.log("finally runs before the return");
+  }
+}
+console.log(test());
+
+// Cleanup pattern
+function withSpinner() {
+  let spinner = "visible";
+  try {
+    return "data loaded";
+  } finally {
+    spinner = "hidden";
+    console.log("spinner:", spinner);
+  }
+}
+console.log(withSpinner());</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Error object -->
+      <div class="section">
+        <h2>4. The <code>Error</code> Object</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function throwIt() {
+  throw new TypeError("expected a number");
+}
+
+try {
+  throwIt();
+} catch (err) {
+  console.log("name    :", err.name);
+  console.log("message :", err.message);
+  console.log("has stack:", typeof err.stack === "string");
+  console.log("first stack line:");
+  console.log("  " + err.stack.split("\n")[0].trim());
+
+  console.log("is Error     :", err instanceof Error);
+  console.log("is TypeError :", err instanceof TypeError);
+}
+
+// Attaching a cause (ES2022)
+try {
+  try {
+    JSON.parse("{bad}");
+  } catch (inner) {
+    throw new Error("config could not be parsed", { cause: inner });
+  }
+} catch (outer) {
+  console.log("");
+  console.log("outer message:", outer.message);
+  console.log("cause name   :", outer.cause.name);
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. throw -->
+      <div class="section">
+        <h2>5. <code>throw</code> — Always Throw an <code>Error</code></h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// ---- GOOD ----
+try {
+  throw new Error("something went wrong");
+} catch (e) {
+  console.log("Error object:", e.message);
+  console.log("has stack   :", typeof e.stack === "string");
+}
+
+// ---- LEGAL BUT BAD ----
+try {
+  throw "a string";              // no stack, no name
+} catch (e) {
+  console.log("");
+  console.log("string thrown:", e);
+  console.log("typeof       :", typeof e);
+  console.log("e.stack      :", typeof e.stack);
+}
+
+// ---- Rethrowing inside catch ----
+function risky() {
+  throw new Error("inner error");
+}
+
+try {
+  try {
+    risky();
+  } catch (e) {
+    console.log("");
+    console.log("first catch  :", e.message);
+    throw e;                     // rethrow the SAME error
+  }
+} catch (e) {
+  console.log("outer catch  :", e.message);
+}
+
+// ---- Guard-first style (preferred) ----
+function divide(a, b) {
+  if (typeof a !== "number") throw new TypeError("a must be a number");
+  if (b === 0)               throw new RangeError("b cannot be zero");
+  return a / b;
+}
+console.log("");
+console.log("divide(10, 2)  →", divide(10, 2));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Custom errors -->
+      <div class="section">
+        <h2>6. Custom Error Classes</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class ValidationError extends Error {
+  constructor(field, message) {
+    super(message);               // MUST call super first
+    this.name  = "ValidationError";
+    this.field = field;
+  }
+}
+
+class NotFoundError extends Error {
+  constructor(resource) {
+    super(resource + " not found");
+    this.name = "NotFoundError";
+    this.resource = resource;
+  }
+}
+
+// Usage
+function createUser(data) {
+  if (!data.name) {
+    throw new ValidationError("name", "name is required");
+  }
+  if (data.name.length < 2) {
+    throw new ValidationError("name", "name is too short");
+  }
+  return { id: 1, name: data.name };
+}
+
+try {
+  createUser({ name: "" });
+} catch (e) {
+  console.log("name    :", e.name);
+  console.log("message :", e.message);
+  console.log("field   :", e.field);
+  console.log("instanceof ValidationError:", e instanceof ValidationError);
+  console.log("instanceof Error         :", e instanceof Error);
+}
+
+// ---- Wrapping errors with context ----
+function loadConfig(text) {
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw new Error("invalid config", { cause: e });
+  }
+}
+
+try {
+  loadConfig("{bad}");
+} catch (e) {
+  console.log("");
+  console.log("wrapped  :", e.message);
+  console.log("cause    :", e.cause.name);
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. instanceof branching -->
+      <div class="section">
+        <h2>7. Catching Specific Types with <code>instanceof</code></h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class ValidationError extends Error {
+  constructor(msg) { super(msg); this.name = "ValidationError"; }
+}
+
+function handle(err) {
+  // Check the MOST SPECIFIC class first
+  if (err instanceof ValidationError) {
+    return "validation: " + err.message;
+  }
+  if (err instanceof TypeError) {
+    return "type error: " + err.message;
+  }
+  if (err instanceof RangeError) {
+    return "range error: " + err.message;
+  }
+  if (err instanceof Error) {
+    return "generic: " + err.message;
+  }
+  return "non-error thrown: " + String(err);
+}
+
+// Same catch, different subtypes
+try { throw new ValidationError("missing email"); }
+catch (e) { console.log(handle(e)); }
+
+try { throw new TypeError("not a function"); }
+catch (e) { console.log(handle(e)); }
+
+try { throw new RangeError("too big"); }
+catch (e) { console.log(handle(e)); }
+
+// Rethrow anything you cannot handle
+try {
+  throw new Error("unknown origin");
+} catch (e) {
+  if (e instanceof ValidationError) {
+    console.log("handle here");
+  } else {
+    console.log("rethrowing:", e.message);
+  }
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Async errors -->
+      <div class="section">
+        <h2>8. Async Errors — <code>await</code> and Promises</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Promises that reject
+const badFetch = () =>
+  Promise.reject(new Error("network down"));
+
+// ---- await + try/catch (caught) ----
+async function loadA() {
+  try {
+    const data = await badFetch();
+    return data;
+  } catch (err) {
+    return "handled: " + err.message;
+  } finally {
+    // runs here too
+  }
+}
+
+// ---- .catch on the chain ----
+function loadB() {
+  return badFetch()
+    .then(d => d)
+    .catch(err => "handled: " + err.message)
+    .finally(() => console.log("B finally runs"));
+}
+
+// ---- async fn turns throw into a rejected promise ----
+async function loadC() {
+  throw new Error("async boom");   // becomes a rejection
+}
+loadC().catch(e => console.log("C caught:", e.message));
+
+// ---- unhandled rejection demo ----
+window.addEventListener(
+  "unhandledrejection",
+  e => console.log("unhandled:", e.reason.message),
+  { once: true }
+);
+Promise.reject(new Error("forgotten"));
+console.log("sync code runs first");
+
+// Run everything
+loadA().then(v => console.log("A:", v));
+loadB().then(v => console.log("B:", v));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Global handlers -->
+      <div class="section">
+        <h2>9. Global Safety Nets</h2>
+        <p>
+          Last-resort handlers for anything that slipped through. Useful for
+          monitoring, not for normal flow.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// UNCAUGHT ERRORS
+window.addEventListener("error", (event) => {
+  console.log("global error event");
+  console.log("  message :", event.message);
+  console.log("  file    :", event.filename);
+  console.log("  line    :", event.lineno);
+  console.log("  error   :", event.error?.name);
+});
+
+// Trigger an uncaught error
+setTimeout(() => {
+  throw new Error("uncaught demo");
+}, 0);
+
+// UNHANDLED PROMISE REJECTIONS
+window.addEventListener("unhandledrejection", (event) => {
+  console.log("unhandled rejection");
+  console.log("  reason  :", event.reason?.message);
+  event.preventDefault();          // stop the console warning
+});
+
+setTimeout(() => {
+  Promise.reject(new Error("forgotten promise"));
+}, 100);
+
+// USE FOR:
+//   - logging to a server
+//   - showing a fallback UI
+//   - catching bugs during development
+// NOT FOR:
+//   - expected errors that should be handled locally</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out9" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Patterns -->
+      <div class="section">
+        <h2>10. Practical Patterns</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// A. GUARD CLAUSES — throw early
+function divide(a, b) {
+  if (typeof a !== "number") throw new TypeError("a must be a number");
+  if (typeof b !== "number") throw new TypeError("b must be a number");
+  if (b === 0)               throw new RangeError("b cannot be zero");
+  return a / b;
+}
+
+// B. SAFE PARSE — best-effort conversion
+function safeParse(text, fallback = {}) {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return fallback;
+  }
+}
+console.log("parse valid:  ", safeParse('{"a":1}'));
+console.log("parse invalid:", safeParse("bad json"));
+
+// C. WRAP WITH CONTEXT
+function readSetting(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch (e) {
+    throw new Error("could not read " + key, { cause: e });
+  }
+}
+
+// D. RETRY — handle transient failures
+async function retry(fn, attempts = 3) {
+  let lastErr;
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      lastErr = e;
+      console.log("  attempt " + i + " failed:", e.message);
+    }
+  }
+  throw lastErr;
+}
+
+// E. LOG ONCE — at the point of handling
+function safeDivide(a, b) {
+  try {
+    return divide(a, b);
+  } catch (e) {
+    console.warn("[safeDivide]", e.name + ": " + e.message);
+    return null;
+  }
+}
+
+console.log("divide(10, 2)  →", divide(10, 2));
+console.log("safeDivide(10, 0) →", safeDivide(10, 0));
+
+// Run retry example
+let tries = 0;
+retry(async () => {
+  tries++;
+  if (tries < 3) throw new Error("flaky");
+  return "succeeded on attempt " + tries;
+}).then(v => console.log("retry result:", v));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out10" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. Anti-patterns -->
+      <div class="section">
+        <h2>11. Anti-Patterns — What Not To Do</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// BAD 1 — swallowing silently
+function swallow() {
+  try { null.x; } catch (e) { /* nothing */ }
+}
+swallow();
+console.log("BUG 1: error was silently lost");
+
+// BAD 2 — throwing a string (no stack)
+try {
+  throw "just a string";
+} catch (e) {
+  console.log("BUG 2: typeof err = " + typeof e + ", no .stack");
+}
+
+// BAD 3 — catch-and-rethrow with no new information
+function pointless() {
+  try { null.x; } catch (e) { throw e; }   // same as no try
+}
+try { pointless(); } catch (e) {
+  console.log("BUG 3: try/catch added nothing");
+}
+
+// BAD 4 — return inside finally swallows the result
+function tricky() {
+  try {
+    return "try result";
+  } finally {
+    return "finally always wins";   // overrides try's return
+  }
+}
+console.log("BUG 4:", tricky());
+
+// BAD 5 — try/catch for expected control flow
+function badCheck(value) {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+}
+// Better: guard first when there is a cheap check
+function betterCheck(value) {
+  if (typeof value !== "string") return null;
+  if (!value.trim().startsWith("{")) return null;
+  try { return JSON.parse(value); } catch { return null; }
+}
+console.log("parse attempt 1:", badCheck('{"a":1}'));
+console.log("parse attempt 2:", badCheck("not json"));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out11" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Result pattern -->
+      <div class="section">
+        <h2>12. The Result Pattern — Alternative to Throwing</h2>
+        <p>
+          When an error is an expected outcome (validation, parsing), return a
+          box instead of throwing.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Return { ok: true, value } or { ok: false, error }
+function parseNumber(str) {
+  if (typeof str !== "string") {
+    return { ok: false, error: "input is not a string" };
+  }
+  const n = Number(str);
+  if (!Number.isFinite(n)) {
+    return { ok: false, error: "not a valid number" };
+  }
+  return { ok: true, value: n };
+}
+
+// CALLER decides how to react — no exceptions in the flow
+const a = parseNumber("42");
+console.log(a);
+if (a.ok) console.log("value:", a.value);
+else      console.log("error:", a.error);
+
+const b = parseNumber("42px");
+console.log(b);
+if (!b.ok) console.log("error:", b.error);
+
+// Throwing version — for contrast
+function parseNumberOrThrow(str) {
+  const n = Number(str);
+  if (!Number.isFinite(n)) throw new TypeError("not a number");
+  return n;
+}
+
+try {
+  console.log("throw version:", parseNumberOrThrow("42"));
+} catch (e) {
+  console.log("never runs");
+}
+
+// WHEN TO USE WHICH
+// result pattern → validation, parsing, expected failures
+// throw          → unexpected states, missing dependencies,
+//                  anything the caller probably cannot continue past</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out12" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. QUICK REFERENCE -->
+      <div class="section">
+        <h2>13. Quick Reference</h2>
+
+        <h3 class="h5 mt-4">Error Types</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Type</th>
+                <th>When It Throws</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>SyntaxError</code></td>
+                <td>Invalid syntax</td>
+                <td><code>JSON.parse("{bad}")</code></td>
+              </tr>
+              <tr>
+                <td><code>ReferenceError</code></td>
+                <td>Variable does not exist</td>
+                <td><code>console.log(unknown)</code></td>
+              </tr>
+              <tr>
+                <td><code>TypeError</code></td>
+                <td>Wrong type or not callable</td>
+                <td><code>null.x</code>, <code>notFn()</code></td>
+              </tr>
+              <tr>
+                <td><code>RangeError</code></td>
+                <td>Number out of allowed range</td>
+                <td><code>new Array(-1)</code></td>
+              </tr>
+              <tr>
+                <td><code>URIError</code></td>
+                <td>Malformed URI</td>
+                <td><code>decodeURIComponent("%")</code></td>
+              </tr>
+              <tr>
+                <td><code>EvalError</code></td>
+                <td>Historical — rarely thrown</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>AggregateError</code></td>
+                <td>Multiple errors in one</td>
+                <td><code>Promise.any</code> failures</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="h5 mt-4">Skeleton</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Part</th>
+                <th>Runs When</th>
+                <th>Use For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>try</code></td>
+                <td>Always</td>
+                <td>The risky operation</td>
+              </tr>
+              <tr>
+                <td><code>catch</code></td>
+                <td>Only on throw / reject</td>
+                <td>Handle, log, or rethrow</td>
+              </tr>
+              <tr>
+                <td><code>finally</code></td>
+                <td>Always (even on return)</td>
+                <td>Cleanup — restore UI, close</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="h5 mt-4">Error Object</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Property</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>err.name</code></td>
+                <td>
+                  <code>"TypeError"</code>, <code>"ValidationError"</code>, …
+                </td>
+              </tr>
+              <tr>
+                <td><code>err.message</code></td>
+                <td>Human-readable description</td>
+              </tr>
+              <tr>
+                <td><code>err.stack</code></td>
+                <td>Origin trace</td>
+              </tr>
+              <tr>
+                <td><code>err.cause</code></td>
+                <td>Underlying error (ES2022)</td>
+              </tr>
+              <tr>
+                <td><code>err instanceof Error</code></td>
+                <td>true for standard and custom</td>
+              </tr>
+              <tr>
+                <td><code>err instanceof TypeError</code></td>
+                <td>true for TypeError only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="h5 mt-4">Rules</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Rule</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Always <code>throw new Error(...)</code></td>
+                <td>Gets name, message, and stack</td>
+              </tr>
+              <tr>
+                <td>Never throw strings or plain objects</td>
+                <td>No stack, no <code>instanceof</code></td>
+              </tr>
+              <tr>
+                <td>
+                  Check <code>instanceof</code> in order specific → general
+                </td>
+                <td>Subclasses match parents</td>
+              </tr>
+              <tr>
+                <td>Rethrow what you cannot handle</td>
+                <td>Prevents silent failures</td>
+              </tr>
+              <tr>
+                <td>Never return inside <code>finally</code></td>
+                <td>Overrides try/catch and swallows errors</td>
+              </tr>
+              <tr>
+                <td>Wrap async in try/catch around <code>await</code></td>
+                <td>Rejections become catches</td>
+              </tr>
+              <tr>
+                <td>Attach <code>.catch</code> to every promise chain</td>
+                <td>Otherwise <code>unhandledrejection</code> fires</td>
+              </tr>
+              <tr>
+                <td>Log once — where it is handled</td>
+                <td>Avoid duplicate noise</td>
+              </tr>
+              <tr>
+                <td>Use <code>cause</code> when wrapping</td>
+                <td>Keeps the original error</td>
+              </tr>
+              <tr>
+                <td>Handle expected failures with the result pattern</td>
+                <td>Exceptions are for genuinely unusual states</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+      const J = (v) => JSON.stringify(v);
+
+      // 1. Error types
+      (() => {
+        const lines = [];
+        let ref = null;
+
+        try {
+          console.log(notDeclaredAnywhere);
+        } catch (e) {
+          ref = e;
+          lines.push("ReferenceError  → " + e.name + " | " + e.message);
+        }
+
+        let type = null;
+        try {
+          null.name;
+        } catch (e) {
+          type = e;
+          lines.push("TypeError       → " + e.name + " | " + e.message);
+        }
+
+        try {
+          new Array(-1);
+        } catch (e) {
+          lines.push("RangeError      → " + e.name + " | " + e.message);
+        }
+
+        try {
+          JSON.parse("{bad}");
+        } catch (e) {
+          lines.push("SyntaxError     → " + e.name + " | " + e.message);
+        }
+
+        try {
+          decodeURIComponent("%");
+        } catch (e) {
+          lines.push("URIError        → " + e.name + " | " + e.message);
+        }
+
+        lines.push("");
+        lines.push("inheritance:");
+        lines.push("  ref  instanceof Error      → " + (ref instanceof Error));
+        lines.push(
+          "  type instanceof TypeError  → " + (type instanceof TypeError),
+        );
+        lines.push(
+          "  ref  instanceof TypeError  → " + (ref instanceof TypeError),
+        );
+        write("out1", lines);
+      })();
+
+      // 2. try / catch
+      (() => {
+        const lines = [];
+        try {
+          const x = 10 / 2;
+          lines.push("try: result = " + x);
+          lines.push("catch: skipped");
+        } catch (err) {
+          lines.push("never runs");
+        }
+
+        lines.push("");
+        try {
+          const user = null;
+          lines.push("try: reading user.name ...");
+          lines.push(user.name);
+          lines.push("this line is skipped");
+        } catch (err) {
+          lines.push("Caught: " + err.name);
+          lines.push("Message: " + err.message);
+        }
+
+        lines.push("");
+        lines.push("program continues after try/catch");
+        write("out2", lines);
+      })();
+
+      // 3. finally
+      (() => {
+        const lines = [];
+        try {
+          lines.push("try succeeds");
+        } finally {
+          lines.push("finally runs (after success)");
+        }
+
+        lines.push("");
+        try {
+          throw new Error("boom");
+        } catch (e) {
+          lines.push("caught: " + e.message);
+        } finally {
+          lines.push("finally runs (after error)");
+        }
+
+        lines.push("");
+        function test() {
+          try {
+            return "from try";
+          } finally {
+            lines.push("finally runs BEFORE the return");
+          }
+        }
+        lines.push("returned value: " + test());
+
+        lines.push("");
+        function withSpinner() {
+          let spinner = "visible";
+          try {
+            return "data loaded";
+          } finally {
+            spinner = "hidden";
+            lines.push("cleanup: spinner changed to " + spinner);
+          }
+        }
+        lines.push("result: " + withSpinner());
+        write("out3", lines);
+      })();
+
+      // 4. Error object
+      (() => {
+        function throwIt() {
+          throw new TypeError("expected a number");
+        }
+        const lines = [];
+
+        try {
+          throwIt();
+        } catch (err) {
+          lines.push("name     : " + err.name);
+          lines.push("message  : " + err.message);
+          lines.push("has stack: " + (typeof err.stack === "string"));
+          lines.push(
+            "first stack line: " + (err.stack.split("\n")[0] || "").trim(),
+          );
+          lines.push("is Error     : " + (err instanceof Error));
+          lines.push("is TypeError : " + (err instanceof TypeError));
+        }
+
+        lines.push("");
+        try {
+          try {
+            JSON.parse("{bad}");
+          } catch (inner) {
+            throw new Error("config could not be parsed", { cause: inner });
+          }
+        } catch (outer) {
+          lines.push("outer message : " + outer.message);
+          lines.push("cause name    : " + outer.cause.name);
+          lines.push("cause message : " + outer.cause.message);
+        }
+        write("out4", lines);
+      })();
+
+      // 5. throw
+      (() => {
+        const lines = [];
+
+        try {
+          throw new Error("something went wrong");
+        } catch (e) {
+          lines.push("Error object : " + e.message);
+          lines.push("has stack    : " + (typeof e.stack === "string"));
+        }
+
+        lines.push("");
+        try {
+          throw "a string";
+        } catch (e) {
+          lines.push("string thrown: " + J(e));
+          lines.push("typeof       : " + typeof e);
+          lines.push("e.stack      : " + typeof e.stack + "   (missing)");
+          lines.push("e.name       : " + typeof e.name + "   (missing)");
+        }
+
+        lines.push("");
+        function risky() {
+          throw new Error("inner error");
+        }
+        try {
+          try {
+            risky();
+          } catch (e) {
+            lines.push("first catch  : " + e.message);
+            throw e;
+          }
+        } catch (e) {
+          lines.push("outer catch  : " + e.message);
+        }
+
+        function divide(a, b) {
+          if (typeof a !== "number") throw new TypeError("a must be a number");
+          if (b === 0) throw new RangeError("b cannot be zero");
+          return a / b;
+        }
+        lines.push("");
+        lines.push("divide(10, 2)   → " + divide(10, 2));
+        try {
+          divide(10, 0);
+        } catch (e) {
+          lines.push("divide(10, 0)   → " + e.name + ": " + e.message);
+        }
+        try {
+          divide("a", 1);
+        } catch (e) {
+          lines.push('divide("a", 1)  → ' + e.name + ": " + e.message);
+        }
+        write("out5", lines);
+      })();
+
+      // 6. Custom errors
+      (() => {
+        class ValidationError extends Error {
+          constructor(field, message) {
+            super(message);
+            this.name = "ValidationError";
+            this.field = field;
+          }
+        }
+        class NotFoundError extends Error {
+          constructor(resource) {
+            super(resource + " not found");
+            this.name = "NotFoundError";
+            this.resource = resource;
+          }
+        }
+        function createUser(data) {
+          if (!data.name) throw new ValidationError("name", "name is required");
+          if (data.name.length < 2)
+            throw new ValidationError("name", "name is too short");
+          return { id: 1, name: data.name };
+        }
+        function loadConfig(text) {
+          try {
+            return JSON.parse(text);
+          } catch (e) {
+            throw new Error("invalid config", { cause: e });
+          }
+        }
+
+        const lines = [];
+        try {
+          createUser({ name: "" });
+        } catch (e) {
+          lines.push("name     : " + e.name);
+          lines.push("message  : " + e.message);
+          lines.push("field    : " + e.field);
+          lines.push(
+            "instanceof ValidationError: " + (e instanceof ValidationError),
+          );
+          lines.push("instanceof Error         : " + (e instanceof Error));
+        }
+
+        lines.push("");
+        lines.push(
+          "createUser({ name: 'Sam' }) → " + J(createUser({ name: "Sam" })),
+        );
+
+        lines.push("");
+        try {
+          loadConfig("{bad}");
+        } catch (e) {
+          lines.push("wrapped  : " + e.message);
+          lines.push("cause    : " + e.cause.name);
+        }
+        write("out6", lines);
+      })();
+
+      // 7. instanceof branching
+      (() => {
+        class ValidationError extends Error {
+          constructor(msg) {
+            super(msg);
+            this.name = "ValidationError";
+          }
+        }
+        function handle(err) {
+          if (err instanceof ValidationError)
+            return "validation: " + err.message;
+          if (err instanceof TypeError) return "type error: " + err.message;
+          if (err instanceof RangeError) return "range error: " + err.message;
+          if (err instanceof Error) return "generic: " + err.message;
+          return "non-error thrown: " + String(err);
+        }
+        const results = [];
+        try {
+          throw new ValidationError("missing email");
+        } catch (e) {
+          results.push(handle(e));
+        }
+        try {
+          throw new TypeError("not a function");
+        } catch (e) {
+          results.push(handle(e));
+        }
+        try {
+          throw new RangeError("too big");
+        } catch (e) {
+          results.push(handle(e));
+        }
+        try {
+          throw new Error("unknown");
+        } catch (e) {
+          results.push(handle(e));
+        }
+        try {
+          throw "string";
+        } catch (e) {
+          results.push(handle(e));
+        }
+
+        const lines = ["CATCH-AND-BRANCH DEMO"];
+        results.forEach((r, i) => lines.push("  " + (i + 1) + ". " + r));
+        lines.push("");
+        lines.push("Rethrow what you cannot handle:");
+        try {
+          throw new Error("unknown origin");
+        } catch (e) {
+          if (e instanceof ValidationError) lines.push("  handling here");
+          else lines.push("  rethrowing: " + e.message);
+        }
+        write("out7", lines);
+      })();
+
+      // 8. Async errors
+      (() => {
+        const lines = [];
+        const badFetch = () => Promise.reject(new Error("network down"));
+
+        async function loadA() {
+          try {
+            return await badFetch();
+          } catch (err) {
+            return "handled: " + err.message;
+          } finally {
+            lines.push("A finally runs");
+            write("out8", lines);
+          }
+        }
+
+        function loadB() {
+          return badFetch()
+            .then((d) => d)
+            .catch((err) => "handled: " + err.message)
+            .finally(() => {
+              lines.push("B finally runs");
+              write("out8", lines);
+            });
+        }
+
+        async function loadC() {
+          throw new Error("async boom");
+        }
+
+        window.addEventListener(
+          "unhandledrejection",
+          (e) => {
+            lines.push("unhandledrejection event");
+            lines.push("  reason: " + (e.reason && e.reason.message));
+            write("out8", lines);
+          },
+          { once: true },
+        );
+
+        lines.push("sync code runs first — async rejects later");
+
+        loadA().then((v) => {
+          lines.push("A result: " + v);
+          write("out8", lines);
+        });
+        loadB().then((v) => {
+          lines.push("B result: " + v);
+          write("out8", lines);
+        });
+        loadC().catch((e) => {
+          lines.push("C caught: " + e.message);
+          write("out8", lines);
+        });
+        Promise.reject(new Error("forgotten promise"));
+
+        write("out8", lines);
+      })();
+
+      // 9. Global handlers
+      (() => {
+        const lines = ["waiting for errors ..."];
+
+        window.addEventListener("error", (event) => {
+          lines.push("");
+          lines.push("error event fired");
+          lines.push("  message : " + event.message);
+          lines.push("  has file: " + Boolean(event.filename));
+          lines.push("  line    : " + event.lineno);
+          lines.push(
+            "  error   : " + (event.error ? event.error.name : "null"),
+          );
+          write("out9", lines);
+        });
+
+        window.addEventListener("unhandledrejection", (event) => {
+          lines.push("");
+          lines.push("unhandledrejection event fired");
+          lines.push("  reason  : " + (event.reason && event.reason.message));
+          lines.push(
+            "  promise : " + (event.promise ? "promise object" : "null"),
+          );
+          write("out9", lines);
+        });
+
+        write("out9", lines);
+
+        setTimeout(() => {
+          throw new Error("uncaught demo");
+        }, 50);
+        setTimeout(() => {
+          Promise.reject(new Error("forgotten at 150ms"));
+        }, 150);
+      })();
+
+      // 10. Patterns
+      (() => {
+        function divide(a, b) {
+          if (typeof a !== "number") throw new TypeError("a must be a number");
+          if (typeof b !== "number") throw new TypeError("b must be a number");
+          if (b === 0) throw new RangeError("b cannot be zero");
+          return a / b;
+        }
+        function safeParse(text, fallback = {}) {
+          try {
+            return JSON.parse(text);
+          } catch {
+            return fallback;
+          }
+        }
+        function safeDivide(a, b) {
+          try {
+            return divide(a, b);
+          } catch (e) {
+            console.warn("[safeDivide]", e.name + ": " + e.message);
+            return null;
+          }
+        }
+        async function retry(fn, attempts = 3) {
+          let lastErr;
+          for (let i = 1; i <= attempts; i++) {
+            try {
+              return await fn();
+            } catch (e) {
+              lastErr = e;
+            }
+          }
+          throw lastErr;
+        }
+
+        const lines = [];
+        lines.push("GUARD CLAUSES");
+        lines.push("  divide(10, 2)  → " + divide(10, 2));
+        try {
+          divide(10, 0);
+        } catch (e) {
+          lines.push("  divide(10, 0)  → " + e.name);
+        }
+
+        lines.push("");
+        lines.push("SAFE PARSE");
+        lines.push("  valid   → " + J(safeParse('{"a":1}')));
+        lines.push("  invalid → " + J(safeParse("bad json")));
+
+        lines.push("");
+        lines.push("LOG ONCE AT THE HANDLER");
+        lines.push("  safeDivide(10, 2) → " + safeDivide(10, 2));
+        lines.push(
+          "  safeDivide(10, 0) → " +
+            safeDivide(10, 0) +
+            "   (warning logged to console)",
+        );
+
+        lines.push("");
+        lines.push("RETRY (running async) ...");
+        write("out10", lines);
+
+        let tries = 0;
+        retry(async () => {
+          tries++;
+          if (tries < 3) throw new Error("flaky, attempt " + tries);
+          return "succeeded on attempt " + tries;
+        }).then((v) => {
+          lines.push("  retry result: " + v);
+          write("out10", lines);
+        });
+      })();
+
+      // 11. Anti-patterns
+      (() => {
+        const lines = [];
+
+        function swallow() {
+          try {
+            null.x;
+          } catch (e) {
+            /* nothing */
+          }
+        }
+        swallow();
+        lines.push("BUG 1 — swallowed silently: error was lost");
+
+        try {
+          throw "just a string";
+        } catch (e) {
+          lines.push(
+            "BUG 2 — typeof err = " +
+              typeof e +
+              ", has stack: " +
+              (typeof e.stack !== "undefined"),
+          );
+        }
+
+        function pointless() {
+          try {
+            null.x;
+          } catch (e) {
+            throw e;
+          }
+        }
+        try {
+          pointless();
+        } catch (e) {
+          lines.push("BUG 3 — try/catch added no information");
+        }
+
+        function tricky() {
+          try {
+            return "try result";
+          } finally {
+            return "finally always wins";
+          }
+        }
+        lines.push("BUG 4 — finally return override: " + J(tricky()));
+
+        function betterCheck(value) {
+          if (typeof value !== "string") return null;
+          const t = value.trim();
+          if (!(t.startsWith("{") || t.startsWith("["))) return null;
+          try {
+            return JSON.parse(t);
+          } catch {
+            return null;
+          }
+        }
+        lines.push("PATTERN — guard first, try/catch second:");
+        lines.push(
+          "  betterCheck('{\"a\":1}')   → " + J(betterCheck('{"a":1}')),
+        );
+        lines.push(
+          '  betterCheck("not json")   → ' + J(betterCheck("not json")),
+        );
+        write("out11", lines);
+      })();
+
+      // 12. Result pattern
+      (() => {
+        function parseNumber(str) {
+          if (typeof str !== "string")
+            return { ok: false, error: "input is not a string" };
+          const n = Number(str);
+          if (!Number.isFinite(n))
+            return { ok: false, error: "not a valid number" };
+          return { ok: true, value: n };
+        }
+        function parseNumberOrThrow(str) {
+          const n = Number(str);
+          if (!Number.isFinite(n)) throw new TypeError("not a number");
+          return n;
+        }
+
+        const a = parseNumber("42");
+        const b = parseNumber("42px");
+
+        write("out12", [
+          "RESULT PATTERN",
+          "",
+          '  parseNumber("42")   → ' + J(a),
+          '  parseNumber("42px") → ' + J(b),
+          "",
+          "CALLER decides:",
+          "  a.ok → " + a.ok + ", value: " + (a.ok ? a.value : "—"),
+          "  b.ok → " + b.ok + ", error: " + (b.ok ? "—" : b.error),
+          "",
+          "THROWING VERSION — caller must try/catch",
+          '  parseNumberOrThrow("42")   → ' + parseNumberOrThrow("42"),
+          '  parseNumberOrThrow("42px") → throws TypeError',
+          "",
+          "USE THE RESULT PATTERN WHEN:",
+          "  validation, parsing, expected failures",
+          "USE THROW WHEN:",
+          "  genuinely wrong state, missing dependency,",
+          "  anything the caller most likely cannot continue past",
+        ]);
+      })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

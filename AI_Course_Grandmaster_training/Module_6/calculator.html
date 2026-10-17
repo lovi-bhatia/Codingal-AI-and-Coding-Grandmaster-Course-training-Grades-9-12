@@ -1,0 +1,1112 @@
+<!--
+=======================================================
+  CALCULATOR USING JAVASCRIPT - GUIDE
+=======================================================
+
+WHAT IS BEING BUILT?
+A working four-operation calculator with:
+  - digit input (numbers accumulate)
+  - decimal point (only one per number)
+  - operators + - × ÷
+  - equals (chain + repeat)
+  - clear, backspace, sign toggle, percent
+  - divide-by-zero handling
+  - full keyboard support
+  - formatted display with thousands separators
+
+-------------------------------------------------------
+THE STATE MODEL — the whole calculator is three variables
+-------------------------------------------------------
+  current   the number on the screen, kept as a STRING
+  previous  the number that was on screen before the operator
+  operator  the pending operator, one of "+", "-", "*", "/"
+  waiting   if true, the next digit REPLACES current
+
+Every button press decides one of two things:
+  - change `current` directly    (press a digit)
+  - switch to a pending operation (press an operator)
+
+Rule: keep `current` as a string, not a number.
+Why? A number cannot remember:
+  - a trailing dot ("5." looks like 5 to a float)
+  - leading zeros ("0.05" is fine, but "00" would lose its shape)
+  - the fact that the user is still typing
+Strings preserve exactly what the user has typed.
+
+-------------------------------------------------------
+WHY NOT USE eval()
+-------------------------------------------------------
+eval("2 + 3") works for a single expression but:
+  - it is a security hole if any input comes from a user
+  - it cannot express operator precedence sensibly
+  - it cannot enforce "one decimal", "no leading zeros",
+    "limit to 12 digits", "reject divide by zero" without
+    pre-sanitising the string
+  - it cannot show a helpful error like "Cannot divide by zero"
+Manual dispatch via a small `calculate(a, b, op)` function
+is clearer, safer, and shorter than trying to sanitise text.
+
+-------------------------------------------------------
+THE THREE CORE FUNCTIONS
+-------------------------------------------------------
+  1. pressNumber(d)    append a digit (or replace after an operator)
+  2. pressOperator(op) store the operator, compute any pending one
+  3. pressEquals()     compute the pending operation
+
+Everything else (clear, backspace, sign, percent) is a
+variation on those three.
+
+-------------------------------------------------------
+FLOATING POINT PRECISION
+-------------------------------------------------------
+  0.1 + 0.2 === 0.30000000000000004
+A calculator should show "0.3", not the raw float.
+The fix:
+  round  → Math.round(result * 1e12) / 1e12
+  12 decimal places is wider than the display can show
+  and narrower than the noise from IEEE-754 arithmetic.
+
+-------------------------------------------------------
+KEYBOARD SUPPORT
+-------------------------------------------------------
+  0-9     digits
+  .       decimal
+  + - * / operators
+  Enter   equals
+  =       equals
+  Escape  clear
+  Backspace  delete
+
+The keyboard listener is bound to `document` so the page
+feels native. Add a visual hint so users know it works.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background:
+          radial-gradient(1200px 600px at 10% 0%, #dbeafe 0%, transparent 60%),
+          radial-gradient(900px 600px at 90% 100%, #e0e7ff 0%, transparent 60%),
+          #f5f7fb;
+        min-height: 100vh;
+      }
+
+      .page-title {
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+      }
+
+      /* ---------- CALCULATOR SHELL ---------- */
+      .calc {
+        width: 100%;
+        max-width: 360px;
+        background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow:
+          0 24px 60px rgba(15, 23, 42, 0.28),
+          0 4px 12px rgba(15, 23, 42, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+
+      /* ---------- DISPLAY ---------- */
+      .calc-display {
+        background: rgba(0, 0, 0, 0.28);
+        border-radius: 16px;
+        padding: 20px 22px;
+        margin-bottom: 16px;
+        text-align: right;
+        min-height: 108px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .calc-expression {
+        font-family: "SF Mono", "Menlo", monospace;
+        font-size: 14px;
+        color: #94a3b8;
+        min-height: 20px;
+        letter-spacing: 0.02em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .calc-value {
+        font-family: "SF Mono", "Menlo", monospace;
+        font-size: 40px;
+        font-weight: 300;
+        color: #f8fafc;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        transition: color 0.2s;
+      }
+
+      .calc-value.is-error {
+        color: #f87171;
+        font-size: 28px;
+      }
+
+      /* ---------- BUTTON GRID ---------- */
+      .calc-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      .calc-btn {
+        border: none;
+        border-radius: 14px;
+        padding: 18px 0;
+        font-size: 18px;
+        font-weight: 500;
+        color: #f8fafc;
+        cursor: pointer;
+        transition:
+          transform 0.08s ease,
+          filter 0.15s ease,
+          background 0.15s ease;
+        user-select: none;
+        background: rgba(255, 255, 255, 0.09);
+        font-family: inherit;
+      }
+
+      .calc-btn:hover {
+        filter: brightness(1.25);
+      }
+      .calc-btn:active {
+        transform: scale(0.95);
+      }
+      .calc-btn:focus-visible {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+      }
+
+      .calc-btn-fn {
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        font-size: 16px;
+      }
+
+      .calc-btn-op {
+        background: linear-gradient(180deg, #3b82f6, #2563eb);
+        font-size: 20px;
+        color: #ffffff;
+      }
+
+      .calc-btn-op.is-active {
+        background: linear-gradient(180deg, #f8fafc, #e2e8f0);
+        color: #0f172a;
+      }
+
+      .calc-btn-eq {
+        background: linear-gradient(180deg, #10b981, #059669);
+        font-size: 20px;
+      }
+
+      /* ---------- SIDE PANELS ---------- */
+      .panel-title {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #64748b;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .kbd {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-bottom-width: 2px;
+        border-radius: 5px;
+        padding: 2px 7px;
+        font-family: monospace;
+        font-size: 12px;
+        color: #0f172a;
+      }
+
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+
+      code {
+        background: #eef2ff;
+        color: #0d6efd;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      .section {
+        margin-bottom: 34px;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body class="p-3 p-md-4">
+    <div
+      class="container bg-white p-4 p-md-5 rounded-4 shadow-sm"
+      style="max-width: 1080px"
+    >
+      <h1 class="page-title mb-1">Calculator Using JavaScript</h1>
+      <p class="text-muted mb-4">
+        A working four-operation calculator with keyboard support and edge-case
+        handling.
+      </p>
+
+      <!-- ============================================================ -->
+      <!-- 1. THE LIVE CALCULATOR                                        -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <div class="row g-4 align-items-start">
+          <div class="col-lg-5 text-center text-lg-start">
+            <span class="label"
+              >Live calculator — click or use the keyboard:</span
+            >
+
+            <div class="calc mx-auto mx-lg-0">
+              <div class="calc-display">
+                <div id="calcExpression" class="calc-expression"></div>
+                <div id="calcValue" class="calc-value">0</div>
+              </div>
+
+              <div id="calcGrid" class="calc-grid">
+                <button class="calc-btn calc-btn-fn" data-key="AC">AC</button>
+                <button class="calc-btn calc-btn-fn" data-key="DEL">⌫</button>
+                <button class="calc-btn calc-btn-fn" data-key="%">%</button>
+                <button class="calc-btn calc-btn-op" data-key="/">÷</button>
+
+                <button class="calc-btn" data-key="7">7</button>
+                <button class="calc-btn" data-key="8">8</button>
+                <button class="calc-btn" data-key="9">9</button>
+                <button class="calc-btn calc-btn-op" data-key="*">×</button>
+
+                <button class="calc-btn" data-key="4">4</button>
+                <button class="calc-btn" data-key="5">5</button>
+                <button class="calc-btn" data-key="6">6</button>
+                <button class="calc-btn calc-btn-op" data-key="-">−</button>
+
+                <button class="calc-btn" data-key="1">1</button>
+                <button class="calc-btn" data-key="2">2</button>
+                <button class="calc-btn" data-key="3">3</button>
+                <button class="calc-btn calc-btn-op" data-key="+">+</button>
+
+                <button class="calc-btn calc-btn-fn" data-key="±">±</button>
+                <button class="calc-btn" data-key="0">0</button>
+                <button class="calc-btn" data-key=".">.</button>
+                <button class="calc-btn calc-btn-eq" data-key="=">=</button>
+              </div>
+            </div>
+
+            <div class="mt-3 small text-muted">
+              <span class="kbd">0-9</span>
+              <span class="kbd">.</span>
+              <span class="kbd">+</span>
+              <span class="kbd">-</span>
+              <span class="kbd">*</span>
+              <span class="kbd">/</span>
+              <span class="kbd">Enter</span>
+              <span class="kbd">Backspace</span>
+              <span class="kbd">Esc</span>
+            </div>
+          </div>
+
+          <!-- Right column: explanation of the four state variables -->
+          <div class="col-lg-7">
+            <div class="panel-title">
+              The entire calculator is four variables
+            </div>
+            <pre><code>let current  = "0";    // what is on screen (a string)
+let previous = null;   // the number before the operator
+let operator = null;   // "+", "-", "*", "/" or null
+let waiting  = false;  // if true, the next digit REPLACES current</code></pre>
+
+            <p class="mt-3 mb-2">
+              Every button press either changes <code>current</code>
+              (someone is typing a number) or shifts to a pending operation
+              (someone pressed an operator).
+            </p>
+
+            <div class="panel-title mt-4">
+              Why <code>current</code> is a string, not a number
+            </div>
+            <pre><code>// A number cannot remember these things:
+typeof 5     // "number" — cannot tell "5" from "5."
+typeof 0.05  // "number" — cannot tell from "0.050"
+typeof "0"   // preserved exactly
+typeof "5."  // trailing dot is still there
+
+// So we keep the user's typed text as a string
+// and only convert to Number when actually calculating.</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 2. PRESSING A DIGIT                                           -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2 class="h4">2. Pressing a Digit — <code>pressNumber</code></h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function pressNumber(d) {
+  // if the previous press left an error, start fresh
+  if (current === "Error") reset();
+
+  if (waiting) {
+    // user pressed an operator, then a digit
+    current = d;
+    waiting = false;
+  } else {
+    // starting from 0 → replace, not append
+    if (current === "0") current = d;
+    else {
+      // 12-digit cap so the display never overflows
+      if (current.replace(/\D/g, "").length >= 12) return;
+      current += d;
+    }
+  }
+  render();
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Behaviour to try in the calculator:</span>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item small">
+                Press <span class="kbd">0</span> <span class="kbd">0</span>
+                <span class="kbd">0</span> — the display stays
+                <code>0</code> (leading zeros are dropped).
+              </li>
+              <li class="list-group-item small">
+                Press <span class="kbd">5</span> <span class="kbd">+</span>
+                <span class="kbd">3</span> — after <code>+</code>, the
+                <code>3</code> REPLACES the screen (that is
+                <code>waiting=true</code>).
+              </li>
+              <li class="list-group-item small">
+                Press 15 digits in a row — the 13th is ignored, so the display
+                never breaks.
+              </li>
+              <li class="list-group-item small">
+                Press <span class="kbd">5</span> <span class="kbd">+</span>
+                <span class="kbd">0</span> <span class="kbd">÷</span>
+                <span class="kbd">1</span> <span class="kbd">=</span> — should
+                show <code>0</code>, not "Error".
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 3. OPERATORS                                                  -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2 class="h4">3. Pressing an Operator — <code>pressOperator</code></h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function pressOperator(op) {
+  if (current === "Error") return;
+
+  // Chain: "5 + 3 +" must compute 8 before storing "+"
+  if (operator &amp;&amp; !waiting) {
+    const r = calculate(previous, parseFloat(current), operator);
+    if (r === null) return showError();
+    current  = String(round(r));
+    previous = round(r);
+  } else {
+    previous = parseFloat(current);
+  }
+
+  operator = op;
+  waiting  = true;
+  render();
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Two operation modes for operators:</span>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item small">
+                <strong>Operator swap:</strong> <span class="kbd">5</span>
+                <span class="kbd">+</span> <span class="kbd">×</span> — replaces
+                the pending operator without computing. (Because
+                <code>waiting</code> is true after the first operator.)
+              </li>
+              <li class="list-group-item small">
+                <strong>Chained compute:</strong> <span class="kbd">5</span>
+                <span class="kbd">+</span> <span class="kbd">3</span>
+                <span class="kbd">×</span> — computes <code>8</code>, then
+                becomes <code>8 ×</code>. (Because a digit was typed,
+                <code>waiting</code> became false.)
+              </li>
+            </ul>
+            <p class="small text-muted mt-2 mb-0">
+              That is why one button has two behaviours. It depends entirely on
+              <code>waiting</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 4. EQUALS + CALCULATE                                         -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2 class="h4">4. Equals and the <code>calculate</code> Helper</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function pressEquals() {
+  if (operator === null) return;
+  const r = calculate(previous, parseFloat(current), operator);
+  if (r === null) return showError();
+
+  current  = String(round(r));
+  previous = null;
+  operator = null;
+  waiting  = true;
+  render();
+}
+
+function calculate(a, b, op) {
+  switch (op) {
+    case "+": return a + b;
+    case "-": return a - b;
+    case "*": return a * b;
+    case "/": return b === 0 ? null : a / b;
+  }
+  return null;
+}
+
+// Rounding kills floating point noise
+function round(n) {
+  return Math.round(n * 1e12) / 1e12;
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Floating point demonstration:</span>
+            <pre><code>0.1 + 0.2          // 0.30000000000000004
+round(0.1 + 0.2)   // 0.3
+
+1.1 * 3            // 3.3000000000000003
+round(1.1 * 3)     // 3.3
+
+// 1e12 = 1,000,000,000,000
+// 12 decimal places is wider than the display
+// and narrower than IEEE-754 noise.</code></pre>
+
+            <p class="small mt-3 mb-0">
+              Try <span class="kbd">0</span> <span class="kbd">.</span>
+              <span class="kbd">1</span> <span class="kbd">+</span>
+              <span class="kbd">0</span> <span class="kbd">.</span>
+              <span class="kbd">2</span> <span class="kbd">=</span> — the answer
+              is exactly <code>0.3</code>, not <code>0.30000000000000004</code>.
+              That is the whole reason for the round function.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 5. DISPLAY FORMATTING                                         -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2 class="h4">5. Display Formatting — Thousands Separators</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function render() {
+  const valueEl = document.getElementById("calcValue");
+  const exprEl  = document.getElementById("calcExpression");
+
+  let shown = current;
+
+  // Do not format "Error", empty, or trailing-dot strings
+  if (current !== "Error" &amp;&amp; !current.endsWith(".")) {
+    const n = Number(current);
+    if (!Number.isNaN(n)) {
+      shown = n.toLocaleString("en-US", {
+        maximumFractionDigits: 10
+      });
+    }
+  }
+
+  valueEl.textContent = shown;
+  valueEl.classList.toggle("is-error", current === "Error");
+
+  // Small "5 +" line above the big number
+  if (operator &amp;&amp; previous !== null) {
+    const sym = { "+": "+", "-": "−", "*": "×", "/": "÷" }[operator];
+    exprEl.textContent = previous.toLocaleString("en-US") + " " + sym;
+  } else {
+    exprEl.textContent = "";
+  }
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Formatting examples:</span>
+            <pre><code>"1234567"       → "1,234,567"
+"1234.5"        → "1,234.5"
+"0.0001234"     → "0.0001234"
+"5."            → "5."    (don't format trailing dot)
+"Error"         → "Error" (red, smaller font)
+String(1e21)    → "1e+21" (very large → sci notation)</code></pre>
+            <p class="small text-muted mt-3 mb-0">
+              The trailing-dot check matters — <code>Number("5.")</code> is just
+              <code>5</code>, so without the check the display would drop the
+              dot the user is still typing.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 6. EDGE CASES                                                 -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2 class="h4">6. Edge Cases to Handle</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">The four that bite most calculators:</span>
+            <pre><code>// 1. Divide by zero → clear error, block further ops
+case "/": return b === 0 ? null : a / b;
+
+// 2. Two decimal points → ignore the second one
+if (!current.includes(".")) current += ".";
+
+// 3. Leading zeros → replace, do not append
+if (current === "0") current = d;
+
+// 4. Operator, then another operator → swap, do not compute
+if (operator &amp;&amp; !waiting) { compute(); }
+operator = op;</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Test each in the calculator:</span>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item small">
+                <strong>Divide by zero:</strong>
+                <span class="kbd">5</span> <span class="kbd">÷</span>
+                <span class="kbd">0</span> <span class="kbd">=</span> — the
+                display shows <code>Error</code> in red. The next digit starts
+                fresh.
+              </li>
+              <li class="list-group-item small">
+                <strong>Two dots:</strong>
+                <span class="kbd">3</span> <span class="kbd">.</span>
+                <span class="kbd">.</span> <span class="kbd">5</span> — the
+                second dot is ignored, result <code>3.5</code>.
+              </li>
+              <li class="list-group-item small">
+                <strong>Leading zeros:</strong>
+                <span class="kbd">0</span> <span class="kbd">0</span>
+                <span class="kbd">0</span> <span class="kbd">7</span> — the
+                display shows <code>7</code>, not <code>0007</code>.
+              </li>
+              <li class="list-group-item small">
+                <strong>Swap operator:</strong>
+                <span class="kbd">5</span> <span class="kbd">+</span>
+                <span class="kbd">×</span> <span class="kbd">3</span>
+                <span class="kbd">=</span> — should be <code>15</code>, not
+                <code>15 × 3</code>.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 7. KEYBOARD                                                   -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2 class="h4">7. Keyboard Support</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>document.addEventListener("keydown", (e) => {
+  const k = e.key;
+
+  if (k &gt;= "0" &amp;&amp; k &lt;= "9")                handleKey(k);
+  else if (k === ".")                       handleKey(".");
+  else if ("+-*/".includes(k))              handleKey(k);
+  else if (k === "Enter" || k === "=") {
+    e.preventDefault();
+    handleKey("=");
+  }
+  else if (k === "Escape")                  handleKey("AC");
+  else if (k === "Backspace")               handleKey("DEL");
+});</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Why the key list is guarded:</span>
+            <pre><code>// e.key returns the CHARACTER for printable keys:
+"5"  → "5"
+"+"  → "+"
+Enter → "Enter"
+Esc   → "Escape"
+
+// But also your keyboard layout matters:
+// shift+"=" on a US layout produces "+"
+// "digit5 with shift" produces "%"
+// so keep the guard simple and check the
+// resulting e.key, not the keycode.</code></pre>
+            <p class="small text-muted mt-2 mb-0">
+              <code>e.preventDefault()</code> is required on
+              <span class="kbd">Enter</span> — otherwise pressing Enter inside
+              any focused form tries to submit.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 8. BUTTONS + EVENT DELEGATION                                 -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2 class="h4">8. Button Clicks — One Listener, Not Twenty</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Each button carries a data-key attribute:
+&lt;button data-key="7"&gt;7&lt;/button&gt;
+&lt;button data-key="+"&gt;+&lt;/button&gt;
+&lt;button data-key="="&gt;=&lt;/button&gt;
+
+// ONE listener on the grid handles every button
+document.getElementById("calcGrid")
+  .addEventListener("click", (e) =&gt; {
+    const btn = e.target.closest("[data-key]");
+    if (!btn) return;
+    handleKey(btn.dataset.key);
+  });
+
+function handleKey(key) {
+  if (/^\d$/.test(key))         pressNumber(key);
+  else if (key === ".")         pressDot();
+  else if ("+-*/".includes(key)) pressOperator(key);
+  else if (key === "=")         pressEquals();
+  else if (key === "AC")        reset();
+  else if (key === "DEL")       pressBackspace();
+  else if (key === "±")         pressSign();
+  else if (key === "%")         pressPercent();
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Why event delegation:</span>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item small">
+                One listener instead of twenty.
+              </li>
+              <li class="list-group-item small">
+                Works if you later add a new button — as long as it has
+                <code>data-key</code>.
+              </li>
+              <li class="list-group-item small">
+                <code>e.target.closest("[data-key]")</code> handles clicks that
+                land on the button's text or padding.
+              </li>
+              <li class="list-group-item small">
+                Keyboard and mouse share the same <code>handleKey</code>
+                function — one place to change behaviour.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 9. QUICK REFERENCE                                            -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2 class="h4">9. Quick Reference</h2>
+
+        <h3 class="h5 mt-4">State at any moment</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Variable</th>
+                <th>Holds</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>current</code></td>
+                <td>The number on screen (as string)</td>
+                <td><code>"42.5"</code></td>
+              </tr>
+              <tr>
+                <td><code>previous</code></td>
+                <td>The stored left operand</td>
+                <td><code>10</code> or <code>null</code></td>
+              </tr>
+              <tr>
+                <td><code>operator</code></td>
+                <td>Pending operator</td>
+                <td><code>"+"</code> or <code>null</code></td>
+              </tr>
+              <tr>
+                <td><code>waiting</code></td>
+                <td>Should next digit replace <code>current?</code></td>
+                <td><code>true</code> / <code>false</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="h5 mt-4">Behaviour summary</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Action</th>
+                <th>Effect on state</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Press digit while <code>waiting = false</code></td>
+                <td>Append to <code>current</code></td>
+              </tr>
+              <tr>
+                <td>Press digit while <code>waiting = true</code></td>
+                <td>
+                  Replace <code>current</code>, set <code>waiting = false</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Press operator while <code>waiting = false</code></td>
+                <td>Compute pending, store new operator</td>
+              </tr>
+              <tr>
+                <td>Press operator while <code>waiting = true</code></td>
+                <td>Swap operator only</td>
+              </tr>
+              <tr>
+                <td>Press equals</td>
+                <td>
+                  Compute, clear <code>operator</code> and <code>previous</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Press AC</td>
+                <td>Reset everything to <code>"0"</code></td>
+              </tr>
+              <tr>
+                <td>Press DEL</td>
+                <td>Remove the last character of <code>current</code></td>
+              </tr>
+              <tr>
+                <td>Press ±</td>
+                <td>Toggle leading <code>-</code> on <code>current</code></td>
+              </tr>
+              <tr>
+                <td>Press %</td>
+                <td><code>current / 100</code></td>
+              </tr>
+              <tr>
+                <td>Divide by zero</td>
+                <td>Show <code>Error</code>, reset on next digit</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="h5 mt-4">
+          What students should be able to answer after this file
+        </h3>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Question</th>
+                <th>Answer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Why is <code>current</code> a string?</td>
+                <td>
+                  To keep the trailing dot and typed digits exactly as typed
+                </td>
+              </tr>
+              <tr>
+                <td>Why not <code>eval()</code>?</td>
+                <td>
+                  Security, no operator precedence control, no display
+                  formatting
+                </td>
+              </tr>
+              <tr>
+                <td>Why do we round results?</td>
+                <td>
+                  To hide IEEE-754 arithmetic noise like <code>0.1 + 0.2</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Why one listener on the grid?</td>
+                <td>Event delegation — one handler instead of twenty</td>
+              </tr>
+              <tr>
+                <td>Why <code>waiting</code>?</td>
+                <td>
+                  To distinguish "typing a number" from "starting fresh after an
+                  operator"
+                </td>
+              </tr>
+              <tr>
+                <td>Why check <code>current.endsWith(".")</code>?</td>
+                <td>
+                  Otherwise <code>Number("5.")</code> would drop the dot the
+                  user is typing
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+       CALCULATOR SCRIPT
+       ============================================================ -->
+    <script>
+      // ---- STATE ----
+      let current = "0";
+      let previous = null;
+      let operator = null;
+      let waiting = false;
+
+      // ---- HELPERS ----
+      const round = (n) => Math.round(n * 1e12) / 1e12;
+
+      function calculate(a, b, op) {
+        switch (op) {
+          case "+":
+            return a + b;
+          case "-":
+            return a - b;
+          case "*":
+            return a * b;
+          case "/":
+            return b === 0 ? null : a / b;
+        }
+        return null;
+      }
+
+      function showError() {
+        current = "Error";
+        previous = null;
+        operator = null;
+        waiting = true;
+        render();
+      }
+
+      function reset() {
+        current = "0";
+        previous = null;
+        operator = null;
+        waiting = false;
+        render();
+      }
+
+      // ---- RENDERING ----
+      function render() {
+        const valueEl = document.getElementById("calcValue");
+        const exprEl = document.getElementById("calcExpression");
+
+        let shown = current;
+
+        if (current !== "Error" && !current.endsWith(".") && current !== "") {
+          const n = Number(current);
+          if (!Number.isNaN(n)) {
+            shown = n.toLocaleString("en-US", { maximumFractionDigits: 10 });
+          }
+        }
+
+        valueEl.textContent = shown;
+        valueEl.classList.toggle("is-error", current === "Error");
+
+        // Expression line above the big number
+        if (operator && previous !== null) {
+          const sym = { "+": "+", "-": "−", "*": "×", "/": "÷" }[operator];
+          exprEl.textContent =
+            Number(previous).toLocaleString("en-US", {
+              maximumFractionDigits: 10,
+            }) +
+            " " +
+            sym;
+        } else {
+          exprEl.textContent = "";
+        }
+
+        // Highlight the active operator button
+        document.querySelectorAll(".calc-btn-op").forEach((btn) => {
+          btn.classList.toggle(
+            "is-active",
+            operator !== null && btn.dataset.key === operator,
+          );
+        });
+      }
+
+      // ---- INPUT ----
+      function pressNumber(d) {
+        if (current === "Error") reset();
+
+        if (waiting) {
+          current = d;
+          waiting = false;
+        } else {
+          if (current === "0") current = d;
+          else {
+            if (current.replace(/\D/g, "").length >= 12) return;
+            current += d;
+          }
+        }
+        render();
+      }
+
+      function pressDot() {
+        if (current === "Error") reset();
+
+        if (waiting) {
+          current = "0.";
+          waiting = false;
+        } else if (!current.includes(".")) {
+          current += ".";
+        }
+        render();
+      }
+
+      function pressOperator(op) {
+        if (current === "Error") return;
+
+        if (operator && !waiting) {
+          const r = calculate(previous, parseFloat(current), operator);
+          if (r === null) return showError();
+          current = String(round(r));
+          previous = round(r);
+        } else {
+          previous = parseFloat(current);
+        }
+
+        operator = op;
+        waiting = true;
+        render();
+      }
+
+      function pressEquals() {
+        if (operator === null) return;
+
+        const r = calculate(previous, parseFloat(current), operator);
+        if (r === null) return showError();
+
+        current = String(round(r));
+        previous = null;
+        operator = null;
+        waiting = true;
+        render();
+      }
+
+      function pressBackspace() {
+        if (current === "Error") return reset();
+
+        if (waiting) {
+          current = "0";
+          waiting = false;
+        } else {
+          current = current.length > 1 ? current.slice(0, -1) : "0";
+          if (current === "-") current = "0";
+        }
+        render();
+      }
+
+      function pressSign() {
+        if (current === "Error" || current === "0") return;
+        current = current.startsWith("-") ? current.slice(1) : "-" + current;
+        render();
+      }
+
+      function pressPercent() {
+        if (current === "Error") return;
+        const n = parseFloat(current);
+        current = String(round(n / 100));
+        waiting = true;
+        render();
+      }
+
+      // ---- UNIFIED KEY HANDLER ----
+      function handleKey(key) {
+        if (/^\d$/.test(key)) pressNumber(key);
+        else if (key === ".") pressDot();
+        else if ("+-*/".includes(key)) pressOperator(key);
+        else if (key === "=") pressEquals();
+        else if (key === "AC") reset();
+        else if (key === "DEL") pressBackspace();
+        else if (key === "±") pressSign();
+        else if (key === "%") pressPercent();
+      }
+
+      // ---- BUTTON CLICKS (event delegation) ----
+      document.getElementById("calcGrid").addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-key]");
+        if (!btn) return;
+        handleKey(btn.dataset.key);
+      });
+
+      // ---- KEYBOARD ----
+      document.addEventListener("keydown", (e) => {
+        // Ignore when typing in an input / textarea
+        const tag = document.activeElement && document.activeElement.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+        const k = e.key;
+        if (k >= "0" && k <= "9") handleKey(k);
+        else if (k === ".") handleKey(".");
+        else if ("+-*/".includes(k)) handleKey(k);
+        else if (k === "Enter" || k === "=") {
+          e.preventDefault();
+          handleKey("=");
+        } else if (k === "Escape") handleKey("AC");
+        else if (k === "Backspace") handleKey("DEL");
+      });
+
+      // ---- INITIAL RENDER ----
+      render();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

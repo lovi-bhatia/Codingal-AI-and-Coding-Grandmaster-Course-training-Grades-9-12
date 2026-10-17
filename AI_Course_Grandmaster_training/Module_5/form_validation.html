@@ -1,0 +1,384 @@
+<!--
+=======================================================
+  JAVASCRIPT FORM VALIDATION
+=======================================================
+
+WHAT IS FORM VALIDATION?
+Form validation is the process of verifying that user input 
+in an HTML form meets required criteria (e.g., non-empty fields, 
+valid email format, minimum password length) BEFORE submitting 
+data to a server.
+
+WHY VALIDATE ON CLIENT-SIDE (JAVASCRIPT)?
+  1. Instant User Feedback: Users catch mistakes immediately without 
+     waiting for a page reload or server response.
+  2. Reduces Server Load: Prevents invalid requests from hitting your backend.
+  3. Security Notice: Client-side validation improves UX, BUT server-side 
+     validation is ALWAYS still required because client-side JS can be bypassed!
+
+-------------------------------------------------------
+1. HTML5 NATIVE VALIDATION VS JAVASCRIPT VALIDATION
+-------------------------------------------------------
+  - HTML5 Attributes : `required`, `minlength`, `type="email"`, `pattern`
+  - JavaScript Custom: Offers complete control over dynamic error messages, 
+                       custom regex rules, multi-field matching (e.g., password confirm), 
+                       and Bootstrap styling classes.
+
+-------------------------------------------------------
+2. FORM VALIDATION PATTERN IN JAVASCRIPT
+-------------------------------------------------------
+
+  1. INTERCEPT FORM SUBMISSION:
+     Listen to the `submit` event on the `<form>` and call `e.preventDefault()` 
+     to prevent the default browser page refresh.
+
+  2. READ INPUT VALUES:
+     Extract and trim whitespace: `const email = emailInput.value.trim();`
+
+  3. APPLY VALIDATION RULES:
+     - Non-empty check : `value === ""`
+     - Regex pattern   : `/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)`
+     - Length check    : `value.length < 8`
+     - Matching check  : `pass1 === pass2`
+
+  4. UPDATE DOM / DISPLAY ERRORS:
+     Add Bootstrap validation feedback classes (`is-invalid` / `is-valid`) 
+     and display target error text.
+
+Memory Trick:
+  e.preventDefault() = Stop form from submitting/reloading page.
+  .trim()            = Strip leading/trailing empty spaces.
+  is-invalid         = Bootstrap red outline class.
+  is-valid           = Bootstrap green outline class.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Form Validation</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Form Validation</h1>
+
+      <!-- LIVE INTERACTIVE FORM DEMO -->
+      <div class="section">
+        <h2>1. Interactive Form Validation Demo</h2>
+        <p>
+          Test real-time validation rules for required text, regex email,
+          password length, and matching fields.
+        </p>
+
+        <div class="row g-4">
+          <!-- FORM CONTAINER -->
+          <div class="col-lg-6">
+            <div class="p-4 bg-light border rounded">
+              <form id="signup-form" novalidate>
+                <!-- USERNAME -->
+                <div class="mb-3">
+                  <label for="username" class="form-label fw-bold small"
+                    >Username</label
+                  >
+                  <input
+                    type="text"
+                    id="username"
+                    class="form-control"
+                    placeholder="At least 3 characters"
+                  />
+                  <div id="username-feedback" class="invalid-feedback">
+                    Please enter a valid username (min 3 chars).
+                  </div>
+                </div>
+
+                <!-- EMAIL -->
+                <div class="mb-3">
+                  <label for="email" class="form-label fw-bold small"
+                    >Email Address</label
+                  >
+                  <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    placeholder="name@example.com"
+                  />
+                  <div id="email-feedback" class="invalid-feedback">
+                    Please enter a valid email address.
+                  </div>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="mb-3">
+                  <label for="password" class="form-label fw-bold small"
+                    >Password</label
+                  >
+                  <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    placeholder="Min 6 characters"
+                  />
+                  <div id="password-feedback" class="invalid-feedback">
+                    Password must be at least 6 characters.
+                  </div>
+                </div>
+
+                <!-- CONFIRM PASSWORD -->
+                <div class="mb-3">
+                  <label for="confirm-password" class="form-label fw-bold small"
+                    >Confirm Password</label
+                  >
+                  <input
+                    type="password"
+                    id="confirm-password"
+                    class="form-control"
+                    placeholder="Re-enter password"
+                  />
+                  <div id="confirm-feedback" class="invalid-feedback">
+                    Passwords do not match.
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 fw-bold">
+                  Register Account
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- CONSOLE / STATUS OUTPUT -->
+          <div class="col-lg-6">
+            <span class="label">Validation Log Output:</span>
+            <div id="out1" class="output mb-3">Awaiting form submission...</div>
+
+            <span class="label">JavaScript Validation Logic:</span>
+            <pre><code>form.addEventListener("submit", (e) => {
+  e.preventDefault(); // Stop page reload
+  let isValid = true;
+
+  // 1. Username Check (Min 3 chars)
+  if (usernameVal.length < 3) {
+    showError(usernameInput, "Min 3 characters required");
+    isValid = false;
+  } else {
+    showSuccess(usernameInput);
+  }
+
+  // 2. Email Regex Check
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(emailVal)) {
+    showError(emailInput, "Invalid email format");
+    isValid = false;
+  } else {
+    showSuccess(emailInput);
+  }
+
+  // 3. Password Match Check
+  if (passwordVal !== confirmVal) {
+    showError(confirmInput, "Passwords do not match");
+    isValid = false;
+  }
+});</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. QUICK REFERENCE -->
+      <div class="section">
+        <h2>2. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Validation Rule</th>
+                <th>JavaScript Code Pattern</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Prevent Reload</td>
+                <td><code>e.preventDefault()</code></td>
+                <td>
+                  Stops form from performing default browser HTTP submission
+                </td>
+              </tr>
+              <tr>
+                <td>Trim Input</td>
+                <td><code>input.value.trim()</code></td>
+                <td>Removes accidental whitespace from start/end of string</td>
+              </tr>
+              <tr>
+                <td>Non-Empty Check</td>
+                <td><code>value === ""</code> or <code>!value.length</code></td>
+                <td>Ensures required fields are populated</td>
+              </tr>
+              <tr>
+                <td>Email Regex</td>
+                <td><code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)</code></td>
+                <td>Verifies email string contains @ and domain dot</td>
+              </tr>
+              <tr>
+                <td>Length Check</td>
+                <td><code>password.length &gt;= 8</code></td>
+                <td>Validates minimum or maximum character limits</td>
+              </tr>
+              <tr>
+                <td>Field Match</td>
+                <td><code>pass1 === pass2</code></td>
+                <td>Ensures confirmation inputs match main input value</td>
+              </tr>
+              <tr>
+                <td>Bootstrap Valid UI</td>
+                <td><code>elem.classList.add("is-valid")</code></td>
+                <td>Applies green border and success styling</td>
+              </tr>
+              <tr>
+                <td>Bootstrap Invalid UI</td>
+                <td><code>elem.classList.add("is-invalid")</code></td>
+                <td>Applies red border and failure styling</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // DOM Elements
+      const form = document.getElementById("signup-form");
+      const usernameInput = document.getElementById("username");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const confirmInput = document.getElementById("confirm-password");
+
+      // Helper functions for UI Feedback
+      function showError(inputEl, message) {
+        inputEl.classList.remove("is-valid");
+        inputEl.classList.add("is-invalid");
+        const feedbackEl = inputEl.nextElementSibling;
+        if (feedbackEl) feedbackEl.textContent = message;
+      }
+
+      function showSuccess(inputEl) {
+        inputEl.classList.remove("is-invalid");
+        inputEl.classList.add("is-valid");
+      }
+
+      // Event Listener
+      form.addEventListener("submit", (e) => {
+        e.preventDefault(); // Prevent default page refresh
+        const log = [];
+        let isFormValid = true;
+
+        // 1. Validate Username
+        const usernameVal = usernameInput.value.trim();
+        if (usernameVal.length < 3) {
+          showError(usernameInput, "Username must be at least 3 characters.");
+          log.push("❌ Username validation failed");
+          isFormValid = false;
+        } else {
+          showSuccess(usernameInput);
+          log.push("✓ Username valid");
+        }
+
+        // 2. Validate Email
+        const emailVal = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailVal)) {
+          showError(emailInput, "Please enter a valid email address.");
+          log.push("❌ Email validation failed");
+          isFormValid = false;
+        } else {
+          showSuccess(emailInput);
+          log.push("✓ Email valid");
+        }
+
+        // 3. Validate Password
+        const passwordVal = passwordInput.value;
+        if (passwordVal.length < 6) {
+          showError(passwordInput, "Password must be at least 6 characters.");
+          log.push("❌ Password length validation failed");
+          isFormValid = false;
+        } else {
+          showSuccess(passwordInput);
+          log.push("✓ Password length valid");
+        }
+
+        // 4. Validate Confirm Password
+        const confirmVal = confirmInput.value;
+        if (confirmVal === "" || confirmVal !== passwordVal) {
+          showError(confirmInput, "Passwords do not match.");
+          log.push("❌ Password match validation failed");
+          isFormValid = false;
+        } else {
+          showSuccess(confirmInput);
+          log.push("✓ Password match valid");
+        }
+
+        // Final Status
+        if (isFormValid) {
+          log.push("\n🚀 FORM SUCCESSFULLY VALIDATED! Ready to submit.");
+        } else {
+          log.push("\n⚠️ Form contains errors. Submission aborted.");
+        }
+
+        write("out1", log);
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

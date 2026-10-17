@@ -1,0 +1,409 @@
+<!--
+=======================================================
+  EVALUATING VARIABLES IN JAVASCRIPT
+=======================================================
+
+WHAT DOES "EVALUATING A VARIABLE" MEAN?
+Evaluating a variable means resolving a variable name to its 
+underlying data value at runtime within a specific execution context.
+
+JavaScript evaluates variables in several core contexts:
+1. Truthiness / Falsiness Evaluation (inside if/while statements)
+2. Short-Circuit Logical Evaluation (using ||, &&, ??)
+3. Dynamic Object Property Lookup (bracket notation obj[varName])
+4. String Interpolation Evaluation (`${variable}` inside template literals)
+5. Dynamic Expression Computation (evaluating math or strings safely)
+
+-------------------------------------------------------
+1. TRUTHY VS FALSY EVALUATION
+-------------------------------------------------------
+When a variable is evaluated in a boolean context (like an `if` statement),
+JS converts its value to `true` or `false`.
+
+FALSY VALUES (Evaluates to false):
+  false, 0, "", null, undefined, NaN
+
+TRUTHY VALUES (Evaluates to true):
+  Everything else! Including "0", "false", [], {}, and all numbers !== 0.
+
+-------------------------------------------------------
+2. SHORT-CIRCUIT EVALUATION
+-------------------------------------------------------
+JS evaluates logical operators from left to right and stops 
+as soon as the outcome is determined:
+
+- `OR (||)`       : Evaluates and returns the FIRST TRUTHY value.
+- `AND (&&)`      : Evaluates until it finds the FIRST FALSY value.
+- `NULLISH (??)`  : Evaluates and returns the right side ONLY if 
+                    the left side is `null` or `undefined`.
+
+-------------------------------------------------------
+3. DYNAMIC PROPERTY EVALUATION
+-------------------------------------------------------
+- Dot notation (`obj.key`) treats `key` as a literal property name.
+- Bracket notation (`obj[key]`) EVALUATES the variable `key` first 
+  to get its string value, then accesses that property on the object.
+
+-------------------------------------------------------
+4. DYNAMIC EXPRESSION EVALUATION
+-------------------------------------------------------
+To evaluate a string containing a mathematical expression (e.g. "10 + 20"):
+- Avoid `eval()`: It is insecure, slow, and exposes code to injection attacks.
+- Safe Alternative: `Function("return " + expression)()`
+
+Memory Trick:
+  obj.x     = Literal lookup for "x"
+  obj[x]    = Evaluates variable x first
+  a || b    = First truthy value
+  a ?? b    = First non-null/undefined value
+  ${var}    = Evaluates expression inside template string
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluating Variables in JavaScript</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">Evaluating Variables in JavaScript</h1>
+
+      <!-- 1. TRUTHY / FALSY EVALUATION -->
+      <div class="section">
+        <h2>1. Truthy &amp; Falsy Evaluation</h2>
+        <p>
+          How variables evaluate in boolean contexts (like
+          <code>if</code> conditions or <code>Boolean()</code> calls).
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const emptyText = "";
+const zeroVal = 0;
+const emptyArray = [];
+const userObj = { name: "Alex" };
+
+// Evaluating truthiness
+console.log('"" evaluates to:', Boolean(emptyText));    // false
+console.log('0 evaluates to:', Boolean(zeroVal));       // false
+console.log('[] evaluates to:', Boolean(emptyArray));   // true (objects/arrays are truthy)
+console.log('{} evaluates to:', Boolean(userObj));      // true</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SHORT-CIRCUIT EVALUATION -->
+      <div class="section">
+        <h2>
+          2. Short-Circuit Logical Evaluation (<code>||</code>,
+          <code>&amp;&amp;</code>, <code>??</code>)
+        </h2>
+        <p>
+          Using logical operators to evaluate fallbacks and conditional
+          execution.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>let inputName = "";
+let userScore = 0;
+
+// OR (||) -> Returns first truthy value (0 is falsy, so it returns "Guest")
+const name1 = inputName || "Guest";
+
+// NULLISH (??) -> Returns right side ONLY if left is null/undefined (0 is preserved!)
+const score1 = userScore ?? 100;
+
+// AND (&&) -> Evaluates right side ONLY if left side is truthy
+const isLoggedIn = true;
+const welcomeMsg = isLoggedIn && "Welcome back!";
+
+console.log("Name fallback (||):", name1);
+console.log("Score fallback (??):", score1);
+console.log("Conditional (&&) :", welcomeMsg);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. DYNAMIC PROPERTY EVALUATION -->
+      <div class="section">
+        <h2>3. Dynamic Property Evaluation (Bracket Notation)</h2>
+        <p>
+          Evaluating a variable to determine which object property to access.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const user = {
+  firstName: "Alex",
+  role: "Admin",
+  age: 25
+};
+
+const keyToFetch = "role";
+
+// Dot notation looks for property named "keyToFetch" (undefined)
+console.log("Dot notation   :", user.keyToFetch);
+
+// Bracket notation EVALUATES variable keyToFetch to "role"
+console.log("Bracket notation:", user[keyToFetch]);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. TEMPLATE LITERAL EVALUATION -->
+      <div class="section">
+        <h2>4. Template Literal Expression Evaluation (<code>${}</code>)</h2>
+        <p>
+          JavaScript evaluates variables and math expressions inside backtick
+          strings.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const item = "Keyboard";
+const price = 49.99;
+const quantity = 2;
+
+// Variables and mathematical expressions evaluate inside ${}
+const summary = `Order: ${quantity}x ${item} | Total: $${(price * quantity).toFixed(2)}`;
+
+console.log(summary);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. SAFE DYNAMIC EXPRESSION EVALUATION -->
+      <div class="section">
+        <h2>
+          5. Safe Dynamic String Evaluation (Avoiding <code>eval()</code>)
+        </h2>
+        <p>
+          Evaluating math expressions stored as strings safely using
+          <code>Function()</code> instead of <code>eval()</code>.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const mathExpression = "15 * 4 + 10";
+
+// Safe evaluation method using Function constructor
+function evaluateMath(expr) {
+  // Returns a function that evaluates the math expression
+  return new Function(`return ${expr}`)();
+}
+
+const result = evaluateMath(mathExpression);
+console.log(`Evaluating "${mathExpression}" ->`, result);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. QUICK REFERENCE -->
+      <div class="section">
+        <h2>6. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Evaluation Pattern</th>
+                <th>Syntax Example</th>
+                <th>Evaluation Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Truthy Check</td>
+                <td><code>if (val) { ... }</code></td>
+                <td>
+                  Evaluates <code>val</code> to boolean (falsy =
+                  <code>false, 0, "", null, undefined, NaN</code>)
+                </td>
+              </tr>
+              <tr>
+                <td>Default Fallback</td>
+                <td><code>val || "default"</code></td>
+                <td>
+                  Returns <code>"default"</code> if <code>val</code> is any
+                  falsy value
+                </td>
+              </tr>
+              <tr>
+                <td>Nullish Fallback</td>
+                <td><code>val ?? "default"</code></td>
+                <td>
+                  Returns <code>"default"</code> ONLY if <code>val</code> is
+                  <code>null</code> or <code>undefined</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Conditional Guard</td>
+                <td><code>val &amp;&amp; run()</code></td>
+                <td>
+                  Runs <code>run()</code> ONLY if <code>val</code> evaluates to
+                  truthy
+                </td>
+              </tr>
+              <tr>
+                <td>Dynamic Lookup</td>
+                <td><code>obj[varName]</code></td>
+                <td>
+                  Evaluates <code>varName</code> variable to get key name string
+                </td>
+              </tr>
+              <tr>
+                <td>Template Interpolation</td>
+                <td><code>`${x + y}`</code></td>
+                <td>
+                  Evaluates expression <code>x + y</code> and converts result to
+                  string
+                </td>
+              </tr>
+              <tr>
+                <td>Safe String Math</td>
+                <td><code>Function("return " + str)()</code></td>
+                <td>
+                  Evaluates mathematical expression string safely without
+                  <code>eval()</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Truthy & Falsy Evaluation
+      const emptyText = "";
+      const zeroVal = 0;
+      const emptyArray = [];
+      const userObj = { name: "Alex" };
+
+      write("out1", [
+        '"" evaluates to      : ' + Boolean(emptyText),
+        "0 evaluates to       : " + Boolean(zeroVal),
+        "[] evaluates to      : " + Boolean(emptyArray) + " (Truthy)",
+        "{} evaluates to      : " + Boolean(userObj) + " (Truthy)",
+      ]);
+
+      // 2. Short-Circuit Evaluation
+      let inputName = "";
+      let userScore = 0;
+
+      const name1 = inputName || "Guest";
+      const score1 = userScore ?? 100;
+      const isLoggedIn = true;
+      const welcomeMsg = isLoggedIn && "Welcome back!";
+
+      write("out2", [
+        'Name fallback (||)  : "' + name1 + '"',
+        "Score fallback (??) : " + score1 + " (0 preserved!)",
+        'Conditional (&&)    : "' + welcomeMsg + '"',
+      ]);
+
+      // 3. Dynamic Property Evaluation
+      const user = { firstName: "Alex", role: "Admin", age: 25 };
+      const keyToFetch = "role";
+
+      write("out3", [
+        "Dot notation (user.keyToFetch)   : " + user.keyToFetch,
+        'Bracket notation (user[keyToFetch]): "' + user[keyToFetch] + '"',
+      ]);
+
+      // 4. Template String Evaluation
+      const item = "Keyboard";
+      const price = 49.99;
+      const quantity = 2;
+      const summary = `Order: ${quantity}x ${item} | Total: $${(price * quantity).toFixed(2)}`;
+
+      write("out4", [summary]);
+
+      // 5. Safe Dynamic Math Evaluation
+      const mathExpression = "15 * 4 + 10";
+      function evaluateMath(expr) {
+        return new Function(`return ${expr}`)();
+      }
+
+      write("out5", [
+        `Expression : "${mathExpression}"`,
+        `Evaluated  : ${evaluateMath(mathExpression)}`,
+      ]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

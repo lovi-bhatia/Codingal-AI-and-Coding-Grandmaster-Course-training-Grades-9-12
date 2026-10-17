@@ -1,0 +1,578 @@
+<!--
+=======================================================
+  BOOTSTRAP 5 & CSS: NAVIGATION BARS
+=======================================================
+
+WHAT IS A NAVIGATION BAR?
+A navigation bar goes beyond basic functional navigation 
+by incorporating modern UI/UX design trends such as glassmorphism, 
+floating island containers, subtle backdrop blurs, soft gradient 
+accents, smooth hover micro-interactions, and refined typography.
+
+-------------------------------------------------------
+KEY DESIGN PATTERNS FOR MODERN AESTHETIC NAVBARS
+-------------------------------------------------------
+
+1. GLASSMORPHISM (Frosted Glass Effect):
+   Uses semi-transparent background colors paired with CSS `backdrop-filter: blur()`
+   so content scrolling beneath the navbar creates a soft, modern blur.
+
+   background: rgba(255, 255, 255, 0.7);
+   backdrop-filter: blur(12px);
+   border: 1px solid rgba(255, 255, 255, 0.2);
+
+2. FLOATING ISLAND / PILL NAVBAR:
+   Instead of sticking wall-to-wall against the screen edges, the navbar 
+   floats inside the viewport with margin and pill-shaped rounded corners (`rounded-pill`).
+
+3. NEON & DARK GRADIENT ACCENTS:
+   Dark-themed navigation bars elevated with subtle glowing borders, gradient CTA 
+   (Call-to-Action) buttons, and active indicator pills.
+
+4. MICRO-INTERACTIONS & HOVER STATES:
+   Links smoothly transition backgrounds, text colors, or animated underline indicators 
+   when hovered over using CSS `transition: all 0.3s ease;`.
+
+-------------------------------------------------------
+BOOTSTRAP 5 NAVBAR UTILITIES USED
+-------------------------------------------------------
+  - `.navbar`                 : Base responsive header wrapper.
+  - `.navbar-expand-lg`       : Controls mobile collapse breakpoint (collapses below lg screen).
+  - `.sticky-top` / `.fixed-top`: Keeps navbar pinned to top during scroll.
+  - `.navbar-brand`           : Styling for logo/brand name.
+  - `.navbar-nav`             : Flex container for navigation link items.
+  - `.nav-link`               : Link items with built-in padding and hover states.
+  - `.navbar-toggler`         : Responsive mobile hamburger button.
+
+Memory Trick:
+  Glassmorphism = backdrop-filter: blur() + semi-transparent bg.
+  Floating Pill = mx-auto + my-3 + rounded-pill + shadow.
+  Active State  = soft pill background or gradient highlight.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aesthetic Navigation Bar</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #f0f4fd 0%, #e2e8f0 100%);
+        min-height: 100vh;
+      }
+
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 40px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+
+      /* ============================================================ */
+      /* CUSTOM AESTHETIC NAVBAR STYLES                               */
+      /* ============================================================ */
+
+      /* 1. Glassmorphic Style */
+      .navbar-glass {
+        background: rgba(255, 255, 255, 0.7) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      }
+      .navbar-glass .nav-link {
+        color: #334155;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        transition: all 0.25s ease;
+      }
+      .navbar-glass .nav-link:hover,
+      .navbar-glass .nav-link.active {
+        color: #0284c7;
+        background: rgba(2, 132, 199, 0.08);
+      }
+
+      /* 2. Floating Island Pill Style */
+      .navbar-floating {
+        max-width: 950px;
+        margin: 15px auto;
+        border-radius: 50rem;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        padding: 0.5rem 1.2rem;
+      }
+      .navbar-floating .nav-link {
+        color: #475569;
+        font-weight: 500;
+        margin: 0 2px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+      }
+      .navbar-floating .nav-link:hover {
+        color: #0f172a;
+        background: #f1f5f9;
+      }
+      .navbar-floating .nav-link.active {
+        color: #ffffff !important;
+        background: #0f172a;
+      }
+
+      /* 3. Dark Cyber / Gradient Accent Style */
+      .navbar-dark-cyber {
+        background: #0f172a !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+      .navbar-dark-cyber .navbar-brand {
+        background: linear-gradient(135deg, #38bdf8, #818cf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+      }
+      .navbar-dark-cyber .nav-link {
+        color: #94a3b8;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+      .navbar-dark-cyber .nav-link:hover,
+      .navbar-dark-cyber .nav-link.active {
+        color: #38bdf8;
+      }
+      .btn-gradient {
+        background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+        border: none;
+        color: #ffffff;
+        font-weight: 600;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .btn-gradient:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+        color: #ffffff;
+      }
+
+      /* Background content simulation */
+      .dummy-content-bg {
+        background:
+          radial-gradient(
+            circle at 10% 20%,
+            rgba(56, 189, 248, 0.15) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 90% 80%,
+            rgba(99, 102, 241, 0.15) 0%,
+            transparent 40%
+          );
+        padding: 30px;
+        border-radius: 16px;
+      }
+    </style>
+  </head>
+  <body class="p-3 p-md-4">
+    <div
+      class="container-fluid bg-white p-4 p-md-5 rounded-4 shadow-sm"
+      style="max-width: 1200px"
+    >
+      <h1 class="mb-4">Aesthetic Navigation Bar Design Patterns</h1>
+
+      <!-- ============================================================ -->
+      <!-- 1. GLASSMORPHIC NAVBAR (LIGHT THEME)                          -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>1. Minimalist Glassmorphic Navbar (Frosted Glass)</h2>
+        <p>
+          Uses <code>backdrop-filter: blur()</code> and semi-transparent white
+          background to create depth over scrolling content.
+        </p>
+
+        <div class="dummy-content-bg border rounded-4 mb-3">
+          <!-- NAVBAR CONTAINER -->
+          <nav class="navbar navbar-expand-lg navbar-glass rounded-3 px-3">
+            <div class="container-fluid">
+              <!-- BRAND LOGO -->
+              <a
+                class="navbar-brand fw-bold text-dark d-flex align-items-center gap-2"
+                href="#"
+              >
+                <i class="bi bi-intersect text-primary fs-4"></i>
+                <span>Lumina</span>
+              </a>
+
+              <!-- MOBILE TOGGLER -->
+              <button
+                class="navbar-toggler border-0 shadow-none"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#glassNav"
+              >
+                <i class="bi bi-list fs-2 text-dark"></i>
+              </button>
+
+              <!-- NAV LINKS -->
+              <div class="collapse navbar-collapse" id="glassNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Explore</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Showcase</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                  </li>
+                </ul>
+
+                <!-- RIGHT ACTIONS -->
+                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                  <a
+                    href="#"
+                    class="btn btn-link text-decoration-none text-dark fw-semibold btn-sm"
+                    >Sign In</a
+                  >
+                  <a
+                    href="#"
+                    class="btn btn-primary rounded-pill btn-sm px-3 fw-semibold shadow-sm"
+                    >Get Started</a
+                  >
+                </div>
+              </div>
+            </div>
+          </nav>
+
+          <p class="text-muted small mt-3 mb-0 text-center">
+            <em
+              >Scroll simulation: Notice how background colors softly blur
+              beneath the glass container.</em
+            >
+          </p>
+        </div>
+
+        <span class="label">CSS Code Snippet:</span>
+        <pre><code>.navbar-glass {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}</code></pre>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 2. FLOATING ISLAND PILL NAVBAR                               -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>2. Floating Island Pill Navbar</h2>
+        <p>
+          A centered, capsule-shaped navigation bar that floats independently
+          over page content with a soft shadow.
+        </p>
+
+        <div class="p-3 bg-light border rounded-4 mb-3">
+          <!-- FLOATING NAVBAR -->
+          <nav class="navbar navbar-expand-md navbar-floating">
+            <div class="container-fluid">
+              <a class="navbar-brand fw-bold text-dark fs-5" href="#">
+                Aura<span class="text-primary">.</span>
+              </a>
+
+              <button
+                class="navbar-toggler border-0 shadow-none"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#floatingNav"
+              >
+                <i class="bi bi-grid-fill text-dark"></i>
+              </button>
+
+              <div class="collapse navbar-collapse" id="floatingNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-md-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Overview</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Integrations</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Changelog</a>
+                  </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                  <button
+                    class="btn btn-sm btn-dark rounded-pill px-3 fw-semibold"
+                  >
+                    Subscribe
+                  </button>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+
+        <span class="label">CSS Code Snippet:</span>
+        <pre><code>.navbar-floating {
+  max-width: 950px;
+  margin: 15px auto;
+  border-radius: 50rem; /* Creates the capsule/pill shape */
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}</code></pre>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 3. DARK MODE NEON / GRADIENT ACCENT NAVBAR                   -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>3. Dark Mode Cyberpunk / Gradient Accent Navbar</h2>
+        <p>
+          Sleek dark theme featuring gradient brand typography, glowing CTA
+          buttons, and high-contrast links.
+        </p>
+
+        <div class="p-3 bg-dark rounded-4 mb-3">
+          <!-- DARK NAVBAR -->
+          <nav class="navbar navbar-expand-lg navbar-dark-cyber rounded-3 px-3">
+            <div class="container-fluid">
+              <a class="navbar-brand fs-4" href="#">
+                <i class="bi bi-cpu text-info me-1"></i> NexusLab
+              </a>
+
+              <button
+                class="navbar-toggler border-0 shadow-none"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#darkNav"
+              >
+                <i class="bi bi-list text-white fs-2"></i>
+              </button>
+
+              <div class="collapse navbar-collapse" id="darkNav">
+                <ul class="navbar-nav ms-auto me-4 mb-2 mb-lg-0 gap-2">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Products</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Developers</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Docs</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Community</a>
+                  </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                  <a href="#" class="text-white-50 text-decoration-none fs-5"
+                    ><i class="bi bi-github"></i
+                  ></a>
+                  <a href="#" class="btn btn-gradient rounded-pill px-4 btn-sm"
+                    >Launch App</a
+                  >
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+
+        <span class="label">CSS Code Snippet:</span>
+        <pre><code>.navbar-dark-cyber .navbar-brand {
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}</code></pre>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 4. SEARCH & NOTIFICATION CENTRIC NAVBAR                     -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>4. Search &amp; Interactive Action-Centric Navbar</h2>
+        <p>
+          Includes a styled live search bar, user notifications, and avatar
+          controls for SaaS or Dashboard apps.
+        </p>
+
+        <div class="p-3 bg-light border rounded-4 mb-3">
+          <nav
+            class="navbar navbar-expand-lg bg-white rounded-3 shadow-sm px-3 border"
+          >
+            <div class="container-fluid">
+              <!-- BRAND -->
+              <a class="navbar-brand fw-bold text-dark me-4" href="#">
+                <i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i
+                >Dashboard
+              </a>
+
+              <!-- SEARCH BAR -->
+              <div
+                class="d-none d-md-flex align-items-center bg-light border rounded-pill px-3 py-1 me-auto"
+                style="width: 280px"
+              >
+                <i class="bi bi-search text-muted me-2"></i>
+                <input
+                  type="text"
+                  class="form-control bg-transparent border-0 shadow-none p-0 small"
+                  placeholder="Search anything... (Ctrl+K)"
+                />
+              </div>
+
+              <!-- RIGHT ACTIONS -->
+              <div class="d-flex align-items-center gap-3 ms-auto">
+                <!-- Notifications -->
+                <button
+                  class="btn btn-light rounded-circle position-relative p-2"
+                  style="width: 40px; height: 40px"
+                >
+                  <i class="bi bi-bell text-secondary"></i>
+                  <span
+                    class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"
+                  ></span>
+                </button>
+
+                <!-- Avatar -->
+                <div class="d-flex align-items-center gap-2 border-start ps-3">
+                  <div
+                    class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                    style="width: 38px; height: 38px"
+                  >
+                    JD
+                  </div>
+                  <div class="d-none d-xl-block">
+                    <span class="d-block fw-bold small text-dark leading-tight"
+                      >Jane Doe</span
+                    >
+                    <small class="text-muted d-block" style="font-size: 11px"
+                      >Administrator</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 5. QUICK REFERENCE CHEAT SHEET                               -->
+      <!-- ============================================================ -->
+      <div class="section">
+        <h2>5. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Aesthetic Feature</th>
+                <th>Required CSS / Bootstrap Properties</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Glassmorphism</strong></td>
+                <td>
+                  <code
+                    >backdrop-filter: blur(12px); background:
+                    rgba(255,255,255,0.7);</code
+                  >
+                </td>
+                <td>
+                  Creates a frosted glass effect that blurs scrolling background
+                  content.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Floating Capsule</strong></td>
+                <td>
+                  <code
+                    >max-width: 900px; margin: auto; border-radius: 50rem;
+                    shadow;</code
+                  >
+                </td>
+                <td>
+                  Detaches navbar from screen edges for a modern floating look.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Gradient Text</strong></td>
+                <td>
+                  <code
+                    >background: linear-gradient(...); -webkit-background-clip:
+                    text;</code
+                  >
+                </td>
+                <td>
+                  Applies eye-catching multi-color gradient fills to brand logos
+                  or text.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Micro-Interactions</strong></td>
+                <td>
+                  <code>transition: all 0.3s ease;</code> on
+                  <code>.nav-link</code>
+                </td>
+                <td>
+                  Smoothly animates hover states, text colors, and background
+                  pills.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Sticky Placement</strong></td>
+                <td>
+                  Class <code>.sticky-top</code> or <code>.fixed-top</code>
+                </td>
+                <td>
+                  Keeps navigation visible at top of viewport during scrolling.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

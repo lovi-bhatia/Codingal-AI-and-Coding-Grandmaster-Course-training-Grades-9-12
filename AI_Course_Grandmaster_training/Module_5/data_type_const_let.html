@@ -1,0 +1,441 @@
+<!--
+=======================================================
+  JAVASCRIPT DATA TYPES, LET AND CONST
+=======================================================
+
+-------------------------------------------------------
+1. JAVASCRIPT DATA TYPES
+-------------------------------------------------------
+JavaScript is a dynamically typed language. You do not need 
+to specify the data type of a variable when declaring it.
+Types are categorized into PRIMITIVES and REFERENCE TYPES.
+
+PRIMITIVE TYPES (Stored directly in stack memory by value):
+  1. String    -> Textual data enclosed in quotes: "hello", 'world', `hi`
+  2. Number    -> Integers and floating-point numbers: 42, 3.14, -10
+  3. Boolean   -> Logical values: true or false
+  4. Undefined -> Variable declared but not assigned a value
+  5. Null      -> Intentionally empty value (represents "no object")
+  6. BigInt    -> Arbitrary precision integers: 9007199254740991n
+  7. Symbol    -> Unique, immutable primitive value used for object keys
+
+REFERENCE TYPES (Stored in heap memory, passed by reference):
+  1. Object    -> Key-value pairs: { name: "Alex", age: 20 }
+  2. Array     -> Indexed collections: [10, 20, 30]
+  3. Function  -> Executable code blocks: function() {}
+
+THE typeof OPERATOR:
+  typeof "hello"   -> "string"
+  typeof 42        -> "number"
+  typeof true      -> "boolean"
+  typeof undefined -> "undefined"
+  typeof null      -> "object" (Historical JS bug, primitive value)
+  typeof {}        -> "object"
+  typeof []        -> "object" (Arrays are special objects)
+  typeof fn        -> "function"
+
+-------------------------------------------------------
+2. LET AND CONST KEYWORDS
+-------------------------------------------------------
+ES6 (2015) introduced `let` and `const` to fix scope issues 
+associated with the legacy `var` keyword.
+
+LET (.let):
+  - Block Scoped: Exists only inside the `{ }` where declared.
+  - Reassignable: Value can be changed after declaration.
+  - Cannot be re-declared in the same scope.
+  - Not hoisted with initialization (Temporal Dead Zone).
+
+CONST (.const):
+  - Block Scoped: Exists only inside the `{ }` where declared.
+  - NOT Reassignable: Cannot point to a new value once assigned.
+  - MUST be initialized at declaration time.
+  - IMPORTANT: `const` protects the VARIABLE BINDING, not the content.
+    Properties of `const` objects and elements of `const` arrays 
+    CAN still be modified (mutated).
+
+LEGACY VAR vs LET vs CONST:
+  Feature      | var           | let          | const
+  -------------|---------------|--------------|--------------
+  Scope        | Function      | Block        | Block
+  Reassignable | Yes           | Yes          | No
+  Redeclarable | Yes           | No           | No
+  Hoisting     | Yes (undef)   | No (TDZ)     | No (TDZ)
+
+Memory Trick:
+  const = Constant binding (use by default).
+  let   = Let it change (use when reassignment is needed).
+  Primitive = Passed by Value (copied).
+  Reference = Passed by Reference (shared address).
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Data Types, let and const</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Data Types, let and const</h1>
+
+      <!-- 1. PRIMITIVE DATA TYPES -->
+      <div class="section">
+        <h2>1. Primitive Data Types</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const str = "Hello World";     // String
+const num = 42;                // Number
+const isVal = true;            // Boolean
+let unassigned;                // Undefined
+const emptyVal = null;        // Null
+const bigIntNum = 9007199254740991n; // BigInt
+const sym = Symbol("id");      // Symbol
+
+console.log(typeof str);       // string
+console.log(typeof num);       // number
+console.log(typeof isVal);     // boolean
+console.log(typeof unassigned); // undefined
+console.log(typeof emptyVal);  // object (JS quirk)
+console.log(typeof bigIntNum); // bigint
+console.log(typeof sym);       // symbol</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. REFERENCE DATA TYPES -->
+      <div class="section">
+        <h2>2. Reference Data Types (Objects &amp; Arrays)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const user = { name: "Alex", age: 20 }; // Object
+const numbers = [10, 20, 30];            // Array
+function greet() { return "Hi"; }        // Function
+
+console.log(typeof user);     // object
+console.log(typeof numbers);  // object
+console.log(typeof greet);    // function
+
+// Value vs Reference Demonstration
+let x = 10;
+let y = x; // Copy of value
+y = 20;
+
+const obj1 = { val: 10 };
+const obj2 = obj1; // Copy of reference
+obj2.val = 20;
+
+console.log("Primitive x:", x);   // 10 (unchanged)
+console.log("Object obj1:", obj1.val); // 20 (mutated)</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. THE LET KEYWORD -->
+      <div class="section">
+        <h2>
+          3. The <code>let</code> Keyword (Reassignable &amp; Block Scoped)
+        </h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>let score = 50;
+score = 75; // Valid reassignment
+
+if (true) {
+  let blockScore = 100;
+  console.log("Inside block:", blockScore);
+}
+
+console.log("Reassigned score:", score);
+// console.log(blockScore); // ReferenceError: blockScore is not defined</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. THE CONST KEYWORD -->
+      <div class="section">
+        <h2>
+          4. The <code>const</code> Keyword (Binding Protection vs Mutation)
+        </h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const TAX_RATE = 0.18;
+// TAX_RATE = 0.20; // TypeError: Assignment to constant variable
+
+// const protects binding, NOT object content (mutation allowed)
+const person = { name: "Sam" };
+person.name = "Maya"; // Valid mutation
+person.age = 25;     // Valid addition
+
+const colors = ["Red", "Green"];
+colors.push("Blue"); // Valid mutation
+
+console.log("Tax Rate:", TAX_RATE);
+console.log("Mutated Person:", person);
+console.log("Mutated Colors:", colors);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. SCOPE & TEMPORAL DEAD ZONE -->
+      <div class="section">
+        <h2>5. Scope Comparison &amp; Temporal Dead Zone (TDZ)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// var leaks out of block scope
+if (true) {
+  var varVariable = "I am var";
+  let letVariable = "I am let";
+}
+
+console.log("varVariable:", varVariable); // Accessible!
+
+// TDZ: Accessing let/const before declaration throws error
+try {
+  console.log(tdzDemo);
+  let tdzDemo = "Hello";
+} catch (err) {
+  console.log("TDZ Error:", err.message);
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. QUICK REFERENCE -->
+      <div class="section">
+        <h2>6. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Concept</th>
+                <th>Type / Keyword</th>
+                <th>Key Characteristics</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Primitives</td>
+                <td>
+                  String, Number, Boolean, Undefined, Null, BigInt, Symbol
+                </td>
+                <td>
+                  Immutable single values; stored by value in stack memory
+                </td>
+              </tr>
+              <tr>
+                <td>Reference Types</td>
+                <td>Object, Array, Function</td>
+                <td>Mutable collections; stored by reference in heap memory</td>
+              </tr>
+              <tr>
+                <td><code>typeof</code> Quirk</td>
+                <td><code>typeof null</code></td>
+                <td>
+                  Returns <code>"object"</code> due to historic JS
+                  implementation
+                </td>
+              </tr>
+              <tr>
+                <td><code>let</code></td>
+                <td>Variable Keyword</td>
+                <td>
+                  Block scoped, reassignable, cannot be redeclared in same scope
+                </td>
+              </tr>
+              <tr>
+                <td><code>const</code></td>
+                <td>Variable Keyword</td>
+                <td>
+                  Block scoped, non-reassignable binding, requires initial value
+                </td>
+              </tr>
+              <tr>
+                <td>Mutation</td>
+                <td><code>const obj = {}</code></td>
+                <td>
+                  Properties/elements of <code>const</code> objects/arrays CAN
+                  be changed
+                </td>
+              </tr>
+              <tr>
+                <td>Scope</td>
+                <td>Block <code>{ }</code> vs Function</td>
+                <td>
+                  <code>let</code>/<code>const</code> observe block scope;
+                  <code>var</code> observes function scope
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Primitives
+      const str = "Hello World";
+      const num = 42;
+      const isVal = true;
+      let unassigned;
+      const emptyVal = null;
+      const bigIntNum = 9007199254740991n;
+      const sym = Symbol("id");
+
+      write("out1", [
+        'typeof "Hello World" -> ' + typeof str,
+        "typeof 42          -> " + typeof num,
+        "typeof true        -> " + typeof isVal,
+        "typeof undefined   -> " + typeof unassigned,
+        "typeof null        -> " + typeof emptyVal + " (JS Quirk)",
+        "typeof 90071992... -> " + typeof bigIntNum,
+        "typeof Symbol()    -> " + typeof sym,
+      ]);
+
+      // 2. Reference Types
+      const user = { name: "Alex", age: 20 };
+      const numbers = [10, 20, 30];
+      function greet() {
+        return "Hi";
+      }
+
+      let x = 10;
+      let y = x;
+      y = 20;
+
+      const obj1 = { val: 10 };
+      const obj2 = obj1;
+      obj2.val = 20;
+
+      write("out2", [
+        "typeof { object }   -> " + typeof user,
+        "typeof [ array ]    -> " + typeof numbers,
+        "typeof function()   -> " + typeof greet,
+        "Primitive x (val)   -> " + x,
+        "Object obj1 (ref)   -> " + obj1.val,
+      ]);
+
+      // 3. Let Keyword
+      let score = 50;
+      score = 75;
+      let blockOut = "";
+      if (true) {
+        let blockScore = 100;
+        blockOut = "Inside block: " + blockScore;
+      }
+
+      write("out3", [blockOut, "Reassigned score: " + score]);
+
+      // 4. Const Keyword
+      const TAX_RATE = 0.18;
+      const person = { name: "Sam" };
+      person.name = "Maya";
+      person.age = 25;
+
+      const colors = ["Red", "Green"];
+      colors.push("Blue");
+
+      write("out4", [
+        "TAX_RATE           -> " + TAX_RATE,
+        "Mutated Person     -> " + JSON.stringify(person),
+        "Mutated Colors     -> [" + colors.join(", ") + "]",
+      ]);
+
+      // 5. Scope & TDZ
+      let varDemoOut = "";
+      if (true) {
+        var varVariable = "I am var";
+      }
+      varDemoOut = "varVariable outside block -> " + varVariable;
+
+      let tdzErr = "";
+      try {
+        // Intentional error simulation
+        eval('console.log(tdzVar); let tdzVar = "test";');
+      } catch (err) {
+        tdzErr = "TDZ Error -> " + err.message;
+      }
+
+      write("out5", [varDemoOut, tdzErr]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

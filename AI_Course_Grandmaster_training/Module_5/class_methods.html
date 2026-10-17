@@ -1,0 +1,1404 @@
+<!--
+=======================================================
+  JAVASCRIPT CLASSES, INHERITANCE, STATIC METHODS
+=======================================================
+
+-------------------------------------------------------
+1. WHAT IS A CLASS?
+-------------------------------------------------------
+A class is a template for creating objects. It bundles:
+  - DATA        (properties set in the constructor)
+  - BEHAVIOUR   (methods defined on the class)
+
+  class User {
+    constructor(name) { this.name = name; }
+    greet() { return "Hi " + this.name; }
+  }
+  const u = new User("Alex");
+
+Important:
+  - A class is NOT hoisted like a function declaration.
+    You must declare it before you use it.
+  - Classes are ALWAYS in strict mode, even without "use strict".
+  - Inside class code, `this` is undefined when a method is
+    called without a receiver — no fallback to window.
+  - Classes are functions under the hood — but with clearer syntax
+    and safer rules.
+
+-------------------------------------------------------
+2. CLASS ANATOMY
+-------------------------------------------------------
+  class Name {
+    // 1. static field (belongs to the class)
+    static TAX = 0.1;
+
+    // 2. instance field (per object, set BEFORE constructor)
+    count = 0;
+
+    // 3. constructor  → runs once on `new`
+    constructor(a, b) {
+      this.a = a;
+      this.b = b;
+    }
+
+    // 4. instance method (on the prototype)
+    total() { return this.a + this.b; }
+
+    // 5. static method (on the class itself)
+    static create(a, b) { return new Name(a, b); }
+
+    // 6. getter / setter
+    get value() { return this.a; }
+    set value(v) { this.a = v; }
+  }
+
+Order of execution on `new`:
+  a) new empty object is created
+  b) static / instance fields are set (instance fields here)
+  c) constructor body runs
+  d) reference to the new object is returned
+
+-------------------------------------------------------
+3. INSTANCE vs CLASS (STATIC) MEMBERS
+-------------------------------------------------------
+  INSTANCE method / field  →  belongs to each object
+                              accessed via `obj.x` or `this.x`
+                              has access to `this`
+
+  STATIC method / field    →  belongs to the class itself
+                              accessed via `ClassName.x`
+                              called WITHOUT an instance
+                              `this` inside is the CLASS, not an object
+
+Common uses of static:
+  - factory helpers           User.fromJSON(data)
+  - utility functions         Math.max(), Array.isArray()
+  - constants                 App.VERSION, Config.TAX_RATE
+  - counters / registries     User.count
+  - private helpers that do not need instance state
+
+RULE: if the method does not need `this` of an instance → static.
+
+-------------------------------------------------------
+4. CLASS INHERITANCE (`extends`)
+-------------------------------------------------------
+  class Admin extends User {
+    constructor(name, role) {
+      super(name);           // must run FIRST
+      this.role = role;
+    }
+    greet() { return super.greet() + " (admin)"; }
+  }
+
+WHAT `extends` DOES:
+  - Sets the child prototype chain:  Admin.prototype → User.prototype
+  - Each instance can call BOTH child and parent methods
+  - Child methods override parent methods of the same name
+
+WHAT `super` DOES:
+  - super(...)         calls the PARENT constructor
+  - super.method()     calls the PARENT version of that method
+  - Must be called before using `this` in a child constructor with extends
+    (there is no `this` until the parent constructor runs)
+
+WHAT GETS INHERITED:
+  - instance methods       YES  (through the prototype chain)
+  - static methods         YES  (child class links to parent class, not the prototype)
+  - static fields          YES  (same chain)
+  - getters / setters      YES
+  - constructor            not "inherited" — you must call super()
+    when the child has its own constructor
+
+OVERRIDING vs EXTENDING:
+  Override  → redefine the method with the same name
+  Extend    → call super.method() inside the override
+
+CALLING PARENT STATIC METHODS:
+  class Child extends Parent { }
+  Child.parentStatic()      → works (static chain)
+  Inside Child:  super.staticMethod()
+
+-------------------------------------------------------
+5. THE `instanceof` OPERATOR
+-------------------------------------------------------
+  const u = new User("Alex");
+  const a = new Admin("Sam", "root");
+
+  u instanceof User        → true
+  a instanceof User        → true     (through the chain)
+  a instanceof Admin       → true
+  u instanceof Admin       → false    (parent is not a child)
+
+Use it to check which constructor created an object.
+
+-------------------------------------------------------
+6. PRIVATE FIELDS AND METHODS (`#`)
+-------------------------------------------------------
+  class Bank {
+    #balance = 0;                       // private field
+    #log() { }                          // private method
+    deposit(n) { this.#balance += n; }
+    get balance() { return this.#balance; }
+  }
+
+  b.#balance                              → SyntaxError outside the class
+
+`#` private members are truly private — the only reliable way.
+(many devs used `_balance` by convention before; that was never enforced)
+
+-------------------------------------------------------
+7. GETTERS AND SETTERS
+-------------------------------------------------------
+  class Circle {
+    constructor(r) { this.r = r; }
+    get diameter() { return this.r * 2; }
+    set diameter(d) { this.r = d / 2; }
+  }
+
+  c.diameter = 20;    // setter runs
+  c.diameter;         // getter runs → 20
+
+Getters let you expose computed values; setters let you validate
+or convert input. From outside, they look like normal properties.
+
+-------------------------------------------------------
+8. CLASS vs FUNCTION CONSTRUCTOR (historical contrast)
+-------------------------------------------------------
+  Old way:
+    function User(name) { this.name = name; }
+    User.prototype.greet = function () { return "Hi " + this.name; };
+
+  Class way:
+    class User { constructor(n){ this.name = n; } greet(){ ... } }
+
+Classes are syntactic sugar over the prototype system, but with
+stricter rules, cleaner syntax, and proper extend/super support.
+
+-------------------------------------------------------
+9. COMMON MISTAKES
+-------------------------------------------------------
+  Remembering 12 rules is not needed — remembering these 6 is:
+  1. Using `this` BEFORE super() in a subclass constructor.
+  2. Forgetting `new` when calling the class
+     → TypeError: Class constructor cannot be invoked without 'new'.
+  3. Setting `this` fields before super() (no `this` exists yet).
+  4. Using arrow functions as class methods (no own `this`).
+  5. Assigning to an instance-inherited static accidentally:
+     this.staticThing  → undefined, not the class field
+  6. Detaching a class method and calling it bare
+     → this = undefined → crash (classes are strict)
+
+-------------------------------------------------------
+10. WHEN TO USE A CLASS
+-------------------------------------------------------
+  YES: objects with state + behaviour (Player, BankAccount, Cart)
+  YES: hierarchies with shared logic (Base -> Admin, Animal -> Dog)
+  YES: small data models with validation (setters)
+  MAYBE: single utility function → plain function is simpler
+  NO:  one-off data → object literal is enough
+  NO:  pure data tables → arrays + objects
+
+Memory Trick:
+  class         = blueprint for objects
+  constructor   = runs once on `new`
+  instance member = per object, uses `this`
+  static member = on the class, called ClassName.method()
+  extends       = inherit from a parent class
+  super(...)    = call parent constructor (before `this`)
+  super.m()     = call parent method
+  #private      = truly private member
+  instanceof    = "was I built from this class (or a child)?"
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Classes, Inheritance, Static Methods</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+      .note {
+        background: #fff8e6;
+        border-left: 4px solid #f0ad4e;
+        padding: 10px 14px;
+        border-radius: 4px;
+        margin-bottom: 14px;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Classes, Inheritance, and Static Methods</h1>
+
+      <div class="note">
+        <strong>Setup:</strong> everything below is written in the live demo
+        script at the bottom of this page. Each block shows the code on the left
+        and its real output on the right.
+      </div>
+
+      <!-- 1. CLASS BASICS -->
+      <div class="section">
+        <h2>1. Class Basics</h2>
+        <p>
+          A class groups data and behaviour into a reusable blueprint. Create
+          objects from it with <code>new</code>.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class User {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  greet() {
+    return "Hi " + this.name;
+  }
+  describe() {
+    return this.name + " (" + this.age + ")";
+  }
+}
+
+const alex = new User("Alex", 20);
+const sam  = new User("Sam", 25);
+
+console.log(alex.name);
+console.log(alex.greet());
+console.log(sam.describe());
+
+// Two instances = two independent objects
+console.log(alex instanceof User);
+console.log(typeof User);         // "function"</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ANATOMY -->
+      <div class="section">
+        <h2>2. Class Anatomy — All the Parts</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class Product {
+  // 1. static field (one per class)
+  static CATEGORY = "electronics";
+
+  // 2. instance field (one per object)
+  qty = 1;
+
+  constructor(name, price) {
+    this.name = name;
+    this.price = price;
+  }
+
+  // 3. instance method
+  total() {
+    return this.price * this.qty;
+  }
+
+  // 4. static method
+  static describe() {
+    return "Shop category: " + Product.CATEGORY;
+  }
+
+  // 5. getter / setter
+  get label() { return this.name.toUpperCase(); }
+  set label(v) { this.name = v.toLowerCase(); }
+}
+
+const p = new Product("Lamp", 500);
+
+console.log(p.name);
+console.log(p.total());
+console.log(Product.describe());
+console.log(p.label);
+p.label = "DESK";
+console.log(p.name);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. INSTANCE vs STATIC -->
+      <div class="section">
+        <h2>3. Instance vs Static Members</h2>
+        <p>
+          Instance members belong to each object. Static members belong to the
+          class itself.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class Counter {
+  static total = 0;      // shared by ALL instances
+
+  constructor(label) {
+    this.label = label;         // per-object
+    this.count = 0;             // per-object
+    Counter.total++;            // increment the shared counter
+  }
+
+  hit() {
+    this.count++;
+    return `${this.label}: ${this.count}`;
+  }
+
+  // static: no `this` of an instance
+  static summary() {
+    return "instances created: " + Counter.total;
+  }
+}
+
+const a = new Counter("A");
+const b = new Counter("B");
+
+console.log(a.hit());
+console.log(a.hit());
+console.log(b.hit());
+console.log(Counter.summary());
+
+// Where these live:
+console.log(typeof a.hit);        // function (via prototype)
+console.log(typeof a.summary);    // undefined (static is on the class only)
+console.log(typeof Counter.hit);  // undefined (methods need an instance)</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. STATIC FACTORY METHOD -->
+      <div class="section">
+        <h2>4. Static Factory Method — the Classic Use Case</h2>
+        <p>
+          A static method that builds instances for you. Used everywhere in real
+          code (e.g. <code>Date.now()</code>, <code>Array.from()</code>).
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class User {
+  constructor(name, role) {
+    this.name = name;
+    this.role = role;
+  }
+
+  static fromJSON(json) {
+    const data = typeof json === "string" ? JSON.parse(json) : json;
+    return new User(data.name, data.role);
+  }
+
+  static guest() {
+    return new User("Guest", "viewer");
+  }
+
+  describe() {
+    return this.name + " (" + this.role + ")";
+  }
+}
+
+const a = new User("Alex", "admin");
+const b = User.fromJSON('{"name":"Sam","role":"editor"}');
+const c = User.guest();
+
+console.log(a.describe());
+console.log(b.describe());
+console.log(c.describe());
+
+// Why not just `new User(...)` everywhere?
+// `fromJSON` handles parsing; callers stay clean.</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. INHERITANCE -->
+      <div class="section">
+        <h2>5. Inheritance with <code>extends</code></h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+  speak() { return this.name + " makes a sound"; }
+  intro() { return "I am " + this.name; }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);              // must call BEFORE this
+    this.breed = breed;
+  }
+  speak() {
+    // override + extend using super
+    return this.name + " barks (" + this.breed + ")";
+  }
+}
+
+class Puppy extends Dog {
+  constructor(name, breed) {
+    super(name, breed);
+    this.age = 0;
+  }
+  intro() {
+    // call parent version, then add more
+    return super.intro() + ", a puppy";
+  }
+}
+
+const d = new Dog("Rex", "Labrador");
+const p = new Puppy("Buddy", "Beagle");
+
+console.log(d.intro());
+console.log(d.speak());
+console.log(p.intro());     // overridden
+console.log(p.speak());     // inherited 3 levels up
+
+// instanceof walks the whole chain
+console.log(p instanceof Puppy);
+console.log(p instanceof Dog);
+console.log(p instanceof Animal);
+console.log(d instanceof Puppy);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. STATIC INHERITANCE -->
+      <div class="section">
+        <h2>6. Static Members Are Inherited Too</h2>
+        <p>
+          A subclass automatically inherits its parent's static methods and
+          fields — but not from the prototype chain, from the class chain.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class Shape {
+  static TYPE = "shape";
+  static count = 0;
+
+  static register() {
+    Shape.count++;
+    return "registered " + Shape.count;
+  }
+
+  area() { return 0; }
+}
+
+class Circle extends Shape {
+  constructor(r) { super(); this.r = r; }
+  area() { return Math.PI * this.r * this.r; }
+
+  // subclass static override
+  static register() {
+    return "circle: " + super.register();
+  }
+}
+
+const c = new Circle(2);
+
+// Instance method
+console.log(c.area().toFixed(2));
+
+// Static inherited
+console.log(Circle.TYPE);
+console.log(Circle.register());
+console.log(Shape.register());
+
+// Static lives on the class
+console.log(typeof c.register);     // undefined</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out6" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. PRIVATE -->
+      <div class="section">
+        <h2>7. Private Fields and Methods (<code>#</code>)</h2>
+        <p>
+          <code>#</code> members are truly private — no outside access, even
+          with bracket notation.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class Bank {
+  #balance = 0;              // private field
+  #history = [];             // private field
+
+  #log(kind, amt) {          // private method
+    this.#history.push({ kind, amt });
+  }
+
+  deposit(amt) {
+    if (amt <= 0) throw new Error("invalid amount");
+    this.#balance += amt;
+    this.#log("deposit", amt);
+    return this.#balance;
+  }
+
+  withdraw(amt) {
+    if (amt > this.#balance) throw new Error("insufficient");
+    this.#balance -= amt;
+    this.#log("withdraw", amt);
+    return this.#balance;
+  }
+
+  get balance() { return this.#balance; }
+  get history() { return [...this.#history]; }  // return a copy
+}
+
+const b = new Bank();
+b.deposit(100);
+b.deposit(50);
+b.withdraw(30);
+console.log("balance:", b.balance);
+console.log("history:", b.history);
+
+// Outside access is a SyntaxError
+try {
+  console.log(b.#balance);
+} catch (e) {
+  console.log(e.name + ": " + e.message);
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out7" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. GETTERS AND SETTERS -->
+      <div class="section">
+        <h2>8. Getters and Setters</h2>
+        <p>
+          They look like normal properties from the outside but run code when
+          read or written.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class Temperature {
+  #celsius = 0;
+
+  // Getter: computed property
+  get fahrenheit() {
+    return this.#celsius * 9 / 5 + 32;
+  }
+
+  // Setter: validation + conversion
+  set fahrenheit(f) {
+    if (f < -459.67) throw new Error("below absolute zero");
+    this.#celsius = (f - 32) * 5 / 9;
+  }
+
+  get celsius() { return this.#celsius; }
+  set celsius(c) {
+    if (c < -273.15) throw new Error("below absolute zero");
+    this.#celsius = c;
+  }
+}
+
+const t = new Temperature();
+t.celsius = 25;
+console.log(t.celsius, "°C =", t.fahrenheit.toFixed(1), "°F");
+
+t.fahrenheit = 212;
+console.log(t.celsius.toFixed(1), "°C =", t.fahrenheit, "°F");
+
+try {
+  t.celsius = -500;
+} catch (e) {
+  console.log(e.message);
+}</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out8" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. REAL WORLD -->
+      <div class="section">
+        <h2>9. Real World — Small Model Example</h2>
+        <p>
+          A <code>CartItem</code> class with a subclass
+          <code>DiscountedItem</code> and a static factory.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class CartItem {
+  static TAX = 0.1;
+
+  constructor(name, price, qty = 1) {
+    this.name = name;
+    this.price = price;
+    this.qty = qty;
+  }
+
+  subtotal() {
+    return this.price * this.qty;
+  }
+
+  total() {
+    return Math.round(this.subtotal() * (1 + CartItem.TAX) * 100) / 100;
+  }
+
+  static fromJSON(json) {
+    const d = typeof json === "string" ? JSON.parse(json) : json;
+    return new CartItem(d.name, d.price, d.qty);
+  }
+}
+
+class DiscountedItem extends CartItem {
+  constructor(name, price, qty, percent) {
+    super(name, price, qty);
+    this.percent = percent;
+  }
+  subtotal() {
+    // apply discount first
+    const base = super.subtotal();
+    return Math.round(base * (1 - this.percent / 100) * 100) / 100;
+  }
+}
+
+const a = CartItem.fromJSON('{"name":"Pen","price":20,"qty":3}');
+const b = new DiscountedItem("Laptop Bag", 1000, 1, 15);
+
+console.log(a.name, "→ total", a.total());
+console.log(b.name, "→ subtotal", b.subtotal(), "total", b.total());
+
+// Static constants are shared by parent AND child
+console.log(b instanceof CartItem);
+console.log(b instanceof DiscountedItem);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out9" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. COMMON MISTAKES -->
+      <div class="section">
+        <h2>10. Common Mistakes (and the errors they cause)</h2>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>class Animal {
+  constructor(name) { this.name = name; }
+  speak() { return "sound"; }
+}
+
+// ---- 1. Forgetting new ----
+try {
+  Animal("Rex");
+} catch (e) {
+  console.log("no new →", e.name);
+}
+
+// ---- 2. this before super in subclass ----
+class Dog extends Animal {
+  constructor(name) {
+    // this.x = 1;      // ReferenceError
+    super(name);
+    this.x = 1;
+  }
+}
+
+// ---- 3. Detached method ----
+const d = new Dog("Rex");
+const speak = d.speak;
+try {
+  speak();
+} catch (e) {
+  console.log("detached →", e.name);
+}
+
+// ---- 4. arrow as method ----
+class Counter {
+  count = 0;
+  bad  = () => this.count;   // this = instance via class field
+  good() { return this.count; }
+}
+const c = new Counter();
+console.log(c.bad());
+console.log(c.good());
+
+// ---- 5. calling class static on an instance ----
+class Math2 {
+  static add(a, b) { return a + b; }
+}
+console.log(Math2.add(2, 3));
+// new Math2().add(2, 3);   // TypeError</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out10" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. QUICK REFERENCE -->
+      <div class="section">
+        <h2>11. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Concept</th>
+                <th>Syntax</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Declare a class</td>
+                <td><code>class Name { }</code></td>
+                <td>Not hoisted — declare before use</td>
+              </tr>
+              <tr>
+                <td>Create an object</td>
+                <td><code>new Name(args)</code></td>
+                <td>Runs the constructor</td>
+              </tr>
+              <tr>
+                <td>Constructor</td>
+                <td><code>constructor(a, b) { }</code></td>
+                <td>Runs once on <code>new</code></td>
+              </tr>
+              <tr>
+                <td>Instance field</td>
+                <td><code>count = 0;</code></td>
+                <td>Set on every new object</td>
+              </tr>
+              <tr>
+                <td>Static field</td>
+                <td><code>static TAX = 0.1;</code></td>
+                <td>Shared by all instances</td>
+              </tr>
+              <tr>
+                <td>Instance method</td>
+                <td><code>total() { }</code></td>
+                <td><code>this</code> = instance</td>
+              </tr>
+              <tr>
+                <td>Static method</td>
+                <td><code>static create() { }</code></td>
+                <td><code>Name.method()</code>, no instance</td>
+              </tr>
+              <tr>
+                <td>Getter</td>
+                <td><code>get value() { }</code></td>
+                <td>Reads like a property</td>
+              </tr>
+              <tr>
+                <td>Setter</td>
+                <td><code>set value(v) { }</code></td>
+                <td>Validates input</td>
+              </tr>
+              <tr>
+                <td>Private field</td>
+                <td><code>#count = 0;</code></td>
+                <td>Truly private (SyntaxError from outside)</td>
+              </tr>
+              <tr>
+                <td>Private method</td>
+                <td><code>#log() { }</code></td>
+                <td>Truly private</td>
+              </tr>
+              <tr>
+                <td>Inheritance</td>
+                <td><code>class Child extends Parent { }</code></td>
+                <td>Prototype chain setup</td>
+              </tr>
+              <tr>
+                <td>Parent constructor</td>
+                <td><code>super(args)</code></td>
+                <td>Must run before <code>this</code></td>
+              </tr>
+              <tr>
+                <td>Parent method</td>
+                <td><code>super.method()</code></td>
+                <td>Extend instead of replace</td>
+              </tr>
+              <tr>
+                <td>Parent static</td>
+                <td><code>super.staticMethod()</code></td>
+                <td>Static chain</td>
+              </tr>
+              <tr>
+                <td>Type check</td>
+                <td><code>obj instanceof Parent</code></td>
+                <td>Walks the whole chain</td>
+              </tr>
+              <tr>
+                <td>Arrow as method</td>
+                <td><code>method = () =&gt; this.x</code></td>
+                <td>Uses class field binding</td>
+              </tr>
+              <tr>
+                <td>Attach method to callback</td>
+                <td><code>obj.method.bind(obj)</code></td>
+                <td>Or arrow wrapper</td>
+              </tr>
+              <tr>
+                <td>Class as a function</td>
+                <td><code>typeof MyClass</code></td>
+                <td>Returns <code>"function"</code></td>
+              </tr>
+              <tr>
+                <td>Static on instance</td>
+                <td><code>obj.staticMethod()</code></td>
+                <td>Undefined — statics are class-only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Basics
+      (() => {
+        class User {
+          constructor(name, age) {
+            this.name = name;
+            this.age = age;
+          }
+          greet() {
+            return "Hi " + this.name;
+          }
+          describe() {
+            return this.name + " (" + this.age + ")";
+          }
+        }
+
+        const alex = new User("Alex", 20);
+        const sam = new User("Sam", 25);
+
+        write("out1", [
+          "alex.name        → " + alex.name,
+          "alex.greet()     → " + alex.greet(),
+          "sam.describe()   → " + sam.describe(),
+          "",
+          "alex instanceof User → " + (alex instanceof User),
+          "typeof User          → " + typeof User,
+          "",
+          "Two instances are independent — setting alex.name does not affect sam.",
+        ]);
+      })();
+
+      // 2. Anatomy
+      (() => {
+        class Product {
+          static CATEGORY = "electronics";
+          qty = 1;
+
+          constructor(name, price) {
+            this.name = name;
+            this.price = price;
+          }
+          total() {
+            return this.price * this.qty;
+          }
+          static describe() {
+            return "Shop category: " + Product.CATEGORY;
+          }
+          get label() {
+            return this.name.toUpperCase();
+          }
+          set label(v) {
+            this.name = v.toLowerCase();
+          }
+        }
+
+        const p = new Product("Lamp", 500);
+
+        const before = p.name;
+        const upper = p.label;
+        p.label = "DESK";
+        const after = p.name;
+
+        write("out2", [
+          "p.name           → " + before,
+          "p.total()        → " + p.total(),
+          "Product.describe() → " + Product.describe(),
+          "",
+          "p.label (getter) → " + upper,
+          "p.label = 'DESK' → setter runs",
+          "p.name           → " + after + "   (stored lowercase)",
+          "",
+          "Order on `new`",
+          "  1. instance fields (qty = 1)",
+          "  2. constructor body",
+          "  3. object returned",
+        ]);
+      })();
+
+      // 3. Instance vs static
+      (() => {
+        class Counter {
+          static total = 0;
+          constructor(label) {
+            this.label = label;
+            this.count = 0;
+            Counter.total++;
+          }
+          hit() {
+            this.count++;
+            return this.label + ": " + this.count;
+          }
+          static summary() {
+            return "instances created: " + Counter.total;
+          }
+        }
+
+        const a = new Counter("A");
+        const b = new Counter("B");
+
+        write("out3", [
+          "a.hit()          → " + a.hit(),
+          "a.hit()          → " + a.hit(),
+          "b.hit()          → " + b.hit(),
+          "",
+          "Counter.summary() → " + Counter.summary(),
+          "",
+          "typeof a.hit          → " + typeof a.hit + "     (via prototype)",
+          "typeof a.summary      → " +
+            typeof a.summary +
+            "  (static is class-only)",
+          "typeof Counter.hit    → " +
+            typeof Counter.hit +
+            "  (needs an instance)",
+        ]);
+      })();
+
+      // 4. Static factory
+      (() => {
+        class User {
+          constructor(name, role) {
+            this.name = name;
+            this.role = role;
+          }
+          static fromJSON(json) {
+            const d = typeof json === "string" ? JSON.parse(json) : json;
+            return new User(d.name, d.role);
+          }
+          static guest() {
+            return new User("Guest", "viewer");
+          }
+          describe() {
+            return this.name + " (" + this.role + ")";
+          }
+        }
+
+        const a = new User("Alex", "admin");
+        const b = User.fromJSON('{"name":"Sam","role":"editor"}');
+        const c = User.guest();
+
+        write("out4", [
+          "new User('Alex', 'admin')          → " + a.describe(),
+          "User.fromJSON(json string)          → " + b.describe(),
+          "User.guest()                        → " + c.describe(),
+          "",
+          "Factory hides parsing details — the caller stays clean:",
+          "  const u = User.fromJSON(responseBody);",
+        ]);
+      })();
+
+      // 5. Inheritance
+      (() => {
+        class Animal {
+          constructor(name) {
+            this.name = name;
+          }
+          speak() {
+            return this.name + " makes a sound";
+          }
+          intro() {
+            return "I am " + this.name;
+          }
+        }
+
+        class Dog extends Animal {
+          constructor(name, breed) {
+            super(name);
+            this.breed = breed;
+          }
+          speak() {
+            return this.name + " barks (" + this.breed + ")";
+          }
+        }
+
+        class Puppy extends Dog {
+          constructor(name, breed) {
+            super(name, breed);
+            this.age = 0;
+          }
+          intro() {
+            return super.intro() + ", a puppy";
+          }
+        }
+
+        const d = new Dog("Rex", "Labrador");
+        const p = new Puppy("Buddy", "Beagle");
+
+        write("out5", [
+          "d.intro()        → " + d.intro() + "     (Animal version)",
+          "d.speak()        → " + d.speak() + "     (Dog override)",
+          "p.intro()        → " +
+            p.intro() +
+            "     (Puppy override, calls super)",
+          "p.speak()        → " + p.speak() + "     (inherited from Dog)",
+          "",
+          "instanceof:",
+          "  p instanceof Puppy   → " + (p instanceof Puppy),
+          "  p instanceof Dog     → " + (p instanceof Dog),
+          "  p instanceof Animal  → " + (p instanceof Animal),
+          "  d instanceof Puppy   → " +
+            (d instanceof Puppy) +
+            "     (parent is not child)",
+        ]);
+      })();
+
+      // 6. Static inheritance
+      (() => {
+        class Shape {
+          static TYPE = "shape";
+          static count = 0;
+          static register() {
+            Shape.count++;
+            return "registered " + Shape.count;
+          }
+          area() {
+            return 0;
+          }
+        }
+
+        class Circle extends Shape {
+          constructor(r) {
+            super();
+            this.r = r;
+          }
+          area() {
+            return Math.PI * this.r * this.r;
+          }
+          static register() {
+            return "circle: " + super.register();
+          }
+        }
+
+        const c = new Circle(2);
+
+        write("out6", [
+          "c.area().toFixed(2)   → " + c.area().toFixed(2),
+          "",
+          "STATIC INHERITANCE:",
+          "  Circle.TYPE          → " + Shape.TYPE === "shape" ? "shape" : "",
+          "  Circle.TYPE          → " + Circle.TYPE + "   (inherited)",
+          "  Circle.register()    → " + Circle.register(),
+          "  Shape.register()     → " + Shape.register(),
+          "",
+          "  typeof c.register    → " +
+            typeof c.register +
+            "   (static is not on instances)",
+        ]);
+      })();
+
+      // 7. Private members
+      (() => {
+        class Bank {
+          #balance = 0;
+          #history = [];
+          #log(kind, amt) {
+            this.#history.push({ kind, amt });
+          }
+          deposit(amt) {
+            if (amt <= 0) throw new Error("invalid amount");
+            this.#balance += amt;
+            this.#log("deposit", amt);
+            return this.#balance;
+          }
+          withdraw(amt) {
+            if (amt > this.#balance) throw new Error("insufficient");
+            this.#balance -= amt;
+            this.#log("withdraw", amt);
+            return this.#balance;
+          }
+          get balance() {
+            return this.#balance;
+          }
+          get history() {
+            return [...this.#history];
+          }
+        }
+
+        const b = new Bank();
+        b.deposit(100);
+        b.deposit(50);
+        b.withdraw(30);
+
+        // Attempt private access — the syntax error is caught at parse time
+        // in real code. Here we use eval to trap it as a runtime error.
+        let err = "";
+        try {
+          eval("console.log(b.#balance)");
+        } catch (e) {
+          err = e.name + ": " + e.message;
+        }
+
+        write("out7", [
+          "b.deposit(100); b.deposit(50); b.withdraw(30);",
+          "b.balance → " + b.balance,
+          "",
+          "b.history →",
+          JSON.stringify(b.history, null, 2),
+          "",
+          "Try outside access:",
+          "  b.#balance  → " + err,
+        ]);
+      })();
+
+      // 8. Getters/setters
+      (() => {
+        class Temperature {
+          #celsius = 0;
+          get fahrenheit() {
+            return (this.#celsius * 9) / 5 + 32;
+          }
+          set fahrenheit(f) {
+            if (f < -459.67) throw new Error("below absolute zero");
+            this.#celsius = ((f - 32) * 5) / 9;
+          }
+          get celsius() {
+            return this.#celsius;
+          }
+          set celsius(c) {
+            if (c < -273.15) throw new Error("below absolute zero");
+            this.#celsius = c;
+          }
+        }
+
+        const t = new Temperature();
+        t.celsius = 25;
+        const c1 = t.celsius;
+        const f1 = t.fahrenheit.toFixed(1);
+
+        t.fahrenheit = 212;
+        const c2 = t.celsius.toFixed(1);
+        const f2 = t.fahrenheit;
+
+        let err = "";
+        try {
+          t.celsius = -500;
+        } catch (e) {
+          err = e.message;
+        }
+
+        write("out8", [
+          "t.celsius = 25",
+          "  t.celsius    → " + c1,
+          "  t.fahrenheit → " + f1,
+          "",
+          "t.fahrenheit = 212",
+          "  t.celsius    → " + c2,
+          "  t.fahrenheit → " + f2,
+          "",
+          "Validation:",
+          "  t.celsius = -500 → " + err,
+        ]);
+      })();
+
+      // 9. Real world
+      (() => {
+        class CartItem {
+          static TAX = 0.1;
+          constructor(name, price, qty = 1) {
+            this.name = name;
+            this.price = price;
+            this.qty = qty;
+          }
+          subtotal() {
+            return this.price * this.qty;
+          }
+          total() {
+            return Math.round(this.subtotal() * (1 + CartItem.TAX) * 100) / 100;
+          }
+          static fromJSON(json) {
+            const d = typeof json === "string" ? JSON.parse(json) : json;
+            return new CartItem(d.name, d.price, d.qty);
+          }
+        }
+
+        class DiscountedItem extends CartItem {
+          constructor(name, price, qty, percent) {
+            super(name, price, qty);
+            this.percent = percent;
+          }
+          subtotal() {
+            const base = super.subtotal();
+            return Math.round(base * (1 - this.percent / 100) * 100) / 100;
+          }
+        }
+
+        const a = CartItem.fromJSON('{"name":"Pen","price":20,"qty":3}');
+        const b = new DiscountedItem("Laptop Bag", 1000, 1, 15);
+
+        write("out9", [
+          "CartItem.fromJSON('Pen', 20, qty 3)",
+          "  subtotal → " + a.subtotal(),
+          "  total    → " + a.total() + "   (includes 10% tax)",
+          "",
+          "new DiscountedItem('Laptop Bag', 1000, 1, 15%)",
+          "  subtotal → " + b.subtotal() + "   (overridden, 15% off)",
+          "  total    → " + b.total() + "   (tax applied after discount)",
+          "",
+          "instanceof:",
+          "  b instanceof DiscountedItem → " + (b instanceof DiscountedItem),
+          "  b instanceof CartItem       → " + (b instanceof CartItem),
+          "",
+          "Static constant shared: CartItem.TAX = " + CartItem.TAX,
+        ]);
+      })();
+
+      // 10. Common mistakes
+      (() => {
+        class Animal {
+          constructor(name) {
+            this.name = name;
+          }
+          speak() {
+            return "sound";
+          }
+        }
+        class Dog extends Animal {
+          constructor(name) {
+            super(name);
+            this.x = 1;
+          }
+        }
+
+        let noNewErr = "";
+        try {
+          Animal("Rex");
+        } catch (e) {
+          noNewErr = e.name;
+        }
+
+        const d = new Dog("Rex");
+        const speak = d.speak;
+        let detachedErr = "";
+        try {
+          speak();
+        } catch (e) {
+          detachedErr = e.name;
+        }
+
+        class Counter {
+          count = 0;
+          bad = () => this.count;
+          good() {
+            return this.count;
+          }
+        }
+        const c = new Counter();
+
+        class Math2 {
+          static add(a, b) {
+            return a + b;
+          }
+        }
+
+        write("out10", [
+          "1. Animal('Rex')  without new     → " + noNewErr,
+          "2. this before super()            → ReferenceError (parse-time)",
+          "3. const speak = d.speak; speak() → " + detachedErr,
+          "",
+          "Class field arrow → keeps `this`:",
+          "  c.bad()  → " + c.bad(),
+          "  c.good() → " + c.good(),
+          "",
+          "Static method on the class:",
+          "  Math2.add(2, 3) → " + Math2.add(2, 3),
+          "  new Math2().add → TypeError (static is not on instances)",
+        ]);
+      })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

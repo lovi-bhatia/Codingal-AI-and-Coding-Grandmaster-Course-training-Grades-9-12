@@ -1,0 +1,342 @@
+<!--
+=======================================================
+  JAVASCRIPT: SEARCHING AND REPLACING STRINGS
+=======================================================
+
+WHY SEARCH AND REPLACE STRINGS?
+Text manipulation is one of the most common tasks in web development, 
+such as validating user input, formatting text, dynamic template 
+replacement, or filtering search results.
+
+IMPORTANT REMINDER:
+Strings in JavaScript are IMMUTABLE. Searching or replacing NEVER 
+modifies the original string; it always returns a NEW modified string!
+
+-------------------------------------------------------
+1. SEARCHING STRINGS
+-------------------------------------------------------
+JavaScript provides several built-in methods to search within text:
+
+  - `.includes(searchStr)`
+    Returns `true` or `false` if the substring exists anywhere.
+    Case-sensitive! Example: `"Hello".includes("He")` → `true`
+
+  - `.indexOf(searchStr)`
+    Returns the FIRST index position of the match, or `-1` if missing.
+    Example: `"JavaScript".indexOf("Script")` → `4`
+
+  - `.lastIndexOf(searchStr)`
+    Returns the LAST index position of the match, or `-1` if missing.
+
+  - `.startsWith(searchStr)` / `.endsWith(searchStr)`
+    Returns `true`/`false` if string begins or ends with searchStr.
+
+  - `.match(regExp)`
+    Searches using Regular Expressions and returns an Array of matches.
+
+-------------------------------------------------------
+2. REPLACING STRINGS (.replace() and .replaceAll())
+-------------------------------------------------------
+
+A. `.replace(searchValue, newValue)`
+   By default, replaces ONLY THE FIRST MATCH found!
+
+   Example:
+     const text = "cat cat cat";
+     text.replace("cat", "dog"); // "dog cat cat" (Only 1st match!)
+
+B. `.replaceAll(searchValue, newValue)`
+   Replaces ALL OCCURRENCES of the string. (ES2021+)
+
+   Example:
+     text.replaceAll("cat", "dog"); // "dog dog dog"
+
+C. REPLACING USING REGULAR EXPRESSIONS (RegExp)
+   - Global Flag `/g` : Replaces ALL matches (older alternative to replaceAll).
+   - Case-Insensitive Flag `/i` : Ignores uppercase/lowercase differences.
+
+   Examples:
+     text.replace(/cat/g, "dog");  // Replaces all "cat"
+     text.replace(/cat/i, "dog");  // Replaces "Cat", "CAT", "cat" (1st match)
+     text.replace(/cat/gi, "dog"); // Replaces all matches case-insensitively
+
+Memory Trick:
+  .includes("x")    = Quick true/false check
+  .indexOf("x")     = Position index (-1 if missing)
+  .replace("a", "b")= Replaces FIRST match
+  .replaceAll("a","b") = Replaces ALL matches
+  /pattern/gi       = Global + Case-Insensitive Regex
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Searching and Replacing Strings</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">Searching and Replacing Strings</h1>
+
+      <!-- 1. SEARCHING METHODS -->
+      <div class="section">
+        <h2>1. String Search Methods</h2>
+        <p>
+          Using <code>.includes()</code>, <code>.indexOf()</code>,
+          <code>.startsWith()</code>, and <code>.endsWith()</code>.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const text = "JavaScript is modern and flexible";
+
+console.log(text.includes("modern"));    // true
+console.log(text.indexOf("modern"));     // 14 (Index position)
+console.log(text.indexOf("Python"));     // -1 (Not found)
+console.log(text.startsWith("Java"));    // true
+console.log(text.endsWith("flexible"));  // true</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. BASIC REPLACING (.replace VS .replaceAll) -->
+      <div class="section">
+        <h2>2. Replaces First Match vs Replaces All Matches</h2>
+        <p>
+          Comparing <code>.replace()</code> (first match) against
+          <code>.replaceAll()</code> (all matches).
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const sentence = "The cat sat on the cat mat";
+
+// .replace() only replaces the FIRST occurrence
+const singleReplace = sentence.replace("cat", "dog");
+
+// .replaceAll() replaces ALL occurrences
+const allReplace = sentence.replaceAll("cat", "dog");
+
+console.log("Original String  :", sentence);
+console.log(".replace()      :", singleReplace);
+console.log(".replaceAll()   :", allReplace);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. REPLACING WITH REGULAR EXPRESSIONS -->
+      <div class="section">
+        <h2>
+          3. Replacing with Regular Expressions (<code>/pattern/gi</code>)
+        </h2>
+        <p>
+          Using regex flags: <code>/g</code> (global - replace all) and
+          <code>/i</code> (case-insensitive).
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const mixedText = "JS is great. I love js and Js!";
+
+// Case-insensitive replacement (/i) - First match only
+const replaceI = mixedText.replace(/js/i, "JavaScript");
+
+// Global & Case-insensitive replacement (/gi) - All matches
+const replaceGI = mixedText.replace(/js/gi, "JavaScript");
+
+console.log("Case-Insensitive (/i) :", replaceI);
+console.log("Global & Case-Ins. (/gi):", replaceGI);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. DYNAMIC REPLACEMENT USING A CALLBACK FUNCTION -->
+      <div class="section">
+        <h2>4. Dynamic Replacements Using Functions</h2>
+        <p>
+          Passing a callback function into <code>.replace()</code> to transform
+          matched strings dynamically.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const statement = "I have 2 apples and 5 oranges";
+
+// Dynamically double any numbers found in string
+const doubledText = statement.replace(/\d+/g, (match) => {
+  return Number(match) * 2;
+});
+
+console.log("Original:", statement);
+console.log("Doubled :", doubledText);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. QUICK REFERENCE -->
+      <div class="section">
+        <h2>5. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Method / Pattern</th>
+                <th>Syntax</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Check Existence</td>
+                <td><code>str.includes("target")</code></td>
+                <td>Returns <code>true</code> if substring exists anywhere</td>
+              </tr>
+              <tr>
+                <td>Find Index</td>
+                <td><code>str.indexOf("target")</code></td>
+                <td>
+                  Returns start index position, or <code>-1</code> if not found
+                </td>
+              </tr>
+              <tr>
+                <td>Check Boundaries</td>
+                <td>
+                  <code>str.startsWith()</code> / <code>str.endsWith()</code>
+                </td>
+                <td>
+                  Returns <code>true</code> if string starts/ends with search
+                  term
+                </td>
+              </tr>
+              <tr>
+                <td>Replace First Match</td>
+                <td><code>str.replace("a", "b")</code></td>
+                <td>Replaces ONLY the first occurrence of "a" with "b"</td>
+              </tr>
+              <tr>
+                <td>Replace All Matches</td>
+                <td><code>str.replaceAll("a", "b")</code></td>
+                <td>Replaces ALL occurrences of "a" with "b"</td>
+              </tr>
+              <tr>
+                <td>Regex Global Replace</td>
+                <td><code>str.replace(/a/g, "b")</code></td>
+                <td>Replaces all occurrences using global regex flag</td>
+              </tr>
+              <tr>
+                <td>Regex Case-Insensitive</td>
+                <td><code>str.replace(/a/gi, "b")</code></td>
+                <td>Replaces all occurrences ignoring case differences</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Search Methods
+      const text = "JavaScript is modern and flexible";
+      write("out1", [
+        'includes("modern")   -> ' + text.includes("modern"),
+        'indexOf("modern")    -> ' + text.indexOf("modern"),
+        'indexOf("Python")    -> ' + text.indexOf("Python") + " (Missing)",
+        'startsWith("Java")   -> ' + text.startsWith("Java"),
+        'endsWith("flexible") -> ' + text.endsWith("flexible"),
+      ]);
+
+      // 2. replace vs replaceAll
+      const sentence = "The cat sat on the cat mat";
+      write("out2", [
+        "Original String  : " + sentence,
+        ".replace('cat')   : " + sentence.replace("cat", "dog"),
+        ".replaceAll('cat'): " + sentence.replaceAll("cat", "dog"),
+      ]);
+
+      // 3. Regex Replacement
+      const mixedText = "JS is great. I love js and Js!";
+      write("out3", [
+        "Case-Insensitive (/i)  : " + mixedText.replace(/js/i, "JavaScript"),
+        "Global & Case-Ins (/gi): " + mixedText.replace(/js/gi, "JavaScript"),
+      ]);
+
+      // 4. Dynamic Replacements
+      const statement = "I have 2 apples and 5 oranges";
+      const doubledText = statement.replace(
+        /\d+/g,
+        (match) => Number(match) * 2,
+      );
+      write("out4", ["Original : " + statement, "Doubled  : " + doubledText]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

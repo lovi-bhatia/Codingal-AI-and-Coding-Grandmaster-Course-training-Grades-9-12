@@ -1,0 +1,362 @@
+<!--
+=======================================================
+  JAVASCRIPT: SORTING AND REVERSING STRINGS
+=======================================================
+
+WHY IS SORTING & REVERSING STRINGS DIFFERENT?
+In JavaScript, strings are PRIMITIVE and IMMUTABLE. 
+This means you CANNOT sort or reverse a string directly 
+using string methods alone.
+
+To sort or reverse a string, you must convert it into an 
+ARRAY, perform array operations, and join it back into a string!
+
+-------------------------------------------------------
+1. THE 3-STEP STRING REVERSE PATTERN
+-------------------------------------------------------
+Formula: String → Array → Reverse Array → String
+
+  const str = "hello";
+  const reversed = str.split("").reverse().join(""); // "olleh"
+
+Steps:
+  1. .split("")  : Converts string into an array of characters ["h", "e", "l", "l", "o"]
+  2. .reverse()  : Reverses the array elements in place ["o", "l", "l", "e", "h"]
+  3. .join("")   : Combines array characters back into a string "olleh"
+
+-------------------------------------------------------
+2. SORTING STRINGS ALPHABETICALLY
+-------------------------------------------------------
+Formula: String → Array → Sort Array → String
+
+  const str = "dcba";
+  const sorted = str.split("").sort().join(""); // "abcd"
+
+CASE-SENSITIVE vs CASE-INSENSITIVE SORTING:
+  - Standard `.sort()` orders by ASCII values (Uppercase before lowercase):
+    "b".split("").concat(["A"]).sort() → ["A", "b"]
+
+  - Case-Insensitive Sorting (using `localeCompare`):
+    const sortedInsensitive = str.split("").sort((a, b) => 
+      a.localeCompare(b, undefined, { sensitivity: 'base' })
+    ).join("");
+
+-------------------------------------------------------
+3. REVERSING WORDS IN A SENTENCE
+-------------------------------------------------------
+Instead of splitting by character `split("")`, split by space `split(" ")` 
+to manipulate entire words:
+
+  const sentence = "JavaScript is awesome";
+  const reversedWords = sentence.split(" ").reverse().join(" ");
+  // Result: "awesome is JavaScript"
+
+Memory Trick:
+  Strings are Immutable → Must Split → Modify → Join
+  .split("")  = Break string into letters
+  .reverse()  = Flip array order
+  .sort()     = Alphabetize array
+  .join("")   = Glue letters back into string
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sorting and Reversing Strings</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">Sorting and Reversing Strings</h1>
+
+      <!-- 1. REVERSING A STRING -->
+      <div class="section">
+        <h2>
+          1. Reversing a String (<code>split</code> -> <code>reverse</code> ->
+          <code>join</code>)
+        </h2>
+        <p>
+          Converting a string to a character array, flipping it, and joining it
+          back.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function reverseString(str) {
+  return str.split("").reverse().join("");
+}
+
+const original = "Bootstrap";
+const reversed = reverseString(original);
+
+console.log("Original:", original);
+console.log("Reversed:", reversed);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SORTING STRING CHARACTERS ALPHABETICALLY -->
+      <div class="section">
+        <h2>2. Sorting String Characters Alphabetically</h2>
+        <p>Arranging characters of a string in alphabetical order.</p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const word = "webdeveloper";
+
+// Standard ASCII sort
+const sorted = word.split("").sort().join("");
+
+console.log("Original Word:", word);
+console.log("Sorted Letters:", sorted);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. CASE-INSENSITIVE SORTING -->
+      <div class="section">
+        <h2>3. Case-Insensitive String Sorting (<code>localeCompare</code>)</h2>
+        <p>
+          Standard <code>.sort()</code> puts uppercase before lowercase. Use
+          <code>localeCompare</code> for true alphabetical order.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const mixedStr = "bA cD";
+
+// Default ASCII sort (Uppercase first)
+const asciiSort = mixedStr.split("").sort().join("");
+
+// Case-insensitive sort using localeCompare
+const caseInsensitiveSort = mixedStr.split("").sort((a, b) => 
+  a.localeCompare(b, undefined, { sensitivity: 'base' })
+).join("");
+
+console.log("Default ASCII Sort:", asciiSort);
+console.log("Case-Insensitive :", caseInsensitiveSort);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. REVERSING WORDS IN A SENTENCE -->
+      <div class="section">
+        <h2>4. Reversing Words in a Sentence</h2>
+        <p>
+          Splitting by spaces (<code>split(" ")</code>) to reverse word order
+          while keeping word letters intact.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const sentence = "JavaScript is awesome";
+
+// Reverse word order
+const reversedSentence = sentence.split(" ").reverse().join(" ");
+
+console.log("Original Sentence:", sentence);
+console.log("Reversed Words   :", reversedSentence);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. PALINDROME CHECKER UTILITY -->
+      <div class="section">
+        <h2>5. Real-World Application: Palindrome Checker</h2>
+        <p>Checking if a string reads the same backwards and forwards.</p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function isPalindrome(str) {
+  // Clean string: lowercase and remove non-alphanumeric chars
+  const cleanStr = str.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const reversedStr = cleanStr.split("").reverse().join("");
+  return cleanStr === reversedStr;
+}
+
+console.log("racecar  ->", isPalindrome("racecar"));
+console.log("hello    ->", isPalindrome("hello"));
+console.log("A man, a plan, a canal: Panama ->", isPalindrome("A man, a plan, a canal: Panama"));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out5" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. QUICK REFERENCE -->
+      <div class="section">
+        <h2>6. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Task</th>
+                <th>Formula / Code Pattern</th>
+                <th>Result Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Reverse Characters</td>
+                <td><code>str.split("").reverse().join("")</code></td>
+                <td><code>"abc"</code> → <code>"cba"</code></td>
+              </tr>
+              <tr>
+                <td>Alphabetize Letters</td>
+                <td><code>str.split("").sort().join("")</code></td>
+                <td><code>"cba"</code> → <code>"abc"</code></td>
+              </tr>
+              <tr>
+                <td>Reverse Words</td>
+                <td><code>str.split(" ").reverse().join(" ")</code></td>
+                <td><code>"hi all"</code> → <code>"all hi"</code></td>
+              </tr>
+              <tr>
+                <td>Case-Insensitive Sort</td>
+                <td>
+                  <code
+                    >str.split("").sort((a,b) =&gt;
+                    a.localeCompare(b)).join("")</code
+                  >
+                </td>
+                <td>Correct alphabetical order regardless of case</td>
+              </tr>
+              <tr>
+                <td>Palindrome Check</td>
+                <td>
+                  <code
+                    >cleanStr === cleanStr.split("").reverse().join("")</code
+                  >
+                </td>
+                <td>Returns <code>true</code> if word reads same backwards</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Reversing String
+      function reverseString(str) {
+        return str.split("").reverse().join("");
+      }
+      const original = "Bootstrap";
+      write("out1", [
+        "Original : " + original,
+        "Reversed : " + reverseString(original),
+      ]);
+
+      // 2. Sorting Letters
+      const word = "webdeveloper";
+      write("out2", [
+        "Original Word : " + word,
+        "Sorted Letters: " + word.split("").sort().join(""),
+      ]);
+
+      // 3. Case Insensitive Sort
+      const mixedStr = "bA cD";
+      const asciiSort = mixedStr.split("").sort().join("");
+      const caseInsensitiveSort = mixedStr
+        .split("")
+        .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
+        .join("");
+      write("out3", [
+        "Default ASCII Sort : " + JSON.stringify(asciiSort),
+        "Case-Insensitive   : " + JSON.stringify(caseInsensitiveSort),
+      ]);
+
+      // 4. Reverse Words
+      const sentence = "JavaScript is awesome";
+      write("out4", [
+        "Original Sentence : " + sentence,
+        "Reversed Words    : " + sentence.split(" ").reverse().join(" "),
+      ]);
+
+      // 5. Palindrome Checker
+      function isPalindrome(str) {
+        const cleanStr = str.toLowerCase().replace(/[^a-z0-9]/g, "");
+        const reversedStr = cleanStr.split("").reverse().join("");
+        return cleanStr === reversedStr;
+      }
+      write("out5", [
+        'isPalindrome("racecar") -> ' + isPalindrome("racecar"),
+        'isPalindrome("hello")   -> ' + isPalindrome("hello"),
+        'isPalindrome("A man, a plan, a canal: Panama") -> ' +
+          isPalindrome("A man, a plan, a canal: Panama"),
+      ]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,298 @@
+<!--
+=======================================================
+  GENERATE RANDOM NUMBERS USING A WHILE LOOP
+=======================================================
+
+WHY USE A WHILE LOOP FOR RANDOM NUMBERS?
+A `while` loop is ideal when you need to generate random 
+numbers until a specific condition is met, but you DO NOT 
+know how many iterations (tries) it will take in advance.
+
+COMMON USE CASES:
+  - Rolling a die until a target number (e.g., a 6) appears.
+  - Generating a list of UNIQUE random numbers (avoiding duplicates).
+  - Simulating games, lotteries, or random sampling.
+
+-------------------------------------------------------
+1. RANDOM NUMBER FORMULAS IN JAVASCRIPT
+-------------------------------------------------------
+  - `Math.random()`
+    Generates a decimal float from `0` (inclusive) up to `1` (exclusive).
+
+  - Random Integer between min and max (inclusive):
+    `Math.floor(Math.random() * (max - min + 1)) + min`
+
+  Examples:
+    1 to 6 (Die roll):   `Math.floor(Math.random() * 6) + 1`
+    1 to 100:            `Math.floor(Math.random() * 100) + 1`
+
+-------------------------------------------------------
+2. WHILE LOOP STRUCTURE FOR RANDOM GENERATION
+-------------------------------------------------------
+  let targetFound = false;
+
+  while (!targetFound) {
+    let randomNumber = Math.floor(Math.random() * 10) + 1;
+    
+    // Check stopping condition
+    if (randomNumber === 7) {
+      targetFound = true; // Stops the loop
+    }
+  }
+
+SAFETY WARNING:
+  Always ensure your `while` loop condition WILL eventually 
+  become false, or include a maximum attempt guard to prevent 
+  an infinite loop that freezes the browser!
+
+Memory Trick:
+  Math.random() = 0 to 0.999...
+  Math.floor()  = Chop off decimals
+  while         = Keep rolling until condition is met
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generate Random Numbers Using a While Loop</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">Generate Random Numbers Using a While Loop</h1>
+
+      <!-- 1. ROLL UNTIL TARGET NUMBER IS REACHED -->
+      <div class="section">
+        <h2>1. Roll a Die Until a 6 Appears</h2>
+        <p>
+          Repeats random number generation until a specific target number is
+          rolled.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>let roll = 0;
+let attempts = 0;
+
+// Keep rolling while roll is NOT 6
+while (roll !== 6) {
+  // Generate random integer from 1 to 6
+  roll = Math.floor(Math.random() * 6) + 1;
+  attempts++;
+  console.log(`Attempt ${attempts}: Rolled a ${roll}`);
+}
+
+console.log(`Success! Hit 6 in ${attempts} attempts.`);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. GENERATE UNIQUE RANDOM NUMBERS -->
+      <div class="section">
+        <h2>2. Generate N Unique Random Numbers (Lottery Style)</h2>
+        <p>
+          Uses a <code>while</code> loop to fill an array with random numbers,
+          ignoring duplicate values.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const uniqueNumbers = [];
+const countNeeded = 5;
+
+// Loop until we have exactly 5 UNIQUE numbers
+while (uniqueNumbers.length < countNeeded) {
+  // Generate random number from 1 to 20
+  const randomNum = Math.floor(Math.random() * 20) + 1;
+
+  // Add to array ONLY if it doesn't already exist
+  if (!uniqueNumbers.includes(randomNum)) {
+    uniqueNumbers.push(randomNum);
+  }
+}
+
+console.log("Unique Numbers:", uniqueNumbers);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. WHILE LOOP WITH SAFETY GUARD -->
+      <div class="section">
+        <h2>3. Random Generation with Max Attempt Safety Guard</h2>
+        <p>Prevents infinite loops by setting a maximum attempt limit.</p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>let currentNum = 0;
+let totalRolls = 0;
+const MAX_ATTEMPTS = 100; // Safety limit
+
+// Loop stops if number > 95 OR if max attempts exceeded
+while (currentNum <= 95 && totalRolls < MAX_ATTEMPTS) {
+  currentNum = Math.floor(Math.random() * 100) + 1;
+  totalRolls++;
+}
+
+console.log(`Stopped at ${currentNum} after ${totalRolls} rolls`);</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. QUICK REFERENCE -->
+      <div class="section">
+        <h2>4. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Task</th>
+                <th>Formula / Pattern</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Random Float (0 to 0.999)</td>
+                <td><code>Math.random()</code></td>
+                <td>Generates a random decimal number</td>
+              </tr>
+              <tr>
+                <td>Random Integer (1 to N)</td>
+                <td><code>Math.floor(Math.random() * N) + 1</code></td>
+                <td>Generates a random whole number from 1 to N</td>
+              </tr>
+              <tr>
+                <td>Random Integer (Min to Max)</td>
+                <td>
+                  <code>Math.floor(Math.random() * (max - min + 1)) + min</code>
+                </td>
+                <td>Generates integer within specified range</td>
+              </tr>
+              <tr>
+                <td>Loop Until Target</td>
+                <td><code>while (num !== target) { num = gen(); }</code></td>
+                <td>Repeats generation until condition is satisfied</td>
+              </tr>
+              <tr>
+                <td>Unique Collection</td>
+                <td>
+                  <code
+                    >while (arr.length &lt; N) { if (!arr.includes(val))
+                    arr.push(val); }</code
+                  >
+                </td>
+                <td>Fills collection avoiding duplicates</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Roll Until Target (6)
+      const out1 = [];
+      let roll = 0;
+      let attempts = 0;
+
+      while (roll !== 6) {
+        roll = Math.floor(Math.random() * 6) + 1;
+        attempts++;
+        out1.push(`Attempt ${attempts}: Rolled a ${roll}`);
+      }
+      out1.push(`\nSuccess! Hit 6 in ${attempts} attempts.`);
+      write("out1", out1);
+
+      // 2. Unique Random Numbers
+      const uniqueNumbers = [];
+      const countNeeded = 5;
+
+      while (uniqueNumbers.length < countNeeded) {
+        const randomNum = Math.floor(Math.random() * 20) + 1;
+        if (!uniqueNumbers.includes(randomNum)) {
+          uniqueNumbers.push(randomNum);
+        }
+      }
+      write("out2", ["Unique Numbers: [" + uniqueNumbers.join(", ") + "]"]);
+
+      // 3. Safety Guarded Loop
+      const out3 = [];
+      let currentNum = 0;
+      let totalRolls = 0;
+      const MAX_ATTEMPTS = 100;
+
+      while (currentNum <= 95 && totalRolls < MAX_ATTEMPTS) {
+        currentNum = Math.floor(Math.random() * 100) + 1;
+        totalRolls++;
+      }
+      out3.push(`Stopped at ${currentNum} after ${totalRolls} rolls`);
+      write("out3", out3);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

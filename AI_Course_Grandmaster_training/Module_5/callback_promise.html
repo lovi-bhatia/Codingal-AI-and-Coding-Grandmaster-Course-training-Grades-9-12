@@ -1,0 +1,395 @@
+<!--
+=======================================================
+  JAVASCRIPT ASYNCHRONOUS: CALLBACKS AND PROMISES
+=======================================================
+
+WHAT IS ASYNCHRONOUS JAVASCRIPT?
+JavaScript is single-threaded (executes one line at a time). 
+Asynchronous operations (like fetching network data, reading files, 
+or timers) allow long tasks to run in the background without 
+blocking the rest of the application execution.
+
+-------------------------------------------------------
+1. CALLBACK FUNCTIONS
+-------------------------------------------------------
+A callback is a function passed as an ARGUMENT to another function, 
+to be executed (called back) after the parent operation completes.
+
+EXAMPLE:
+  function fetchData(callback) {
+    setTimeout(() => {
+      callback("Data received!");
+    }, 1000);
+  }
+
+  fetchData(data => console.log(data));
+
+THE PROBLEM: "CALLBACK HELL" (Pyramid of Doom)
+When nesting multiple asynchronous callbacks inside each other, 
+code becomes unreadable, unmaintainable, and hard to handle errors:
+
+  getData(a => {
+    getMoreData(a, b => {
+      getEvenMoreData(b, c => {
+        // Deep unreadable nesting...
+      });
+    });
+  });
+
+-------------------------------------------------------
+2. PROMISES IN JAVASCRIPT
+-------------------------------------------------------
+Introduced in ES6 to solve "Callback Hell", a Promise is an 
+object representing the eventual completion (or failure) of 
+an asynchronous operation.
+
+THE 3 STATES OF A PROMISE:
+  1. Pending   : Initial state, operation is still running.
+  2. Fulfilled : Operation completed successfully (`resolve()`).
+  3. Rejected  : Operation failed (`reject()`).
+
+SYNTAX:
+  const myPromise = new Promise((resolve, reject) => {
+    let success = true;
+    if (success) {
+      resolve("Operation successful!");
+    } else {
+      reject("Operation failed!");
+    }
+  });
+
+CONSUMING PROMISES (.then(), .catch(), .finally()):
+  myPromise
+    .then(result => console.log(result))   // Handles success (Fulfilled)
+    .catch(error => console.error(error)) // Handles errors (Rejected)
+    .finally(() => console.log("Done"));  // Always executes at end
+
+PROMISE CHAINING:
+  Promises allow flat, readable chaining to execute async steps sequentially:
+
+  fetchUserData()
+    .then(user => fetchUserPosts(user.id))
+    .then(posts => console.log(posts))
+    .catch(err => console.error(err));
+
+-------------------------------------------------------
+3. PROMISE HELPER METHODS
+-------------------------------------------------------
+  - `Promise.all([p1, p2])`  : Waits for ALL promises to fulfill (fails if 1 fails).
+  - `Promise.race([p1, p2])` : Resolves/rejects as soon as FIRST promise settles.
+
+Memory Trick:
+  Callback = Pass function as parameter to run later.
+  Callback Hell = Deeply nested callback pyramid (hard to manage).
+  Promise = Ticket for future result (Pending -> Fulfilled or Rejected).
+  .then() = What to do if successful.
+  .catch() = What to do if failed.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Callbacks and Promises</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Callbacks &amp; Promises</h1>
+
+      <!-- 1. CALLBACK FUNCTIONS -->
+      <div class="section">
+        <h2>1. Asynchronous Callbacks</h2>
+        <p>
+          Passing a function as an argument to execute after a task completes.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function fetchUserCallback(userId, callback) {
+  setTimeout(() => {
+    const user = { id: userId, name: "Alex" };
+    callback(user); // Execute callback with result
+  }, 1000);
+}
+
+console.log("Fetching user...");
+fetchUserCallback(101, (data) => {
+  console.log("Callback Received:", data.name);
+});</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. CREATING AND CONSUMING A PROMISE -->
+      <div class="section">
+        <h2>
+          2. Creating &amp; Consuming Promises (<code>.then</code>,
+          <code>.catch</code>)
+        </h2>
+        <p>
+          Replacing callbacks with clean Promise objects handling success and
+          failure states.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function checkInventory(item) {
+  return new Promise((resolve, reject) => {
+    const inStock = true;
+    
+    if (inStock) {
+      resolve(`${item} is in stock!`); // Fulfilled
+    } else {
+      reject(`${item} is out of stock.`); // Rejected
+    }
+  });
+}
+
+checkInventory("Laptop")
+  .then(message => console.log("Success:", message))
+  .catch(error => console.log("Error:", error))
+  .finally(() => console.log("Inventory check complete"));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. PROMISE CHAINING -->
+      <div class="section">
+        <h2>3. Sequential Execution via Promise Chaining</h2>
+        <p>
+          Executing asynchronous tasks sequentially without nesting callbacks.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>function step1() {
+  return Promise.resolve("Step 1 Complete");
+}
+function step2(msg) {
+  return Promise.resolve(`${msg} -> Step 2 Complete`);
+}
+
+step1()
+  .then(res1 => step2(res1))
+  .then(res2 => console.log("Chain Result:", res2));</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PROMISE.ALL (PARALLEL EXECUTION) -->
+      <div class="section">
+        <h2>4. Parallel Execution with <code>Promise.all()</code></h2>
+        <p>
+          Running multiple promises in parallel and waiting for all to complete.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const p1 = Promise.resolve("User Data");
+const p2 = Promise.resolve("Posts Data");
+const p3 = Promise.resolve("Comments Data");
+
+Promise.all([p1, p2, p3])
+  .then(results => {
+    console.log("All Promises Resolved:", results);
+  });</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. QUICK REFERENCE -->
+      <div class="section">
+        <h2>5. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Concept</th>
+                <th>Syntax / Pattern</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Callback</td>
+                <td><code>fn(arg, (data) =&gt; {})</code></td>
+                <td>
+                  Function passed as argument to execute after async task
+                  completes
+                </td>
+              </tr>
+              <tr>
+                <td>Callback Hell</td>
+                <td>Deeply nested callbacks</td>
+                <td>
+                  Unreadable pyramid code structure resulting from nested async
+                  tasks
+                </td>
+              </tr>
+              <tr>
+                <td>New Promise</td>
+                <td><code>new Promise((res, rej) =&gt; {})</code></td>
+                <td>
+                  Creates async wrapper object with <code>resolve</code> and
+                  <code>reject</code> handles
+                </td>
+              </tr>
+              <tr>
+                <td>.then()</td>
+                <td><code>promise.then(data =&gt; {})</code></td>
+                <td>
+                  Executes when promise is successfully fulfilled (resolved)
+                </td>
+              </tr>
+              <tr>
+                <td>.catch()</td>
+                <td><code>promise.catch(err =&gt; {})</code></td>
+                <td>Executes when promise fails (rejected)</td>
+              </tr>
+              <tr>
+                <td>.finally()</td>
+                <td><code>promise.finally(() =&gt; {})</code></td>
+                <td>
+                  Executes ALWAYS after promise settles regardless of
+                  success/fail
+                </td>
+              </tr>
+              <tr>
+                <td>Promise.all()</td>
+                <td><code>Promise.all([p1, p2])</code></td>
+                <td>
+                  Waits for all promises in array to resolve; fails if any fails
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Callback Demo
+      const out1 = ["Fetching user..."];
+      function fetchUserCallback(userId, callback) {
+        setTimeout(() => {
+          const user = { id: userId, name: "Alex" };
+          callback(user);
+        }, 500);
+      }
+      fetchUserCallback(101, (data) => {
+        out1.push("Callback Received: " + data.name);
+        write("out1", out1);
+      });
+
+      // 2. Promise Demo
+      const out2 = [];
+      function checkInventory(item) {
+        return new Promise((resolve, reject) => {
+          const inStock = true;
+          if (inStock) resolve(`${item} is in stock!`);
+          else reject(`${item} is out of stock.`);
+        });
+      }
+      checkInventory("Laptop")
+        .then((message) => out2.push("Success: " + message))
+        .catch((error) => out2.push("Error: " + error))
+        .finally(() => {
+          out2.push("Inventory check complete");
+          write("out2", out2);
+        });
+
+      // 3. Promise Chaining
+      function step1() {
+        return Promise.resolve("Step 1 Complete");
+      }
+      function step2(msg) {
+        return Promise.resolve(`${msg} -> Step 2 Complete`);
+      }
+
+      step1()
+        .then((res1) => step2(res1))
+        .then((res2) => write("out3", ["Chain Result: " + res2]));
+
+      // 4. Promise.all
+      const p1 = Promise.resolve("User Data");
+      const p2 = Promise.resolve("Posts Data");
+      const p3 = Promise.resolve("Comments Data");
+
+      Promise.all([p1, p2, p3]).then((results) =>
+        write("out4", [
+          "All Resolved: [" + results.map((r) => `"${r}"`).join(", ") + "]",
+        ]),
+      );
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

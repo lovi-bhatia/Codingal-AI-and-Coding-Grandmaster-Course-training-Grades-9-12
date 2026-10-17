@@ -1,0 +1,368 @@
+<!--
+=======================================================
+  JAVASCRIPT TYPE CONVERSION (COERCION)
+=======================================================
+
+WHAT IS TYPE CONVERSION?
+Type conversion (also known as Type Coercion) is the process 
+of converting a value from one data type to another (e.g., String 
+to Number, or Number to Boolean).
+
+TWO TYPES OF CONVERSION:
+  1. Explicit Conversion (Casting)  : Done intentionally by the developer using code/methods.
+  2. Implicit Conversion (Coercion) : Done automatically by JavaScript in the background.
+
+-------------------------------------------------------
+1. EXPLICIT CONVERSION (RECOMMENDED)
+-------------------------------------------------------
+Developers explicitly convert types using built-in constructors/methods:
+
+A. TO NUMBER:
+   - `Number("42")`     → 42
+   - `parseInt("42.5")`  → 42   (Parses integer from start of string)
+   - `parseFloat("42.5")`→ 42.5 (Parses floating decimal)
+   - `Number("hello")`  → NaN  (Not a Number)
+   - `Number(true)`     → 1
+   - `Number(false)`    → 0
+
+B. TO STRING:
+   - `String(42)`       → "42"
+   - `(42).toString()`  → "42"
+   - `String(true)`     → "true"
+   - `String(null)`     → "null"
+
+C. TO BOOLEAN:
+   - `Boolean(1)`       → true
+   - `Boolean(0)`       → false
+   - `Boolean("hello")` → true
+   - `Boolean("")`      → false
+
+-------------------------------------------------------
+2. IMPLICIT CONVERSION (JS AUTOMATIC COERCION)
+-------------------------------------------------------
+JavaScript automatically converts types when operators are used 
+on mismatched data types:
+
+A. STRING CONCATENATION (+ OPERATOR):
+   If ANY operand is a String, the `+` operator converts EVERYTHING to a String!
+   - `"5" + 2`    → "52" (String)
+   - `1 + 2 + "3"`→ "33" (1+2=3, then 3+"3"="33")
+
+B. NUMERIC OPERATORS (-, *, /, %):
+   Math operators (except `+`) convert Strings to Numbers automatically!
+   - `"5" - 2`    → 3   (Number)
+   - `"10" * "2"` → 20  (Number)
+   - `"5" - "foo"`→ NaN (Number)
+
+C. UNARY PLUS OPERATOR (+):
+   Placing `+` before a variable converts it to a Number:
+   - `+"42"`      → 42  (Number)
+
+D. LOOSE EQUALITY (==):
+   `==` performs implicit coercion before comparing. Avoid `==`! Always use `===`.
+   - `"5" == 5`   → true  (Implicit conversion)
+   - `"5" === 5`  → false (Strict check, no conversion)
+
+Memory Trick:
+  + with String = Concatenates as String ("5" + 2 = "52").
+  - * / %      = Converts to Number ("5" - 2 = 3).
+  Number("42")  = Explicitly converts to 42.
+  String(42)    = Explicitly converts to "42".
+  Boolean(x)    = Falsy (0, "", null, undefined, NaN) -> false, else true.
+
+=======================================================
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Type Conversion</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+      }
+      .label {
+        font-family: monospace;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .output {
+        background: #1e1e1e;
+        color: #00ff66;
+        font-family: monospace;
+        padding: 12px;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        font-size: 13px;
+        min-height: 44px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #e6e6e6;
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 0;
+        overflow-x: auto;
+      }
+      code {
+        background: #eef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #0d6efd;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container bg-white p-4 p-md-5 rounded shadow-sm">
+      <h1 class="mb-4">JavaScript Type Conversion</h1>
+
+      <!-- 1. EXPLICIT CONVERSION TO NUMBER -->
+      <div class="section">
+        <h2>1. Explicit Conversion to Number</h2>
+        <p>
+          Using <code>Number()</code>, <code>parseInt()</code>, and
+          <code>parseFloat()</code>.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>const strInt = "42";
+const strFloat = "42.85";
+const invalidStr = "100px";
+
+console.log(Number(strInt));         // 42 (Number)
+console.log(parseInt(strFloat));     // 42 (Truncates decimal)
+console.log(parseFloat(strFloat));   // 42.85 (Preserves decimal)
+console.log(parseInt(invalidStr));   // 100 (Extracts initial numbers)
+console.log(Number(invalidStr));     // NaN (Fails completely)</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out1" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. EXPLICIT CONVERSION TO STRING & BOOLEAN -->
+      <div class="section">
+        <h2>2. Explicit Conversion to String &amp; Boolean</h2>
+        <p>
+          Using <code>String()</code> and <code>Boolean()</code> explicit
+          constructors.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// String Conversion
+console.log(String(100));            // "100"
+console.log(String(true));           // "true"
+console.log(String(null));           // "null"
+
+// Boolean Conversion
+console.log(Boolean(1));             // true
+console.log(Boolean(0));             // false
+console.log(Boolean("Hello"));       // true
+console.log(Boolean(""));            // false</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out2" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. IMPLICIT COERCION (+ VS OTHER OPERATORS) -->
+      <div class="section">
+        <h2>3. Implicit Coercion (Plus <code>+</code> vs Math Operators)</h2>
+        <p>
+          The <code>+</code> operator converts to String if a string is present,
+          while <code>-</code>, <code>*</code>, <code>/</code> convert to
+          Number.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>// Plus (+) prefers String concatenation
+console.log("5" + 2);        // "52" (String)
+console.log(1 + 2 + "3");    // "33" (String)
+
+// Math operators (-, *, /) coerce to Number
+console.log("5" - 2);        // 3 (Number)
+console.log("10" * "2");     // 20 (Number)
+console.log("10" / "2");     // 5 (Number)
+
+// Unary plus (+) shorthand to convert to number
+console.log(+"42");          // 42 (Number)</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out3" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. EQUALITY COERCION (== VS ===) -->
+      <div class="section">
+        <h2>
+          4. Implicit Coercion in Equality (<code>==</code> vs <code>===</code>)
+        </h2>
+        <p>
+          Loose equality <code>==</code> performs implicit coercion, while
+          strict equality <code>===</code> compares value and type.
+        </p>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <span class="label">Code:</span>
+            <pre><code>console.log("5" == 5);       // true (Coerces string "5" to number 5)
+console.log("5" === 5);      // false (Strict type check)
+
+console.log(1 == true);      // true (Coerces true to number 1)
+console.log(1 === true);     // false
+
+console.log(null == undefined);  // true
+console.log(null === undefined); // false</code></pre>
+          </div>
+          <div class="col-lg-6">
+            <span class="label">Output:</span>
+            <div id="out4" class="output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. QUICK REFERENCE -->
+      <div class="section">
+        <h2>5. Quick Reference</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Conversion Type</th>
+                <th>Method / Expression</th>
+                <th>Input</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>String to Int</td>
+                <td><code>parseInt(val)</code></td>
+                <td><code>"42.9px"</code></td>
+                <td><code>42</code> (Number)</td>
+              </tr>
+              <tr>
+                <td>String to Float</td>
+                <td><code>parseFloat(val)</code></td>
+                <td><code>"42.9px"</code></td>
+                <td><code>42.9</code> (Number)</td>
+              </tr>
+              <tr>
+                <td>Explicit Number</td>
+                <td><code>Number(val)</code></td>
+                <td><code>"42.9"</code></td>
+                <td><code>42.9</code> (Number)</td>
+              </tr>
+              <tr>
+                <td>Unary Plus</td>
+                <td><code>+val</code></td>
+                <td><code>"42"</code></td>
+                <td><code>42</code> (Number)</td>
+              </tr>
+              <tr>
+                <td>Explicit String</td>
+                <td><code>String(val)</code> or <code>val.toString()</code></td>
+                <td><code>42</code></td>
+                <td><code>"42"</code> (String)</td>
+              </tr>
+              <tr>
+                <td>Explicit Boolean</td>
+                <td><code>Boolean(val)</code> or <code>!!val</code></td>
+                <td><code>0</code></td>
+                <td><code>false</code> (Boolean)</td>
+              </tr>
+              <tr>
+                <td>Implicit String</td>
+                <td><code>val + ""</code> or <code>"5" + 2</code></td>
+                <td><code>"5" + 2</code></td>
+                <td><code>"52"</code> (String)</td>
+              </tr>
+              <tr>
+                <td>Implicit Number</td>
+                <td><code>"5" - 2</code> or <code>"10" * 2</code></td>
+                <td><code>"5" - 2</code></td>
+                <td><code>3</code> (Number)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DEMO SCRIPT ===================== -->
+    <script>
+      const write = (id, lines) => {
+        document.getElementById(id).textContent = lines.join("\n");
+      };
+
+      // 1. Explicit to Number
+      const strInt = "42";
+      const strFloat = "42.85";
+      const invalidStr = "100px";
+
+      write("out1", [
+        "Number('42')       -> " +
+          Number(strInt) +
+          " (" +
+          typeof Number(strInt) +
+          ")",
+        "parseInt('42.85')  -> " + parseInt(strFloat),
+        "parseFloat('42.85')-> " + parseFloat(strFloat),
+        "parseInt('100px')  -> " + parseInt(invalidStr),
+        "Number('100px')    -> " + Number(invalidStr),
+      ]);
+
+      // 2. Explicit to String & Boolean
+      write("out2", [
+        "String(100)        -> " + JSON.stringify(String(100)),
+        "String(true)       -> " + JSON.stringify(String(true)),
+        "String(null)       -> " + JSON.stringify(String(null)),
+        "Boolean(1)         -> " + Boolean(1),
+        "Boolean(0)         -> " + Boolean(0),
+        'Boolean("Hello")   -> ' + Boolean("Hello"),
+        'Boolean("")        -> ' + Boolean(""),
+      ]);
+
+      // 3. Implicit Coercion
+      write("out3", [
+        '"5" + 2            -> ' + JSON.stringify("5" + 2) + " (String)",
+        '1 + 2 + "3"        -> ' + JSON.stringify(1 + 2 + "3") + " (String)",
+        '"5" - 2            -> ' + ("5" - 2) + " (Number)",
+        '"10" * "2"         -> ' + "10" * "2" + " (Number)",
+        '+"42"              -> ' + +"42" + " (" + typeof +"42" + ")",
+      ]);
+
+      // 4. Equality Coercion
+      write("out4", [
+        '"5" == 5           -> ' + ("5" == 5) + " (Implicit Coercion)",
+        '"5" === 5          -> ' + ("5" === 5) + " (Strict Check)",
+        "1 == true          -> " + (1 == true),
+        "1 === true         -> " + (1 === true),
+        "null == undefined  -> " + (null == undefined),
+        "null === undefined -> " + (null === undefined),
+      ]);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
